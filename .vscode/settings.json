@@ -6,8 +6,5 @@
   "prettier.configPath": ".prettier.json",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[django-html]": {
-    "editor.defaultFormatter": ""
   }
 }
