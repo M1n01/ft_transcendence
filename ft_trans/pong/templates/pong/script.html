@@ -1,0 +1,13 @@
+{% load static %} {% load i18n %}
+<body>
+  <h1>Script TEST</h1>
+  <link rel="stylesheet" href="{% static 'pong_css/script.css' %}" />
+
+  <div id="replace">変換前</div>
+  <p id="child">{% trans "not_change" %}</p>
+  <h2>{% trans "Japanese" %}</h2>
+  <a href="{% url 'pong:script2' %}">test</a>
+
+  <div id="test_spa">test_spa_replace?</div>
+  <script src="{% static 'pong/js/test.js' %}"></script>
+</body>
