@@ -5,6 +5,7 @@ RUN apt install gettext -y
 
 # 静的ファイルの配置(STATIC_ROOTディレクトリに移動)
 WORKDIR /workspace
+RUN mkdir log
 
 COPY ./.env /workspace
 RUN python -m pip install --upgrade pip

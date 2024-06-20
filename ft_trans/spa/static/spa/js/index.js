@@ -41,10 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
       var formData = new FormData(form);
       const current_uri = getDisplayedURI(tmp_path);
       changingLanguage(lang_url, formData, current_uri);
+      //changingLanguage(lang_url, form, current_uri);
     }
   });
 
   const uri = getDisplayedURI(tmp_path);
   navigateTo(uri);
-  router();
+  //router();
 });

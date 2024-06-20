@@ -1,3 +1,5 @@
+import {getCookie} from "./cookie.js"
+/*
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== "") {
@@ -13,6 +15,7 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+*/
 
 const csrftoken = getCookie("csrftoken");
 
@@ -22,7 +25,7 @@ const csrftoken = getCookie("csrftoken");
 function makeRequest(method, url) {
   return fetch(url, {
     method: method,
-    headers: { "X-CSRFToken": csrftoken },
+    headers: { SPA: "spa" },
   }).then((response) => {
     if (!response.ok) {
       throw new Error(" Fetch() Error");
@@ -55,10 +58,10 @@ function sendRequestAsForm(method, url) {
 
 export default async function fetchData(url) {
   try {
-    console.log("No.1 fetch url:" + url);
+    console.log("No.2 fetch url:" + url);
     //url = "http://localhost:8000/ja/pong/script";
-    //const response = await makeRequest("GET", url);
-    const response = await sendRequestAsForm("POST", url);
+    const response = await makeRequest("GET", url);
+    //const response = await sendRequestAsForm("POST", url);
     return response;
   } catch (error) {
     console.error(error);

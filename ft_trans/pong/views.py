@@ -6,6 +6,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
 from urllib.parse import urlparse
+from django.template import RequestContext, Template
 import asyncio
 
 def checkSPA(request):
@@ -25,8 +26,13 @@ class Pong(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
 
+
+
 # テスト用　後で消す
 def lang(request):
+    #template = Template("{{ title }}: {{ ip_address }}")
+    #context = RequestContext(request, [ip_address_processor])
+    #return HttpResponse(template.render(context))
     return render(request, 'pong/lang_test.html')
 
 def script(request):

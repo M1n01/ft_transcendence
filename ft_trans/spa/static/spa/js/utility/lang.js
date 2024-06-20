@@ -1,9 +1,13 @@
 import { navigateTo, router } from "../routing/routing.js";
+import {getCookie} from "./cookie.js"
 
 export async function changingLanguage(url, form, current_uri) {
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
   try {
     const response = await fetch(url, {
       method: "POST",
+      headers: { "X-CSRFToken": csrftoken},
+      mode: 'same-origin',
       body: form,
     });
 

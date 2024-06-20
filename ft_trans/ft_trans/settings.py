@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
-LOG_BASE_DIR = os.path.join("/var", "log", "django")
+LOG_BASE_DIR = os.path.join("./log")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -60,7 +60,9 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '172.38.10.10', 'nginx']
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '172.38.10.10', 'nginx', 'localhost', 'localhost:8080']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://localhost', 'http://127.0.0.1', 'http://172.38.10.10', 'http://nginx']
+
 
 
 # Application definition
@@ -162,7 +164,7 @@ USE_I18N = True
 USE_TZ = True
 
 #CSRF 不要
-#CSRF_USE_SESSIONS = True
+CSRF_USE_SESSIONS = True
 
 
 # Static files (CSS, JavaScript, Images)
