@@ -6,6 +6,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
 from urllib.parse import urlparse
+import asyncio
 
 def checkSPA(request):
     spa = request.META.get('HTTP_SPA')

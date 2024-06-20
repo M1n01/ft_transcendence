@@ -1,0 +1,60 @@
+version: "3"
+networks:
+  django_net:
+    name: django_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.10.0/24
+      #ipam:
+      #config:
+      #- subnet: 172.38.10.0/24
+services:
+  nginx:
+    container_name: "nginx"
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    networks:
+      django_net:
+        ipv4_address: 172.38.10.10
+    tty: true
+    ports:
+      - 8080:80
+      - 443:443
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    volumes:
+      - ../ft_trans/public/:/public/
+    depends_on:
+      - django
+
+  django:
+    container_name: "django"
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    networks:
+      django_net:
+        ipv4_address: 172.38.10.3
+    tty: true
+    # プロジェクトをバインドマウント
+    volumes:
+      - ../ft_trans/:/workspace
+    # ポートマッピングを指定
+    ports:
+      - 8000:8000
+    env_file:
+      - ./django/.env
+    command:
+      /bin/sh -c '
+      python manage.py collectstatic
+      '
+
+
+
+  client:
+    container_name: "client"
+    image: python:3.10
+    tty: true

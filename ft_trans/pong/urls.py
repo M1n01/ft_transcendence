@@ -14,6 +14,9 @@ urlpatterns = [
 	path('index', views.index),
 	path('', views.index),
 ]
+# エンドユーザーによるファイルアップロードなどがある場合、
+# それらを保持するディレクトリを定義する
+#] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #urlpatterns += i18n_patterns(
 #)

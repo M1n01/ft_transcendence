@@ -14,6 +14,39 @@ import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
+LOG_BASE_DIR = os.path.join("/var", "log", "django")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"simple": {"format": "%(asctime)s [%(levelname)s] %(message)s"}},
+    "handlers": {
+        "info": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "info.log"),
+            "formatter": "simple",
+        },
+        "warning": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "warning.log"),
+            "formatter": "simple",
+        },
+        "error": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_BASE_DIR, "error.log"),
+            "formatter": "simple",
+        },
+    },
+    "root": {
+        "handlers": ["info", "warning", "error"],
+        "level": "INFO",
+    },
+}
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,17 +55,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)mwdnh&(w_%7aj#v-(+2zyf&stvxh1_dfs1$=it76$4gxf3+pu'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '172.38.10.10', 'nginx']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne", # ASGI設定
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +88,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.template.context_processors.media', #ユーザーアップロード用
 ]
 
 ROOT_URLCONF = 'ft_trans.urls'
@@ -106,6 +141,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#キャッシュ用
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -125,10 +168,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# ASGI設定
+#ASGI_APPLICATION = "myproject.asgi.application"
+ASGI_APPLICATION = "ft_trans.asgi.application"
+
  #　多言語設定
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'localization'),]
 
+#ファイルアップロード
+#MEDIA_URL = "/media/"
+#MEDIA_ROOT = "./public/media"
+
 STATIC_URL = 'static/'
+STATIC_ROOT = "./public/static"
+
+# Appに依存しない静的ファイルがある場合
+#STATICFILES_DIRS = [
+    #BASE_DIR / "static",
+    #"/var/www/static/",
+#]
+
+
+
 LANGUAGE_CODE = 'ja'
 LANGUAGES = [
     ('ja', _('Japanese')),
