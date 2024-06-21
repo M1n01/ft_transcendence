@@ -3,5 +3,9 @@
 .env
 *.bkp
 *.pyc
+*.log
+*.key
+*.crt
 __pycache__/*
+ft_trans/public/*
 
