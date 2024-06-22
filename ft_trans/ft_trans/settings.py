@@ -119,8 +119,18 @@ WSGI_APPLICATION = 'ft_trans.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # old version
+    #"ENGINE": "django.db.backends.postgresql_psycopg2",
+    'ENGINE': 'django.db.backends.postgresql',
+    "OPTIONS": {
+            "service": "ft_trans",
+            "passfile": ".my_pgpass",
+        },
+    'NAME': os.environ['POSTGRES_DJANGO_DB_NAME'],
+    'USER': os.environ['POSTGRES_DJANGO_USER'],
+    'PASSWORD': os.environ['POSTGRES_DJANGO_PASSWORD'],
+    'HOST': "db",
+    'PORT': '5432',
     }
 }
 
@@ -216,8 +226,8 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True 
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_HSTS_PRELOAD = True 
+#SECURE_CONTENT_TYPE_NOSNIFF = True
+#X_FRAME_OPTIONS = 'DENY'

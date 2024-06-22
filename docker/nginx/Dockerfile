@@ -1,7 +1,6 @@
-FROM nginx:1.24.0-bullseye
+FROM nginx:1.25.0-bullseye
 MAINTAINER hsano hsano@student.42tokyo.jp
 RUN apt update && apt upgrade -y
-#RUN apt install -y ufw
 RUN apt install -y vim
 COPY ./django.conf /etc/nginx/conf.d/
 COPY ./make_ca.sh /tmp/make_ca.sh

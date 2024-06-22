@@ -6,6 +6,15 @@ networks:
     ipam:
       config:
         - subnet: 172.38.10.0/24
+  db_net:
+    name: db_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.20.0/24
+      #ipam:
+      #config:
+      #- subnet: 172.38.10.0/24
       #ipam:
       #config:
       #- subnet: 172.38.10.0/24
@@ -29,6 +38,24 @@ services:
       - ../ft_trans/public/:/public/
     depends_on:
       - django
+  db:
+    container_name: "db"
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    networks:
+      - db_net
+    tty: true
+    ports:
+      - 5432:5432
+    volumes:
+      - ../db_volume/:/var/lib/postgresql/data
+    depends_on:
+      - django
+    env_file:
+      - ./db/.env
+      - ./db/django_db.env
+    user: postgres
 
   django:
     container_name: "django"
@@ -36,27 +63,25 @@ services:
       context: ./django
       dockerfile: Dockerfile
     networks:
-      django_net:
-        #ipv4_address: 172.38.10.3
+      - django_net
+      - db_net
     tty: true
     # プロジェクトをバインドマウント
     volumes:
       - ../ft_trans/:/workspace
-    # ポートマッピングを指定
     ports:
       - 8000:8000
     env_file:
       - ./django/.env
+      - ./db/django_db.env
     command:
       /bin/sh -c '
       cp /tmp/server.key /workspace/ &&
       cp /tmp/domain.crt /workspace/ &&
+      cp /tmp/.my_pgpass /workspace/ &&
       python manage.py collectstatic --noinput &&
       daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/domain.crt ft_trans.asgi:application
       '
-
-
-
   client:
     container_name: "client"
     image: python:3.10
