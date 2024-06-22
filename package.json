@@ -1,9 +1,26 @@
 {
   "devDependencies": {
-    "eslint": "^9.5.0"
+    "eslint": "^9.5.0",
+    "eslint-config-prettier": "^9.1.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
+    "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint ./*.js",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx}'",
+    "prepare": "simple-git-hooks > /dev/null"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "prettier --write --loglevel=error",
+      "eslint --fix --quiet"
+    ],
+    "{public,src}/**/*.{html,gql,graphql,json}": [
+      "prettier --write --loglevel=error"
+    ]
   }
 }
