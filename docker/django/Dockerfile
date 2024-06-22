@@ -5,8 +5,9 @@ RUN apt install gettext procps postgresql-client iputils-ping net-tools  -y
 
 WORKDIR /workspace
 
-COPY ./.my_pgpass /tmp/.my_pgpass
+#COPY ./.my_pgpass /tmp/.my_pgpass
 COPY ./make_ca.sh /tmp/make_ca.sh
+COPY ./make_db_setting.sh /tmp/make_db_setting.sh
 RUN python -m pip install --upgrade pip
 RUN python -m pip install django-cors-headers
 RUN python -m pip install Django==5.0.6
@@ -15,6 +16,9 @@ RUN python -m pip install psycopg
 
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
+
+#RUN chmod 600 /workspace/.my_pgpass
+#RUN cp /workspace/.pg_service.conf ~/
 
 #RUN python manage.py collectstatic
 

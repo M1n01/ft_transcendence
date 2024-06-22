@@ -126,11 +126,11 @@ DATABASES = {
             "service": "ft_trans",
             "passfile": ".my_pgpass",
         },
-    'NAME': os.environ['POSTGRES_DJANGO_DB_NAME'],
-    'USER': os.environ['POSTGRES_DJANGO_USER'],
-    'PASSWORD': os.environ['POSTGRES_DJANGO_PASSWORD'],
-    'HOST': "db",
-    'PORT': '5432',
+    #'NAME': os.environ['POSTGRES_DJANGO_DB_NAME'],
+    #'USER': os.environ['POSTGRES_DJANGO_USER'],
+    #'PASSWORD': os.environ['POSTGRES_DJANGO_PASSWORD'],
+    #'HOST': "db",
+    #'PORT': '5432',
     }
 }
 
