@@ -55,6 +55,10 @@ dev:
 	sed -i "s/DEBUG\s*=\s*False/DEBUG = True/" $(DJANGO_SETTING)
 	sed -i "s/django.core.cache.backends.locmem.LocMemCache/django.core.cache.backends.dummy.DummyCache/" $(DJANGO_SETTING)
 
+
+update:
+	docker-compose -f docker/docker-compose.yml up -d --build
+
 $(NAME): $(DEPFILES)
 	#-@rm $(DJANGO_STATIC_DIR)/static/*
 	-mkdir -p $(DJANGO_STATIC_DIR)/media

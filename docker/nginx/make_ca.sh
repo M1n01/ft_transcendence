@@ -1,4 +1,4 @@
-openssl req -x509 -days 3650 -nodes -newkey rsa:4096 -keyout /etc/nginx/server.key -out /etc/nginx/domain.crt -config - << __EOF__
+openssl req -x509 -days 3650 -nodes -newkey rsa:4096 -keyout /etc/nginx/server.key -out /etc/nginx/server.crt -config - << __EOF__
 [req]
 distinguished_name = req_distinguished_name
 prompt = no
@@ -22,7 +22,7 @@ DNS.2 = sub.mydomain.example
 __EOF__
 
 # 証明書の内容を確認
-#openssl x509 -in /etc/nginx/domain.crt -noout -text
-#cp /etc/nginx/domain.crt /var/www/html/
-#chown user42 /var/www/html/domain.crt
-#chmod 777 /var/www/html/domain.crt
+#openssl x509 -in /etc/nginx/server.crt -noout -text
+#cp /etc/nginx/server.crt /var/www/html/
+#chown user42 /var/www/html/server.crt
+#chmod 777 /var/www/html/server.crt

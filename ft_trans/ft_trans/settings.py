@@ -119,18 +119,16 @@ WSGI_APPLICATION = 'ft_trans.wsgi.application'
 
 DATABASES = {
     'default': {
-    # old version
-    #"ENGINE": "django.db.backends.postgresql_psycopg2",
     'ENGINE': 'django.db.backends.postgresql',
     "OPTIONS": {
             "service": "ft_trans",
             "passfile": ".my_pgpass",
+            # requireは認証局による証明書が必要
+            #'sslmode': 'require',
+            'sslmode': 'prefer',
+            'sslcert': 'server.crt',
+            'sslkey': 'server.key',
         },
-    #'NAME': os.environ['POSTGRES_DJANGO_DB_NAME'],
-    #'USER': os.environ['POSTGRES_DJANGO_USER'],
-    #'PASSWORD': os.environ['POSTGRES_DJANGO_PASSWORD'],
-    #'HOST': "db",
-    #'PORT': '5432',
     }
 }
 
