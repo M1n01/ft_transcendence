@@ -11,3 +11,4 @@
 __pycache__/*
 ft_trans/public/*
 
+node_modules

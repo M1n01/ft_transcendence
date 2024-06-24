@@ -39,6 +39,7 @@
 ## 環境構築
 ### Visual Studio Code 拡張機能
 - Prettier
+- Black Formatter
 
 ### クローン
 ```
