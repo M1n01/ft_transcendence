@@ -7,8 +7,10 @@ COPY ./make_ca.sh /tmp/make_ca.sh
 COPY ./sql_data /docker-entrypoint-initdb.d/
 COPY ./exe_sql.sh /docker-entrypoint-initdb.d/
 
-RUN chmod 744 /tmp/make_ca.sh
+RUN chmod 755 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
+RUN chmod 755 /tmp/server.key
+RUN chmod 755 /tmp/server.crt
 
 #RUN chmod 777 /tmp
 #RUN eval "echo \"$(cat /tmp/sql_data)\"" > /tmp/tmp_sql
