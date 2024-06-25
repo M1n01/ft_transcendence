@@ -11,6 +11,7 @@ DB		:= db
 
 NGINXDIR		:= $(addprefix $(DOCKERDIR)/, $(NGINX))
 DBDIR		:= $(addprefix $(DOCKERDIR)/, $(DB))
+ENV_FILE	:= .env
 
 
 DEPDIR			:= $(DBDIR)
@@ -54,6 +55,7 @@ dev:
 	#@rm $(DJANGODIR)/root_static/*
 	sed -i "s/DEBUG\s*=\s*False/DEBUG = True/" $(DJANGO_SETTING)
 	sed -i "s/django.core.cache.backends.locmem.LocMemCache/django.core.cache.backends.dummy.DummyCache/" $(DJANGO_SETTING)
+	python ft_trans/manage.py runserver
 
 
 update:
@@ -66,7 +68,7 @@ $(NAME): $(DEPFILES)
 	sed -i	"s/DEBUG\s*=\s*True/DEBUG = False/" $(DJANGO_SETTING)
 	sed -i	"s/django.core.cache.backends.dummy.DummyCache/django.core.cache.backends.locmem.LocMemCache/" $(DJANGO_SETTING)
 	#docker-compose --env-file .env -f docker/docker-compose.yml up -d
-	docker-compose -f docker/docker-compose.yml up -d
+	docker-compose   --env-file $(ENV_FILE)  -f docker/docker-compose.yml up -d
 
 stop:
 	docker-compose -f docker/docker-compose.yml down

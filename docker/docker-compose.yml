@@ -53,10 +53,10 @@ services:
     depends_on:
       - django
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DJANGO_USER=django_user_test3
-      - POSTGRES_DJANGO_PASSWORD=django
-      - POSTGRES_DJANGO_DB_NAME=django_db_test3
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
+      - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
+      - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
 
   django:
     container_name: "django"
@@ -76,10 +76,10 @@ services:
       - ./django/.env
 
     environment:
-      - DJANGO_SECRET_KEY=django-insecure-)m4dn7&(w_%7aj#p-(+2zyf&staxh1_dfs1$=it06$4gxT3+pv
-      - POSTGRES_DJANGO_USER=django_user_test3
-      - POSTGRES_DJANGO_PASSWORD=django
-      - POSTGRES_DJANGO_DB_NAME=django_db_test3
+      - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+      - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
+      - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
+      - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
 
 
     command:
