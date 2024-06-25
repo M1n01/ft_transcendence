@@ -59,7 +59,7 @@ LOGGING = {
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '172.38.10.10', 'nginx', 'localhost', 'localhost:8080', 'localhost:443']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://localhost', 'http://127.0.0.1', 'http://172.38.10.10', 'http://nginx', 'https://nginx:443']

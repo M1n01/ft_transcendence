@@ -49,11 +49,7 @@ init:
 	-mkdir -p $(DJANGO_STATIC_DIR)/static
 
 up:
-	-rm $(DJANGO_SETTING)
-	cp $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
-	sed -i "s/DEBUG\s*=\s*False/DEBUG = True/" $(DJANGO_SETTING)
-	sed -i "s/django.core.cache.backends.locmem.LocMemCache/django.core.cache.backends.dummy.DummyCache/" $(DJANGO_SETTING)
-	python ft_trans/manage.py runserver
+	python3 ft_trans/manage.py runserver
 
 
 update:
@@ -62,10 +58,6 @@ update:
 $(NAME):
 	-mkdir -p $(DJANGO_STATIC_DIR)/media
 	-mkdir -p $(DJANGO_STATIC_DIR)/static
-	-rm $(DJANGO_SETTING)
-	cp $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
-	sed -i	"s/DEBUG\s*=\s*True/DEBUG = False/" $(DJANGO_SETTING)
-	sed -i	"s/django.core.cache.backends.dummy.DummyCache/django.core.cache.backends.locmem.LocMemCache/" $(DJANGO_SETTING)
 	docker-compose   --env-file $(ENV_FILE)  -f docker/docker-compose.yml up -d
 
 stop:
