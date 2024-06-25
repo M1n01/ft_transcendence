@@ -1,5 +1,14 @@
 .DS_Store
 
 .env
+*.env
+.my_pgpass
+*.bkp
+*.pyc
+*.log
+*.key
+*.crt
+__pycache__/*
+ft_trans/public/*
 
 node_modules
