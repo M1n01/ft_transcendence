@@ -12,12 +12,6 @@ networks:
     ipam:
       config:
         - subnet: 172.38.20.0/24
-      #ipam:
-      #config:
-      #- subnet: 172.38.10.0/24
-      #ipam:
-      #config:
-      #- subnet: 172.38.10.0/24
 services:
   nginx:
     container_name: "nginx"
@@ -67,21 +61,17 @@ services:
       - django_net
       - db_net
     tty: true
-    # プロジェクトをバインドマウント
     volumes:
       - ../ft_trans/:/workspace
     ports:
       - 8000:8000
     env_file:
       - ./django/.env
-
     environment:
       - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
       - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
       - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
       - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
-
-
     command:
       /bin/sh -c '
       cp /tmp/server.key /workspace/ &&
@@ -92,7 +82,3 @@ services:
       python manage.py migrate &&
       daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
       '
-  client:
-    container_name: "client"
-    image: python:3.10
-    tty: true
