@@ -49,7 +49,6 @@ init:
 	-mkdir -p $(DJANGO_STATIC_DIR)/static
 
 up:
-	unlink $(DJANGO_SETTING)
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
 	python3 ft_trans/manage.py runserver
 
