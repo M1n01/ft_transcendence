@@ -49,6 +49,7 @@ init:
 	-mkdir -p $(DJANGO_STATIC_DIR)/static
 
 up:
+	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
 	python3 ft_trans/manage.py runserver
 
 
@@ -58,6 +59,7 @@ update:
 $(NAME):
 	-mkdir -p $(DJANGO_STATIC_DIR)/media
 	-mkdir -p $(DJANGO_STATIC_DIR)/static
+	ln -f  $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
 	docker-compose   --env-file $(ENV_FILE)  -f docker/docker-compose.yml up -d
 
 stop:
