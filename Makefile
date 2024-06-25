@@ -51,7 +51,7 @@ init:
 up:
 	unlink $(DJANGO_SETTING)
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
-	python ft_trans/manage.py runserver
+	python3 ft_trans/manage.py runserver
 
 
 update:
