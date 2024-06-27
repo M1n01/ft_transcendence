@@ -1,9 +1,11 @@
-import eslint from "@eslint/js";
+import eslint from '@eslint/js';
 
 export default [
   eslint.configs.recommended,
   {
     files: ['ft_trans/**/*.js', 'ft_trans/**/*.jsx'],
-    ignores: ['node_modules'],
+  },
+  {
+    ignores: ['node_modules', 'ft_trans/**/*.config.js'],
   },
 ];
