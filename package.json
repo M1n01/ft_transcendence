@@ -1,9 +1,12 @@
 {
   "type": "module",
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@eslint/eslintrc": "^3.1.0",
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-config-recommended": "^4.1.0",
+    "hardhat": "^2.22.5",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
     "simple-git-hooks": "^2.11.1"

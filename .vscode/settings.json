@@ -4,6 +4,7 @@
   "editor.tabSize": 2,
   "files.autoSave": "afterDelay",
   "prettier.configPath": ".prettierrc.json",
+  "solidity.telemetry": true,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -13,6 +14,10 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "always"
     }
+  },
+  "[solidity]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
   },
   "files.insertFinalNewline": true
 }
