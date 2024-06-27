@@ -7,15 +7,15 @@
     "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint ft_trans/**/*.js",
-    "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx}'",
     "prepare": "simple-git-hooks > /dev/null"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "ft_trans/**/*.{js,jsx}": [
+    "src/**/*.{js,jsx}": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
