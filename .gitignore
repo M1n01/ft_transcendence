@@ -16,6 +16,9 @@ db_volume
 *.pyc
 __pycache__/*
 
+## setting file
+ft_trans/ft_trans/settings.py
+
 # Logs
 *.log
 
