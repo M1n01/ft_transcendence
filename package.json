@@ -19,7 +19,7 @@
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
-    "{public,src}/**/*.{html,gql,graphql,json}": [
+    "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
     ]
   }
