@@ -1,13 +1,11 @@
 module.exports = {
-  rules: {
-    indent: ['error', 2],
-    quotes: ['error', 'single'],
-  },
-  extends: ['prettier'],
+  extends: [
+    'eslint:recommended',
+    'prettier',
+  ],
   include: [
-    'src/**/*.js',
-    'src/**/*.jsx',
+    'ft_trans/**/*.js',
+    'ft_trans/**/*.jsx',
   ],
   exclude: ['node_modules'],
-
 };
