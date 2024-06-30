@@ -16,14 +16,6 @@ DJANGO_NET		:= django_net
 ENV_FILE	:= .env
 
 
-DEPDIR			:= $(DBDIR)
-DOCKERFILE		:= Dockerfile
-
-VOLUME_DB			:= mariadb_volume
-VOLUME_WP			:= wordpress_volume
-NETWORK				:= inception_net
-
-
 all:
 	@make $(NAME)
 
@@ -65,4 +57,4 @@ $(NAME):
 stop:
 	docker-compose -f docker/docker-compose.yml down
 
-.PHONY: all clean fclean re stop dev 
+.PHONY: all clean fclean re stop dev

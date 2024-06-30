@@ -1,14 +1,33 @@
+# macOS
 .DS_Store
 
+# Environment variables
 .env
 *.env
+
+# Database
 .my_pgpass
+db_volume
+
+# Backups
 *.bkp
+
+# Python
 *.pyc
+__pycache__/*
+
+## setting file
+ft_trans/ft_trans/settings.py
+
+# Logs
 *.log
+
+# Security
 *.key
 *.crt
-__pycache__/*
-ft_trans/public/*
 
+# Node.js
 node_modules
+
+# Public files
+ft_trans/public/*

@@ -1,5 +1,7 @@
 {
+  "type": "module",
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
     "lint-staged": "^15.2.7",
@@ -7,19 +9,19 @@
     "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx}'",
+    "lint": "eslint ft_trans/**/*.js",
+    "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
     "prepare": "simple-git-hooks > /dev/null"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
+    "ft_trans/**/*.{js,jsx}": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
-    "{public,src}/**/*.{html,gql,graphql,json}": [
+    "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
     ]
   }
