@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example of DetailView</title>
+  </head>
+  <body>
+    <main>
+      <h2>ユーザー一覧</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ユーザー名</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>{{ object.id }}</td>
+            <td>{{ object.username }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

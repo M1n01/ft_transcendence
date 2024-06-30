@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example of LoginView</title>
+  </head>
+  <body>
+    <main>
+      <h2>ログイン</h2>
+      <form action="{% url 'account:login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="redirect" value="{{ redirect }}" />
+        <table>
+          {{ form.as_table }}
+        </table>
+        <p><input type="submit" value="送信" /></p>
+      </form>
+    </main>
+  </body>
+</html>
