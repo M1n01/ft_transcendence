@@ -24,25 +24,32 @@ export const navigateTo = (url) => {
   console.log('history pushState:' + url);
   console.log('router() No.1');
   history.pushState(null, null, url);
+  console.log('router() start');
   router();
   console.log('router() end');
 };
 
 export const router = async () => {
-  console.log('router() No.2');
+  //console.log('router() No.12 path=' + route.path);
+  //console.log('router() No.2 regpath=' + pathToRegex(route.path));
+  //console.log('router() No.22 regpath=' + route.path);
+
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
       result: location.pathname.match(pathToRegex(route.path)),
     };
   });
-  console.log('router() No.3:' + potentialMatches.result);
+  //console.log('router() No.3 length:' + potentialMatches.length);
+  //if (potentialMatches.length > 0) {
+  //console.log('router() No.3 potentilMathces[0]:' + potentialMatches[0]);
+  //}
 
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
-  console.log('router() No.4:' + match.result);
+  //console.log('router() No.4:' + match.result);
 
-  console.log('No.1 match=' + match.route.path);
-  console.log('No.1 result=' + match.result);
+  //console.log('No.1 match=' + match.route.path);
+  //console.log('No.1 result=' + match.result);
   if (!match) {
     match = {
       route: Routes[0],

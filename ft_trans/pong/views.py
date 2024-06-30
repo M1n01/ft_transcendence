@@ -13,9 +13,18 @@ import asyncio
 import hashlib
 from django.conf import settings
 
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+# loginしない限り見れない
+# class Pong(LoginRequiredMixin, ListView):
+# model = "test"
+
+
 def checkSPA(request):
-    spa = request.META.get('HTTP_SPA')
-    spas = request.META.get('HTTPS_SPA')
+    spa = request.META.get("HTTP_SPA")
+    spas = request.META.get("HTTPS_SPA")
     if spa is None and spas is None:
         Http404("not allowed")
     if spa and spa == "spa":
@@ -25,34 +34,39 @@ def checkSPA(request):
     Http404("not allowed")
     return False
 
+
 # Create your views here.
-class Pong(models.Model):
+class Pong(models.Model, LoginRequiredMixin):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
 
+
 def my_etag(request, *args, **kwargs):
-    return (hashlib.md5(':'.join( request.GET.dict().values()).encode('utf-8')).hexdigest())
+    return hashlib.md5(
+        ":".join(request.GET.dict().values()).encode("utf-8")
+    ).hexdigest()
 
 
 # テスト用　後で消す
 @condition(etag_func=my_etag)
 def lang(request):
-    return render(request, 'pong/lang_test.html')
+    return render(request, "pong/lang_test.html")
+
 
 @condition(etag_func=my_etag)
 def script(request):
     checkSPA(request)
-    return render(request, 'pong/script.html')
+    return render(request, "pong/script.html")
 
 
 @condition(etag_func=my_etag)
 def script2(request):
-    return render(request, 'pong/script2.html')
+    return render(request, "pong/script2.html")
 
 
 @condition(etag_func=my_etag)
 def test(request):
-    return render(request, 'pong/test.html')
+    return render(request, "pong/test.html")
 
 
 @condition(etag_func=my_etag)

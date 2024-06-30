@@ -1,70 +1,63 @@
-import {getCookie} from "./cookie.js"
-/*
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === name + "=") {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-*/
+import { getCookie } from './cookie.js';
 
-const csrftoken = getCookie("csrftoken");
-
-//If you activate CSRF_USE_SESSIONS or CSRF_COOKIE_HTTPONLY
-//const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+//const csrftoken = getCookie('csrftoken');
 
 function makeRequest(method, url) {
   return fetch(url, {
     method: method,
-    headers: { SPA: "spa" },
+    headers: { SPA: 'spa' },
   }).then((response) => {
     if (!response.ok) {
-      throw new Error(" Fetch() Error");
+      throw new Error(' Fetch() Error');
     }
     return response.text();
   });
 }
 
-function sendRequestAsForm(method, url) {
-  return fetch(url, {
-    method: method,
-    headers: { "X-CSRFToken": csrftoken, SPA: "spa" },
-    mode: "same-origin",
-    body: {
-      spa: "enable",
-    },
-  }).then((response) => {
-    console.error("Fetch error status:" + response.status);
-    if (300 <= response.status && response.status < 400) {
-      console.log(response.headers);
-    }
+export async function fetchAsForm(url, form, current_uri) {
+  console.log('fetchAsForm No.1');
+  console.log('fetchAsForm No.1');
+  console.log('fetchAsForm No.1');
+  console.log('fetchAsForm No.2');
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrftoken },
+      mode: 'same-origin',
+      body: form,
+    });
 
-    if (!response.ok) {
-      throw new Error(" Fetch() Error");
+    const result = await response.text();
+    /*
+    if (result) {
+      navigateTo(current_uri);
+      router();
+    } else {
+      console.error('Failure');
     }
+      */
 
-    return response.text();
-  });
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return '';
 }
 
 export default async function fetchData(url) {
+  console.log('fetchData No.1');
+  console.log('fetchData No.1');
+  console.log('fetchData No.1');
   try {
-    console.log("No.2 fetch url:" + url);
+    console.log('No.2 fetch url:' + url);
     //url = "http://localhost:8000/ja/pong/script";
-    const response = await makeRequest("GET", url);
+    const response = await makeRequest('GET', url);
     //const response = await sendRequestAsForm("POST", url);
     return response;
   } catch (error) {
     console.error(error);
   }
-  return "";
+  return '';
 }
