@@ -16,27 +16,34 @@ function makeRequest(method, url) {
 
 export async function fetchAsForm(url, form, current_uri) {
   console.log('fetchAsForm No.1');
+  console.log('fetchAsForm No.2 + form:' + form.toString());
+  console.log('fetchAsForm No.3 + form:' + form[0]);
   console.log('fetchAsForm No.1');
-  console.log('fetchAsForm No.1');
-  console.log('fetchAsForm No.2');
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  //console.log('fetchAsForm No.1 form=' + form);
+  //console.log('fetchAsForm No.3 url=' + url);
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'X-CSRFToken': csrftoken },
+      headers: { 'X-CSRFToken': csrftoken, 
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+       },
       mode: 'same-origin',
-      body: form,
+      body:JSON.stringify(form),
+      //body: form,
+      //body: {"username":"test9", "password":"AABCfwi39"},
+      //body: "username: test9&password: AABCfwi39",
     });
 
     const result = await response.text();
-    /*
+    //console.log("fetch result:" + result);
     if (result) {
       navigateTo(current_uri);
       router();
     } else {
       console.error('Failure');
     }
-      */
 
     return response;
   } catch (error) {

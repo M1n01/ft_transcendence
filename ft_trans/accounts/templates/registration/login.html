@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LoginViewテスト</title>
+  </head>
+  <body>
+    {% if user.is_authenticated %}
+    <div>
+      <form id="logout-form" method="post" action="{% url 'account:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="form-button">Log out</button>
+      </form>
+    </div>
+
+    {% else %}
+    <form method="post" id="login-form" action="{% url 'account:login' %}">
+      {% csrf_token %} {{ form }}
+      <button type="submit" class="form-button">ログイン</button>
+    </form>
+    {% endif %}
+  </body>
+</html>

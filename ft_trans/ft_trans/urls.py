@@ -20,20 +20,22 @@ from django.urls import path
 from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
 import pong.urls
-import account.urls
-import login.urls
+
+import spa.urls
+import accounts.urls
+
 
 # API
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path('api/', include(api.urls)),
-    path("login/", include(login.urls)),
-    path("account/", include(account.urls)),
+    # path("login/", include(login.urls)),
+    path("account/", include(accounts.urls)),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 urlpatterns += i18n_patterns(
     path("pong/", include(pong.urls)),
-    re_path(r"[\w\/]*", include("spa.urls")),
+    re_path(r"[\w\/]*", include(spa.urls)),
     prefix_default_language=True,
 )

@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     "spa",
     "pong",
     "login",
-    "account",
+    "accounts",
     "api",
     # "allauth",
     #'allauth.account',
@@ -260,3 +260,4 @@ CSRF_COOKIE_SECURE = True
 
 # 認証
 LOGIN_REDIRECT_URL = "/"
+AUTH_USER_MODEL = "accounts.User"

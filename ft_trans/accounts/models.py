@@ -5,9 +5,11 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.utils.translation import gettext_lazy as _
+import logging
 
 
 # Create your models here.
+"""
 class UserManager(BaseUserManager):
     def _create_user(self, email, account_id, password, **extra_fields):
         email = self.normalize_email(email)
@@ -42,9 +44,9 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    # account_id = models.CharField(
-    # verbose_name=_("account_id"), unique=True, max_length=10
-    # )
+    account_id = models.CharField(
+        verbose_name=_("account_id"), unique=True, max_length=10
+    )
     email = models.EmailField(verbose_name=_("email"), unique=True)
     username = models.CharField(
         verbose_name=_("username"), max_length=32, primary_key=True
@@ -70,16 +72,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "username"  # ログイン時、ユーザー名の代わりにaccount_idを使用
+    USERNAME_FIELD = "account_id"  # ログイン時、ユーザー名の代わりにaccount_idを使用
     REQUIRED_FIELDS = ["email"]  # スーパーユーザー作成時にemailも設定する
 
     def __str__(self):
         return self.account_id
-
-
 """
+
+
 class UserManager(BaseUserManager):
     def _create_user(self, email, username, password, **extra_fields):
+        logging.info(f"_create_user")
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
@@ -88,6 +91,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email, username, password, **extra_fields):
+        logging.info(f"create_user()")
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
@@ -110,6 +114,7 @@ class UserManager(BaseUserManager):
         )
 
 
+"""
 class UserName(models.Model):
     username = models.CharField(max_length=32, primary_key=True)
 
@@ -122,13 +127,14 @@ class Email(models.Model):
 
     def __str__(self):
         return self.email
+"""
 
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    account_id = models.CharField(
-        verbose_name=_("account_id"), unique=True, max_length=10
-    )
+    # account_id = models.CharField(
+    # verbose_name=_("account_id"), unique=True, max_length=10
+    # )
 
     username = models.CharField(
         verbose_name=_("username"), max_length=32, primary_key=True
@@ -174,4 +180,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
-"""
+
+
+# Create your models here.

@@ -68,7 +68,7 @@ ALLOWED_HOSTS = [
     "localhost:443",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8080",
+    "http://localhost:8000",
     "http://localhost",
     "http://127.0.0.1",
     "http://172.38.10.10",
@@ -80,7 +80,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # "daphne", # ASGI設定
+    "daphne",  # ASGI設定
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -89,12 +89,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "spa",
     "pong",
-    "login",
-    "account",
-    # "api",
-    "api.apps.ApiConfig",
-    # "api.apps.ApiConfig.User",
-    # "account.apps.AccountConfig",
+    # "login",
+    "accounts",
+    "api",
+    # "allauth",
+    #'allauth.account',
     # "corsheaders", #CORS設定
 ]
 
@@ -135,13 +134,31 @@ WSGI_APPLICATION = "ft_trans.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+"""#PRODUCTION ENVIRONMENT
+DATABASES = {
+    'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    "OPTIONS": {
+            "service": "ft_trans",
+            "passfile": ".my_pgpass",
+            # requireは認証局による証明書が必要
+            #'sslmode': 'require',
+            'sslmode': 'prefer',
+            'sslcert': 'server.crt',
+            'sslkey': 'server.key',
+        },
+    }
+}
+"""  # PRODUCTION ENVIRONMENT
 
+# """#DEVLOPMENT ENVIRONMENT
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+# """#DEVLOPMENT ENVIRONMENT
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -164,7 +181,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # キャッシュ用
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "unique-snowflake",
     }
 }
@@ -189,7 +206,7 @@ CSRF_USE_SESSIONS = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 # ASGI設定
-# ASGI_APPLICATION = "ft_trans.asgi.application"
+ASGI_APPLICATION = "ft_trans.asgi.application"
 
 # 　多言語設定
 LOCALE_PATHS = [
@@ -234,8 +251,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 
+# SECURE_HSTS_SECONDS = 31536000
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'DENY'
+
+
 # 認証
 LOGIN_REDIRECT_URL = "/"
-AUTH_USER_MODEL = "account.User"
-
-# "account.apps.AccountConfig",
+AUTH_USER_MODEL = "accounts.User"
