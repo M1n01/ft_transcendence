@@ -10,7 +10,7 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const uri = getUrlWithLang('account/logout');
+    const uri = getUrlWithLang('accounts/logout');
     const data = fetchData(uri);
     return data;
   }

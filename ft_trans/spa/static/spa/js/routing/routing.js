@@ -77,3 +77,7 @@ export const router = async () => {
     //console.error(error);
   }
 };
+
+export function updatePage(html){
+  document.querySelector('#app').innerHTML = html;
+}

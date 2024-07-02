@@ -10,13 +10,13 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    console.log('account/signup');
-    const uri = getUrlWithLang('account/signup');
+    console.log('accounts/signup');
+    const uri = getUrlWithLang('accounts/signup');
     const data = fetchData(uri);
     return data;
   }
   async executeScript() {
-    const url = '/account/signup/';
+    const url = '/accounts/signup/';
     const form = document.getElementById('signup-form');
     let formData = new FormData(form);
 

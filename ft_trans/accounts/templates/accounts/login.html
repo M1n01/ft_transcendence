@@ -7,14 +7,14 @@
   <body>
     {% if user.is_authenticated %}
     <div>
-      <form id="logout-form" method="post" action="{% url 'account:logout' %}">
+      <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
         <button type="submit" class="form-button">Log out</button>
       </form>
     </div>
 
     {% else %}
-    <form method="post" id="login-form" action="{% url 'account:login' %}">
+    <form method="post" id="login-form" action="{% url 'accounts:login' %}">
       {% csrf_token %} {{ form }}
       <button type="submit" class="form-button">ログイン</button>
     </form>

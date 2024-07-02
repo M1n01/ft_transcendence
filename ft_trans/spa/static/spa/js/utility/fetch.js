@@ -14,43 +14,43 @@ function makeRequest(method, url) {
   });
 }
 
-export async function fetchAsForm(url, form, current_uri) {
+export async function fetchAsForm(form, FormData) {
   console.log('fetchAsForm No.1');
   console.log('fetchAsForm No.2 + form:' + form.toString());
   console.log('fetchAsForm No.3 + form:' + form[0]);
   console.log('fetchAsForm No.1');
-  //console.log('fetchAsForm No.1 form=' + form);
-  //console.log('fetchAsForm No.3 url=' + url);
+
   const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'X-CSRFToken': csrftoken, 
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-       },
+  try{
+    const res = await fetch(form.action, {
+      method: "POST",
+      headers: { 'X-CSRFToken': csrftoken
+      },
       mode: 'same-origin',
-      body:JSON.stringify(form),
-      //body: form,
-      //body: {"username":"test9", "password":"AABCfwi39"},
-      //body: "username: test9&password: AABCfwi39",
-    });
+      body: FormData
+    })
+    .then(response => {
+      console.log("then response");
 
-    const result = await response.text();
-    //console.log("fetch result:" + result);
-    if (result) {
-      navigateTo(current_uri);
-      router();
-    } else {
-      console.error('Failure');
+      //const result = await response.text();
+      if (!response.ok) {
+        console.error("Fetch Error");
+        return "";
+      }
+      return response;
+    })
+    .then((data) => {
+      return data.text();
+    })
+    .catch((error) => {
+          return "";
+    })
+      return (res);
+    }catch(error){
+      console.error("Fetch Error");
+      return "";
+      //console.log(error);
     }
-
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-
-  return '';
 }
 
 export default async function fetchData(url) {

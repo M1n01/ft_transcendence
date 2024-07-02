@@ -259,5 +259,5 @@ CSRF_COOKIE_SECURE = True
 
 
 # 認証
-LOGIN_REDIRECT_URL = "/"
-AUTH_USER_MODEL = "accounts.User"
+LOGIN_REDIRECT_URL = "/"  # Login後にリダイレクトされるページ
+AUTH_USER_MODEL = "accounts.User"  # ユーザー認証用のモデル

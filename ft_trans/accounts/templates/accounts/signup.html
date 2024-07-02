@@ -1,6 +1,6 @@
 <div>
   <br />
-  <form method="POST" id="signup-form" action="{% url 'account:signup' %}">
+  <form method="POST" id="signup-form" action="{% url 'accounts:signup' %}">
     {% csrf_token %}  {{ form }}
     <br />
     <div class="mt-3">

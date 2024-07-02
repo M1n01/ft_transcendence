@@ -259,5 +259,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # 認証
-LOGIN_REDIRECT_URL = "/"
-AUTH_USER_MODEL = "accounts.User"
+
+LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
+AUTH_USER_MODEL = "accounts.User"  # ユーザー認証用のモデル

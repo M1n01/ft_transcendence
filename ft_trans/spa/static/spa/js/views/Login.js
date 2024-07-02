@@ -11,12 +11,13 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const uri = getUrlWithLang('account/login');
+    const uri = getUrlWithLang('accounts/login');
     const data = fetchData(uri);
     return data;
   }
   async executeScript() {
     //
+    /*
     const url = '/account/login/';
     const form = document.getElementById('login-form');
     let formData = new FormData(form);
@@ -24,6 +25,7 @@ export default class extends AbstractView {
     console.log('execute login()');
     fetchAsForm(url, formData, 'login');
     console.log('execute login() end');
+    */
     //executeScriptTab("");
   }
 }
