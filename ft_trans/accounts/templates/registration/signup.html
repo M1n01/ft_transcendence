@@ -1,7 +1,7 @@
 <div>
   <br />
   <form method="POST" id="signup-form" action="{% url 'account:signup' %}">
-    {% csrf_token %}  {{ form.as_p }}
+    {% csrf_token %}  {{ form }}
     <br />
     <div class="mt-3">
       <button type="submit" class="form-button">Create</button>

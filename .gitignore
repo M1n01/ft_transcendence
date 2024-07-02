@@ -31,3 +31,6 @@ node_modules
 
 # Public files
 ft_trans/public/*
+
+# Database
+ft_trans/db.sqlite3

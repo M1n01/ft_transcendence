@@ -44,8 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(form.action, {
       //ypmethod: form.method,
       method: "POST",
+      //credentials:true,
       headers: { 'X-CSRFToken': csrftoken
+
         //'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+        //'Content-Type': 'text/html; charset=utf-8'
        },
       mode: 'same-origin',
       body: formData
