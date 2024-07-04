@@ -1,7 +1,6 @@
 NAME	:= ft_transcendence
-YMLDIR	:= ./docker
-DOCKERDIR	:= ./docker
-DJANGODIR	:= ./ft_trans/
+
+DJANGODIR	:= ./backend/
 DJANGO_STATIC_DIR	:= $(DJANGODIR)/public/
 SRCDIR	:= $(DJANGODIR)/ft_trans/
 DJANGO_SETTING	:= $(SRCDIR)/settings.py
