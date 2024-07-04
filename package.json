@@ -6,7 +6,8 @@
     "eslint-config-prettier": "^9.1.0",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
-    "simple-git-hooks": "^2.11.1"
+    "simple-git-hooks": "^2.11.1",
+    "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "lint": "eslint ft_trans/**/*.js",
