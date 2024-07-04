@@ -1,9 +1,10 @@
 NAME	:= ft_transcendence
 
 DJANGODIR	:= ./backend/
-DJANGO_STATIC_DIR	:= $(DJANGODIR)/public/
-SRCDIR	:= $(DJANGODIR)/ft_trans/
-DJANGO_SETTING	:= $(SRCDIR)/settings.py
+DJANGO_SETTING	:= $(DJANGODIR)/ft_trans/settings.py
+
+SRCDIR	:= ./frontend/
+STATIC_DIR	:= $(SRCDIR)/public/
 
 NGINX_IMAGE		:= docker-nginx
 DB_IMAGE		:= docker-db
@@ -29,31 +30,30 @@ fclean:
 	docker volume prune
 	docker network prune
 	sudo rm -rf db_volume/*
-	sudo rm -rf ft_trans/.my_pgpass
+	sudo rm -rf $(DJANGODIR)/.my_pgpass
 
 re:
 	@make fclean
 	@make $(NAME)
 
 init:
-	-mkdir -p $(DJANGO_STATIC_DIR)/media
-	-mkdir -p $(DJANGO_STATIC_DIR)/static
+	-mkdir -p $(STATIC_DIR)/media
+	-mkdir -p $(STATIC_DIR)/static
 
 up:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
-	python3 ft_trans/manage.py runserver
-
+	python3 $(DJANGODIR)/manage.py runserver
 
 update:
-	docker-compose -f docker/docker-compose.yml up -d --build
+	docker-compose -f docker-compose.yml up -d --build
 
 $(NAME):
-	-mkdir -p $(DJANGO_STATIC_DIR)/media
-	-mkdir -p $(DJANGO_STATIC_DIR)/static
+	-mkdir -p $(STATIC_DIR)/media
+	-mkdir -p $(STATIC_DIR)/static
 	ln -f  $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
-	docker-compose   --env-file $(ENV_FILE)  -f docker/docker-compose.yml up -d
+	docker-compose   --env-file $(ENV_FILE)  -f docker-compose.yml up -d
 
 stop:
-	docker-compose -f docker/docker-compose.yml down
+	docker-compose -f docker-compose.yml down
 
 .PHONY: all clean fclean re stop dev

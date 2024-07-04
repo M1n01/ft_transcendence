@@ -8,6 +8,7 @@
 # Database
 .my_pgpass
 db_volume
+backend/pong/migrations/
 
 # Backups
 *.bkp
@@ -17,7 +18,7 @@ db_volume
 __pycache__/*
 
 ## setting file
-ft_trans/ft_trans/settings.py
+backend/ft_trans/settings.py
 
 # Logs
 *.log
@@ -27,7 +28,7 @@ ft_trans/ft_trans/settings.py
 *.crt
 
 # Node.js
-node_modules
+frontend/node_modules
 
 # Public files
-ft_trans/public/*
+backend/public/*
