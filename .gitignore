@@ -15,6 +15,7 @@ db_volume
 # Python
 *.pyc
 __pycache__/*
+*/**/db.sqlite3
 
 ## setting file
 ft_trans/ft_trans/settings.py
