@@ -4,7 +4,9 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "js-cookie": ["node_modules/js-cookie/src/js.cookie.js"]
+      "js-cookie": ["node_modules/js-cookie/src/js.cookie.js"],
+      "@/*": ["ft_trans/spa/static/spa/js/*"],
+      "~/*": ["./*"]
     }
   },
 }
