@@ -1,8 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 
 # from .modelss import User, FtUser
-from .models.user import User
-from .models.ft_user import FtUser
+from .models import User
+from .models import FtUser
 
 
 class SignUpForm(UserCreationForm):
@@ -21,7 +21,7 @@ class FtSignUpForm(UserCreationForm):
     class Meta:
         model = FtUser
         fields = (
-            #"url",
+            # "url",
             "username",
             "email",
             # "email",

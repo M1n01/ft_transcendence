@@ -7,8 +7,8 @@ from urllib.parse import urlparse, parse_qs
 from django.contrib.auth.backends import BaseBackend, ModelBackend, RemoteUserBackend
 
 # from .modelss import User, FtUser
-from .models.user import User
-from .models.ft_user import FtUser
+from .models import User
+from .models import FtUser
 
 
 def randomStr(n):
@@ -51,9 +51,10 @@ class FtOAuth(ModelBackend):
     BASE_URL = getattr(settings, "OAUTH_AUTHORIZE_URL", None)
     CLIENT_ID = getattr(settings, "OAUTH_CLIENT_ID", None)
     SECRET_ID = getattr(settings, "OAUTH_SECRET_ID", None)
-    REDIRECTED_URL = "http://localhost:8000/accounts/redirect-oauth"
+    DOMAIN = getattr(settings, "PONG_DOMAIN", None)
+    REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
-    def authenticate(self, request, username):
+    def authenticate(self, request, username, email):
         url = "test"
         print("FtOAuth authenticate No.1")
         # query = query_to_dict(url)
@@ -70,15 +71,20 @@ class FtOAuth(ModelBackend):
         # email = user_response["email"]
         # def authenticate(self, request, token=None):
         try:
+            print("FtOAuth authenticate No.2")
             user = FtUser.objects.get(username=username)
+            print("FtOAuth authenticate No.3")
         except FtUser.DoesNotExist:
             print("Error")
             user = FtUser()
             user.username = username
             user.email = email
+            print("FtOAuth authenticate No.4")
             user.save()
+            print("FtOAuth authenticate No.5")
             # user.email2 = email
             # raise exceptions.AuthenticationFailed("No such user")
+        print("FtOAuth authenticate No.6")
         return user
 
     def append_state_code_dict(self, state, code):

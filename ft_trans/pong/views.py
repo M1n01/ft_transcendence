@@ -23,6 +23,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def checkSPA(request):
+    headers = request.headers
+    print(f"checkSPA:{headers=}")
+    cokkie = headers.get("Cookie", "No Cookie Header Found")
+    print(f"checkSPA:{cokkie=}")
     spa = request.META.get("HTTP_SPA")
     spas = request.META.get("HTTPS_SPA")
     if spa is None and spas is None:
@@ -55,6 +59,10 @@ def lang(request):
 
 @condition(etag_func=my_etag)
 def script(request):
+    headers = request.headers
+    print(f"checkSPA:{headers=}")
+    cokkie = headers.get("Cookie", "No Cookie Header Found")
+    print(f"checkSPA:{cokkie=}")
     checkSPA(request)
     return render(request, "pong/script.html")
 

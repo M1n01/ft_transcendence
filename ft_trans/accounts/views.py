@@ -15,8 +15,8 @@ from .forms import SignUpForm
 from .forms import FtSignUpForm
 
 # from .models import User, FtUser
-from accounts.models.user import User
-from accounts.models.ft_user import FtUser
+from accounts.models import User
+from accounts.models import FtUser
 import qrcode
 import qrcode.image.svg
 from io import BytesIO
@@ -203,7 +203,7 @@ def oauth_login(request):
     print("form_valid test No.7")
     # response_form = super().form_valid(form)
     print("form_valid test No.8")
-    user = authenticate(request, username=username)
+    user = authenticate(request, username=username, email=email)
     print("form_valid test No.9")
     # user = ft_oauth.authenticate(request, username)
     if user is None:

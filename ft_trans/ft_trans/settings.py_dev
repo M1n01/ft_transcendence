@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     "pong",
     # "login",
     "accounts",
+    # "accounts.models.ft_user",
     "api",
     # "allauth",
     # "allauth.account",
@@ -129,7 +130,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 # alloauth
-                "django.template.context_processors.request",
+                # "django.template.context_processors.request",
             ],
         },
     },
@@ -188,7 +189,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     "accounts.oauth.FtOAuth",
     "django.contrib.auth.backends.ModelBackend",
-    "django.contrib.auth.backends.RemoteUserBackend",
+    # "django.contrib.auth.backends.RemoteUserBackend",
     # "backends.LoginIdModelBackend",
 ]
 
@@ -276,8 +277,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
 LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.User"  # ユーザー認証用のモデル
+# AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
 OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
+
+# ドメイン
+PONG_DOMAIN = "http://localhost:8000/"
