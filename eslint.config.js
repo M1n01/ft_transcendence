@@ -5,7 +5,7 @@ export default [
   eslint.configs.recommended,
   {
     files: ['ft_trans/**/*.{js,jsx}'],
-    ignores: ['node_modules'],
+    ignores: ['node_modules', 'ft_trans/public/'],
     languageOptions: {
       globals: {
         ...globals.browser,
