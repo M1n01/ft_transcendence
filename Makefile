@@ -1,6 +1,6 @@
 NAME	:= ft_transcendence
 
-COMPOSEFILE	:= ./docker/docker-compose.yml
+COMPOSEFILE	:= docker-compose.yml
 
 DJANGODIR	:= ./ft_trans/
 DJANGO_STATIC_DIR	:= $(DJANGODIR)/public/
