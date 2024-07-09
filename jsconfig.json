@@ -4,8 +4,7 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "@bar/*": ["src/foo/bar/*"]
+      "js-cookie": ["node_modules/js-cookie/src/js.cookie.js"]
     }
   },
-  "exclude": ["node_modules", "dist"]
 }

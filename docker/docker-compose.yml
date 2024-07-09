@@ -1,4 +1,3 @@
-version: "3"
 networks:
   django_net:
     name: django_net

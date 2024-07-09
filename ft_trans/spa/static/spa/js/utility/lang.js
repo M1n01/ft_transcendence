@@ -1,12 +1,11 @@
-import { navigateTo, router } from "../routing/routing.js";
-import {getCookie} from "./cookie.js"
+import { navigateTo, router } from '../routing/routing.js';
 
 export async function changingLanguage(url, form, current_uri) {
-  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   try {
     const response = await fetch(url, {
-      method: "POST",
-      headers: { "X-CSRFToken": csrftoken},
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrftoken },
       mode: 'same-origin',
       body: form,
     });
@@ -16,7 +15,7 @@ export async function changingLanguage(url, form, current_uri) {
       navigateTo(current_uri);
       router();
     } else {
-      console.error("Failure");
+      console.error('Failure');
     }
 
     return response;
@@ -24,5 +23,5 @@ export async function changingLanguage(url, form, current_uri) {
     console.error(error);
   }
 
-  return "";
+  return '';
 }

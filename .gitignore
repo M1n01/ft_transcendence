@@ -15,6 +15,9 @@ db_volume
 # Python
 *.pyc
 __pycache__/*
+*/**/db.sqlite3
+*/**/migrations/*initial.py
+ft_trans/make_db_setting.sh
 
 ## setting file
 ft_trans/ft_trans/settings.py
@@ -28,6 +31,7 @@ ft_trans/ft_trans/settings.py
 
 # Node.js
 node_modules
+*/**/dist
 
 # Public files
 ft_trans/public/*

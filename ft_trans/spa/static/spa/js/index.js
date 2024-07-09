@@ -1,43 +1,41 @@
-import { Routes } from ".//routing/routes.js";
-import { DataType } from "./const/type.js";
-import sendPost from "./utility/post.js";
-import { navigateTo, router } from "./routing/routing.js";
-import { changingLanguage } from "./utility/lang.js";
-import { getUrl } from "./utility/url.js";
+import { Routes } from './routing/routes.js';
+import { navigateTo, router } from './routing/routing.js';
+import { changingLanguage } from './utility/lang.js';
+import { getUrl } from './utility/url.js';
 
-window.addEventListener("popstate", router);
+// ブラウザの戻るボタンを押したときに発火するイベント
+window.addEventListener('popstate', router);
 
+// パス名を取得する関数
 const getDisplayedURI = (pathname) => {
-  const splits = pathname.split("/").filter((uri) => uri !== "");
+  const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
-    (str) => Routes.findIndex((path) => path.path.replace("/", "") === str) >= 0
+    (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
-  path = path === undefined ? "" : path;
+  path = path === undefined ? '' : path;
   return getUrl(path);
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded No.1");
+// DOMが読み込まれたときに発火するイベント
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded No.1');
   let tmp_path = window.location.pathname;
-  document.body.addEventListener("click", (e) => {
+  document.body.addEventListener('click', (e) => {
     // ページ切替
-    if (e.target.matches("[data-link]")) {
+    if (e.target.matches('[data-link]')) {
       e.preventDefault();
       tmp_path = e.target.href;
-      console.log("DOMContentLoaded No.2 tmp_path:" + tmp_path);
+      console.log('DOMContentLoaded No.2 tmp_path:' + tmp_path);
       navigateTo(tmp_path);
     }
-    console.log("DOMContentLoaded No.3");
+    console.log('DOMContentLoaded No.3');
 
     //多言語切替
-    if (
-      e.target.tagName === "INPUT" &&
-      e.target.className === "change-language"
-    ) {
+    if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
       e.preventDefault();
 
-      const lang_url = "/i18n/setlang/";
-      const form = document.getElementById("lang_form");
+      const lang_url = '/i18n/setlang/';
+      const form = document.getElementById('lang_form');
       var formData = new FormData(form);
       const current_uri = getDisplayedURI(tmp_path);
       changingLanguage(lang_url, formData, current_uri);
