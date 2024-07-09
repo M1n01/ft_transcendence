@@ -15,7 +15,7 @@ DB_NET			:= db_net
 DJANGO_NET		:= django_net
 DB_VOLUME		:= ./db_volume
 
-ENV_FILE	:= ./docker/.env
+ENV_FILE	:= .env
 
 
 all: $(NAME)
