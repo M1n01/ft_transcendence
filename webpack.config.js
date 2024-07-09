@@ -20,16 +20,12 @@ export default {
           presets: ['@babel/preset-env', '@babel/preset-react'],
         },
       },
-      {
-        test: /\.css$/,
-        loader: ['style-loader', 'css-loader'],
-      },
     ],
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'ft_trans/spa/static/spa/js'),
-      '~': __dirname
+      '~': __dirname,
     },
   },
 };

@@ -42,6 +42,7 @@ update:
 $(NAME):
 	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
 	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
+	npx webpack
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
 
 stop:
