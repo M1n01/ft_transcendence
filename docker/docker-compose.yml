@@ -69,6 +69,8 @@ services:
       - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
       - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
       - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
+      - OAUTH_CLIENT_ID=$OAUTH_CLIENT_ID
+      - OAUTH_SECRET_ID=$OAUTH_SECRET_ID
     command:
       /bin/sh -c '
       cp /tmp/server.key /workspace/ &&

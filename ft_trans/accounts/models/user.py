@@ -3,9 +3,11 @@ from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser,
     PermissionsMixin,
+    Group,
+    Permission,
 )
 from django.utils.translation import gettext_lazy as _
-import logging
+import logging, datetime
 
 
 # Create your models here.
@@ -77,7 +79,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     birth_date = models.DateField(verbose_name=_("birth_date"), blank=True, null=True)
-    created_at = models.DateTimeField(verbose_name=_("created_at"), auto_now_add=True)
+    created_at = models.DateTimeField(
+        verbose_name=_("created_at"),
+        #auto_now_add=True,
+        default=datetime.datetime.now(),
+    )
     updated_at = models.DateTimeField(verbose_name=_("updateded_at"), auto_now=True)
 
     def __str__(self):
@@ -87,3 +93,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
+
+
+class FtUserManager(BaseUserManager):
+
+    def _create_user(self, email, username, **extra_fields):
+        logging.info(f"_create_user")
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        # user.set_password(email)
+        user.save(using=self._db)
+
+        return user
+
+    def create_user(self, email, username, password, **extra_fields):
+        logging.info(f"create_user()")
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(
+            email=email,
+            username=username,
+            # password=password,
+            **extra_fields,
+        )
+
+    def create_superuser(self, email, username, password, **extra_fields):
+        extra_fields["is_active"] = True
+        extra_fields["is_staff"] = True
+        extra_fields["is_superuser"] = True
+        return self._create_user(
+            email=email,
+            username=username,
+            password=password,
+            **extra_fields,
+        )

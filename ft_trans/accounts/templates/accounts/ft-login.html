@@ -15,23 +15,11 @@
     </div>
 
     {% else %}
-    <form method="post" id="login-form" action="{% url 'accounts:login' %}">
+    <form method="post" id="login-form" action="{% url 'accounts:check-ft-oauth' %}">
       {% csrf_token %} {{ form }}
       <button type="submit" class="form-button">ログイン</button>
     </form>
 
-    <p>42Ouath</p>
-    <button id="openDialog">Open Dialog</button>
-
-    <dialog id="myDialog">
-      <p>42認証が終わり次第、ダイアログを閉じてください</p>
-      <img src="data:image/png;base64,{{ qr }}" height="480" width="480" />
-      <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer">URL</a>
-      <button id="closeDialog">Close</button>
-    </dialog>
-
     {% endif %}
-
-    <script src="{% static 'accounts/js/login.js' %}"></script>
   </body>
 </html>

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
-from accounts.models import User
+from accounts.models.user import User
 
 
 # Create your models here.

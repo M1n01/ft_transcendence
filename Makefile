@@ -7,10 +7,10 @@ SRCDIR	:= $(DJANGODIR)/ft_trans/
 DJANGO_SETTING	:= $(SRCDIR)/settings.py
 
 NGINX_IMAGE		:= docker-nginx
-DB_IMAGE		:= docker-db
+DB_IMAGE			:= docker-db
 DJANGO_IMAGE	:= docker-django
 
-DB_NET			:= db_net
+DB_NET				:= db_net
 DJANGO_NET		:= django_net
 
 ENV_FILE	:= .env

@@ -8,6 +8,7 @@
 # Database
 .my_pgpass
 db_volume
+ft_trans/*/migrations/*
 
 # Backups
 *.bkp
@@ -34,3 +35,9 @@ ft_trans/public/*
 
 # Database
 ft_trans/db.sqlite3
+
+# Volume
+ft_trans/make_db_setting.sh
+
+#vim
+*.swp
