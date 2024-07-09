@@ -31,6 +31,7 @@ ft_trans/ft_trans/settings.py
 
 # Node.js
 node_modules
+*/**/dist
 
 # Public files
 ft_trans/public/*
