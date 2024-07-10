@@ -12,8 +12,6 @@ import datetime
 
 
 # Create your models here.
-
-
 class FtUserManager(BaseUserManager):
 
     def _create_user(self, email, username, **extra_fields):

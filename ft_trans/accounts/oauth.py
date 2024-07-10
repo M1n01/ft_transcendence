@@ -16,45 +16,39 @@ logger = logging.getLogger(__name__)
 
 
 def randomStr(n):
+    """
+    ランダムな文字列を返す
+    引数:
+        n:      文字数
+    戻り値:
+        string: n文字数なランダムな文字列
+    """
     randlst = [random.choice(string.ascii_letters + string.digits) for i in range(n)]
     return "".join(randlst)
 
 
 def query_to_dict(url):
+    """
+    urlのクエリをdictに変換して返す
+    引数:
+        url:    対象のurl文字列
+    戻り値:
+        Dict: urlから抽出したクエリを辞書型に変換したもの
+    """
     parsed_url = urlparse(url)
     query_dict = parse_qs(parsed_url.query)
     return query_dict
 
 
-"""
-class LoginIdModelBackend(ModelBackend):
-
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        try:
-            login_id = kwargs.get("login_id")
-            if not login_id:
-                raise User.DoesNotExist
-            user = User.objects.get(login_id=login_id)
-        except User.DoesNotExist:
-            # Run the default password hasher once to reduce the timing
-            # difference between an existing and a nonexistent user (#20760).
-            User().set_password(password)
-        else:
-            if user.check_password(password) and self.user_can_authenticate(user):
-                return user
-"""
-
 # 42認可サーバーから受け取る、state,codeの組み合わせをdictで管理
 state_code_dict = {}
 
-# class CustomHeaderMiddleware(RemoteUserMiddleware):
-# header = "HTTP_AUTHUSER"
 
-
-# class FtOAuth(RemoteUserBackend):
 class FtOAuth(ModelBackend):
-    # class FtOAuth(BaseBackend):
-    # class FtOAuth:
+    """
+    FtUser用の認証バックエンドクラス
+    """
+
     BASE_URL = getattr(settings, "OAUTH_AUTHORIZE_URL", None)
     CLIENT_ID = getattr(settings, "OAUTH_CLIENT_ID", None)
     SECRET_ID = getattr(settings, "OAUTH_SECRET_ID", None)
@@ -63,35 +57,24 @@ class FtOAuth(ModelBackend):
 
     def authenticate(self, request, username, email):
         try:
-            print("FtOAuth authenticate No.2")
             user = FtUser.objects.get(username=username)
-            print("FtOAuth authenticate No.3 username:" + user.username)
         except FtUser.DoesNotExist:
-            print("Error")
             user = FtUser()
             user.username = username
             user.email = email
             user.password = randomStr(32)
             user.created_at = datetime.datetime.now()
-            print("FtOAuth authenticate No.4")
             user.save()
-            print("FtOAuth authenticate No.5")
             user = FtUser.objects.get(username=username)
-            print("FtOAuth authenticate No.6")
-            # user.email2 = email
-            # raise exceptions.AuthenticationFailed("No such user")
-        print("FtOAuth authenticate No.7")
         return user
 
     def append_state_code_dict(self, state, code):
         state_code_dict[state] = code
 
-    # def make_user(self, state, code):
-    # state_code_dict[state] = code
-    # FtUser.a
-
-    # 42認可サーバーのURL取得
     def get_ft_authorization_url(self):
+        """
+        42認可サーバーのURL取得
+        """
         redirect_uri = self.REDIRECTED_URL
         query_list = {
             "client_id": self.CLIENT_ID,
@@ -105,15 +88,15 @@ class FtOAuth(ModelBackend):
         url = self.BASE_URL + "?" + query
         return url
 
-    # curl -F grant_type=authorization_code -F client_id=u-s4t2ud-69852fb56c7eac30b2c17c5d17509527815e50bb2ce195c461931cff5ed594a7
-    # -F client_secret=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
-    # -F code=50917ac89e6661453c80947571cced5d0f62d192d08955937d34aa92a114fef9
-    # -F redirect_uri=https://localhost/ -X POST https://api.intra.42.fr/oauth/token
-
-    def receive_redirect(self, url):
-        return url
-
     def fetch_user(self, access_token):
+        """
+        42認可サーバーからユーザー情報を取得
+
+        引数:
+            access_token: 42のaccess_token
+        戻り値:
+            json: ユーザー情報
+        """
         url_user = "https://api.intra.42.fr/v2/me"
         headers = {
             "Authorization": "Bearer " + access_token,

@@ -20,11 +20,6 @@ class FtSignUpForm(UserCreationForm):
     class Meta:
         model = FtUser
         fields = (
-            # "url",
             "username",
             "email",
-            # "email",
-            # "first_name",
-            # "last_name",
-            # "birth_date",
         )
