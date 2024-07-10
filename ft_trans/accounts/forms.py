@@ -7,13 +7,13 @@ from .models import FtUser
 
 class SignUpForm(UserCreationForm):
     class Meta:
-        model = User
+        model = FtUser
         fields = (
             "username",
             "email",
-            "first_name",
-            "last_name",
-            "birth_date",
+            #"first_name",
+            #"last_name",
+            #"birth_date",
         )
 
 

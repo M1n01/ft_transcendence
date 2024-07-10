@@ -5,6 +5,7 @@ import requests
 import json
 from urllib.parse import urlparse, parse_qs
 from django.contrib.auth.backends import BaseBackend, ModelBackend, RemoteUserBackend
+from django.contrib.auth.middleware import RemoteUserMiddleware
 
 # from .modelss import User, FtUser
 from .models import User
@@ -43,8 +44,10 @@ class LoginIdModelBackend(ModelBackend):
 # 42認可サーバーから受け取る、state,codeの組み合わせをdictで管理
 state_code_dict = {}
 
+#class CustomHeaderMiddleware(RemoteUserMiddleware):
+    #header = "HTTP_AUTHUSER"
 
-# class FtOAuth(RemoteUserBackend):
+#class FtOAuth(RemoteUserBackend):
 class FtOAuth(ModelBackend):
     # class FtOAuth(BaseBackend):
     # class FtOAuth:
@@ -73,7 +76,7 @@ class FtOAuth(ModelBackend):
         try:
             print("FtOAuth authenticate No.2")
             user = FtUser.objects.get(username=username)
-            print("FtOAuth authenticate No.3")
+            print("FtOAuth authenticate No.3 username:" + user.username)
         except FtUser.DoesNotExist:
             print("Error")
             user = FtUser()
@@ -82,9 +85,11 @@ class FtOAuth(ModelBackend):
             print("FtOAuth authenticate No.4")
             user.save()
             print("FtOAuth authenticate No.5")
+            user = FtUser.objects.get(username=username)
+            print("FtOAuth authenticate No.6")
             # user.email2 = email
             # raise exceptions.AuthenticationFailed("No such user")
-        print("FtOAuth authenticate No.6")
+        print("FtOAuth authenticate No.7")
         return user
 
     def append_state_code_dict(self, state, code):

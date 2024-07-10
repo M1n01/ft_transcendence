@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
-from accounts.models import User
+from accounts.models import FtUser
 
 
 # Create your models here.
@@ -39,13 +39,13 @@ class Game(models.Model):
         default=GAME_CHOICES.PONG1,
     )
     win_user = models.ForeignKey(
-        User, related_name="game_win_user", on_delete=models.CASCADE
+        FtUser, related_name="game_win_user", on_delete=models.CASCADE
     )
     # win_user2 = models.ForeignKey(
     # User, related_name="game_pong", on_delete=models.CASCADE, null=True
     # )
     loose_user = models.ForeignKey(
-        User, related_name="game_loose_user", on_delete=models.CASCADE
+        FtUser, related_name="game_loose_user", on_delete=models.CASCADE
     )
     # loose_user2 = models.ForeignKey(
     # User, related_name="game_pong", on_delete=models.CASCADE, null=True

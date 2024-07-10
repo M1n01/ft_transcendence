@@ -43,7 +43,7 @@ def LogoutPage(request):
 
 class LoginFrom(AuthenticationForm):
     class Meta:
-        model = User
+        model = FtUser
 
 
 class UserLogin(LoginView):
@@ -110,7 +110,7 @@ class UserRegistration(CreateView):
 
 
 class UserList(LoginRequiredMixin, ListView):
-    model = User
+    model = FtUser
     template_name = "accounts/user_list.html"
     redirect_field_name = "redirect"
 
@@ -218,6 +218,8 @@ def oauth_login(request):
         print("Error Error Error Error Error User is None")
     print("form_valid test No.11 username=" + username)
     login(request, user, backend="accounts.oauth.FtOAuth")
+    #login(request, user, backend="django.contrib.auth.backends.RemoteUserBackend")
+
     # login(request, user, backend="django.contrib.auth.backends.RemoteUserBackend")
     print("form_valid test No.12")
     # else:

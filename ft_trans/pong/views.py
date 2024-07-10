@@ -57,14 +57,26 @@ def lang(request):
     return render(request, "pong/lang_test.html")
 
 
-@condition(etag_func=my_etag)
-def script(request):
+def script_view(request):
     headers = request.headers
     print(f"checkSPA:{headers=}")
     cokkie = headers.get("Cookie", "No Cookie Header Found")
     print(f"checkSPA:{cokkie=}")
     checkSPA(request)
     return render(request, "pong/script.html")
+#@condition(etag_func=my_etag)
+def script(request):
+    return render(request, "pong/script.html")
+    #headers = request.headers
+    #headers['REMOTE_USER'] = 'hsano'
+    #request.headers = headers
+    #return script_view(request)
+    #headers = request.headers
+    #print(f"checkSPA:{headers=}")
+    #cokkie = headers.get("Cookie", "No Cookie Header Found")
+    #print(f"checkSPA:{cokkie=}")
+    #checkSPA(request)
+    #return render(request, "pong/script.html")
 
 
 @condition(etag_func=my_etag)
