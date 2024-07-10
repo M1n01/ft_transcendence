@@ -2,6 +2,7 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { fetchAsForm } from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
+import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -10,7 +11,6 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    console.log('accounts/signup');
     const uri = getUrlWithLang('accounts/signup');
     const data = fetchData(uri);
     return data;
@@ -18,10 +18,9 @@ export default class extends AbstractView {
   async executeScript() {
     const url = '/accounts/signup/';
     const form = document.getElementById('signup-form');
+    executeScriptTab('');
     let formData = new FormData(form);
 
-    console.log('execute signup()');
     await fetchAsForm(url, formData, 'signup');
-    console.log('execute signup() end');
   }
 }

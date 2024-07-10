@@ -178,7 +178,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 AUTHENTICATION_BACKENDS = [
-    #"django.contrib.auth.backends.RemoteUserBackend",
     "accounts.oauth.FtOAuth",
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -267,7 +266,7 @@ CSRF_COOKIE_SECURE = True
 LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
 LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
-SESSION_ENGINE = 'django.contrib.sessions.backends.db' # デフォルト。セッションデータをDBに保存
+SESSION_ENGINE = 'django.contrib.sessions.backends.db' # デフォルトのまま。セッションデータをDBに保存
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"

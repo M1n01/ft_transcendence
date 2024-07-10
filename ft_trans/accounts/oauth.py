@@ -6,10 +6,13 @@ import json
 from urllib.parse import urlparse, parse_qs
 from django.contrib.auth.backends import BaseBackend, ModelBackend, RemoteUserBackend
 from django.contrib.auth.middleware import RemoteUserMiddleware
+import datetime
+import logging
 
 # from .modelss import User, FtUser
-from .models import User
 from .models import FtUser
+
+logger = logging.getLogger(__name__)
 
 
 def randomStr(n):
@@ -44,10 +47,11 @@ class LoginIdModelBackend(ModelBackend):
 # 42認可サーバーから受け取る、state,codeの組み合わせをdictで管理
 state_code_dict = {}
 
-#class CustomHeaderMiddleware(RemoteUserMiddleware):
-    #header = "HTTP_AUTHUSER"
+# class CustomHeaderMiddleware(RemoteUserMiddleware):
+# header = "HTTP_AUTHUSER"
 
-#class FtOAuth(RemoteUserBackend):
+
+# class FtOAuth(RemoteUserBackend):
 class FtOAuth(ModelBackend):
     # class FtOAuth(BaseBackend):
     # class FtOAuth:
@@ -58,21 +62,6 @@ class FtOAuth(ModelBackend):
     REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
     def authenticate(self, request, username, email):
-        url = "test"
-        print("FtOAuth authenticate No.1")
-        # query = query_to_dict(url)
-        # if "state" not in query:
-        # return ""
-        # state = query["state"][0]
-        # code = state_code_dict[state]
-        # ft_oauth = FtOAuth()
-        # response = self.fetch_access_token(state, code)
-        # access_token = response.json()["access_token"]
-        # user_response = self.fetch_user(access_token)
-        # print("form_valid test No.5.1")
-        # username = user_response["login"]
-        # email = user_response["email"]
-        # def authenticate(self, request, token=None):
         try:
             print("FtOAuth authenticate No.2")
             user = FtUser.objects.get(username=username)
@@ -82,6 +71,8 @@ class FtOAuth(ModelBackend):
             user = FtUser()
             user.username = username
             user.email = email
+            user.password = randomStr(32)
+            user.created_at = datetime.datetime.now()
             print("FtOAuth authenticate No.4")
             user.save()
             print("FtOAuth authenticate No.5")
@@ -131,6 +122,16 @@ class FtOAuth(ModelBackend):
         return response.json()
 
     def fetch_access_token(self, state, code):
+        """
+        必要なデータを収集して、
+        42認可サーバーに送信してaccess_tokenを取得する
+
+        引数:
+            state:      Djangoが作成したランダムデータ
+            code:       42認可サーバーが作成したランダムデータ
+        戻り値:
+            Response:   送信結果のレスポンスデータ
+        """
         ft_oauth_url = "https://api.intra.42.fr/oauth/token"
         params = {
             "grant_type": "authorization_code",
@@ -140,57 +141,36 @@ class FtOAuth(ModelBackend):
             "redirect_uri": self.REDIRECTED_URL,
             "state": state,
         }
-        print(f"{ft_oauth_url=}")
-        print(f"{params=}")
         response = requests.post(ft_oauth_url, params=params)
         if response.status_code >= 400:
-            print(f"error:{response.status_code=}")
-            return ""
-        print(f"{response.status_code=}")
-        print(f"{response=}")
-        print(f"{response.json()=}")
+            logger.error(f"error:{response.status_code=}")
+            raise RuntimeError(
+                f"42認可サーバーに対する通信に失敗しました：{response.status_code}"
+            )
         return response
-        # return (response.json()["access_token"], response)
 
     # 42認可サーバーへ送信
     def send_ft_authorization(self, url):
+        """
+        引数のurlからstateを抽出し、
+        42認可サーバーに送信してaccess_tokenを取得する
+
+
+        引数:
+            request:    ブラウザからのリクエストデータ
+                        クエリとして"state"と"code"を含まなければならない
+        戻り値:
+            Response:   送信結果のレスポンスデータ
+
+        """
         query = query_to_dict(url)
         if "state" not in query:
-            return ""
+            logger.error(f"not find state in query")
+            raise ValueError("Requestされたデータは無効です")
         state = query["state"][0]
-        print(f"send_ft_authorization No.1 {url=}")
-        print(f"send_ft_authorization No.2 {state=}")
         if state not in state_code_dict:
-            print("not exist")
-            return ""
+            logger.error(f"not find state in state_code_dict")
+            raise ValueError("Requestされたデータは無効です")
 
-        print(f"send_ft_authorization No.3 code={state_code_dict[state]}")
         code = state_code_dict[state]
-        response = self.fetch_access_token(state, code)
-        access_token = response.json()["access_token"]
-        print(f"{access_token=}")
-
-        user_response = self.fetch_user(access_token)
-        """
-        print(f"No.2 {user_response=}")
-        result_json = user_response.json()
-        print(f"No.2 {response.json()=}")
-        print(f"No.2 result_json={result_json}")
-        print(f"No.2 {result_json['id']=}")
-        print(f"No.2 {result_json['email']=}")
-        print(f"No.2 {result_json['login']=}")
-        print(f"No.2 {result_json['first_name']=}")
-        print(f"No.2 {result_json['last_name']=}")
-        print(f"No.2 {result_json['image']['link']=}")
-
-        username = result_json["login"]
-        email = result_json["email"]
-        image = result_json["image"]["link"]
-        """
-
-        # return response.json()
-        return response
-
-    # todo
-    def check_token(token, request):
-        return (token, request)
+        return self.fetch_access_token(state, code)
