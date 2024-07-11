@@ -55,9 +55,9 @@ class FtOAuth(ModelBackend):
     DOMAIN = getattr(settings, "PONG_DOMAIN", None)
     REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
-    def authenticate(self, request, username, email):
+    def authenticate(self, username, email):
         try:
-            user = FtUser.objects.get(username=username)
+            user = FtUser.objects.get(email=email)
         except FtUser.DoesNotExist:
             user = FtUser()
             user.username = username
@@ -65,7 +65,7 @@ class FtOAuth(ModelBackend):
             user.password = randomStr(32)
             user.created_at = datetime.datetime.now()
             user.save()
-            user = FtUser.objects.get(username=username)
+            user = FtUser.objects.get(email=email)
         return user
 
     def append_state_code_dict(self, state, code):

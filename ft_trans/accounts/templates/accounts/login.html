@@ -17,16 +17,14 @@
     {% else %}
     <form method="post" id="login-form" action="{% url 'accounts:login' %}">
       {% csrf_token %} {{ form }}
-      <button type="submit" class="form-button">{% trans "Log_out" %}</button>
+      <button type="submit" class="form-button">{% trans "Log_in" %}</button>
     </form>
 
     <p>42Ouath</p>
     <button id="openDialog">{% trans "42認証" %}</button>
 
-    {% if user.is_authenticated %}
     <p>{% trans "42認証" %}</p>
-    <button type="submit" class="form-button">{% trans "ログアウト" %}</button>
-    {% else %}
+    <!-- <button type="submit" class="form-button">{% trans "ログアウト" %}</button> -->
     <dialog id="myDialog">
       <a href="/success-login" id="success-login" class="nav__link" data-link hidden>success</a>
       <div p id="instruction">
@@ -51,7 +49,7 @@
       <button id="closeDialog">{% trans "認証" %}</button>
     </dialog>
 
-    {% endif %} {% endif %}
+    {% endif %}
 
     <script src="{% static 'accounts/js/login.js' %}"></script>
   </body>

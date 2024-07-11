@@ -17,7 +17,7 @@ class FtUserManager(BaseUserManager):
     def _create_user(self, email, username, **extra_fields):
         logging.info(f"_create_user")
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         # user.set_password(email)
         user.save(using=self._db)
 
@@ -53,9 +53,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         Permission, related_name="ft_user_permissions"
     )
 
-    username = models.CharField(
-        verbose_name=_("ユーザー名"), max_length=32, primary_key=True
-    )
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32)
     email = models.CharField(verbose_name=_("email"), max_length=256, unique=True)
     first_name = models.CharField(
         verbose_name=_("姓"),
@@ -90,7 +89,7 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"username={self.username}, email={self.email}"
 
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     objects = FtUserManager()

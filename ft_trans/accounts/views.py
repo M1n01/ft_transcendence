@@ -22,6 +22,7 @@ import qrcode.image.svg
 import base64
 import json
 import logging
+import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -73,12 +74,7 @@ class SignupView(CreateView):
         CreateViewのメソッドをオーバーライド
         """
         try:
-            response = super().form_valid(form)
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=password)
-            login(self.request, user)
-            return response
+            return super().form_valid(form)
         except:
             return HttpResponseBadRequest("Bad Request")
 
@@ -128,20 +124,31 @@ def oauth_login(request):
         user_response = ft_oauth.fetch_user(access_token)
         username = user_response["login"]
         email = user_response["email"]
-        user = authenticate(request, username=username, email=email)
+        user = ft_oauth.authenticate(username=username, email=email)
 
         if user is None:
             logger.error(f"failure to authenticate")
             return HttpResponseServerError("failure to authenticate")
+            # user = FtUser()
+            # user.username = username
+            # user.email = email
+            # user.password = randomStr(32)
+            # user.created_at = datetime.datetime.now()
+            # user.save()
+            # user = authenticate(username=username, email=email)
+            # if user is None:
+            # logger.error(f"failure to authenticate")
+            # return HttpResponseServerError("failure to authenticate")
 
         login(request, user, backend="accounts.oauth.FtOAuth")
+        # login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         return HttpResponse()
     except RuntimeError as e:
-        return HttpResponseServerError("failure to login")
+        return HttpResponseServerError("failure to login:" + e)
     except ValueError as e:
-        return HttpResponseBadRequest("Bad Request")
-    except:
-        return HttpResponseBadRequest("Bad Request")
+        return HttpResponseBadRequest("Bad Request:" + e)
+    except Exception as e:
+        return HttpResponseBadRequest("Bad Request:" + e)
 
 
 class FtLoginFrom(AuthenticationForm):
