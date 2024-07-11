@@ -42,6 +42,8 @@ init:
 
 up:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
+	python ft_trans/manage.py makemigrations
+	python ft_trans/manage.py migrate
 	python3 ft_trans/manage.py runserver
 
 
