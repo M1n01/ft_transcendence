@@ -5,6 +5,7 @@
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@eslint/eslintrc": "^3.1.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "babel-loader": "^9.1.3",
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
@@ -14,24 +15,30 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
-    "lint": "eslint ft_trans/**/*.js",
-    "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
+    "lint": "eslint ft_trans/**/*.js blockchain/**/*.js",
+    "lint:fix": "eslint --fix 'ft_trans/**/*.js' 'blockchain/**/*.js'",
     "prepare": "simple-git-hooks > /dev/null"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "ft_trans/**/*.{js,jsx}": [
+    "ft_trans/**/*.js": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
     "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
+    ],
+    "blockchain/**/*.js": [
+      "prettier --write --loglevel=error",
+      "eslint --fix --quiet"
     ]
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
     "babel": "^6.23.0",
+    "hardhat": "^2.22.6",
     "js-cookie": "^3.0.5",
     "webpack": "^5.92.1"
   }
