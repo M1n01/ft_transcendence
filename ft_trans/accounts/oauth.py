@@ -57,15 +57,17 @@ class FtOAuth(ModelBackend):
 
     def authenticate(self, username, email):
         try:
-            user = FtUser.objects.get(email=email)
+            user = FtUser.objects.get(email42=email)
         except FtUser.DoesNotExist:
             user = FtUser()
+            cnt = FtUser.objects.count()
             user.username = username
-            user.email = email
+            user.email = str(cnt) + email  # dummy email
+            user.email42 = email
             user.password = randomStr(32)
             user.created_at = datetime.datetime.now()
             user.save()
-            user = FtUser.objects.get(email=email)
+            user = FtUser.objects.get(email42=email)
         return user
 
     def append_state_code_dict(self, state, code):

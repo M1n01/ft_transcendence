@@ -21,5 +21,5 @@ class FtSignUpForm(UserCreationForm):
         model = FtUser
         fields = (
             "username",
-            "email",
+            "email42",
         )

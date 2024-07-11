@@ -129,19 +129,7 @@ def oauth_login(request):
         if user is None:
             logger.error(f"failure to authenticate")
             return HttpResponseServerError("failure to authenticate")
-            # user = FtUser()
-            # user.username = username
-            # user.email = email
-            # user.password = randomStr(32)
-            # user.created_at = datetime.datetime.now()
-            # user.save()
-            # user = authenticate(username=username, email=email)
-            # if user is None:
-            # logger.error(f"failure to authenticate")
-            # return HttpResponseServerError("failure to authenticate")
-
         login(request, user, backend="accounts.oauth.FtOAuth")
-        # login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         return HttpResponse()
     except RuntimeError as e:
         return HttpResponseServerError("failure to login:" + e)

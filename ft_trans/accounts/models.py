@@ -54,8 +54,17 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.AutoField(primary_key=True)
-    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32)
+    username = models.CharField(
+        verbose_name=_("ユーザー名"), max_length=32, unique=False
+    )
     email = models.CharField(verbose_name=_("email"), max_length=256, unique=True)
+    email42 = models.CharField(
+        verbose_name=_("email42"),
+        max_length=256,
+        unique=True,
+        # null=True,
+        # blank=True,
+    )
     first_name = models.CharField(
         verbose_name=_("姓"),
         max_length=150,
