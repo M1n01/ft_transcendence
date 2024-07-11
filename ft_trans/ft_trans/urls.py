@@ -36,6 +36,6 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path("pong/", include(pong.urls)),
-    re_path(r"[\w\/]*", include(spa.urls)),
+    re_path(r"[\w\-\/]*", include(spa.urls)),
     prefix_default_language=True,
 )
