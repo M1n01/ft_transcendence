@@ -10,16 +10,15 @@
     <div>
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
-        <button type="submit" class="form-button">Log out</button>
+        <button type="submit" class="form-button">{% trans "Log_out" %}</button>
       </form>
     </div>
 
     {% else %}
     <form method="post" id="login-form" action="{% url 'accounts:check-ft-oauth' %}">
       {% csrf_token %} {{ form }}
-      <button type="submit" class="form-button">ログイン</button>
+      <button type="submit" class="form-button">{% trans "Log_in" %}</button>
     </form>
-
     {% endif %}
   </body>
 </html>

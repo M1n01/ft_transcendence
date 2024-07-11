@@ -10,8 +10,8 @@ import Script from '../views/Script.js';
 import Script2 from '../views/Script2.js';
 import Index from '../views/Index.js';
 import Pong from '../views/Pong.js';
-import Accounts from '../views/Accounts.js';
 import Admin from '../views/Admin.js';
+import LoginSuccess from '../views/LoginSuccess.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -29,4 +29,5 @@ export const Routes = [
   { path: '/lang', view: Lang },
   { path: '/scriptt', view: Script2 },
   { path: '/script', view: Script },
+  { path: '/success-login', view: LoginSuccess },
 ];

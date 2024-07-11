@@ -1,3 +1,4 @@
+{% load static %} {% load i18n %}
 <!doctype html>
 <html lang="ja">
   <head>
@@ -6,7 +7,7 @@
   </head>
 
   <body>
-    <h1>ログインしました。</h1>
+    <h1>{% trans "ログインしました" %}</h1>
     <p>Welcome, {{ user.username }}!</p>
   </body>
 </html>

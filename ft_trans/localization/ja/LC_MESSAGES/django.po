@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 09:27+0000\n"
+"POT-Creation-Date: 2024-07-11 11:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,23 +16,130 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ft_trans/settings.py:131 pong/templates/pong/lang_test.html:8
+#: accounts/models.py:57
+msgid "ユーザー名"
+msgstr "ユーザー名"
+
+#: accounts/models.py:59
+msgid "email"
+msgstr "メールアドレス"
+
+#: accounts/models.py:61
+msgid "姓"
+msgstr "姓"
+
+#: accounts/models.py:67
+msgid "名"
+msgstr "名"
+
+#: accounts/models.py:72
+msgid "is_superuer"
+msgstr ""
+
+#: accounts/models.py:74
+msgid "staff status"
+msgstr ""
+
+#: accounts/models.py:78
+msgid "is_active"
+msgstr ""
+
+#: accounts/models.py:82
+msgid "誕生日"
+msgstr "誕生日"
+
+#: accounts/models.py:84
+msgid "ft_created_at"
+msgstr ""
+
+#: accounts/models.py:88
+msgid "ft_updateded_at"
+msgstr ""
+
+#: accounts/templates/accounts/ft-login.html:13
+#: accounts/templates/accounts/login.html:13
+#: accounts/templates/accounts/login.html:20
+msgid "Log_out"
+msgstr "ログアウト"
+
+#: accounts/templates/accounts/ft-login.html:20
+msgid "Log_in"
+msgstr "ログイン"
+
+#: accounts/templates/accounts/login.html:24
+#: accounts/templates/accounts/login.html:27
+msgid "42認証"
+msgstr "42認証"
+
+#: accounts/templates/accounts/login.html:28
+msgid "ログアウト"
+msgstr "ログアウト"
+
+#: accounts/templates/accounts/login.html:32
+msgid "QRコードから42でログインすることを許可してください"
+msgstr "QRコードから42でログインすることを許可してください"
+
+#: accounts/templates/accounts/login.html:34
+msgid "続けて認証ボタンを押すことでログインされます"
+msgstr "続けて認証ボタンを押すことでログインされます"
+
+#: accounts/templates/accounts/login.html:37
+msgid "認証中です。"
+msgstr "認証中です。"
+
+#: accounts/templates/accounts/login.html:39
+msgid "しばらくお待ちください"
+msgstr "しばらくお待ちください"
+
+#: accounts/templates/accounts/login.html:42
+msgid "認証に失敗しました。"
+msgstr "認証に失敗しました。"
+
+#: accounts/templates/accounts/login.html:44
+msgid "最初からやり直してください"
+msgstr "最初からやり直してください"
+
+#: accounts/templates/accounts/login.html:48
+msgid "認証"
+msgstr "認証"
+
+#: accounts/templates/accounts/redirect-oauth.html:9
+msgid "認証完了しました"
+msgstr "認証完了しました"
+
+#: accounts/templates/accounts/redirect-oauth.html:9
+msgid "元のページに戻ってください"
+msgstr "元のページに戻ってください"
+
+#: accounts/templates/accounts/success-login.html:10
+msgid "ログインしました"
+msgstr "ログインしました"
+
+#: accounts/templates/accounts/success-logout.html:10
+msgid "ログアウトしました"
+msgstr "ログアウトしました"
+
+#: accounts/templates/accounts/success-signup.html:10
+msgid "サインアップしました。"
+msgstr "サインアップしました。"
+
+#: ft_trans/settings.py:249 pong/templates/pong/lang_test.html:8
 #: pong/templates/pong/lang_test.html:15 pong/templates/pong/script.html:8
 msgid "Japanese"
-msgstr ""
+msgstr "日本語"
 
-#: ft_trans/settings.py:132 pong/templates/pong/lang_test.html:9
+#: ft_trans/settings.py:250 pong/templates/pong/lang_test.html:9
 #: pong/templates/pong/lang_test.html:16
 msgid "English"
-msgstr ""
+msgstr "英語"
 
-#: ft_trans/settings.py:133 pong/templates/pong/lang_test.html:10
+#: ft_trans/settings.py:251 pong/templates/pong/lang_test.html:10
 #: pong/templates/pong/lang_test.html:17
 msgid "French"
-msgstr ""
+msgstr "フランス語"
 
 #: pong/templates/pong/script.html:7
 msgid "not_change"
-msgstr "ここは変換しない"
+msgstr "ここは変更しない"

@@ -10,28 +10,45 @@
     <div>
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
-        <button type="submit" class="form-button">Log out</button>
+        <button type="submit" class="form-button">{% trans "Log_out" %}</button>
       </form>
     </div>
 
     {% else %}
     <form method="post" id="login-form" action="{% url 'accounts:login' %}">
       {% csrf_token %} {{ form }}
-      <button type="submit" class="form-button">ログイン</button>
+      <button type="submit" class="form-button">{% trans "Log_out" %}</button>
     </form>
 
     <p>42Ouath</p>
-    <button id="openDialog">Open Dialog</button>
+    <button id="openDialog">{% trans "42認証" %}</button>
 
     {% if user.is_authenticated %}
-    <p>42OAuth Login</p>
-    <button type="submit" class="form-button">Log out</button>
+    <p>{% trans "42認証" %}</p>
+    <button type="submit" class="form-button">{% trans "ログアウト" %}</button>
     {% else %}
     <dialog id="myDialog">
-      <p>42認証が終わり次第、ダイアログを閉じてください</p>
+      <a href="/success-login" id="success-login" class="nav__link" data-link hidden>success</a>
+      <div p id="instruction">
+        {% trans "QRコードから42でログインすることを許可してください" %}
+        <br />
+        {% trans "続けて認証ボタンを押すことでログインされます" %}
+      </div>
+      <div p id="instruction-processing" hidden>
+        {% trans "認証中です。" %}
+        <br />
+        {% trans "しばらくお待ちください" %}
+      </div>
+      <div p id="instruction-error" stylesheet="{color:red}" hidden>
+        <font color="red">
+          {% trans "認証に失敗しました。" %}
+          <br />
+          {% trans "最初からやり直してください" %}
+        </font>
+      </div>
       <img src="data:image/png;base64,{{ qr }}" height="480" width="480" />
       <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer">URL</a>
-      <button id="closeDialog">Close</button>
+      <button id="closeDialog">{% trans "認証" %}</button>
     </dialog>
 
     {% endif %} {% endif %}

@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       navigateTo(tmp_path);
     }
 
+    // Form送信
     const document_form = document.getElementsByTagName('FORM');
     if (document_form && document_form.length > 0) {
       document.getElementsByTagName('FORM')[0].addEventListener('submit', function (event) {
