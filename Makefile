@@ -45,7 +45,12 @@ $(NAME):
 	npx webpack
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
 
+dev:
+	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker exec -it django bash -c 'python manage.py runserver 0:8001'
+
 stop:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
 
-.PHONY: all clean fclean re stop up update
+.PHONY: all clean fclean re stop up update dev
