@@ -5,4 +5,4 @@ from .models import FtUser
 
 # Register your models here.
 
-# admin.site.register(FtUser)
+admin.site.register(FtUser)

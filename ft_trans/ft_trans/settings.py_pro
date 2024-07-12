@@ -148,16 +148,16 @@ WSGI_APPLICATION = "ft_trans.wsgi.application"
 
 #"""#PRODUCTION ENVIRONMENT
 DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    "OPTIONS": {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "OPTIONS": {
             "service": "ft_trans",
             "passfile": ".my_pgpass",
             # requireは認証局による証明書が必要
             #'sslmode': 'require',
-            'sslmode': 'prefer',
-            'sslcert': 'server.crt',
-            'sslkey': 'server.key',
+            "sslmode": "prefer",
+            "sslcert": "server.crt",
+            "sslkey": "server.key",
         },
     }
 }
@@ -170,7 +170,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-"""#DEVLOPMENT ENVIRONMENT
+"""  # DEVLOPMENT ENVIRONMENT
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -288,7 +288,7 @@ OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
 
 # ドメイン
-PONG_DOMAIN = "http://localhost:8000/"
+PONG_DOMAIN = "https://localhost/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"

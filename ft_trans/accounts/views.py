@@ -69,7 +69,11 @@ class SignupView(CreateView):
     template_name = "accounts/signup.html"
     success_url = reverse_lazy("accounts:success-signup")
 
-    cnt = str(FtUser.objects.count()) + "-"
+    cnt = "0-"
+    try:
+        cnt = FtUser.objects.count() + "-"
+    except:
+        cnt = "0-"
     extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
 
     def form_valid(self, form):

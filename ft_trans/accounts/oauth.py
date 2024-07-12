@@ -60,7 +60,11 @@ class FtOAuth(ModelBackend):
             user = FtUser.objects.get(email42=email)
         except FtUser.DoesNotExist:
             user = FtUser()
-            cnt = FtUser.objects.count()
+            cnt = 0
+            try:
+                cnt = FtUser.objects.count()
+            except:
+                cnt = 0
             user.username = username
             user.email = str(cnt) + email  # dummy email
             user.email42 = email
