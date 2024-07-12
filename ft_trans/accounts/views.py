@@ -69,14 +69,18 @@ class SignupView(CreateView):
     template_name = "accounts/signup.html"
     success_url = reverse_lazy("accounts:success-signup")
 
+    cnt = str(FtUser.objects.count()) + "-"
+    extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
+
     def form_valid(self, form):
         """
         CreateViewのメソッドをオーバーライド
         """
         try:
+            print(f"{form=}")
             return super().form_valid(form)
-        except:
-            return HttpResponseBadRequest("Bad Request")
+        except Exception as e:
+            return HttpResponseBadRequest("Bad Request:" + e)
 
 
 def SignupSuccess(request):

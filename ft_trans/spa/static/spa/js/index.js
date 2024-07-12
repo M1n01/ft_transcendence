@@ -30,13 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document_form && document_form.length > 0) {
       document.getElementsByTagName('FORM')[0].addEventListener('submit', function (event) {
         event.preventDefault(); // フォームのデフォルトの送信を防止
-
         const form = event.target;
+        if (form.disabled == true) {
+          //なぜか２回以上実行される（Formも２回以上送信される）ため、
+          //ここで無効化させる。
+          return;
+        }
+
+        form.disabled = true;
+
         const formData = new FormData(form);
         const response = fetchAsForm(form, formData);
         if (response && response !== '') {
           response.then((data) => {
             updatePage(data);
+            form.disabled = false;
           });
         }
       });
@@ -51,11 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
       let formData = new FormData(form);
       const current_uri = getDisplayedURI(tmp_path);
       changingLanguage(lang_url, formData, current_uri);
-      //changingLanguage(lang_url, form, current_uri);
     }
   });
 
   const uri = getDisplayedURI(tmp_path);
   navigateTo(uri);
-  //router();
 });

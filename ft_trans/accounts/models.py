@@ -62,8 +62,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("email42"),
         max_length=256,
         unique=True,
-        # null=True,
-        # blank=True,
+        null=True,
+        blank=True,
     )
     first_name = models.CharField(
         verbose_name=_("姓"),

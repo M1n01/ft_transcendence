@@ -18,25 +18,10 @@ export async function fetchAsForm(form, FormData) {
       headers: { 'X-CSRFToken': csrftoken },
       mode: 'same-origin',
       body: FormData,
-    })
-      .then((response) => {
-        //const result = await response.text();
-        if (!response.ok) {
-          console.error('Fetch Error');
-          return '';
-        }
-        return response;
-      })
-      .then((data) => {
-        return data.text();
-      })
-      .catch((error) => {
-        console.error('Fetch Error:' + error);
-        return '';
-      });
-    return res;
+    });
+    return res.text();
   } catch (error) {
-    console.error('Fetch Error:' + error);
+    console.error('Fetch Error:' + error.message);
     return '';
   }
 }
@@ -46,7 +31,7 @@ export default async function fetchData(url) {
     const response = await makeRequest('GET', url);
     return response;
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
   }
   return '';
 }

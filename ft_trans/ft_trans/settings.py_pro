@@ -21,7 +21,11 @@ LOG_BASE_DIR = os.path.join(BASE_DIR, "log")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {"simple": {"format": "%(asctime)s [%(levelname)s] %(message)s"}},
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s {module}:{filename}:{funcName}:{lineno} [%(levelname)s] %(message)s"
+        }
+    },
     "handlers": {
         "info": {
             "level": "INFO",
@@ -56,7 +60,7 @@ LOGGING = {
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     ".localhost",
@@ -68,7 +72,7 @@ ALLOWED_HOSTS = [
     "localhost:443",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8080",
+    "http://localhost:8000",
     "http://localhost",
     "http://127.0.0.1",
     "http://172.38.10.10",
@@ -91,10 +95,13 @@ INSTALLED_APPS = [
     "pong",
     # "login",
     "accounts",
+    # "accounts.models.ft_user",
     "api",
     # "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
     #'allauth.account',
-    # "corsheaders", #CORS設定
+    # "corsheaders",  #CORS設定
     # "oauth2_provider",  # OAuth2設定
 ]
 
@@ -106,9 +113,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    #"django.contrib.auth.middleware.RemoteUserMiddleware",
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
     #'django.template.context_processors.media', #ユーザーアップロード用
 ]
 
@@ -125,6 +133,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # alloauth
+                # "django.template.context_processors.request",
             ],
         },
     },
@@ -136,6 +146,7 @@ WSGI_APPLICATION = "ft_trans.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#"""#PRODUCTION ENVIRONMENT
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
@@ -150,15 +161,16 @@ DATABASES = {
         },
     }
 }
+#"""  # PRODUCTION ENVIRONMENT
 
-# """#DEVLOPMENT ENVIRONMENT
-#DATABASES = {
-    #"default": {
-        #"ENGINE": "django.db.backends.sqlite3",
-        #"NAME": BASE_DIR / "db.sqlite3",
-    #}
-#}
-# """#DEVLOPMENT ENVIRONMENT
+"""#DEVLOPMENT ENVIRONMENT
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+"""#DEVLOPMENT ENVIRONMENT
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -177,6 +189,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
 AUTHENTICATION_BACKENDS = [
     "accounts.oauth.FtOAuth",
     "django.contrib.auth.backends.ModelBackend",
@@ -242,7 +255,7 @@ LANGUAGES = [
 # CORS_ALLOWED_ORIGINS = [
 # "https://localhost",
 # "http://localhost:8000",
-# 
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -266,15 +279,16 @@ CSRF_COOKIE_SECURE = True
 LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
 LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
-SESSION_ENGINE = 'django.contrib.sessions.backends.db' # デフォルトのまま。セッションデータをDBに保存
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
+# AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
 OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
 
-#REMOTE_USER_AUTO_CREATE = True
-#REMOTE_USER =""
-
 # ドメイン
-PONG_DOMAIN = "https://localhost/"
+PONG_DOMAIN = "http://localhost:8000/"
+
+# エラーページ
+ERROR_PAGE = PONG_DOMAIN + "error.html"
