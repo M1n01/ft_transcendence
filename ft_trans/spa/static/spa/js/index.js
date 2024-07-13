@@ -1,4 +1,4 @@
-import { Routes } from './/routing/routes.js';
+import { Routes } from './routing/routes.js';
 import { navigateTo, router, updatePage } from './routing/routing.js';
 import { changingLanguage } from './utility/lang.js';
 import { getUrl } from './utility/url.js';
@@ -6,6 +6,7 @@ import { fetchAsForm } from './utility/fetch.js';
 
 window.addEventListener('popstate', router);
 
+// パス名を取得する関数
 const getDisplayedURI = (pathname) => {
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(

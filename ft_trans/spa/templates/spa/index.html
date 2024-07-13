@@ -29,8 +29,8 @@
     </div>
 
     {% csrf_token %}
-    <script type="module" src="{% static 'spa/js/index.js' %}">
-      import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js';
+    <script type="module" src="{% static 'dist/bundle.js' %}">
+      import Cookies from 'js-cookie';
       //const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     </script>
   </body>

@@ -1,6 +1,7 @@
 NAME	:= ft_transcendence
-YMLDIR	:= ./docker
-DOCKERDIR	:= ./docker
+
+COMPOSEFILE	:= docker-compose.yml
+
 DJANGODIR	:= ./ft_trans/
 DJANGO_STATIC_DIR	:= $(DJANGODIR)/public/
 SRCDIR	:= $(DJANGODIR)/ft_trans/
@@ -12,51 +13,46 @@ DJANGO_IMAGE	:= docker-django
 
 DB_NET				:= db_net
 DJANGO_NET		:= django_net
+DB_VOLUME			:= ./db_volume
 
-ENV_FILE	:= .env
+ENV_FILE			:= .env
 
 
-all:
-	@make $(NAME)
+all: $(NAME)
 
-clean:
-	@make stop
-	docker image rm $(DB_IMAGE)
-	docker image rm $(NGINX_IMAGE)
-	docker image rm $(DJANGO_IMAGE)
+clean: stop
+	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE)
 
 fclean:
-	@make clean
-	docker volume prune
-	docker network prune
-	sudo rm -rf db_volume/*
-	sudo rm -rf ft_trans/.my_pgpass
+	-$(MAKE) clean
+	docker system prune -f
+	docker volume prune -f
+	docker network prune -f
+	sudo rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
 
-re:
-	@make fclean
-	@make $(NAME)
-
-init:
-	-mkdir -p $(DJANGO_STATIC_DIR)/media
-	-mkdir -p $(DJANGO_STATIC_DIR)/static
+re: fclean all
 
 up:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
-	python ft_trans/manage.py makemigrations
-	python ft_trans/manage.py migrate
-	python3 ft_trans/manage.py runserver
-
+	python $(DJANGODIR)/manage.py makemigrations
+	python $(DJANGODIR)/manage.py migrate
+	python3 $(DJANGODIR)/manage.py runserver
 
 update:
-	docker-compose -f docker/docker-compose.yml up -d --build
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
 
 $(NAME):
-	-mkdir -p $(DJANGO_STATIC_DIR)/media
-	-mkdir -p $(DJANGO_STATIC_DIR)/static
-	ln -f  $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
-	docker-compose   --env-file $(ENV_FILE)  -f docker/docker-compose.yml up -d
+	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
+	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
+	npx webpack
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+
+dev:
+	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker exec -it django bash -c 'python manage.py runserver 0:8001'
 
 stop:
-	docker-compose -f docker/docker-compose.yml down
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
 
-.PHONY: all clean fclean re stop dev
+.PHONY: all clean fclean re stop up update dev
