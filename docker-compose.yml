@@ -39,8 +39,6 @@ services:
     tty: true
     volumes:
       - ./db_volume/:/var/lib/postgresql/data
-    depends_on:
-      - django
     environment:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER

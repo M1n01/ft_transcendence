@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-11 17:19+0000\n"
+"POT-Creation-Date: 2024-07-13 05:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: accounts/models.py:57
+#: accounts/models.py:58
 msgid "ユーザー名"
 msgstr "ユーザー名"
 
-#: accounts/models.py:58
+#: accounts/models.py:60
 msgid "email"
 msgstr "メールアドレス"
 
-#: accounts/models.py:60
+#: accounts/models.py:62
+#, fuzzy
+#| msgid "email"
+msgid "email42"
+msgstr "メールアドレス"
+
+#: accounts/models.py:69
 msgid "姓"
 msgstr "姓"
 
-#: accounts/models.py:66
+#: accounts/models.py:75
 msgid "名"
 msgstr "名"
 
-#: accounts/models.py:71
+#: accounts/models.py:80
 msgid "is_superuer"
 msgstr ""
 
-#: accounts/models.py:73
+#: accounts/models.py:82
 msgid "staff status"
 msgstr ""
 
-#: accounts/models.py:77
+#: accounts/models.py:86
 msgid "is_active"
 msgstr ""
 
-#: accounts/models.py:81
+#: accounts/models.py:90
 msgid "誕生日"
 msgstr "誕生日"
 
-#: accounts/models.py:83
+#: accounts/models.py:92
 msgid "ft_created_at"
 msgstr ""
 
-#: accounts/models.py:87
+#: accounts/models.py:96
 msgid "ft_updateded_at"
 msgstr ""
 
@@ -69,39 +75,39 @@ msgid "Log_in"
 msgstr "ログイン"
 
 #: accounts/templates/accounts/login.html:24
-#: accounts/templates/accounts/login.html:27
+#: accounts/templates/accounts/login.html:26
 msgid "42認証"
 msgstr "42認証"
 
-#: accounts/templates/accounts/login.html:28
+#: accounts/templates/accounts/login.html:27
 msgid "ログアウト"
 msgstr "ログアウト"
 
-#: accounts/templates/accounts/login.html:33
+#: accounts/templates/accounts/login.html:31
 msgid "QRコードから42でログインすることを許可してください"
 msgstr "QRコードから42でログインすることを許可してください"
 
-#: accounts/templates/accounts/login.html:35
+#: accounts/templates/accounts/login.html:33
 msgid "続けて認証ボタンを押すことでログインされます"
 msgstr "続けて認証ボタンを押すことでログインされます"
 
-#: accounts/templates/accounts/login.html:38
+#: accounts/templates/accounts/login.html:36
 msgid "認証中です。"
 msgstr "認証中です。"
 
-#: accounts/templates/accounts/login.html:40
+#: accounts/templates/accounts/login.html:38
 msgid "しばらくお待ちください"
 msgstr "しばらくお待ちください"
 
-#: accounts/templates/accounts/login.html:44
+#: accounts/templates/accounts/login.html:42
 msgid "認証に失敗しました。"
 msgstr "認証に失敗しました。"
 
-#: accounts/templates/accounts/login.html:46
+#: accounts/templates/accounts/login.html:44
 msgid "最初からやり直してください"
 msgstr "最初からやり直してください"
 
-#: accounts/templates/accounts/login.html:51
+#: accounts/templates/accounts/login.html:49
 msgid "認証"
 msgstr "認証"
 
@@ -125,17 +131,17 @@ msgstr "ログアウトしました"
 msgid "サインアップしました。"
 msgstr "サインアップしました。"
 
-#: ft_trans/settings.py:236 pong/templates/pong/lang_test.html:8
+#: ft_trans/settings.py:250 pong/templates/pong/lang_test.html:8
 #: pong/templates/pong/lang_test.html:15 pong/templates/pong/script.html:8
 msgid "Japanese"
 msgstr "日本語"
 
-#: ft_trans/settings.py:237 pong/templates/pong/lang_test.html:9
+#: ft_trans/settings.py:251 pong/templates/pong/lang_test.html:9
 #: pong/templates/pong/lang_test.html:16
 msgid "English"
 msgstr "英語"
 
-#: ft_trans/settings.py:238 pong/templates/pong/lang_test.html:10
+#: ft_trans/settings.py:252 pong/templates/pong/lang_test.html:10
 #: pong/templates/pong/lang_test.html:17
 msgid "French"
 msgstr "フランス語"
