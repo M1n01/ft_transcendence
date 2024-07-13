@@ -13,8 +13,20 @@ import asyncio
 import hashlib
 from django.conf import settings
 
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+# loginしない限り見れない
+# class Pong(LoginRequiredMixin, ListView):
+# model = "test"
+
 
 def checkSPA(request):
+    headers = request.headers
+    print(f"checkSPA:{headers=}")
+    cokkie = headers.get("Cookie", "No Cookie Header Found")
+    print(f"checkSPA:{cokkie=}")
     spa = request.META.get("HTTP_SPA")
     spas = request.META.get("HTTPS_SPA")
     if spa is None and spas is None:
@@ -28,7 +40,7 @@ def checkSPA(request):
 
 
 # Create your views here.
-class Pong(models.Model):
+class Pong(models.Model, LoginRequiredMixin):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
 
@@ -45,9 +57,18 @@ def lang(request):
     return render(request, "pong/lang_test.html")
 
 
+def script_view(request):
+    headers = request.headers
+    print(f"checkSPA:{headers=}")
+    cokkie = headers.get("Cookie", "No Cookie Header Found")
+    print(f"checkSPA:{cokkie=}")
+    checkSPA(request)
+    return render(request, "pong/script.html")
+
+
 @condition(etag_func=my_etag)
 def script(request):
-    checkSPA(request)
+    # script_view(request)
     return render(request, "pong/script.html")
 
 

@@ -1,9 +1,9 @@
 import { Routes } from './routing/routes.js';
-import { navigateTo, router } from './routing/routing.js';
+import { navigateTo, router, updatePage } from './routing/routing.js';
 import { changingLanguage } from './utility/lang.js';
 import { getUrl } from './utility/url.js';
+import { fetchAsForm } from './utility/fetch.js';
 
-// ブラウザの戻るボタンを押したときに発火するイベント
 window.addEventListener('popstate', router);
 
 // パス名を取得する関数
@@ -16,19 +16,40 @@ const getDisplayedURI = (pathname) => {
   return getUrl(path);
 };
 
-// DOMが読み込まれたときに発火するイベント
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded No.1');
   let tmp_path = window.location.pathname;
   document.body.addEventListener('click', (e) => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
       e.preventDefault();
       tmp_path = e.target.href;
-      console.log('DOMContentLoaded No.2 tmp_path:' + tmp_path);
       navigateTo(tmp_path);
     }
-    console.log('DOMContentLoaded No.3');
+
+    // Form送信
+    const document_form = document.getElementsByTagName('FORM');
+    if (document_form && document_form.length > 0) {
+      document.getElementsByTagName('FORM')[0].addEventListener('submit', function (event) {
+        event.preventDefault(); // フォームのデフォルトの送信を防止
+        const form = event.target;
+        if (form.disabled == true) {
+          //なぜか２回以上実行される（Formも２回以上送信される）ため、
+          //ここで無効化させる。
+          return;
+        }
+
+        form.disabled = true;
+
+        const formData = new FormData(form);
+        const response = fetchAsForm(form, formData);
+        if (response && response !== '') {
+          response.then((data) => {
+            updatePage(data);
+            form.disabled = false;
+          });
+        }
+      });
+    }
 
     //多言語切替
     if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
@@ -36,14 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const lang_url = '/i18n/setlang/';
       const form = document.getElementById('lang_form');
-      var formData = new FormData(form);
+      let formData = new FormData(form);
       const current_uri = getDisplayedURI(tmp_path);
       changingLanguage(lang_url, formData, current_uri);
-      //changingLanguage(lang_url, form, current_uri);
     }
   });
 
   const uri = getDisplayedURI(tmp_path);
   navigateTo(uri);
-  //router();
 });

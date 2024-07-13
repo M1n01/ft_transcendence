@@ -8,19 +8,21 @@ SRCDIR	:= $(DJANGODIR)/ft_trans/
 DJANGO_SETTING	:= $(SRCDIR)/settings.py
 
 NGINX_IMAGE		:= docker-nginx
-DB_IMAGE		:= docker-db
+DB_IMAGE			:= docker-db
 DJANGO_IMAGE	:= docker-django
 
-DB_NET			:= db_net
+DB_NET				:= db_net
 DJANGO_NET		:= django_net
-DB_VOLUME		:= ./db_volume
+DB_VOLUME			:= ./db_volume
 
-ENV_FILE	:= .env
+ENV_FILE			:= .env
 
 
 all: $(NAME)
 
 clean: stop
+	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find . -path "*/migrations/*.pyc"  -delete
 	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE)
 
 fclean:
@@ -28,22 +30,18 @@ fclean:
 	docker system prune -f
 	docker volume prune -f
 	docker network prune -f
-	sudo rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
+	-rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
 
 re: fclean all
 
 up:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
+	python $(DJANGODIR)/manage.py makemigrations
+	python $(DJANGODIR)/manage.py migrate
 	python3 $(DJANGODIR)/manage.py runserver
 
 update:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
-
-$(NAME):
-	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
-	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
-	npx webpack
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
 
 dev:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
@@ -52,5 +50,11 @@ dev:
 
 stop:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
+
+$(NAME):
+	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
+	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
+	npx webpack
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
 
 .PHONY: all clean fclean re stop up update dev

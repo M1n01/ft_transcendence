@@ -1,5 +1,5 @@
-import eslint from "@eslint/js";
-import globals from "globals";
+import eslint from '@eslint/js';
+import globals from 'globals';
 
 export default [
   eslint.configs.recommended,
@@ -13,7 +13,7 @@ export default [
       },
     },
     rules: {
-      'no-unused-vars': ['error', { 'varsIgnorePattern': '^sendRequestAsForm$' }],
+      'no-unused-vars': ['error', { varsIgnorePattern: '^sendRequestAsForm$' }],
     },
   },
 ];
