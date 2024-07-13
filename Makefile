@@ -21,6 +21,8 @@ ENV_FILE			:= .env
 all: $(NAME)
 
 clean: stop
+	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find . -path "*/migrations/*.pyc"  -delete
 	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE)
 
 fclean:
@@ -28,7 +30,7 @@ fclean:
 	docker system prune -f
 	docker volume prune -f
 	docker network prune -f
-	sudo rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
+	-rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
 
 re: fclean all
 
@@ -41,12 +43,6 @@ up:
 update:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
 
-$(NAME):
-	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
-	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
-	npx webpack
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
-
 dev:
 	ln -f $(DJANGO_SETTING)_dev $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
@@ -54,5 +50,11 @@ dev:
 
 stop:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
+
+$(NAME):
+	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
+	ln -f $(DJANGO_SETTING)_pro $(DJANGO_SETTING)
+	npx webpack
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
 
 .PHONY: all clean fclean re stop up update dev
