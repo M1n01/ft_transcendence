@@ -11,14 +11,3 @@ RUN chmod 755 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
 RUN chmod 755 /tmp/server.key
 RUN chmod 755 /tmp/server.crt
-
-#RUN chmod 777 /tmp
-#RUN eval "echo \"$(cat /tmp/sql_data)\"" > /tmp/tmp_sql
-#RUN chmod 777 /docker-entrypoint-initdb.d
-#RUN chown postgres:postgres -R /docker-entrypoint-initdb.d/*
-
-
-#RUN createuser -U postgres doc_test_user
-#RUN createdb -U doc_test_user doc_test_db
-#RUN sh /tmp/exe_sql.sh
-
