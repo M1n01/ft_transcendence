@@ -1,16 +1,16 @@
-import AbstractView from "./AbstractView.js";
-import { executeScriptTab } from "../utility/script.js";
+import AbstractView from './AbstractView.js';
+import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle("Posts");
+    this.setTitle('Posts');
   }
 
   async getHtml() {
     return `
             <h1>Posts</h1>
-            <p>You are viewing the posts!!!111a1234zzz</p>
+            <p>You are viewing the posts!!!1</p>
             <a href="/settings" class="nav__link" data-link>Settings</a>
         `;
   }

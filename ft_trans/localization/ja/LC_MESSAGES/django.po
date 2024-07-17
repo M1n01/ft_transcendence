@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-13 05:32+0000\n"
+"POT-Creation-Date: 2024-07-17 19:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,17 +131,20 @@ msgstr "ログアウトしました"
 msgid "サインアップしました。"
 msgstr "サインアップしました。"
 
-#: ft_trans/settings.py:250 pong/templates/pong/lang_test.html:8
+#: ft_trans/settings.py:261 ft_trans/settings_dev.py:261
+#: ft_trans/settings_prod.py:259 pong/templates/pong/lang_test.html:8
 #: pong/templates/pong/lang_test.html:15 pong/templates/pong/script.html:8
 msgid "Japanese"
 msgstr "日本語"
 
-#: ft_trans/settings.py:251 pong/templates/pong/lang_test.html:9
+#: ft_trans/settings.py:262 ft_trans/settings_dev.py:262
+#: ft_trans/settings_prod.py:260 pong/templates/pong/lang_test.html:9
 #: pong/templates/pong/lang_test.html:16
 msgid "English"
 msgstr "英語"
 
-#: ft_trans/settings.py:252 pong/templates/pong/lang_test.html:10
+#: ft_trans/settings.py:263 ft_trans/settings_dev.py:263
+#: ft_trans/settings_prod.py:261 pong/templates/pong/lang_test.html:10
 #: pong/templates/pong/lang_test.html:17
 msgid "French"
 msgstr "フランス語"
