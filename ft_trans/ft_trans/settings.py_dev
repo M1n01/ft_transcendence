@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "webpack_loader",
     "spa",
     "pong",
     # "login",
@@ -123,10 +124,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+# ft_trans/spa/templates/spa/index.html
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "spa", "templates", "spa")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -236,6 +238,16 @@ LOCALE_PATHS = [
 # MEDIA_ROOT = "./public/media"
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "assets"),)
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "BUNDLE_DIR_NAME": "webpack_bundles/",
+        "STATS_FILE": os.path.join(BASE_DIR, "assets", "webpack-stats.json"),
+    }
+}
+
+
 STATIC_ROOT = "./public/static"
 
 # Appに依存しない静的ファイルがある場合
@@ -289,7 +301,7 @@ OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
 
 # ドメイン
-PONG_DOMAIN = "http://localhost:8001/"
+PONG_DOMAIN = "http://localhost:8000/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"

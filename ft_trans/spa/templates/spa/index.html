@@ -1,4 +1,4 @@
-{% load static %}
+{% load render_bundle from webpack_loader %}
 
 <!doctype html>
 <html>
@@ -6,11 +6,11 @@
     <meta charset="UTF-8" />
     <title>Django Index Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'spa/css/spa.css' %}" />
+    {% render_bundle 'main' 'css' %}
   </head>
   <body>
     <h1>SPA TEST link</h1>
-    <a href="/home" class="nav__link" data-link>Index</a>
+    <a id="test" href="/home" class="nav__link" data-link>Index</a>
     <a href="/pong" class="nav__link" data-link>Pong</a>
     <a href="/accounts" class="nav__link" data-link>Accounts</a>
     <a href="/admin" class="nav__link" data-link>Admin</a>
@@ -28,10 +28,6 @@
       <div id="app"></div>
     </div>
 
-    {% csrf_token %}
-    <script type="module" src="{% static 'dist/bundle.js' %}">
-      import Cookies from 'js-cookie';
-      //const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    </script>
+    {% csrf_token %} {% render_bundle 'main' 'js' %}
   </body>
 </html>

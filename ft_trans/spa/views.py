@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import asyncio
+from django.views.generic import TemplateView
+
 
 # Create your views here.
 def index(request):
