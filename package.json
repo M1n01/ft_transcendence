@@ -20,8 +20,8 @@
     "lint": "eslint ft_trans/**/*.js",
     "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
     "prepare": "simple-git-hooks > /dev/null",
-    "start": "webpack serve --config webpack.config.js",
-    "build": "webpack build --mode=production",
+    "start": "webpack serve --hot --config webpack.dev.js",
+    "build": "webpack build --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "simple-git-hooks": {

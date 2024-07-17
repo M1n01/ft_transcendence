@@ -3,6 +3,7 @@ import { navigateTo, router, updatePage } from './routing/routing.js';
 import { changingLanguage } from './utility/lang.js';
 import { getUrl } from './utility/url.js';
 import { fetchAsForm } from './utility/fetch.js';
+import '../css/spa.css';
 
 window.addEventListener('popstate', router);
 
