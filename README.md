@@ -19,34 +19,45 @@
     - [コミットメッセージの記法](#コミットメッセージの記法)
 
 ## 使用技術について
+
 ### nodeバージョン
+
 - node v22.3.0
 - npm v10.8.1
 
 ### フロントエンド
+
 - VanillaJS
 - Bootstrap
 
 ### バックエンド
+
 - Django
 
 ### ミドルウェア
+
 - Docker
 - Nginx
 - PostgreSQL
 - Docker-compose
 
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
 ## 環境構築
+
 ### Visual Studio Code 拡張機能
+
 - Prettier
 - Black Formatter
 
 ### クローン
+
 ```
 $ git clone https://github.com/M1n01/ft_transcendence.git
 ```
 
 ### ローカル立ち上げまで
+
 ```
 # 環境変数ファイルの作成
 $ cp .env.sample .env
@@ -65,18 +76,24 @@ http://localhost:3000/
 ## ディレクトリ構造
 
 ```
+
 ```
 
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
 ## Gitの運用
+
 ### ブランチについて
+
 mainとfeatureブランチで運用する。
 
-|ブランチ名|役割|派生元|マージ先|
-|:---:|:---:|:---:|:---:|
-|main|本番環境|-|-|
-|feature/*|機能開発|main|main|
+| ブランチ名 |   役割   | 派生元 | マージ先 |
+| :--------: | :------: | :----: | :------: |
+|    main    | 本番環境 |   -    |    -     |
+| feature/\* | 機能開発 |  main  |   main   |
 
 ### コミットメッセージの記法
+
 ```
 fix: バグ修正
 feat: 新機能追加
@@ -90,3 +107,5 @@ test: テストコードの変更
 revert: 変更の取り消し
 chore: その他の変更
 ```
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
