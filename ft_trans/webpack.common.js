@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import BundleTracker from 'webpack-bundle-tracker';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { autoprefixer } from 'autoprefixer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,7 +65,7 @@ export default {
   resolve: {
     extensions: ['.js'],
     alias: {
-      //'@': path.resolve(__dirname, 'spa/static/spa/js'),
+      '@': path.resolve(__dirname, 'spa/static/spa/js'),
       '~': __dirname,
     },
   },

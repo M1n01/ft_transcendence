@@ -11,7 +11,7 @@
   <body>
     <h1>SPA TEST link</h1>
     <a id="test" href="/home" class="nav__link" data-link>Index</a>
-    <a href="/pong" class="nav__link" data-link>Pong</a>
+    <a href="/pong" class="nav__link pong" data-link>Pong</a>
     <a href="/accounts" class="nav__link" data-link>Accounts</a>
     <a href="/admin" class="nav__link" data-link>Admin</a>
     <a href="/posts" class="nav__link" data-link>Posts</a>
@@ -29,6 +29,5 @@
     </div>
 
     {% csrf_token %} {% render_bundle 'main' 'js' %}
-    <div>test</div>
   </body>
 </html>
