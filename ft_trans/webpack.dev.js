@@ -1,10 +1,10 @@
-import path from 'path';
+//import path from 'path';
 import common from './webpack.common.js';
-import { fileURLToPath } from 'url';
+//import { fileURLToPath } from 'url';
 import { merge } from 'webpack-merge';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
 export default merge(common, {
   mode: 'development',

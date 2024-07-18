@@ -18,6 +18,7 @@
   },
   "scripts": {
     "lint": "eslint ft_trans/**/*.js",
+    "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
     "prepare": "simple-git-hooks > /dev/null",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
@@ -28,7 +29,8 @@
   },
   "lint-staged": {
     "ft_trans/**/*.{js,jsx}": [
-      "prettier --write --loglevel=error"
+      "prettier --write --loglevel=error",
+      "eslint --fix --quiet"
     ],
     "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"

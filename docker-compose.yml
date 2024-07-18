@@ -74,7 +74,6 @@ services:
       cp /tmp/server.crt /workspace/ &&
       cp  /tmp/make_db_setting.sh /workspace/make_db_setting.sh &&
       sh /workspace/make_db_setting.sh &&
-      sh /workspace/lang.sh &&
       python manage.py collectstatic --noinput &&
       python manage.py makemigrations &&
       python manage.py migrate &&
