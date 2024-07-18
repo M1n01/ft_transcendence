@@ -12,12 +12,12 @@ const __dirname = path.dirname(__filename);
 export default {
   entry: './static/spa/js/index.js',
   output: {
-    path: __dirname + '/..//public/assets/webpack_bundles',
+    path: __dirname + '/..//public/static/webpack_bundles',
     filename: '[name]-[hash].js',
   },
   plugins: [
     new BundleTracker({
-      path: path.resolve(__dirname, '..', 'public', 'assets'),
+      path: path.resolve(__dirname, '..', 'public', 'static'),
       filename: 'webpack-stats.json',
     }),
     new MiniCssExtractPlugin(),
