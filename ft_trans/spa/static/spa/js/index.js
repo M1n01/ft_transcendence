@@ -4,6 +4,10 @@ import { changingLanguage } from './utility/lang.js';
 import { getUrl } from './utility/url.js';
 import { fetchAsForm } from './utility/fetch.js';
 import '../css/spa.css';
+import '../scss/styles.scss';
+
+// Import all of Bootstrap's JS
+import * as bootstrap from 'bootstrap';
 
 window.addEventListener('popstate', router);
 
