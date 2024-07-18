@@ -28,7 +28,7 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
     volumes:
-      - ./ft_trans/public/:/public/
+      - ./ft_trans/spa/assets/:/public/
   db:
     container_name: 'db'
     build:
@@ -74,10 +74,8 @@ services:
       cp /tmp/server.crt /workspace/ &&
       cp  /tmp/make_db_setting.sh /workspace/make_db_setting.sh &&
       sh /workspace/make_db_setting.sh &&
-      python manage.py collectstatic --noinput &&
       python manage.py makemigrations &&
       python manage.py migrate &&
-      npm install &&
-      npm run build &&
+      (cd spa && npm install && npm run build) &&
       daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
       '

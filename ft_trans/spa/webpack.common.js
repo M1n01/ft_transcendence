@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-  entry: './spa/static/spa/js/index.js',
+  entry: './static/spa/js/index.js',
   output: {
     path: __dirname + '/assets/webpack_bundles',
     filename: '[name]-[hash].js',
@@ -29,15 +29,17 @@ export default {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
+          presets: ['@babel/preset-env'],
         },
       },
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(scss)$/,
+        exclude: /node_modules/,
         use: [
           {
             // Adds CSS to the DOM by injecting a `<style>` tag
@@ -67,7 +69,7 @@ export default {
   resolve: {
     extensions: ['.js'],
     alias: {
-      '@': path.resolve(__dirname, 'spa/static/spa/js'),
+      '@': path.resolve(__dirname, 'static/spa/js'),
       '~': __dirname,
     },
   },
