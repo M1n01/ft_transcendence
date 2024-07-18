@@ -5,11 +5,8 @@ import { merge } from 'webpack-merge';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log("__filename:" + __filename );
-console.log("__dirname:" + __dirname );
 
 export default merge(common, {
-//export default {
   mode: 'development',
   output: {
     publicPath: 'http://localhost:3000/frontend/webpack_bundles/',
@@ -18,7 +15,7 @@ export default merge(common, {
   devServer: {
     hot: true,
     historyApiFallback: true,
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 3000,
     headers: { 'Access-Control-Allow-Origin': '*' },
   },

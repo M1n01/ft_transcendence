@@ -6,15 +6,11 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log("__filename:" + __filename );
-console.log("__dirname:" + __dirname );
-
 export default {
-  entry: __dirname + '/spa/static/spa/js/index',
+  entry: './spa/static/spa/js/index.js',
   output: {
     path: __dirname + '/assets/webpack_bundles',
-    filename: '[name]-[contenthash].js',
-
+    filename: '[name]-[hash].js',
   },
   plugins: [
     new BundleTracker({
@@ -30,7 +26,7 @@ export default {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env'],
+          presets: ['@babel/preset-env', '@babel/preset-react'],
         },
       },
       {

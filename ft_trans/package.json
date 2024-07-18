@@ -42,5 +42,12 @@
     "js-cookie": "^3.0.5",
     "mini-css-extract-plugin": "^2.9.0",
     "webpack": "^5.92.1"
-  }
+  },
+  "name": "workspace",
+  "version": "1.0.0",
+  "main": "babel.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
