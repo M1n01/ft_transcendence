@@ -1,5 +1,5 @@
 import AbstractView from './AbstractView.js';
-import { executeScriptTab } from '../utility/script.js';
+//import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -10,7 +10,7 @@ export default class extends AbstractView {
   async getHtml() {
     return `
             <h1>Posts</h1>
-            <p>You are viewing the posts!!!1234567899</p>
+            <p>You are viewing the posts!!!1234A</p>
             <a href="/settings" class="nav__link" data-link>Settings</a>
         `;
   }

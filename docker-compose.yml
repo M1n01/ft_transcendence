@@ -78,5 +78,7 @@ services:
       python manage.py collectstatic --noinput &&
       python manage.py makemigrations &&
       python manage.py migrate &&
+      npm install &&
+      npm run build &&
       daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
       '

@@ -48,7 +48,7 @@ update:
 dev:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
-	echo "docker exec -it django bash -c 'npm start &&   python manage.py runserver 0:8001'"
+	docker exec -it django bash -c '(npm start &) && python manage.py runserver 0:8001'
 
 stop:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down

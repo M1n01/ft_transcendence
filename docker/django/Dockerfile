@@ -18,13 +18,13 @@ RUN mkdir /usr/local/nvm \
     && ln -sf $NVM_DIR/versions/node/$NODE_VERSION/bin/npm /usr/bin/npm \
     && ln -sf $NVM_DIR/versions/node/$NODE_VERSION/bin/yarn /usr/bin/yarn
 
-
-
 WORKDIR /workspace
 COPY ./make_ca.sh /tmp/make_ca.sh
 COPY ./make_db_setting.sh /tmp/make_db_setting.sh
-COPY ./package.json /workspace/package.json
-#COPY ./package-lock.json /workspace/package-lock.json
+#COPY ./package.json /workspace/
+#COPY ./package.json /tmp/
+#COPY ./package-lock.json /workspace/
+#COPY ./package-lock.json /tmp/
 RUN python -m pip install --upgrade pip && \
 python -m pip install django-cors-headers \
 Django==5.0.6 \
@@ -38,7 +38,7 @@ django-webpack-loader
 
 
 #RUN npm install react-native
-RUN npm init -y
+#RUN npm install
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
 
