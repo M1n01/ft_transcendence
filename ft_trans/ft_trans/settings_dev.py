@@ -232,29 +232,16 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "localization"),
 ]
 
-# ファイルアップロード
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = "./public/media"
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "public", "assets"),)
+STATIC_URL = "static/"
+STATIC_ROOT = "./public/assets"
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "public", "static"),)
 
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "webpack_bundles/",
-        "STATS_FILE": os.path.join(BASE_DIR, "spa", "assets", "webpack-stats.json"),
+        "STATS_FILE": os.path.join(BASE_DIR, "public", "static", "webpack-stats.json"),
     }
 }
-
-
-STATIC_URL = "static/"
-STATIC_ROOT = "./public/static"
-# STATIC_ROOT = "./public/static"
-
-# Appに依存しない静的ファイルがある場合
-# STATICFILES_DIRS = [
-# BASE_DIR / "static",
-# "/var/www/static/",
-# ]
 
 
 LANGUAGE_CODE = "ja"

@@ -232,11 +232,8 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "localization"),
 ]
 
-# ファイルアップロード
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = "./public/media"
-
 STATIC_URL = "static/"
+STATIC_ROOT = "./public/assets"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "public", "static"),)
 
 WEBPACK_LOADER = {
@@ -245,15 +242,6 @@ WEBPACK_LOADER = {
         "STATS_FILE": os.path.join(BASE_DIR, "public", "static", "webpack-stats.json"),
     }
 }
-# 基準URL
-# STATIC_ROOT = os.path.join(BASE_DIR, "spa", "assets")
-STATIC_ROOT = "./public/assets"
-
-# Appに依存しない静的ファイルがある場合
-# STATICFILES_DIRS = [
-# BASE_DIR / "static",
-# "/var/www/static/",
-# ]
 
 
 LANGUAGE_CODE = "ja"
