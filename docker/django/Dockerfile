@@ -21,10 +21,6 @@ RUN mkdir /usr/local/nvm \
 WORKDIR /workspace
 COPY ./make_ca.sh /tmp/make_ca.sh
 COPY ./make_db_setting.sh /tmp/make_db_setting.sh
-#COPY ./package.json /workspace/
-#COPY ./package.json /tmp/
-#COPY ./package-lock.json /workspace/
-#COPY ./package-lock.json /tmp/
 RUN python -m pip install --upgrade pip && \
 python -m pip install django-cors-headers \
 Django==5.0.6 \
@@ -36,9 +32,6 @@ qrcode \
 requests \
 django-webpack-loader
 
-
-#RUN npm install react-native
-#RUN npm install
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
 

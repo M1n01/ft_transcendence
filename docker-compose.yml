@@ -74,8 +74,8 @@ services:
       cp /tmp/server.crt /workspace/ &&
       cp  /tmp/make_db_setting.sh /workspace/make_db_setting.sh &&
       sh /workspace/make_db_setting.sh &&
-      python ./ft_trans/manage.py makemigrations &&
-      python ./ft_trans/manage.py migrate &&
+      python ./backend/manage.py makemigrations &&
+      python ./backend/manage.py migrate &&
       (cd frontend && npm install && npm run build) &&
-      cd ./ft_trans/ && daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
+      cd ./backend/ && daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
       '
