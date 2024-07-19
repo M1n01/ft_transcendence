@@ -2,10 +2,12 @@ NAME	:= ft_transcendence
 
 COMPOSEFILE	:= docker-compose.yml
 
-DJANGODIR	:= ./ft_trans/
+DJANGODIR			:= ./django/
+FRONTEND_DIR		:= $(DJANGODIR)/frontend/
 DJANGO_STATIC_DIR	:= $(DJANGODIR)/public/
-SRCDIR	:= $(DJANGODIR)/ft_trans/
-DJANGO_SETTING	:= $(SRCDIR)/settings.py
+BACKEND_DIR			:=$(DJANGODIR)/ft_trans/
+SRCDIR				:= $(BACKEND_DIR)/ft_trans/
+DJANGO_SETTING		:= $(SRCDIR)/settings.py
 DJANGO_DEV_SETTING	:= $(SRCDIR)/settings_dev.py
 DJANGO_PROD_SETTING	:= $(SRCDIR)/settings_prod.py
 
@@ -36,26 +38,26 @@ fclean:
 
 re: fclean all
 
-up:
-	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
-	python $(DJANGODIR)/manage.py makemigrations
-	python $(DJANGODIR)/manage.py migrate
-	cd ft_trans/spa && (npm start &) && (cd ../ && python manage.py runserver)
+stop:
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
 
 update:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
+up:
+	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
+	python $(BACKEND_DIR)/manage.py makemigrations
+	python $(BACKEND_DIR)/manage.py migrate
+	cd $(FRONTEND_DIR) && (npm start &) && python ../ft_trans/manage.py runserver
 
 dev:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
-	docker exec -it django bash -c '(cd spa && npm start &) && python manage.py runserver 0:8001'
-
-stop:
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
+	docker exec -it django bash -c '(cd frontend && npm start &) && python ./ft_trans/manage.py runserver 0:8001'
 
 $(NAME):
-	-mkdir -p $(DJANGO_STATIC_DIR)/{media,static}
+	-mkdir -p $(addprefix $(DJANGO_STATIC_DIR), media static)
 	ln -f $(DJANGO_PROD_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+
 
 .PHONY: all clean fclean re stop up update dev

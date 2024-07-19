@@ -60,7 +60,7 @@ LOGGING = {
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     ".localhost",
@@ -124,10 +124,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+# 出力ディレクトリ(nginxと共有)
+PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+# フロントエンド用ディレクトリ
+FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "spa", "templates", "spa")],
+        "DIRS": [os.path.join(FRONTEND_DIR, "src")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -148,31 +153,31 @@ WSGI_APPLICATION = "ft_trans.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-"""#PRODUCTION ENVIRONMENT
+# """#PRODUCTION ENVIRONMENT
 DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    "OPTIONS": {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "OPTIONS": {
             "service": "ft_trans",
             "passfile": ".my_pgpass",
             # requireは認証局による証明書が必要
             #'sslmode': 'require',
-            'sslmode': 'prefer',
-            'sslcert': 'server.crt',
-            'sslkey': 'server.key',
+            "sslmode": "prefer",
+            "sslcert": "server.crt",
+            "sslkey": "server.key",
         },
     }
 }
-"""  # PRODUCTION ENVIRONMENT
+# """  # PRODUCTION ENVIRONMENT
 
-# """#DEVLOPMENT ENVIRONMENT
+"""#DEVLOPMENT ENVIRONMENT
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-# """#DEVLOPMENT ENVIRONMENT
+"""  # DEVLOPMENT ENVIRONMENT
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -234,12 +239,12 @@ LOCALE_PATHS = [
 
 STATIC_URL = "static/"
 STATIC_ROOT = "./public/assets"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "public", "static"),)
+STATICFILES_DIRS = (os.path.join(PUBLIC_DIR, "static"),)
 
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "webpack_bundles/",
-        "STATS_FILE": os.path.join(BASE_DIR, "public", "static", "webpack-stats.json"),
+        "STATS_FILE": os.path.join(PUBLIC_DIR, "webpack-stats.json"),
     }
 }
 
@@ -263,10 +268,10 @@ LANGUAGES = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # HTTPS(TLS)
-# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # SECURE_HSTS_SECONDS = 31536000
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -280,7 +285,6 @@ LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクト�
 LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
-# AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
@@ -288,7 +292,7 @@ OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
 
 # ドメイン
-PONG_DOMAIN = "http://localhost:8001/"
+PONG_DOMAIN = "https://localhost/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"

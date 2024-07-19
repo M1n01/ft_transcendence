@@ -66,7 +66,7 @@ def script_view(request):
     return render(request, "pong/script.html")
 
 
-@condition(etag_func=my_etag)
+# @condition(etag_func=my_etag)
 def script(request):
     # script_view(request)
     return render(request, "pong/script.html")

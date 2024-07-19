@@ -27,7 +27,7 @@ export default merge(common, {
     port: 3000,
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchFiles: {
-      paths: ['static/**/*'], // 監視するファイルを指定
+      paths: ['src/**/*'], // 監視するファイルを指定
       options: {
         ignored: /node_modules/, // node_modulesを無視
         poll: true,
@@ -42,7 +42,4 @@ export default merge(common, {
       chunks: 'all', // コード分割を有効化
     },
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(), // HMRプラグイン
-  ],
 });

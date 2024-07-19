@@ -10,14 +10,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-  entry: './static/spa/js/index.js',
+  entry: './src/spa/js/index.js',
   output: {
-    path: __dirname + '/..//public/static/webpack_bundles',
+    //path: __dirname + '/../public/webpack_bundles',
+    path: path.resolve(__dirname, '..', 'public', 'static', 'webpack_bundles'),
     filename: '[name]-[hash].js',
   },
   plugins: [
     new BundleTracker({
-      path: path.resolve(__dirname, '..', 'public', 'static'),
+      path: path.resolve(__dirname, '..', 'public'),
       filename: 'webpack-stats.json',
     }),
     new MiniCssExtractPlugin(),
