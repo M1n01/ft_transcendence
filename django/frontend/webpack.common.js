@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url';
 import BundleTracker from 'webpack-bundle-tracker';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-//import { autoprefixer } from 'autoprefixer';
 import pkg from 'autoprefixer';
 const { autoprefixer } = pkg;
 
@@ -11,11 +10,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-  entry: './src/spa/js/index.js',
+  entry: './src/index.js',
   output: {
-    //path: __dirname + '/../public/webpack_bundles',
     path: path.resolve(__dirname, '..', 'public', 'static', 'webpack_bundles'),
-    filename: '[name]-[hash].js',
+    filename: '[name]-[fullhash].js',
   },
   plugins: [
     new BundleTracker({

@@ -1,15 +1,12 @@
-import { Routes } from './routing/routes.js';
-import { navigateTo, router, updatePage } from './routing/routing.js';
-import { changingLanguage } from './utility/lang.js';
-import { getUrl } from './utility/url.js';
-import { fetchAsForm } from './utility/fetch.js';
-import '../css/spa.css';
-import '../scss/styles.scss';
-import '../../accounts/js/login.js';
-//import '../../main.scss'
+import { Routes } from './spa/js/routing/routes.js';
+import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
+import { changingLanguage } from './spa/js/utility/lang.js';
+import { getUrl } from './spa/js/utility/url.js';
+import { fetchAsForm } from './spa/js/utility/fetch.js';
+import './accounts/js/login.js';
 
-// Import all of Bootstrap's JS
-//import * as bootstrap from 'bootstrap';
+import './spa/scss/spa.scss';
+import './main.scss';
 
 window.addEventListener('popstate', router);
 
