@@ -14,8 +14,8 @@
     "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint ft_trans/**/*.js",
-    "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
+    "lint": "eslint django/frontend/**/*.js",
+    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}'",
     "prepare": "simple-git-hooks > /dev/null",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
@@ -25,11 +25,11 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "ft_trans/**/*.{js,jsx}": [
+    "django/frontend/**/*.{js,jsx}": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
-    "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
+    "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
     ]
   },
