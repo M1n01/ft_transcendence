@@ -18,10 +18,9 @@ django/backend/*/migrations/*
 __pycache__/*
 */**/db.sqlite3
 */**/migrations/*initial.py
-django/backend/make_db_setting.sh
 
 ## setting file
-django/backend/backend/settings.py
+django/backend/ft_trans/settings.py
 
 # Logs
 *.log
@@ -41,7 +40,7 @@ django/public/*
 django/backend/db.sqlite3
 
 # Volume
-django/backend/make_db_setting.sh
+django/make_db_setting.sh
 
 #vim
 *.swp

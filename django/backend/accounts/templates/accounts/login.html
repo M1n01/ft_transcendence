@@ -1,4 +1,4 @@
-{% load static %} {% load i18n %}
+{% load render_bundle from webpack_loader %} {% load static %} {% load i18n %}
 <!doctype html>
 <html lang="ja">
   <head>
@@ -10,7 +10,7 @@
     <div>
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
-        <button type="submit" class="form-button">{% trans "Log_out" %}</button>
+        <button id="logined" type="submit" class="form-button">{% trans "Log_out" %}</button>
       </form>
     </div>
 
@@ -49,8 +49,6 @@
       <button id="closeDialog">{% trans "認証" %}</button>
     </dialog>
 
-    {% endif %}
-
-    <script src="{% static 'accounts/js/login.js' %}"></script>
+    {% endif %} {% render_bundle 'main' 'css' %}
   </body>
 </html>

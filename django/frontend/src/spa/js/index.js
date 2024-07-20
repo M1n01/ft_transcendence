@@ -5,6 +5,7 @@ import { getUrl } from './utility/url.js';
 import { fetchAsForm } from './utility/fetch.js';
 import '../css/spa.css';
 import '../scss/styles.scss';
+import '../../accounts/js/login.js';
 //import '../../main.scss'
 
 // Import all of Bootstrap's JS

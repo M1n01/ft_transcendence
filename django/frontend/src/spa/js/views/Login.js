@@ -2,6 +2,13 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { executeScriptTab } from '../utility/script.js';
+import { LoginEvent } from '../../../accounts/js/login.js';
+
+const myCustomEvent = new Event('myCustomEvent');
+function myFunction() {
+  console.log('Function executed');
+  document.dispatchEvent(myCustomEvent);
+}
 
 export default class extends AbstractView {
   constructor(params) {
@@ -15,6 +22,6 @@ export default class extends AbstractView {
     return data;
   }
   async executeScript() {
-    executeScriptTab('');
+    document.dispatchEvent(LoginEvent);
   }
 }

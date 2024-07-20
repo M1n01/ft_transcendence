@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import BundleTracker from 'webpack-bundle-tracker';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 //import { autoprefixer } from 'autoprefixer';
 import pkg from 'autoprefixer';
 const { autoprefixer } = pkg;
@@ -22,6 +23,7 @@ export default {
       filename: 'webpack-stats.json',
     }),
     new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin(),
   ],
   module: {
     rules: [

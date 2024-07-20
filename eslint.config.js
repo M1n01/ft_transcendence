@@ -4,8 +4,8 @@ import globals from 'globals';
 export default [
   eslint.configs.recommended,
   {
-    files: ['ft_trans/**/*.{js,jsx}'],
-    ignores: ['node_modules', 'ft_trans/public/'],
+    files: ['django/frontend/**/*.{js,jsx}'],
+    ignores: ['node_modules', 'django/public/', 'db_volume'],
     languageOptions: {
       globals: {
         ...globals.browser,
