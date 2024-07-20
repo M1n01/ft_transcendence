@@ -10,6 +10,7 @@ async function main() {
   // ScoreKeeperコントラクトをデプロイ
   const scoreKeeper = await ethers.deployContract('ScoreKeeper', [deployer.address]);
   await scoreKeeper.waitForDeployment();
+  console.log('ScoreKeeper deployed to:', scoreKeeper.target);
 }
 
 main()
