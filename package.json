@@ -11,13 +11,15 @@
     "eslint-plugin-html": "^8.1.1",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
-    "simple-git-hooks": "^2.11.1",
-    "webpack-cli": "^5.1.4"
+    "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
     "lint": "eslint ft_trans/**/*.js",
     "lint:fix": "eslint --fix 'ft_trans/**/*.{js,jsx}'",
-    "prepare": "simple-git-hooks > /dev/null"
+    "prepare": "simple-git-hooks > /dev/null",
+    "start": "webpack serve --hot --config webpack.dev.js",
+    "build": "webpack build --config webpack.prod.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -33,7 +35,6 @@
   },
   "dependencies": {
     "babel": "^6.23.0",
-    "js-cookie": "^3.0.5",
-    "webpack": "^5.92.1"
+    "js-cookie": "^3.0.5"
   }
 }

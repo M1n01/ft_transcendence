@@ -5,7 +5,7 @@
     "baseUrl": "./",
     "paths": {
       "js-cookie": ["node_modules/js-cookie/src/js.cookie.js"],
-      "@/*": ["ft_trans/spa/static/spa/js/*"],
+      "@/*": ["ft_trans/spa/static_bk/spa/js/*"],
       "~/*": ["./*"]
     }
   },
