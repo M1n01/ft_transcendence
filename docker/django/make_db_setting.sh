@@ -1,5 +1,5 @@
-echo db:5432:${POSTGRES_DJANGO_DB_NAME}:${POSTGRES_DJANGO_USER}:${POSTGRES_DJANGO_PASSWORD} > .my_pgpass
-chmod 600 .my_pgpass
+echo db:5432:${POSTGRES_DJANGO_DB_NAME}:${POSTGRES_DJANGO_USER}:${POSTGRES_DJANGO_PASSWORD} > /workspace/backend/.my_pgpass
+chmod 600 /workspace/backend/.my_pgpass
 
 echo "[ft_trans]" > ~/.pg_service.conf 
 echo "host=db" >> ~/.pg_service.conf 

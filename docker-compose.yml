@@ -28,7 +28,7 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
     volumes:
-      - ./ft_trans/public/:/public/
+      - ./django//public/:/public/
   db:
     container_name: 'db'
     build:
@@ -55,10 +55,11 @@ services:
       - db_net
     tty: true
     volumes:
-      - ./ft_trans/:/workspace
+      - ./django/:/workspace
     depends_on:
       - db
     ports:
+      - 3000:3000
       - 8000:8000
       - 8001:8001
     environment:
@@ -69,14 +70,11 @@ services:
       - OAUTH_CLIENT_ID=$OAUTH_CLIENT_ID
       - OAUTH_SECRET_ID=$OAUTH_SECRET_ID
     command: /bin/sh -c '
-      cp /tmp/server.key /workspace/ &&
-      cp /tmp/server.crt /workspace/ &&
-      cp  /tmp/make_db_setting.sh /workspace/make_db_setting.sh &&
-      sh /workspace/make_db_setting.sh &&
-      sh /workspace/lang.sh &&
-      python manage.py collectstatic --noinput &&
+      cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
+      sh ./backend/make_db_setting.sh &&
+      cd backend &&
       python manage.py makemigrations &&
       python manage.py migrate &&
-
-      daphne -e  ssl:8000:privateKey=/workspace/server.key:certKey=/workspace/server.crt ft_trans.asgi:application
+      (cd ../frontend && npm install && npm run build) &&
+      daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '

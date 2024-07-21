@@ -8,7 +8,7 @@
 # Database
 .my_pgpass
 db_volume
-ft_trans/*/migrations/*
+django/backend/*/migrations/*
 
 # Backups
 *.bkp
@@ -18,10 +18,9 @@ ft_trans/*/migrations/*
 __pycache__/*
 */**/db.sqlite3
 */**/migrations/*initial.py
-ft_trans/make_db_setting.sh
 
 ## setting file
-ft_trans/ft_trans/settings.py
+django/backend/ft_trans/settings.py
 
 # Logs
 *.log
@@ -35,13 +34,14 @@ node_modules
 */**/dist
 
 # Public files
-ft_trans/public/*
+django/public/*
 
 # Database
-ft_trans/db.sqlite3
+django/backend/db.sqlite3
 
 # Volume
-ft_trans/make_db_setting.sh
+django/make_db_setting.sh
 
 #vim
 *.swp
+tag*

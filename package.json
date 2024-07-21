@@ -12,23 +12,25 @@
     "eslint-plugin-html": "^8.1.1",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
-    "simple-git-hooks": "^2.11.1",
-    "webpack-cli": "^5.1.4"
+    "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint ft_trans/**/*.js blockchain/**/*.js",
-    "lint:fix": "eslint --fix 'ft_trans/**/*.js' 'blockchain/**/*.js'",
-    "prepare": "simple-git-hooks > /dev/null"
+    "lint": "eslint django/frontend/**/*.js blockchain/**/*.js",
+    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'blockchain/**/*.js'",
+    "prepare": "simple-git-hooks > /dev/null",
+    "start": "webpack serve --hot --config webpack.dev.js",
+    "build": "webpack build --config webpack.prod.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "ft_trans/**/*.js": [
+    "django/frontend/**/*.{js,jsx}": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
-    "{public,ft_trans}/**/*.{html,gql,graphql,json}": [
+    "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
     ],
     "blockchain/**/*.js": [
