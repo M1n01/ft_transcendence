@@ -40,6 +40,9 @@
     "blockchain/**/*.sol": [
       "prettier --write --plugin=prettier-plugin-solidity --loglevel=error",
       "solhint"
+    ],
+    "django/backend/**/*.py": [
+      "black"
     ]
   },
   "dependencies": {
