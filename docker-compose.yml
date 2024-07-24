@@ -44,6 +44,12 @@ services:
       - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
       - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
       - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 8s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
 
   django:
     container_name: 'django'
@@ -57,7 +63,8 @@ services:
     volumes:
       - ./django/:/workspace
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - 3000:3000
       - 8000:8000

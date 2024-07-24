@@ -30,7 +30,8 @@ django-oauth-toolkit \
 djangorestframework  \
 qrcode \
 requests \
-django-webpack-loader
+django-webpack-loader \
+pyjwt
 
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
