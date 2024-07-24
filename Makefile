@@ -52,7 +52,7 @@ up:
 dev:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
-	docker exec -it django bash -c '(cd frontend && npm start &) && python ./backend/manage.py runserver 0:8001'
+	docker exec -it django bash -c '(cd frontend && npm start &) && python ./backend/manage.py runserver 0.0.0.0:8001'
 
 $(NAME):
 	-mkdir -p $(addprefix $(DJANGO_STATIC_DIR), media static)
