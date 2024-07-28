@@ -8,14 +8,12 @@ async function main() {
   console.log('Deploying contracts with the account:', deployer.address);
 
   // ScoreKeeperコントラクトをデプロイ
-  const scoreKeeper = await ethers.deployContract('ScoreKeeper', [deployer.address]);
+  const scoreKeeper = await ethers.deployContract('ScoreKeeper');
   await scoreKeeper.waitForDeployment();
   console.log('ScoreKeeper deployed to:', scoreKeeper.target);
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
