@@ -20,7 +20,8 @@
     "prepare": "simple-git-hooks > /dev/null",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hardhat:node": "npx hardhat node"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

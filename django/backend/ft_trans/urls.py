@@ -28,7 +28,7 @@ import accounts.urls
 # API
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path('api/', include(api.urls)),
+    path("api/", include("api.urls")),
     # path("login/", include(login.urls)),
     path("accounts/", include(accounts.urls)),
     path("i18n/", include("django.conf.urls.i18n")),

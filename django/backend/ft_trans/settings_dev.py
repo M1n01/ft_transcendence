@@ -100,12 +100,15 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
+    "api.scorekeeper",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
     #'allauth.account',
     # "corsheaders",  #CORS設定
     # "oauth2_provider",  # OAuth2設定
+    "rest_framework",
+    "web3",
 ]
 
 MIDDLEWARE = [
