@@ -133,7 +133,7 @@ PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
 # フロントエンド用ディレクトリ
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 # ブロックチェーン用ディレクトリ
-BLOCKCHAIN_DIR = os.path.join(BASE_DIR, "..", "blockchain")
+BLOCKCHAIN_DIR = os.path.join(BASE_DIR, "..", "solidity")
 
 TEMPLATES = [
     {

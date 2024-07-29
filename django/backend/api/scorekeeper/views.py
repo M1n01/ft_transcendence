@@ -16,7 +16,7 @@ web3 = Web3(Web3.HTTPProvider(infura_url))
 project_root = "/workspace"
 json_path = os.path.join(
     project_root,
-    "blockchain",
+    "solidity",
     "artifacts",
     "contracts",
     "ScoreKeeper.sol",

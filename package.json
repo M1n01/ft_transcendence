@@ -15,8 +15,8 @@
     "simple-git-hooks": "^2.11.1"
   },
   "scripts": {
-    "lint": "eslint django/frontend/**/*.js blockchain/**/*.js",
-    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'blockchain/**/*.js'",
+    "lint": "eslint django/frontend/**/*.js solidity/**/*.js",
+    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'solidity/**/*.js'",
     "prepare": "simple-git-hooks > /dev/null",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
@@ -34,11 +34,11 @@
     "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
     ],
-    "blockchain/**/*.js": [
+    "solidity/**/*.js": [
       "prettier --write --loglevel=error",
       "eslint --fix --quiet"
     ],
-    "blockchain/**/*.sol": [
+    "solidity/**/*.sol": [
       "prettier --write --plugin=prettier-plugin-solidity --loglevel=error",
       "solhint"
     ],
