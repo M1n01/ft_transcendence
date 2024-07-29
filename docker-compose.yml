@@ -11,6 +11,12 @@ networks:
     ipam:
       config:
         - subnet: 172.38.20.0/24
+  solidity_net:
+    name: solidity_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.30.0/24
 
 services:
   nginx:
@@ -29,7 +35,8 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
     volumes:
-      - ./django//public/:/public/
+      - ./django/public/:/public/
+
   db:
     container_name: 'db'
     build:
@@ -46,7 +53,7 @@ services:
       - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
       - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 3s
       timeout: 1s
       retries: 5
@@ -59,9 +66,11 @@ services:
     networks:
       - django_net
       - db_net
+      - solidity_net
     tty: true
     volumes:
       - ./django/:/workspace
+      - ./solidity/:/workspace/solidity
     depends_on:
       db:
         condition: service_healthy
@@ -85,3 +94,22 @@ services:
       (cd ../frontend && npm install && npm run build) &&
       daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '
+    healthcheck:
+      test: ['CMD-SHELL', 'python manage.py check']
+      interval: 3s
+      timeout: 1s
+      retries: 5
+
+  solidity:
+    container_name: 'solidity'
+    build:
+      context: ./solidity
+      dockerfile: Dockerfile
+    networks:
+      - solidity_net
+    tty: true
+    volumes:
+      - ./solidity/:/workspace
+    depends_on:
+      django:
+        condition: service_healthy
