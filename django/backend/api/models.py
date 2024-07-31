@@ -6,8 +6,8 @@ class Player(models.Model):
     score = models.IntegerField()
 
 
-class Match(models.Model):
-    match_id = models.CharField(max_length=255)
+class Score(models.Model):
+    match_id = models.IntegerField()
     player = models.ForeignKey(Player, related_name="player", on_delete=models.CASCADE)
     opponent = models.ForeignKey(
         Player, related_name="opponent", on_delete=models.CASCADE

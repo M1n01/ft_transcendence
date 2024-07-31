@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Match
-from .serializers import MatchSerializer
+from .models import Score
+from .serializers import ScoreSerializer
 from web3 import Web3
 import json
 import os
@@ -13,10 +13,8 @@ infura_url = "http://127.0.0.1:8545"
 web3 = Web3(Web3.HTTPProvider(infura_url))
 
 # hardhatコントラクトインスタンスの取得
-project_root = "/workspace"
 json_path = os.path.join(
-    project_root,
-    "solidity",
+    settings.BLOCKCHAIN_DIR,
     "artifacts",
     "contracts",
     "ScoreKeeper.sol",
@@ -31,14 +29,14 @@ contract_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 match_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
 
-class MatchAPIViewSet(APIView):
+class ScoreAPIView(APIView):
     def get(self, request, format=None):
-        matches = Match.objects.all()
-        serializer = MatchSerializer(matches, many=True)
+        scores = Score.objects.all()
+        serializer = ScoreSerializer(scores, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = MatchSerializer(data=request.data)
+        serializer = ScoreSerializer(data=request.data)
         if serializer.is_valid():
             match_id = serializer.validated_data["match_id"]
             player = serializer.validated_data["player"]

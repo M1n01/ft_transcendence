@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from .models import Match, Player
 
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -7,7 +6,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     score = serializers.IntegerField()
 
 
-class MatchSerializer(serializers.ModelSerializer):
+class ScoreSerializer(serializers.ModelSerializer):
     match_id = serializers.IntegerField()
     player = PlayerSerializer()
     opponent = PlayerSerializer()

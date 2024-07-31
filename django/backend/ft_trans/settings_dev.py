@@ -100,7 +100,6 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
-    "api.scorekeeper",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
@@ -128,12 +127,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+PROJECT_ROOT = os.path.join(BASE_DIR, "..")
+
 # 出力ディレクトリ(nginxと共有)
-PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 # ブロックチェーン用ディレクトリ
-BLOCKCHAIN_DIR = os.path.join(BASE_DIR, "..", "solidity")
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "solidity")
 
 TEMPLATES = [
     {
