@@ -6,7 +6,13 @@
     <title>LoginViewテスト</title>
   </head>
   <body>
-    {{extra}} {% if user.is_authenticated %}
+    <div>{{ abc }}</div>
+    {% if is_2fa %}
+    <div>is_2fa is True</div>
+    {% else %}
+    <div>is_2fa is False</div>
+    {% endif %} {{extra}} 
+    {% if user.is_authenticated %}
     <div>
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
@@ -14,7 +20,26 @@
       </form>
     </div>
 
+      {% if is_2fa %}
+      <div>is_2fa is True</div>
+      {% else %}
+      <div>is_2fa is False</div>
+      {% endif%}
     {% else %}
+      {% if is_2fa %}
+      <div>is_2fa is True2</div>
+
+      {% if user.is_authenticated %}
+      <div>is _autheniticated is True</div>
+      {% else %}
+      <div>is _autheniticated is False</div>
+      {% endif %}
+
+      {% else %}
+      <div>is_2fa is False2</div>
+      {% endif%}
+
+
     <form method="post" id="login-form" action="{% url 'accounts:login' %}">
       {% csrf_token %} {{ form }}
       <button type="submit" class="form-button">{% trans "Log_in" %}</button>
@@ -26,7 +51,7 @@
     <p>{% trans "42認証" %}</p>
     <!-- <button type="submit" class="form-button">{% trans "ログアウト" %}</button> -->
     <dialog id="myDialog">
-      <a href="/success-login" id="success-login" class="nav__link" data-link hidden>success</a>
+      <a href={% static 'accounts/two-fa.html'%} id="success-login" class="nav__link" data-link hidden>success</a>
       <div p id="instruction">
         {% trans "QRコードから42でログインすることを許可してください" %}
         <br />

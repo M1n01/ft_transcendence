@@ -7,7 +7,13 @@
   </head>
 
   <body>
+    {% if is_2fa %}
+    <div>is_2fa is True?</div>
     <h1>{% trans "ログインしました" %}</h1>
     <p>Welcome, {{ user.username }}!</p>
+    {% else %}
+    <div>is_2fa is False?</div>
+
+    {% endif%}
   </body>
 </html>

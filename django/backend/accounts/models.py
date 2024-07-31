@@ -9,6 +9,7 @@ from django.contrib.auth.models import (
 from django.utils.translation import gettext_lazy as _
 import logging
 import datetime
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 # Create your models here.
@@ -77,11 +78,14 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=False,
     )
+    phone = PhoneNumberField(verbose_name=_("電話番号"), null=True, blank=True)
+    # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
     is_staff = models.BooleanField(
         verbose_name=_("staff status"),
         default=False,
     )
+
     is_active = models.BooleanField(
         verbose_name=_("is_active"),
         default=True,
@@ -99,6 +103,11 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         return f"username={self.username}, email={self.email}"
 
     USERNAME_FIELD = "email"
+
     REQUIRED_FIELDS = ["username"]
 
     objects = FtUserManager()
+
+    # @property
+    # def is_authenticated(self):
+    # return super().is_authenticated

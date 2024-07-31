@@ -31,7 +31,11 @@ djangorestframework  \
 qrcode \
 requests \
 django-webpack-loader \
-pyjwt
+pyjwt \
+sendgrid \
+twilio \
+django-phonenumber-field[phonenumberslite]
+#django-twilio
 
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh

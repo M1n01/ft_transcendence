@@ -13,6 +13,7 @@ from django.http import (
 from django.urls import reverse_lazy
 
 from accounts.models import FtUser
+from accounts.two_fa import TwoFA
 from .forms import SignUpForm
 from .oauth import FtOAuth, randomStr
 
@@ -23,6 +24,9 @@ import base64
 import json
 import logging
 import datetime
+from django.http import JsonResponse
+from django.contrib.auth import login as auth_login
+import jwt
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +49,7 @@ class UserLogin(LoginView):
     url = ft_oauth.get_ft_authorization_url()
     form_class = LoginFrom
     template_name = "accounts/login.html"
-    success_url = reverse_lazy("accounts:success-login")
+    success_url = reverse_lazy("accounts:two-fa")
 
     # QRコード作成
     try:
@@ -57,17 +61,59 @@ class UserLogin(LoginView):
         qr = make_qr(error_page)
         extra_context = {"qr": "qr", "ft_url": url}
 
+    # Get Method
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if "is_2fa" in request.session:
+            context["is_2fa"] = request.session["is_2fa"]
+        else:
+            context["is_2fa"] = False
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        """
+        Login認証が成功時の戻り値をオーバーライド
+        """
+
+        """Security check complete. Log the user in."""
+        auth_login(self.request, form.get_user())
+        # return HttpResponseRedirect(self.get_success_url())
+        json = {
+            "dispatchEvent": "TwoFaEvent",
+            "html": "/2fa",
+        }
+        return JsonResponse(json)
+
+    def form_invalid(self, form):
+        """
+        Login認証が失敗時の戻り値をオーバーライド
+        現在は特に変更する必要がないので、そのまま返す
+        """
+        return super().form_invalid(form)
+
 
 class UserLogout(LogoutView):
     redirect_field_name = "redirect"
     success_url = reverse_lazy("accounts:success-logout")
+
+    def post(self, request, *args, **kwargs):
+        request.session["is_2fa"] = False
+        return super().post(request, *args, **kwargs)
+        """Logout may be done via POST."""
+        auth_logout(request)
+        redirect_to = self.get_success_url()
+        if redirect_to != request.get_full_path():
+            # Redirect to target page once the session has been cleared.
+            return HttpResponseRedirect(redirect_to)
+        return super().get(request, *args, **kwargs)
 
 
 class SignupView(CreateView):
 
     form_class = SignUpForm
     template_name = "accounts/signup.html"
-    success_url = reverse_lazy("accounts:success-signup")
+    # success_url = reverse_lazy("accounts:success-signup")
+    success_url = reverse_lazy("accounts:two-fa")
 
     cnt = "0-"
     try:
@@ -88,11 +134,23 @@ class SignupView(CreateView):
 
 
 def SignupSuccess(request):
-    return render(request, "accounts/success-signup.html")
+    context = {}
+    if "is_2fa" in request.session:
+        context["is_2fa"] = request.session["is_2fa"]
+    else:
+        context["is_2fa"] = False
+    # return render(request, "accounts/success-login.html", context)
+    return render(request, "accounts/two-fa.html", context)
 
 
 def LoginSuccess(request):
-    return render(request, "accounts/success-login.html")
+    context = {}
+    if "is_2fa" in request.session:
+        context["is_2fa"] = request.session["is_2fa"]
+    else:
+        context["is_2fa"] = False
+    # return render(request, "accounts/success-login.html", context)
+    return render(request, "accounts/two-fa.html", context)
 
 
 def LogoutSuccess(request):
@@ -168,4 +226,101 @@ def redirect_oauth(request):
         ft_oauth.append_state_code_dict(state, code)
         return render(request, "accounts/redirect-oauth.html")
     except:
+        return HttpResponseBadRequest("Bad Request")
+
+
+def two_fa(request):
+    """
+    2認証のモードとその値を元に、認証サービスにデータを送信する
+    引数:
+        request:    ブラウザからのリクエストデータ
+    戻り値:
+        Response:   クライアントに返すレスポンスデータ
+    """
+    if request.method == "GET":
+        return render(request, "accounts/two-fa.html")
+
+    if request.method == "POST":
+        try:
+            mode = request.POST.get("mode")
+            # body = json.loads(request.body)
+            # mode = body["mode"]
+            print(f"{mode=}")
+            if mode == "email":
+                email_address = request.POST.get("email")
+                print(f"{email_address=}")
+            elif mode == "sms":
+                phone_number = request.POST.get("phone")
+                twilio = TwoFA()
+                rval = twilio.sms(phone_number)
+                # rval = False
+                print(f"{phone_number=}")
+
+                # json = {
+                # "page":"overwrite",
+                # "dispatchEvent": "TwoFaEvent",
+                # "data": "",
+                # }
+                if rval:
+                    return HttpResponse()
+                # return JsonResponse(json)
+                # return render(request, "accounts/two-fa-sms.html")
+            elif mode == "app":
+                app_name = request.POST.get("app")
+                print(f"{app_name=}")
+            return HttpResponseBadRequest("Bad Request")
+
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Bad Request")
+        # except RawPostDataException:
+        # return HttpResponseBadRequest("Bad Request")
+    else:
+        return HttpResponseBadRequest("Bad Request")
+
+
+def two_fa_verify(request):
+    if request.method == "POST":
+        try:
+            mode = request.POST.get("mode")
+            pre_input = request.POST.get("pre_input")
+            code = request.POST.get("code")
+            print(f"{code=}")
+            print(f"{mode=}")
+            rval = False
+            if mode == "email":
+                print("email")
+                return HttpResponse()
+            elif mode == "sms":
+                print("sms")
+                twilio = TwoFA()
+                rval = twilio.verify_sms(pre_input, code)
+                # return HttpResponse()
+                # rval = True
+            elif mode == "app":
+                print("app")
+                return HttpResponse()
+            if rval == True:
+                request.session["is_2fa"] = True
+                # tmp_session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
+                print(f"test 2fa")
+                # test = getattr(settings, "SECRET_KEY", None)
+                # print(f"{test=}")
+                # jwt_decode = jwt.decode(
+                # tmp_session_key,
+                # getattr(settings, "SECRET_KEY", None),
+                # leeway=5,  # 通信上の遅延で５秒遅くても大丈夫ないように
+                # algorithms=["HS256"],
+                # )
+                # jwt_decode["is_2fa"] = True
+                # session_key = jwt.encode(jwt_decode)
+                # request.set_cookie(settings.SESSION_COOKIE_NAME, session_key)
+                # return JsonResponse(json)
+                return render(request, "accounts/success-login.html")
+            return HttpResponseBadRequest("Failure to verify")
+
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Bad Request")
+        # except RawPostDataException:
+        # return HttpResponseBadRequest("Bad Request")
+    else:
         return HttpResponseBadRequest("Bad Request")
