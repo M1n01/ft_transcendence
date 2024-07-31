@@ -12,7 +12,8 @@
   - [環境構築](#環境構築)
     - [Visual Studio Code 拡張機能](#visual-studio-code-拡張機能)
     - [クローン](#クローン)
-    - [ローカル立ち上げまで](#ローカル立ち上げまで)
+    - [各環境の立ち上げ](#各環境の立ち上げ)
+    - [アクセス方法](#アクセス方法)
   - [ディレクトリ構造](#ディレクトリ構造)
   - [Gitの運用](#gitの運用)
     - [ブランチについて](#ブランチについて)
@@ -33,6 +34,7 @@
 ### バックエンド
 
 - Django
+- Solidity
 
 ### ミドルウェア
 
@@ -49,6 +51,7 @@
 
 - Prettier
 - Black Formatter
+- Solidity
 
 ### クローン
 
@@ -56,7 +59,7 @@
 $ git clone https://github.com/M1n01/ft_transcendence.git
 ```
 
-### ローカル立ち上げまで
+### 各環境の立ち上げ
 
 ```
 # 環境変数ファイルの作成
@@ -65,13 +68,21 @@ $ cp .env.sample .env
 # パッケージのインストール
 $ npm install
 
-# ローカル環境の立ち上げ
-$ make up
+
+# 環境の選択（以下のいずれかを実行）
+$ make up   # ローカル環境
+$ make dev  # dev環境
+$ make      # 本番環境
 ```
 
-下記のローカル環境にアクセスできればOK
+### アクセス方法
+```
+https://localhost:3000/ # ローカル環境
+https://localhost:8000/ # dev環境
+https://localhost:8001/ # 本番環境
+```
 
-http://localhost:3000/
+<p align="right">(<a href="#top">トップへ</a>)</p>
 
 ## ディレクトリ構造
 
