@@ -78,8 +78,8 @@ $ make      # 本番環境
 ### アクセス方法
 ```
 https://localhost:3000/ # ローカル環境
-https://localhost:8000/ # dev環境
-https://localhost:8001/ # 本番環境
+https://localhost:8001/ # dev環境
+https://localhost:8000/ # 本番環境
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
