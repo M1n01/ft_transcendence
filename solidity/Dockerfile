@@ -5,7 +5,7 @@ WORKDIR /workspace
 
 # パッケージリストをコピーしてインストール
 COPY package*.json ./
-RUN npm install
+RUN npm install && npm install @nomicfoundation/hardhat-toolbox
 
 # プロジェクトファイルをコピー
 COPY . .
