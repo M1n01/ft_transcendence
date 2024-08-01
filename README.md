@@ -38,6 +38,7 @@
 
 ## 環境構築
 ### Visual Studio Code 拡張機能
+- husky
 - Prettier
 - Black Formatter
 
@@ -53,6 +54,10 @@ $ cp .env.sample .env
 
 # パッケージのインストール
 $ npm install
+
+# pre-commitの設定
+$ pip install pre-commit
+$ pre-commit install
 
 # ローカル環境の立ち上げ
 $ make up
