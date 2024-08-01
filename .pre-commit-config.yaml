@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: husky-run-pre-commit
+        name: husky
+        language: system
+        entry: .husky/pre-commit
+        pass_filenames: false
+
+  - repo: https://github.com/pre-commit/mirrors-black
+    rev: 24.4.2
+    hooks:
+      - id: black
+
