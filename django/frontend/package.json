@@ -20,7 +20,8 @@
   "scripts": {
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "name": "workspace",
   "version": "1.0.0",
