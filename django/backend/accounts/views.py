@@ -11,6 +11,7 @@ from django.http import (
     HttpResponse,
 )
 from django.urls import reverse_lazy
+from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 
 from accounts.models import FtUser
 from accounts.two_fa import TwoFA
@@ -26,13 +27,25 @@ import logging
 import datetime
 from django.http import JsonResponse
 from django.contrib.auth import login as auth_login
+from django import forms
 import jwt
+import secrets
+
+
+def generate_secure_random_number():
+    return secrets.randbelow(900000) + 100000  # 100000から999999の範囲の数値を生成
+
 
 logger = logging.getLogger(__name__)
 
 
 # Create your views here.
 class LoginFrom(AuthenticationForm):
+    # username = forms.CharField(label="Email or Phone Number")
+    #COUNTRY_CODE_CHOICES = [(f"+{code}", f"+{code} ({region[0]})") for code, region in COUNTRY_CODE_TO_REGION_CODE.items()]
+    #country_code = forms.ChoiceField(choices=COUNTRY_CODE_CHOICES, label="Country Code")
+    #phone_number = forms.CharField(max_length=15, label="Phone Number")
+
     class Meta:
         model = FtUser
 
@@ -248,7 +261,12 @@ def two_fa(request):
             print(f"{mode=}")
             if mode == "email":
                 email_address = request.POST.get("email")
+                code = generate_secure_random_number()
+                twilio = TwoFA()
+                rval = twilio.email(email_address, code)
                 print(f"{email_address=}")
+                if rval:
+                    return HttpResponse()
             elif mode == "sms":
                 phone_number = request.POST.get("phone")
                 twilio = TwoFA()
@@ -285,11 +303,14 @@ def two_fa_verify(request):
             pre_input = request.POST.get("pre_input")
             code = request.POST.get("code")
             print(f"{code=}")
+            print(f"{pre_input=}")
             print(f"{mode=}")
             rval = False
             if mode == "email":
                 print("email")
-                return HttpResponse()
+                twilio = TwoFA()
+                rval = twilio.verify_email(pre_input, code)
+                # return HttpResponse()
             elif mode == "sms":
                 print("sms")
                 twilio = TwoFA()

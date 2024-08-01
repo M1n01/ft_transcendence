@@ -34,7 +34,8 @@ django-webpack-loader \
 pyjwt \
 sendgrid \
 twilio \
-django-phonenumber-field[phonenumberslite]
+django-phonenumber-field[phonenumberslite] \
+sib_api_v3_sdk
 #django-twilio
 
 RUN chmod 744 /tmp/make_ca.sh
