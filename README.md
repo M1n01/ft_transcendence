@@ -68,6 +68,10 @@ $ cp .env.sample .env
 # パッケージのインストール
 $ npm install
 
+# pre-commitの設定
+$ pip install pre-commit
+$ pre-commit install
+
 
 # 環境の選択（以下のいずれかを実行）
 $ make up   # ローカル環境
