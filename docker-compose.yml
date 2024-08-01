@@ -76,6 +76,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      solidity:
+        condition: service_healthy
     ports:
       - 3000:3000
       - 8000:8000
@@ -107,3 +109,10 @@ services:
     tty: true
     volumes:
       - ./solidity/:/workspace
+    expose:
+      - '8545'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8545']
+      interval: 3s
+      timeout: 1s
+      retries: 5
