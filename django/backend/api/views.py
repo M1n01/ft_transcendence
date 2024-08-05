@@ -8,9 +8,8 @@ import json
 import os
 from django.conf import settings
 
-# infuraのURL
-infura_url = "http://127.0.0.1:8545"
-web3 = Web3(Web3.HTTPProvider(infura_url))
+# ローカルのイーサリアム環境に接続
+web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
 # hardhatコントラクトインスタンスの取得
 json_path = os.path.join(
@@ -24,7 +23,7 @@ json_path = os.path.join(
 with open(json_path) as f:
     scorekeeper_json = json.load(f)
 contract_abi = scorekeeper_json["abi"]
-contract_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+contract_address = os.getenv("CONTRACT_OWNER_ADDRESS")
 
 match_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 

@@ -9,11 +9,12 @@
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-html": "^8.1.1",
-    "prettier": "^3.3.2"
+    "prettier": "^3.3.2",
+    "prettier-plugin-solidity": "^1.3.1"
   },
   "scripts": {
-    "lint": "eslint django/frontend/**/*.js solidity/**/*.js",
-    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'solidity/**/*.js'",
+    "lint": "eslint django/frontend/**/*.js eth-core/**/*.js",
+    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'eth-core/**/*.js'",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,18 +22,18 @@
   },
   "lint-staged": {
     "django/frontend/**/*.{js,jsx}": [
-      "prettier --write --loglevel=error",
+      "prettier --write --log-level=error",
       "eslint --fix --quiet"
     ],
     "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
-      "prettier --write --loglevel=error"
+      "prettier --write --log-level=error"
     ],
-    "solidity/**/*.js": [
-      "prettier --write --loglevel=error",
+    "eth-core/**/*.js": [
+      "prettier --write --log-level=error",
       "eslint --fix --quiet"
     ],
-    "solidity/**/*.sol": [
-      "prettier --write --plugin=prettier-plugin-solidity --loglevel=error",
+    "eth-core/**/*.sol": [
+      "prettier --write --plugin=prettier-plugin-solidity --log-level=error",
       "solhint"
     ]
   },
@@ -41,7 +42,6 @@
     "husky": "^9.1.4",
     "js-cookie": "^3.0.5",
     "lint-staged": "^15.2.7",
-    "prettier-plugin-solidity": "^1.3.1",
     "solhint": "^5.0.1"
   }
 }
