@@ -1,12 +1,17 @@
 from rest_framework import serializers
+from .models import Player, Score
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    player_id = serializers.IntegerField()
-    score = serializers.IntegerField()
+    class Meta:
+        model = Player
+        fields = ("player_id", "score")
 
 
 class ScoreSerializer(serializers.ModelSerializer):
-    match_id = serializers.IntegerField()
     player = PlayerSerializer()
     opponent = PlayerSerializer()
+
+    class Meta:
+        model = Score
+        fields = ("match_id", "player", "opponent")

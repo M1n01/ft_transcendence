@@ -9,7 +9,7 @@ import os
 from django.conf import settings
 
 # ローカルのイーサリアム環境に接続
-web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
+web3 = Web3(Web3.HTTPProvider("http://contracts:8545"))
 
 # hardhatコントラクトインスタンスの取得
 json_path = os.path.join(
@@ -30,9 +30,32 @@ match_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
 class ScoreAPIView(APIView):
     def get(self, request, format=None):
-        scores = Score.objects.all()
-        serializer = ScoreSerializer(scores, many=True)
-        return Response(serializer.data)
+        match_id = request.query_params.get("match_id")  # クエリを使用
+        if match_id:
+            try:
+                match = match_contract.functions.getMatch(int(match_id)).call()
+                return Response(
+                    {
+                        "match_id": match[0],
+                        "player": {
+                            "id": match[1].playerId,
+                            "score": match[1].score,
+                        },
+                        "opponent": {
+                            "id": match[2].playerId,
+                            "score": match[2].score,
+                        },
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                match_count = match_contract.functions.getMatchCount().call()
+                return Response({"match_count": match_count}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
         serializer = ScoreSerializer(data=request.data)
@@ -46,17 +69,31 @@ class ScoreAPIView(APIView):
             opponent_id = opponent["player_id"]
             opponent_score = opponent["score"]
 
-            # トランザクションの送信
-            tx_hash = match_contract.functions.createMatch(
-                match_id, player_id, player_score, opponent_id, opponent_score
-            ).transact({"from": web3.eth.accounts[0]})
+            try:
+                txn = match_contract.functions.addMatch(
+                    match_id, player_id, player_score, opponent_id, opponent_score
+                ).build_transaction(
+                    {
+                        "from": web3.eth.accounts[0],
+                        "nonce": web3.eth.get_transaction_count(web3.eth.accounts[0]),
+                    }
+                )
 
-            # トランザクションの確認
-            receipt = web3.eth.waitForTransactionReceipt(tx_hash)
+                signed_txn = web3.eth.account.sign_transaction(
+                    txn, private_key=os.getenv("CONTRACT_OWNER_PRIVATE_KEY")
+                )
+                tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+                receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+                return Response(
+                    {
+                        "status": "Match created",
+                        "tx_hash": tx_hash.hex(),
+                        "data": serializer.data,
+                    },
+                    status=status.HTTP_201_CREATED,
+                )
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(
-                {"status": "Match created", "tx_hash": tx_hash.hex()},
-                status=status.HTTP_201_CREATED,
-            )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
