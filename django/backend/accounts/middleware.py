@@ -15,7 +15,6 @@ class CustomSessionMiddleware(SessionMiddleware):
     def process_request(self, request):
         tmp_session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
         session_key = tmp_session_key
-        is_2fa = False
         try:
             if tmp_session_key is not None:
                 jwt_decode = jwt.decode(
@@ -25,13 +24,13 @@ class CustomSessionMiddleware(SessionMiddleware):
                     algorithms=["HS256"],
                 )
                 session_key = jwt_decode["session_key"]
-                is_2fa = jwt_decode["is_2fa"]
         except jwt.ExpiredSignatureError:
+            # leeway+expで設定した時間を超過したらここに入る
             pass
         except jwt.exceptions.DecodeError:
+            # tmp_session_keyが編集されていたらここに入る
             pass
         request.session = self.SessionStore(session_key)
-        request.session["is_2fa"] = is_2fa
 
     def process_response(self, request, response):
         try:
@@ -59,6 +58,7 @@ class CustomSessionMiddleware(SessionMiddleware):
                     max_age = request.session.get_expiry_age()
                     expires_time = time.time() + max_age
                     expires = http_date(expires_time)
+
                 if response.status_code < 500:
                     try:
                         request.session.save()
@@ -71,11 +71,10 @@ class CustomSessionMiddleware(SessionMiddleware):
                     jwt_session_key = jwt.encode(
                         {
                             "session_key": request.session.session_key,
-                            "is_2fa": request.session["is_2fa"],
                             "iss": "https://localhost",
                             "sub": "user123",
                             "exp": datetime.now(tz=timezone.utc)
-                            + timedelta(seconds=60),
+                            + timedelta(seconds=14400),
                             "nbf": datetime.now(tz=timezone.utc)
                             + timedelta(
                                 seconds=3

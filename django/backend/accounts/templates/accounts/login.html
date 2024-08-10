@@ -6,52 +6,42 @@
     <title>LoginViewテスト</title>
   </head>
   <body>
-    <div>{{ abc }}</div>
-    {% if is_2fa %}
-    <div>is_2fa is True</div>
-    {% else %}
-    <div>is_2fa is False</div>
-    {% endif %} {{extra}} 
-    {% if user.is_authenticated %}
+    {{extra}} {% if user.is_authenticated %}
     <div>
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
-        <button id="logined" type="submit" class="form-button">{% trans "Log_out" %}</button>
+        <button id="logined" type="submit" class="login-button">{% trans "Log_out" %}</button>
       </form>
+      <form method="post" hidden>dummy</form>
     </div>
 
-      {% if is_2fa %}
-      <div>is_2fa is True</div>
-      {% else %}
-      <div>is_2fa is False</div>
-      {% endif%}
     {% else %}
-      {% if is_2fa %}
-      <div>is_2fa is True2</div>
-
-      {% if user.is_authenticated %}
-      <div>is _autheniticated is True</div>
-      {% else %}
-      <div>is _autheniticated is False</div>
-      {% endif %}
-
-      {% else %}
-      <div>is_2fa is False2</div>
-      {% endif%}
-
-
-    <form method="post" id="login-form" action="{% url 'accounts:login' %}">
+    <form id="dummy" hidden></form>
+    <form method="post" id="login-form" action="{% url 'accounts:login-tmp' %}">
       {% csrf_token %} {{ form }}
-      <button type="submit" class="form-button">{% trans "Log_in" %}</button>
+      <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" disabled hidden />
+      <button type="submit" class="form-button" id="login-tmp-button">{% trans "Log_in" %}</button>
     </form>
 
-    <p>42Ouath</p>
-    <button id="openDialog">{% trans "42認証" %}</button>
+    <button id="back-button" hidden>{% trans "元に戻す" %}</button>
+    <div id="form-error" class="error" hidden>
+      {% trans "認証に失敗しました。" %}
+      <br />
+      {% trans "入力内容を見直してください" %}
+    </div>
 
+    <button id="openDialog">{% trans "42認証" %}</button>
     <p>{% trans "42認証" %}</p>
-    <!-- <button type="submit" class="form-button">{% trans "ログアウト" %}</button> -->
     <dialog id="myDialog">
-      <a href={% static 'accounts/two-fa.html'%} id="success-login" class="nav__link" data-link hidden>success</a>
+      <a
+        href="{% static 'accounts/two-fa.html' %}"
+        id="success-login"
+        class="nav__link"
+        data-link
+        hidden
+      >
+        success
+      </a>
       <div p id="instruction">
         {% trans "QRコードから42でログインすることを許可してください" %}
         <br />

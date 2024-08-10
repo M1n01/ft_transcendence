@@ -31,6 +31,10 @@ class FtUserManager(BaseUserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
+
+        for field in extra_fields:
+            print(f"{field=}")
+
         return self._create_user(
             email=email,
             username=username,
@@ -50,11 +54,13 @@ class FtUserManager(BaseUserManager):
         )
 
 
+class AuthChoices(models.TextChoices):
+    EMAIL = "EMAIL", _("EMail Auth")
+    SMS = "SMS", _("SMS Auth")
+    APP = "APP", _("App Auth")
+
+
 class FtUser(AbstractBaseUser, PermissionsMixin):
-    class AuthChoices(models.TextChoices):
-        EMAIL = "E", _("EMail Auth)")
-        SMS = "S", _("SMS Auth")
-        APP = "A", _("App Auth")
 
     groups = models.ManyToManyField(Group, related_name="ft_user_groups")
     user_permissions = models.ManyToManyField(
@@ -105,6 +111,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
     # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
+    # is_2fa = models.BooleanField(verbose_name=_("is_2fa"), default=False)
+    is_ft = models.BooleanField(verbose_name=_("is_ft"), default=False, null=True)
     is_staff = models.BooleanField(
         verbose_name=_("staff status"),
         default=False,
@@ -118,9 +126,15 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     birth_date = models.DateField(verbose_name=_("誕生日"), blank=True, null=True)
     auth = models.CharField(
         verbose_name=_("2要素認証"),
-        max_length=1,
+        max_length=5,
         choices=AuthChoices,
         default=AuthChoices.APP,
+    )
+    app_secret = models.CharField(
+        verbose_name=_("App鍵"),
+        max_length=32,
+        null=True,
+        blank=True,
     )
 
     created_at = models.DateTimeField(
