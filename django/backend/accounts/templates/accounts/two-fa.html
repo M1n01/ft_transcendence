@@ -12,28 +12,28 @@
       {% csrf_token %}
       <div for="phone">{% trans "認証方法を選択してください" %}:</div>
 
-      <input type="radio" id="option_email" name="mode" value="email" checked />
+      <input type="radio" id="option_email" name="mode" value="EMAIL" checked />
       <label for="option1">{% trans "メール認証" %}</label><br />
 
-      <input type="radio" id="option_sms" name="mode" value="sms" />
+      <input type="radio" id="option_sms" name="mode" value="SMS" />
       <label for="option2">{% trans "SMS認証" %}</label><br />
 
-      <input type="radio" id="option_app" name="mode" value="app" />
+      <input type="radio" id="option_app" name="mode" value="APP" />
       <label for="option3">{% trans "App認証" %}</label><br /><br />
 
       <div id="input_sms" hidden>
         <label>{% trans "電話番号" %}:</label>
-        <input type="tel" id="phone_number" name="phone" pattern="[0-9]*" />
+        <input type="tel" id="phone_number" name="id" pattern="[0-9]*" />
         <div>{% trans "ハイフン(-)はつけないで、数字のみで記入してください" %}</div>
       </div>
       <div id="input_email">
         <label>{% trans "メールアドレス" %}:</label>
-        <input type="email" id="email_address" name="email" />
+        <input type="email" id="email_address" name="id" />
         <div>{% trans "有効なメールアドレスを入力してください" %}</div>
       </div>
       <div id="input_app" hidden>
         <label>{% trans "App" %}:</label>
-        <input type="email" id="app_name" name="app" />
+        <input type="email" id="app_name" name="id" />
         <div>{% trans "有効なメールアドレスを入力してください" %}</div>
       </div>
       <br /><br />
@@ -53,7 +53,7 @@
         <div>{% trans "認証コードを入力してください" %}</div>
         <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
         <input type="text" id="common-mode" name="mode" hidden>
-        <input type="text" id="common-input" name="pre_input" hidden>
+        <input type="text" id="common-input" name="id" hidden>
         <input id="verify-submit" , type="submit" value="送信" />
       </form>
       <div class ="failure-word" id="failure-verify" hidden>{%trans "認証に失敗しました"%}

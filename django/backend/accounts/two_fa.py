@@ -13,8 +13,11 @@ from pprint import pprint
 import ast
 import time
 import urllib.parse
+import pyotp
 
-
+# SMSサービスを一時的に無効にする
+# SMSサービスは有料なので、使用を制限したいため
+# これがTrueであると、認証コードは何を入力しても通る
 DEV_SMS = True
 
 email_code_dict = {}
@@ -31,7 +34,7 @@ class TwoFA:
 
     def sms(self, phone_number):
         client = Client(self.sms_account_sid, self.sms_auth_token)
-        phone_number = "+81" + phone_number[1:]
+        # phone_number = "+81" + phone_number[1:]
         print(f"{phone_number=}")
         if DEV_SMS:
             return True
@@ -125,11 +128,25 @@ class TwoFA:
         return True
 
     def verify_email(self, email_address, code):
-        print(f"verify_email:{email_address=}")
-        print(f"verify_email:{code=}")
-        print(f"verify_email:{email_code_dict[email_address]=}")
         if code == str(email_code_dict[email_address]):
-            print("equal")
             return True
-        print("NG")
+        return False
+
+    def init_app(self, email):
+        totp = pyotp.TOTP(pyotp.random_base32())
+        secret = totp.secret
+
+        # QRコードのURI生成
+        uri = totp.provisioning_uri(name=email, issuer_name="42 Pong Game")
+        return (uri, secret)
+
+    def app(self):
+        return True
+
+    def verify_app(self, secret, code):
+        totp = pyotp.TOTP(secret)
+        totp.now()
+
+        if code == totp.now():
+            return True
         return False

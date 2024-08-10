@@ -31,9 +31,6 @@
     ],
     "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
       "prettier --write --loglevel=error"
-    ],
-    "django/backend/**/*.py": [
-      "black"
     ]
   },
   "dependencies": {

@@ -1,7 +1,6 @@
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import '../scss/two_fa.scss';
 export const TwoFaEvent = new Event('TwoFaEvent');
-//import { updatePage } from './routing/routing.js';
 function displayInput(id) {
   document.getElementById('input_email').hidden = true;
   document.getElementById('input_sms').hidden = true;
@@ -27,7 +26,6 @@ function switchingAllInput(mode) {
     document.getElementById('input_email').disable = true;
     document.getElementById('input_sms').disable = true;
     document.getElementById('input_app').disable = true;
-    //const radioButtons = document.querySelectorAll('input[name="mode"]');
     const radioButtons = document.querySelectorAll('input');
     radioButtons.forEach(function (radioButton) {
       radioButton.disabled = true;
@@ -43,7 +41,6 @@ function switchingAllInput(mode) {
     document.getElementById('input_email').disable = false;
     document.getElementById('input_sms').disable = false;
     document.getElementById('input_app').disable = false;
-    //const radioButtons = document.querySelectorAll('input[name="mode"]');
     const radioButtons = document.querySelectorAll('input');
     radioButtons.forEach(function (radioButton) {
       radioButton.disabled = false;
@@ -59,42 +56,31 @@ function switchingAllInput(mode) {
 }
 
 document.addEventListener('TwoFaEvent', function () {
-  console.log('2FA Event Test');
   document.getElementById('two_fa_form').addEventListener('submit', async function (event) {
-    event.preventDefault(); // フォームのデフォルトの送信を防止
+    event.preventDefault();
     const form = event.target;
-    console.log('2fa Test');
-    console.log('2FA Click Test');
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
     if (response.status == 200) {
       document.getElementById('failure-send-2fa').hidden = true;
-      console.log('response status 200');
       switchingAllInput(true);
       copyInput();
     } else {
-      console.log('response status ERROR:' + response.status);
       document.getElementById('failure-send-2fa').hidden = false;
-      //window.
     }
   });
 
   document.getElementById('two_fa_verify_form').addEventListener('submit', async function (event) {
-    event.preventDefault(); // フォームのデフォルトの送信を防止
+    event.preventDefault();
     const form = event.target;
-    //console.log('2fa Test');
-    //console.log('2FA Click Test');
     const formData = new FormData(form);
     console.table(formData);
     const response = await fetchAsForm(form, formData);
     if (response.status == 200) {
-      console.log('response status 200');
       switchingAllInput(true);
       document.querySelector('#app').innerHTML = await response.text();
     } else {
-      console.log('response status ERROR:' + response.status);
       document.getElementById('failure-verify').hidden = false;
-      //window.
     }
   });
 
@@ -104,7 +90,6 @@ document.addEventListener('TwoFaEvent', function () {
   const Resend = document.getElementById('resend');
   const VerifyInput = document.getElementById('verify-code');
 
-  //const VerifySubmit = document.getElementById('verify-submit');
   RadioEmail.addEventListener('change', function () {
     displayInput('input_email');
   });
@@ -124,12 +109,5 @@ document.addEventListener('TwoFaEvent', function () {
   });
   VerifyInput.addEventListener('input', function () {
     document.getElementById('failure-verify').hidden = true;
-    //copyInput();
   });
-  /*
-  VerifySubmit.addEventListener('click', function () {
-    console.log('click');
-    copyInput();
-  });
-  */
 });
