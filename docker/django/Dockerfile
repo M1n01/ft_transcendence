@@ -30,7 +30,13 @@ django-oauth-toolkit \
 djangorestframework  \
 qrcode \
 requests \
-django-webpack-loader
+django-webpack-loader \
+pyjwt \
+sendgrid \
+twilio \
+django-phonenumber-field[phonenumberslite] \
+sib_api_v3_sdk
+#django-twilio
 
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh

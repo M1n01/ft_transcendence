@@ -51,6 +51,13 @@ services:
       timeout: 1s
       retries: 5
 
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+      interval: 8s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
   django:
     container_name: 'django'
     build:
@@ -76,6 +83,11 @@ services:
       - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
       - OAUTH_CLIENT_ID=$OAUTH_CLIENT_ID
       - OAUTH_SECRET_ID=$OAUTH_SECRET_ID
+      - TWILIO_SERVICE_SID=$TWILIO_SERVICE_SID
+      - TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID
+      - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
+      - BREVO_API_KEY=$BREVO_API_KEY
+      - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&

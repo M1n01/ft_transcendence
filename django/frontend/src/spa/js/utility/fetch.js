@@ -19,7 +19,8 @@ export async function fetchAsForm(form, FormData) {
       mode: 'same-origin',
       body: FormData,
     });
-    return res.text();
+    //return res.text();
+    return res;
   } catch (error) {
     console.error('Fetch Error:' + error.message);
     return '';

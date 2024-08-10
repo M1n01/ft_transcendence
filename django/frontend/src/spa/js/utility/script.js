@@ -1,3 +1,5 @@
+//import { TwoFaEvent } from '../../../accounts/js/two_fa.js';
+
 export function executeScriptTab(path) {
   const app = document.querySelector('#app');
   var newDiv = document.createElement('script');

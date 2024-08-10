@@ -13,4 +13,6 @@ urlpatterns = [
     path("success-logout/", views.LogoutSuccess, name="success-logout"),
     path("redirect-oauth/", views.redirect_oauth, name="redirect-oauth"),
     path("oauth-login/", views.oauth_login, name="oauth-login"),
+    path("two-fa/", views.two_fa, name="two-fa"),
+    path("two-fa-verify/", views.two_fa_verify, name="two-fa-verify"),
 ]

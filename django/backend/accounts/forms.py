@@ -13,6 +13,9 @@ class SignUpForm(UserCreationForm):
             "first_name",
             "last_name",
             "birth_date",
+            "country_code",
+            "phone",
+            "auth",
         )
 
 
