@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
+    "sendgrid",
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
@@ -113,7 +114,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # "corsheaders.middleware.CorsMiddleware", #CORS設定
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    # "django.contrib.sessions.middleware.SessionMiddleware",
+    "accounts.middleware.CustomSessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",  # 多言語設定
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -305,3 +307,18 @@ PONG_DOMAIN = "http://localhost:8001/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"
+
+# SEND_GRID
+SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"
+SENDGRID_EMAIL_PORT = 587
+SENDGRID_EMAIL_USERNAME = "your_sendgrid_username"
+SENDGRID_EMAIL_PASSWORD = "your_sendgrid_password"
+
+# TWILIO(SMS)
+TWILIO_SERVICE_SID = os.environ["TWILIO_SERVICE_SID"]
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+
+# Brevo(Email)
+BREVO_API_KEY = os.environ["BREVO_API_KEY"]
+BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]

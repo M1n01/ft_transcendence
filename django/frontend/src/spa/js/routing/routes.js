@@ -12,6 +12,7 @@ import Index from '../views/Index.js';
 import Pong from '../views/Pong.js';
 import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
+import TwoFA from '../views/TwoFA.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -30,4 +31,5 @@ export const Routes = [
   { path: '/scriptt', view: Script2 },
   { path: '/script', view: Script },
   { path: '/success-login', view: LoginSuccess },
+  { path: '/2fa', view: TwoFA },
 ];

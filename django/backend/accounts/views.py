@@ -4,6 +4,8 @@ from django.views.generic import CreateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.template.exceptions import TemplateDoesNotExist
+from django.contrib.auth import logout
 from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
@@ -11,8 +13,10 @@ from django.http import (
     HttpResponse,
 )
 from django.urls import reverse_lazy
+from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 
 from accounts.models import FtUser
+from accounts.two_fa import TwoFA
 from .forms import SignUpForm
 from .oauth import FtOAuth, randomStr
 
@@ -23,11 +27,22 @@ import base64
 import json
 import logging
 import datetime
+from django.http import JsonResponse
+from django.contrib.auth import login as auth_login
+from django.template.loader import render_to_string
+from django import forms
+import jwt
+import secrets
+from accounts.models import AuthChoices
+
+
+def generate_secure_random_number():
+    return secrets.randbelow(900000) + 100000  # 100000から999999の範囲の数値を生成
+
 
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
 class LoginFrom(AuthenticationForm):
     class Meta:
         model = FtUser
@@ -38,6 +53,75 @@ def make_qr(url):
     buffer = BytesIO()
     img.save(buffer)
     return base64.b64encode(buffer.getvalue()).decode().replace("'", "")
+
+
+def verify_two_fa(user, code):
+
+    if user is None:
+        return False
+    if code is None or code == "":
+        return False
+    two_fa_mode = user.auth
+    two_fa = TwoFA()
+    if two_fa_mode == AuthChoices.SMS:
+        # phone_number = user.phone
+        phone_number = user.country_code + user.phone
+        rval = two_fa.verify_sms(phone_number, code)
+    elif two_fa_mode == AuthChoices.EMAIL:
+        email = user.email
+        rval = two_fa.verify_email(email, code)
+    elif two_fa_mode == AuthChoices.APP:
+        secret = user.app_secret
+        rval = two_fa.verify_app(secret, code)
+    return rval
+
+
+def send_two_fa(user):
+    try:
+        two_fa_mode = user.auth
+        two_fa = TwoFA()
+        if two_fa_mode == AuthChoices.SMS:
+            # phone_number = user.country_code
+            phone_number = user.country_code + user.phone
+            rval = two_fa.sms(phone_number)
+        elif two_fa_mode == AuthChoices.EMAIL:
+            code = generate_secure_random_number()
+            email = user.email
+            rval = two_fa.email(email, code)
+        elif two_fa_mode == AuthChoices.APP:
+            rval = two_fa.app()
+        return rval
+    except:
+        return False
+
+
+class UserTmpLogin(LoginView):
+    def form_invalid(self, form):
+        return HttpResponseBadRequest("Bad Request")
+
+    def form_valid(self, form):
+        """
+        Login認証が成功時の戻り値をオーバーライド
+        """
+
+        """Security check complete. Log the user in."""
+        try:
+            if self.request.method != "POST":
+                return HttpResponseBadRequest("Bad Request")
+            username = self.request.POST.get("username")
+            password = self.request.POST.get("password")
+            user = authenticate(self.request, username=username, password=password)
+            if user is None:
+                return HttpResponseBadRequest("Bad Request")
+            rval = send_two_fa(user)
+            if rval:
+                return HttpResponse()
+        except TemplateDoesNotExist as e:
+            return HttpResponseBadRequest("Bad Request")
+        except Exception as e:
+            return HttpResponseBadRequest("Bad Request")
+        else:
+            return HttpResponseBadRequest("Bad Request")
 
 
 class UserLogin(LoginView):
@@ -57,10 +141,53 @@ class UserLogin(LoginView):
         qr = make_qr(error_page)
         extra_context = {"qr": "qr", "ft_url": url}
 
+    # Get Method
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        # if "is_2fa" in request.session:
+        #    context["is_2fa"] = request.session["is_2fa"]
+        # else:
+        #    context["is_2fa"] = False
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        """
+        Login認証が成功時の戻り値をオーバーライド
+        """
+
+        try:
+            if self.request.method != "POST":
+                return HttpResponseBadRequest("Bad Request")
+
+            username = self.request.POST.get("username")
+            password = self.request.POST.get("password")
+            code = self.request.POST.get("code")
+            user = authenticate(self.request, username=username, password=password)
+            rval = verify_two_fa(user, code)
+            if rval:
+                auth_login(self.request, form.get_user())
+                return render(self.request, "accounts/success-login.html")
+
+            """Security check complete. Log the user in."""
+        except Exception as e:
+            return HttpResponseBadRequest("Bad Request")
+        return HttpResponseBadRequest("Bad Request")
+
+    def form_invalid(self, form):
+        """
+        Login認証が失敗時の戻り値をオーバーライド
+        現在は特に変更する必要がないので、そのまま返す
+        """
+        return super().form_invalid(form)
+
 
 class UserLogout(LogoutView):
     redirect_field_name = "redirect"
     success_url = reverse_lazy("accounts:success-logout")
+
+    def post(self, request, *args, **kwargs):
+        # request.session["is_2fa"] = False
+        return super().post(request, *args, **kwargs)
 
 
 class SignupView(CreateView):
@@ -81,18 +208,47 @@ class SignupView(CreateView):
         CreateViewのメソッドをオーバーライド
         """
         try:
-            print(f"{form=}")
-            return super().form_valid(form)
+            if self.request.method != "POST":
+                return HttpResponseBadRequest("Bad Request")
+            rval = super().form_valid(form)
+            login(
+                self.request,
+                self.object,
+                backend="django.contrib.auth.backends.ModelBackend",
+            )
+            return rval
         except Exception as e:
             return HttpResponseBadRequest("Bad Request:" + e)
 
 
+def signup_valid(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            # バリデーションが成功した場合、次のステップへ進む
+            if form["auth"] == AuthChoices.APP:
+                two_fa = TwoFA()
+                (_, form["app_secret"]) = two_fa.init_app(form["email"])
+
+            data = {"valid": True}
+            return JsonResponse(data)
+        else:
+            html = render_to_string(
+                "accounts/signup.html", {"form": form}, request=request
+            )
+            data = {"valid": False, "html": html}
+            return JsonResponse(data)
+    return HttpResponseBadRequest("Bad Request")
+
+
 def SignupSuccess(request):
-    return render(request, "accounts/success-signup.html")
+    context = {}
+    return render(request, "accounts/success-login.html", context)
 
 
 def LoginSuccess(request):
-    return render(request, "accounts/success-login.html")
+    context = {}
+    return render(request, "accounts/success-login.html", context)
 
 
 def LogoutSuccess(request):
@@ -168,4 +324,75 @@ def redirect_oauth(request):
         ft_oauth.append_state_code_dict(state, code)
         return render(request, "accounts/redirect-oauth.html")
     except:
+        return HttpResponseBadRequest("Bad Request")
+
+
+def two_fa(request):
+    """
+    2認証のモードとその値を元に、認証サービスにデータを送信する
+    引数:
+        request:    ブラウザからのリクエストデータ
+    戻り値:
+        Response:   クライアントに返すレスポンスデータ
+    """
+    if request.method == "GET":
+        return render(request, "accounts/two-fa.html")
+
+    if request.method == "POST":
+        try:
+            mode = request.POST.get("mode")
+            if mode == "EMAIL":
+                email_address = request.POST.get("id")
+                code = generate_secure_random_number()
+                twilio = TwoFA()
+                rval = twilio.email(email_address, code)
+                if rval:
+                    return HttpResponse()
+            elif mode == "SMS":
+                phone_number = request.POST.get("id")
+                twilio = TwoFA()
+                rval = twilio.sms(phone_number)
+                if rval:
+                    return HttpResponse()
+            elif mode == "APP":
+                email_address = request.POST.get("id")
+                twilio = TwoFA()
+                (uri, secret) = twilio.init_app(email_address)
+                qr = make_qr(uri)
+                extra_context = {"app": True, "qr": qr, "app_url": secret}
+                return JsonResponse(extra_context)
+
+            return HttpResponseBadRequest("Bad Request")
+
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Bad Request")
+    else:
+        return HttpResponseBadRequest("Bad Request")
+
+
+def two_fa_verify(request):
+    if request.method == "POST":
+        try:
+            mode = request.POST.get("mode")
+            pre_input = request.POST.get("id")
+            code = request.POST.get("code")
+            secret = request.POST.get("app_secret")
+            rval = False
+            if mode == "EMAIL":
+                twilio = TwoFA()
+                rval = twilio.verify_email(pre_input, code)
+            elif mode == "SMS":
+                twilio = TwoFA()
+                rval = twilio.verify_sms(pre_input, code)
+            elif mode == "APP":
+                twilio = TwoFA()
+                rval = twilio.verify_app(secret, code)
+            if rval == True:
+                # request.session["is_2fa"] = True
+                return HttpResponse()
+            return HttpResponseBadRequest("Failure to verify")
+
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Bad Request")
+    else:
         return HttpResponseBadRequest("Bad Request")

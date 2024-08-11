@@ -6,7 +6,12 @@
   "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "mhutchie.git-graph"]
+      "extensions": [
+        "ms-python.python",
+        "mhutchie.git-graph",
+        "Prettier",
+        "SCSS Formatter"
+      ]
     }
   }
 }

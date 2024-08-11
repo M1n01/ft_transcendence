@@ -2,27 +2,49 @@
 <body>
   <div>
     <br />
+    <form hidden>dummy form</form>
     <form method="POST" id="signup-form" action="{% url 'accounts:signup' %}">
       {% csrf_token %} {{ form }}
       <input type="text" name="created_at" id="id_created_at" hidden />
       <input type="text" name="email42" id="id_email42" value="{{dummy_email}}" hidden />
+      <input type="text" id="app-auth-url" name="app_secret" hidden />
+
       <br />
       <div class="mt-3">
-        <button type="submit" class="form-button">Create</button>
+        <div id="failure-verify-2fa" class="error-message" hidden>
+          {% trans "認証コードの送信に失敗しました" %}
+          <br />
+          {% trans "入力した内容を見直して再度実行してください" %}
+        </div>
+
+        <button type="submit" id="validation-button" class="form-button">{% trans "認証"%}</button>
+        <button id="back-button" class="form-button" hidden>{% trans "元に戻す"%}</button>
       </div>
     </form>
-  </div>
-  <script>
-    const Mytoday = new Date();
-    const yyyy = Mytoday.getFullYear();
-    const mm = String(Mytoday.getMonth() + 1).padStart(2, '0');
-    const dd = String(Mytoday.getDate()).padStart(2, '0');
-    const todayString = `${yyyy}-${mm}-${dd}`;
-    document.getElementById('id_created_at').value = todayString;
-    document.getElementById('id_birth_date').type = 'date';
-    //document.getElementById('id_super').type = 'True';
+    <div id="phone-auth-error" class="error-message" hidden>
+      {% trans "2要素認証をSMSにする場合、電話番号を入力してください" %}
+    </div>
+    <div id="server-error" class="error-message" hidden>
+      {% trans "サーバー内でエラーが発生しました。" %} <br\>
+      {% trans "記入内容を見直して、もう一度最初から実行してください" %}
+    </div>
+    <div id="google-qr">
+      <img src="test" id="app_qr" height="320" width="320"  hidden/>
+    </div>
 
-    //document.getElementById('id_email42').value = '{{dummy_email}}';
-    //document.getElementById('id_id').value = '123';
-  </script>
+    <form action="{% url 'accounts:two-fa' %}" method="post" id="two-fa-form" hidden>
+      {% csrf_token %}
+      <input type="text" id="common-mode" name="mode" hidden />
+      <input type="text" id="common-input" name="id" hidden />
+      <input type="text" id="app-url" name="app_secret" hidden />
+      <div id="verify-code-block">
+        {% trans "認証コードを入力してください" %}
+        <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
+      </div>
+      <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
+    </form>
+    <div class="error-message" id="failure-verify" hidden>
+      {%trans "認証に失敗しました"%}<br\> {% trans "認証コードを見直して再度実行してください"%}
+    </div>
+  </div>
 </body>
