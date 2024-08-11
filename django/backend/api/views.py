@@ -33,29 +33,46 @@ class ScoreAPIView(APIView):
         match_id = request.query_params.get("match_id")  # クエリを使用
         if match_id:
             try:
+                # 試合データの取得
                 match = match_contract.functions.getMatch(int(match_id)).call()
-                return Response(
-                    {
-                        "match_id": match[0],
-                        "player": {
-                            "id": match[1].playerId,
-                            "score": match[1].score,
-                        },
-                        "opponent": {
-                            "id": match[2].playerId,
-                            "score": match[2].score,
-                        },
+
+                # データの構造を変数に分ける
+                match_id = match[0]
+                player_id, player_score = match[1]
+                opponent_id, opponent_score = match[2]
+
+                # レスポンスの作成
+                response_data = {
+                    "message": "Match retrieved",
+                    "match_id": match_id,
+                    "player": {
+                        "id": player_id,
+                        "score": player_score,
                     },
-                    status=status.HTTP_200_OK,
-                )
+                    "opponent": {
+                        "id": opponent_id,
+                        "score": opponent_score,
+                    },
+                }
+
+                return Response(response_data, status=status.HTTP_200_OK)
             except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"message": "Error retrieving match", "error": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         else:
             try:
                 match_count = match_contract.functions.getMatchCount().call()
-                return Response({"match_count": match_count}, status=status.HTTP_200_OK)
+                return Response(
+                    {"message": "Match count retrieved", "match_count": match_count},
+                    status=status.HTTP_200_OK,
+                )
             except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"message": "Error retrieving match count", "error": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
     def post(self, request, format=None):
         serializer = ScoreSerializer(data=request.data)
