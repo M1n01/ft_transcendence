@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Score
-from .models import Comment
 from .serializers import ScoreSerializer
 from web3 import Web3
 import json
@@ -29,6 +28,7 @@ contract_abi = scorekeeper_json["abi"]
 contract_address = os.getenv("CONTRACT_OWNER_ADDRESS")
 
 match_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
+
 
 class ScoreAPIView(APIView):
     def get(self, request, format=None):
