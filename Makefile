@@ -14,7 +14,7 @@ DJANGO_PROD_SETTING	:= $(SRCDIR)/settings_prod.py
 NGINX_IMAGE		:= ft_transcendence-nginx
 DB_IMAGE			:= ft_transcendence-db
 DJANGO_IMAGE	:= ft_transcendence-django
-CONTRACT_IMAGE	:= ft_transcendence-contract　
+CONTRACT_IMAGE	:= ft_transcendence-contract
 
 DB_NET				:= db_net
 DJANGO_NET		:= django_net
