@@ -11,9 +11,9 @@ DJANGO_SETTING		:= $(SRCDIR)/settings.py
 DJANGO_DEV_SETTING	:= $(SRCDIR)/settings_dev.py
 DJANGO_PROD_SETTING	:= $(SRCDIR)/settings_prod.py
 
-NGINX_IMAGE		:= docker-nginx
-DB_IMAGE			:= docker-db
-DJANGO_IMAGE	:= docker-django
+NGINX_IMAGE		:= ft_transcendence-nginx
+DB_IMAGE			:= ft_transcendence-db
+DJANGO_IMAGE	:= ft_transcendence-django
 
 DB_NET				:= db_net
 DJANGO_NET		:= django_net
