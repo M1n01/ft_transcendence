@@ -28,7 +28,7 @@ all: $(NAME)
 clean: stop
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/*.pyc"  -delete
-	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE)
+	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE) $(CONTRACT_IMAGE)
 
 fclean:
 	-$(MAKE) clean
