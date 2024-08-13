@@ -1,17 +1,8 @@
 from rest_framework import serializers
-from .models import Player, Score
+from .models import Game
 
 
-class PlayerSerializer(serializers.ModelSerializer):
+class GameSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Player
-        fields = ("player_id", "score")
-
-
-class ScoreSerializer(serializers.ModelSerializer):
-    player = PlayerSerializer()
-    opponent = PlayerSerializer()
-
-    class Meta:
-        model = Score
-        fields = ("match_id", "player", "opponent")
+        model = Game
+        fields = ["winner", "loser", "winner_score", "loser_score"]

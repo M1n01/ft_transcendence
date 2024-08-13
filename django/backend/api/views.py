@@ -3,8 +3,8 @@ from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Score
-from .serializers import ScoreSerializer
+from .models import Game
+from .serializers import GameSerializer
 from web3 import Web3
 import json
 import os
@@ -27,70 +27,53 @@ with open(json_path) as f:
 contract_abi = scorekeeper_json["abi"]
 contract_address = os.getenv("CONTRACT_OWNER_ADDRESS")
 
-match_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
+game_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
 
-class ScoreAPIView(APIView):
-    def get(self, request, format=None):
-        match_id = request.query_params.get("match_id")  # クエリを使用
-        if match_id:
-            try:
-                # 試合データの取得
-                match = match_contract.functions.getMatch(int(match_id)).call()
+class SaveGameScoreView(APIView):
+    # def get(self, request, format=None):
+    #     game_id = request.query_params.get("game_id")  # クエリを使用
+    #     if game_id:
+    #         try:
+    #             # 試合データの取得
+    #             game = game_contract.functions.getGame(int(game_id)).call()
 
-                # データの構造を変数に分ける
-                match_id = match[0]
-                player_id, player_score = match[1]
-                opponent_id, opponent_score = match[2]
+    #             # レスポンスの作成
+    #             response_data = {
+    #                 "message": "game retrieved",
+    #                 "game_id": game_id,
 
-                # レスポンスの作成
-                response_data = {
-                    "message": "Match retrieved",
-                    "match_id": match_id,
-                    "player": {
-                        "id": player_id,
-                        "score": player_score,
-                    },
-                    "opponent": {
-                        "id": opponent_id,
-                        "score": opponent_score,
-                    },
-                }
+    #             }
 
-                return Response(response_data, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response(
-                    {"message": "Error retrieving match", "error": str(e)},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        else:
-            try:
-                match_count = match_contract.functions.getMatchCount().call()
-                return Response(
-                    {"message": "Match count retrieved", "match_count": match_count},
-                    status=status.HTTP_200_OK,
-                )
-            except Exception as e:
-                return Response(
-                    {"message": "Error retrieving match count", "error": str(e)},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+    #             return Response(response_data, status=status.HTTP_200_OK)
+    #         except Exception as e:
+    #             return Response(
+    #                 {"message": "Error retrieving game", "error": str(e)},
+    #                 status=status.HTTP_400_BAD_REQUEST,
+    #             )
+    #     else:
+    #         try:
+    #             game_count = game_contract.functions.getGameCount().call()
+    #             return Response(
+    #                 {"message": "game count retrieved", "game_count": game_count},
+    #                 status=status.HTTP_200_OK,
+    #             )
+    #         except Exception as e:
+    #             return Response(
+    #                 {"message": "Error retrieving game count", "error": str(e)},
+    #                 status=status.HTTP_400_BAD_REQUEST,
+    #             )
 
     def post(self, request, format=None):
-        serializer = ScoreSerializer(data=request.data)
+        serializer = GameSerializer(data=request.data)
         if serializer.is_valid():
-            match_id = serializer.validated_data["match_id"]
-            player = serializer.validated_data["player"]
-            opponent = serializer.validated_data["opponent"]
-
-            player_id = player["player_id"]
-            player_score = player["score"]
-            opponent_id = opponent["player_id"]
-            opponent_score = opponent["score"]
 
             try:
-                txn = match_contract.functions.addMatch(
-                    match_id, player_id, player_score, opponent_id, opponent_score
+                txn = game_contract.functions.createGame(
+                    serializer.validated_data["winner"],
+                    serializer.validated_data["loser"],
+                    serializer.validated_data["winner_score"],
+                    serializer.validated_data["loser_score"],
                 ).build_transaction(
                     {
                         "from": web3.eth.accounts[0],
@@ -105,7 +88,7 @@ class ScoreAPIView(APIView):
                 receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
                 return Response(
                     {
-                        "status": "Match created",
+                        "status": "game created",
                         "tx_hash": tx_hash.hex(),
                         "data": serializer.data,
                     },

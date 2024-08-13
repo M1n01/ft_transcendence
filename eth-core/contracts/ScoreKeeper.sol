@@ -4,49 +4,35 @@ pragma solidity ^0.8.24;
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 
 contract ScoreKeeper is Ownable {
-  struct Player {
-    uint256 id;
-    uint256 score;
-  }
-
-  struct Match {
+  struct Game {
     uint256 matchId;
-    Player player;
-    Player opponent;
+    address winner;
+    address loser;
+    int16 winnerScore;
+    int16 loserScore;
   }
 
-  mapping(uint256 => Match) public matches;
-  uint256[] public matchIds;
+  Game[] public games;
+  uint256 public nextGameId;
 
   constructor(address initialOwner) Ownable(initialOwner) {}
 
-  function addMatch(
-    uint256 _matchId,
-    uint256 _playerId,
-    uint256 _playerScore,
-    uint256 _opponentId,
-    uint256 _opponentScore
+  function createGame(
+    address _winner,
+    address _loser,
+    int16 _winnerScore,
+    int16 _loserScore
   ) external onlyOwner {
-    require(_matchId > 0, 'Match ID must be greater than 0');
-    require(
-      _matchId > matchIds.length,
-      'Match ID must be greater than the current number of matches'
-    );
-    require(_playerId > 0, 'Player ID must be greater than 0');
-    require(_opponentId > 0, 'Opponent ID must be greater than 0');
-
-    Player memory player = Player(_playerId, _playerScore);
-    Player memory opponent = Player(_opponentId, _opponentScore);
-    matches[_matchId] = Match(_matchId, player, opponent);
-    matchIds.push(_matchId);
+    games.push(Game(nextGameId, _winner, _loser, _winnerScore, _loserScore));
+    nextGameId++;
   }
 
-  function getMatch(uint256 _matchId) external view returns (Match memory) {
-    require(matches[_matchId].matchId != 0, 'Match not found');
-    return matches[_matchId];
+  function createGame(uint256 _matchId) external view returns (Game memory) {
+    require(games[_matchId].matchId != 0, 'Match not found');
+    return games[_matchId];
   }
 
-  function getMatchCount() external view returns (uint256) {
-    return matchIds.length;
+  function getGameCount() external view returns (uint256) {
+    return nextGameId;
   }
 }
