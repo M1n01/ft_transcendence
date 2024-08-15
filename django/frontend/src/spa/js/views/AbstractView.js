@@ -7,10 +7,13 @@ export default class {
     document.title = title;
   }
 
-  async getHtml() {
-    return "";
-  }
-  async executeScript() {
-    return "";
-  }
+  getHtml = async () => {
+    return '';
+  };
+  executeScript = () => {
+    return '';
+  };
+  getState = () => {
+    return '';
+  };
 }

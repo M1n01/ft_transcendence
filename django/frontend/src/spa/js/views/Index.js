@@ -1,20 +1,23 @@
-import AbstractView from "./AbstractView.js";
-import fetchData from "../utility/fetch.js";
-import { getUrlWithLang } from "../utility/url.js";
-import { executeScriptTab } from "../utility/script.js";
+import AbstractView from './AbstractView.js';
+import fetchData from '../utility/fetch.js';
+import { getUrlWithLang } from '../utility/url.js';
+//import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle("Home");
+    this.setTitle('Home');
   }
 
-  async getHtml() {
-    const uri = getUrlWithLang("/home");
+  getHtml = async () => {
+    const uri = getUrlWithLang('/home');
     const data = await fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

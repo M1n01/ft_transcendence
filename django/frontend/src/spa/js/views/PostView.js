@@ -1,20 +1,23 @@
-import AbstractView from "./AbstractView.js";
-import { executeScriptTab } from "../utility/script.js";
+import AbstractView from './AbstractView.js';
+//import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.postId = params.id;
-    this.setTitle("Viewing Post");
+    this.setTitle('Viewing Post');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     return `
             <h1>Post</h1>
             <p>You are viewing post #${this.postId}.</p>
         `;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }
