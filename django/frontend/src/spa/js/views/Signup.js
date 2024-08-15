@@ -10,12 +10,15 @@ export default class extends AbstractView {
     this.setTitle('Sign up');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('accounts/signup');
     const data = fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     document.dispatchEvent(SignupEvent);
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

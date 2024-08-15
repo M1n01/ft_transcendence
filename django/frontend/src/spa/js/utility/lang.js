@@ -13,6 +13,8 @@ export async function changingLanguage(url, form, current_uri) {
     const result = await response.text();
     if (result) {
       navigateTo(current_uri);
+
+      // 画面更新したいだけ
       router();
     } else {
       console.error('Failure');

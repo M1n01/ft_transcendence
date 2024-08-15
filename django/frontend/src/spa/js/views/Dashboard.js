@@ -1,13 +1,13 @@
-import AbstractView from "./AbstractView.js";
-import { executeScriptTab } from "../utility/script.js";
+import AbstractView from './AbstractView.js';
+//import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle("Dashboard");
+    this.setTitle('Dashboard');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     return `
             <h1>Welcome back, Dom</h1>
             <p>
@@ -17,8 +17,11 @@ export default class extends AbstractView {
                 <a href="/posts" data-link>View recent posts</a>.
             </p>
         `;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }
