@@ -6,7 +6,7 @@ export default class extends AbstractView {
     this.setTitle('Dashboard');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     return `
             <h1>Welcome back, Dom</h1>
             <p>
@@ -16,8 +16,11 @@ export default class extends AbstractView {
                 <a href="/posts" data-link>View recent posts</a>.
             </p>
         `;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

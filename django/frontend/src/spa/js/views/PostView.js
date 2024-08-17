@@ -7,13 +7,16 @@ export default class extends AbstractView {
     this.setTitle('Viewing Post');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     return `
             <h1>Post</h1>
             <p>You are viewing post #${this.postId}.</p>
         `;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

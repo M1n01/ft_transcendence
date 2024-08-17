@@ -8,12 +8,15 @@ export default class extends AbstractView {
     this.setTitle('Lang');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('pong/lang');
     const data = await fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

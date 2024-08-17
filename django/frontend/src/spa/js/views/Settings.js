@@ -6,14 +6,17 @@ export default class extends AbstractView {
     this.setTitle('Settings');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     return `
             <h1>Settings</h1>
             <p>Manage your privacy and configuration.</p>
             <a href="/posts" class="nav__link" data-link>Posts</a>
         `;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

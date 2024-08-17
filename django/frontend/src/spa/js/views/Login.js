@@ -10,13 +10,16 @@ export default class extends AbstractView {
     this.setTitle('Log in');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     console.log('Login Test');
     const uri = getUrlWithLang('accounts/login');
     const data = fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     document.dispatchEvent(LoginEvent);
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

@@ -1,5 +1,6 @@
 import { Routes } from './spa/js/routing/routes.js';
-import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
+//import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
+import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
@@ -7,8 +8,6 @@ import './accounts/js/two_fa.js';
 
 import './spa/scss/spa.scss';
 import './main.scss';
-
-window.addEventListener('popstate', router);
 
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {

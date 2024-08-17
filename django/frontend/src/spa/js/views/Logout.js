@@ -8,12 +8,15 @@ export default class extends AbstractView {
     this.setTitle('Log out');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('accounts/logout');
     const data = fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

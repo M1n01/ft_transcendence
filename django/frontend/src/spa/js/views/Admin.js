@@ -8,12 +8,15 @@ export default class extends AbstractView {
     this.setTitle('Admin');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('/admin/login/?next=/');
     const data = await fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

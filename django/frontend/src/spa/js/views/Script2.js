@@ -9,16 +9,19 @@ export default class extends AbstractView {
     this.setTitle('Script2');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('pong/script2');
     const data = await fetchData(uri);
     console.log('script2:' + uri);
     console.log('data:' + data);
     return data;
-  }
+  };
 
-  async executeScript() {
+  executeScript = () => {
     //return '';
     executeScriptTab('');
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

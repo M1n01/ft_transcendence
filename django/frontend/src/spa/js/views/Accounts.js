@@ -8,12 +8,15 @@ export default class extends AbstractView {
     this.setTitle('Accounts');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     const uri = getUrlWithLang('accounts/');
     const data = await fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     //executeScriptTab("");
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

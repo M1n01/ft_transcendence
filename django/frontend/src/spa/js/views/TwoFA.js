@@ -9,13 +9,16 @@ export default class extends AbstractView {
     this.setTitle('Two-Factor Authentication');
   }
 
-  async getHtml() {
+  getHtml = async () => {
     console.log('2FA');
     const uri = getUrlWithLang('accounts/two-fa/');
     const data = fetchData(uri);
     return data;
-  }
-  async executeScript() {
+  };
+  executeScript = () => {
     document.dispatchEvent(TwoFaEvent);
-  }
+  };
+  getState = () => {
+    return null;
+  };
 }

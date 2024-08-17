@@ -2,15 +2,36 @@ import { Routes } from './routes.js';
 import { getUrl } from '../utility/url.js';
 import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
-//import '../../../accounts/js/two_fa.js';
-//import { TwoFaEvent } from '../../../accounts/js/two_fa.js';
+
+let view = undefined;
+window.addEventListener('popstate', async (event) => {
+  try {
+    const stateJson = await event.state;
+    for (let key in stateJson) {
+      console.log(key + ': ' + stateJson[key]);
+      document.getElementById(key).value = stateJson[key];
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
-export const navigateTo = (url) => {
-  history.pushState(null, null, url);
-  router();
+export const navigateTo = async (url) => {
+  const setState = async () => {
+    if (view !== undefined) {
+      const state = await view.getState();
+      history.pushState(state, null, url);
+    } else {
+      history.pushState(null, null, url);
+    }
+    view = router();
+    return await view;
+  };
+  view = await setState();
+  return view;
 };
 
 export const router = async () => {
@@ -46,6 +67,7 @@ export const router = async () => {
   } catch (error) {
     console.error('executeScript Error:' + error);
   }
+  return view;
 };
 
 /*
