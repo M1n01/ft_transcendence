@@ -6,8 +6,8 @@ import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 contract ScoreKeeper is Ownable {
   struct Game {
     uint256 matchId;
-    address winner;
-    address loser;
+    uint256 winner;
+    uint256 loser;
     int16 winnerScore;
     int16 loserScore;
   }
@@ -18,8 +18,8 @@ contract ScoreKeeper is Ownable {
   constructor(address initialOwner) Ownable(initialOwner) {}
 
   function createGame(
-    address _winner,
-    address _loser,
+    uint256 _winner,
+    uint256 _loser,
     int16 _winnerScore,
     int16 _loserScore
   ) external onlyOwner {

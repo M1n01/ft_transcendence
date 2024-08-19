@@ -15,14 +15,14 @@ describe('ScoreKeeper contract', function () {
     scoreKeeper = await ScoreKeeper.deploy(owner.address);
   });
 
-  const addAndVerifyMatch = async (matchId, playerId, playerScore, opponentId, opponentScore) => {
-    await scoreKeeper.addMatch(matchId, playerId, playerScore, opponentId, opponentScore);
+  const addAndVerifyMatch = async (matchId, winner, winnerScore, loser, loserScore) => {
+    await scoreKeeper.addMatch(matchId, winner, winnerScore, loser, loserScore);
     const match = await scoreKeeper.getMatch(matchId);
     expect(match.matchId).to.equal(matchId);
-    expect(match.player.id).to.equal(playerId);
-    expect(match.player.score).to.equal(playerScore);
-    expect(match.opponent.id).to.equal(opponentId);
-    expect(match.opponent.score).to.equal(opponentScore);
+    expect(match.winner).to.equal(winner);
+    expect(match.winnerScore).to.equal(winnerScore);
+    expect(match.loser).to.equal(loser);
+    expect(match.loserScore).to.equal(loserScore);
   };
 
   it('Should add a match correctly', async function () {
@@ -52,17 +52,17 @@ describe('ScoreKeeper contract', function () {
 
     const match1 = await scoreKeeper.getMatch(6);
     expect(match1.matchId).to.equal(6);
-    expect(match1.player.id).to.equal(111);
-    expect(match1.player.score).to.equal(80);
-    expect(match1.opponent.id).to.equal(112);
-    expect(match1.opponent.score).to.equal(75);
+    expect(match1.winner).to.equal(111);
+    expect(match1.winnerScore).to.equal(80);
+    expect(match1.loser).to.equal(112);
+    expect(match1.loserScore).to.equal(75);
 
     const match2 = await scoreKeeper.getMatch(7);
     expect(match2.matchId).to.equal(7);
-    expect(match2.player.id).to.equal(113);
-    expect(match2.player.score).to.equal(90);
-    expect(match2.opponent.id).to.equal(114);
-    expect(match2.opponent.score).to.equal(85);
+    expect(match2.winner).to.equal(113);
+    expect(match2.winnerScore).to.equal(90);
+    expect(match2.loser).to.equal(114);
+    expect(match2.loserScore).to.equal(85);
   });
 
   it('Should estimate gas usage for adding a match', async function () {
