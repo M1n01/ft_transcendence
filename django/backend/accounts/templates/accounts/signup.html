@@ -2,12 +2,16 @@
 <body>
   <div>
     <br />
+    <!--
     <form hidden>dummy form</form>
-    <form method="POST" id="signup-form" action="{% url 'accounts:signup' %}">
+-->
+    <form method="POST" id="signup-form" action="{% url 'accounts:signup-valid' %}">
       {% csrf_token %} {{ form }}
       <input type="text" name="created_at" id="id_created_at" hidden />
+      <!--
       <input type="text" name="email42" id="id_email42" value="{{dummy_email}}" hidden />
       <input type="text" id="app-auth-url" name="app_secret" hidden />
+      -->
 
       <br />
       <div class="mt-3">
@@ -18,7 +22,9 @@
         </div>
 
         <button type="submit" id="validation-button" class="form-button">{% trans "認証"%}</button>
+      <!--
         <button id="back-button" class="form-button" hidden>{% trans "元に戻す"%}</button>
+      -->
       </div>
     </form>
     <div id="phone-auth-error" class="error-message" hidden>

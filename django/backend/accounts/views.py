@@ -3,9 +3,11 @@ from django.shortcuts import render
 from django.views.generic import CreateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.template.exceptions import TemplateDoesNotExist
-from django.contrib.auth import logout
+
+# from django.contrib.auth.backends import BaseBackend
+# from django.contrib.auth import logout
 from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
@@ -13,12 +15,15 @@ from django.http import (
     HttpResponse,
 )
 from django.urls import reverse_lazy
-from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
+
+# from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 
 from accounts.models import FtUser
+
+# from accounts.models import FtTmpUser
 from accounts.two_fa import TwoFA
 from .forms import SignUpForm
-from .oauth import FtOAuth, randomStr
+from .oauth import FtOAuth
 
 from io import BytesIO
 import qrcode
@@ -26,12 +31,8 @@ import qrcode.image.svg
 import base64
 import json
 import logging
-import datetime
-from django.http import JsonResponse
 from django.contrib.auth import login as auth_login
 from django.template.loader import render_to_string
-from django import forms
-import jwt
 import secrets
 from accounts.models import AuthChoices
 
@@ -91,7 +92,8 @@ def send_two_fa(user):
         elif two_fa_mode == AuthChoices.APP:
             rval = two_fa.app()
         return rval
-    except:
+    except Exception as e:
+        print(f"{e=}")
         return False
 
 
@@ -117,11 +119,39 @@ class UserTmpLogin(LoginView):
             if rval:
                 return HttpResponse()
         except TemplateDoesNotExist as e:
-            return HttpResponseBadRequest("Bad Request")
+            return HttpResponseBadRequest(f"Bad Request:{e}")
         except Exception as e:
-            return HttpResponseBadRequest("Bad Request")
+            return HttpResponseBadRequest(f"Bad Request:{e}")
         else:
             return HttpResponseBadRequest("Bad Request")
+
+
+def signup_two_fa_verify(request):
+    if request.method == "POST":
+        try:
+            mode = request.POST.get("mode")
+            pre_input = request.POST.get("id")
+            code = request.POST.get("code")
+            secret = request.POST.get("app_secret")
+            rval = False
+            if mode == "EMAIL":
+                twilio = TwoFA()
+                rval = twilio.verify_email(pre_input, code)
+            elif mode == "SMS":
+                twilio = TwoFA()
+                rval = twilio.verify_sms(pre_input, code)
+            elif mode == "APP":
+                twilio = TwoFA()
+                rval = twilio.verify_app(secret, code)
+            if rval is True:
+                # request.session["is_2fa"] = True
+                return HttpResponse()
+            return HttpResponseBadRequest("Failure to verify")
+
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Bad Request")
+    else:
+        return HttpResponseBadRequest("Bad Request")
 
 
 class UserLogin(LoginView):
@@ -135,8 +165,8 @@ class UserLogin(LoginView):
     try:
         qr = make_qr(url)
         extra_context = {"qr": qr, "ft_url": url}
-    except:
-        logger.error(f"QRコードの作成に失敗しました")
+    except Exception as e:
+        logger.error(f"QRコードの作成に失敗しました:{e}")
         error_page = getattr(settings, "ERROR_PAGE", None)
         qr = make_qr(error_page)
         extra_context = {"qr": "qr", "ft_url": url}
@@ -170,7 +200,7 @@ class UserLogin(LoginView):
 
             """Security check complete. Log the user in."""
         except Exception as e:
-            return HttpResponseBadRequest("Bad Request")
+            return HttpResponseBadRequest(f"Bad Request:{e}")
         return HttpResponseBadRequest("Bad Request")
 
     def form_invalid(self, form):
@@ -196,12 +226,12 @@ class SignupView(CreateView):
     template_name = "accounts/signup.html"
     success_url = reverse_lazy("accounts:success-signup")
 
-    cnt = "0-"
-    try:
-        cnt = FtUser.objects.count() + "-"
-    except:
-        cnt = "0-"
-    extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
+    # cnt = "0-"
+    # try:
+    #    cnt = FtUser.objects.count() + "-"
+    # except:
+    #    cnt = "0-"
+    # extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
 
     def form_valid(self, form):
         """
@@ -219,6 +249,50 @@ class SignupView(CreateView):
             return rval
         except Exception as e:
             return HttpResponseBadRequest("Bad Request:" + e)
+
+
+class SignupTmpView(CreateView):
+
+    form_class = SignUpForm
+    template_name = "accounts/signup.html"
+    success_url = reverse_lazy("accounts:two-fa")
+
+    # cnt = "0-"
+    # try:
+    #    cnt = FtUser.objects.count() + "-"
+    # except:
+    #    cnt = "0-"
+    # extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
+
+    def form_valid(self, form):
+        """
+        CreateViewのメソッドをオーバーライド
+        """
+        print("test No.1")
+        try:
+            print("test No.2")
+            if self.request.method != "POST":
+                print("test No.3")
+                return HttpResponseBadRequest("Bad Request")
+
+            print("test No.4")
+            rval = super().form_valid(form)
+            print("test No.5")
+            if rval.status_code >= 300 and rval.status_code < 400:
+                print("test No.6")
+                login(
+                    self.request,
+                    self.object,
+                    backend="django.contrib.auth.backends.ModelBackend",
+                )
+                html = render_to_string("accounts/two-fa.html", {"form": form})
+                print("test No.6")
+                return HttpResponse(html)
+            print("test No.7")
+            return HttpResponseBadRequest(rval)
+        except Exception as e:
+            print("test No.8")
+            return HttpResponseServerError("Bad Request:" + e)
 
 
 def signup_valid(request):
@@ -291,7 +365,7 @@ def oauth_login(request):
         user = ft_oauth.authenticate(username=username, email=email)
 
         if user is None:
-            logger.error(f"failure to authenticate")
+            logger.error("failure to authenticate")
             return HttpResponseServerError("failure to authenticate")
         login(request, user, backend="accounts.oauth.FtOAuth")
         return HttpResponse()
@@ -323,8 +397,8 @@ def redirect_oauth(request):
         ft_oauth = FtOAuth()
         ft_oauth.append_state_code_dict(state, code)
         return render(request, "accounts/redirect-oauth.html")
-    except:
-        return HttpResponseBadRequest("Bad Request")
+    except Exception as e:
+        return HttpResponseBadRequest(f"Bad Request:{e}")
 
 
 def two_fa(request):
@@ -387,7 +461,7 @@ def two_fa_verify(request):
             elif mode == "APP":
                 twilio = TwoFA()
                 rval = twilio.verify_app(secret, code)
-            if rval == True:
+            if rval is True:
                 # request.session["is_2fa"] = True
                 return HttpResponse()
             return HttpResponseBadRequest("Failure to verify")

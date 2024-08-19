@@ -1,12 +1,14 @@
-from django.contrib import admin
-from django.urls import path, include
+# from django.contrib import admin
+from django.urls import path
 from . import views
 
 app_name = "accounts"
 
 urlpatterns = [
     path("signup/", views.SignupView.as_view(), name="signup"),
-    path("signup-valid/", views.signup_valid, name="signup-valid"),
+    path("signup-valid/", views.SignupTmpView.as_view(), name="signup-valid"),
+    path("signup-two-fa/", views.signup_two_fa_verify, name="signup-two-fa-verify"),
+    # path("signup-valid/", views.signup_valid, name="signup-valid"),
     path("login/", views.UserLogin.as_view(), name="login"),
     path("login-tmp/", views.UserTmpLogin.as_view(), name="login-tmp"),
     path("logout/", views.UserLogout.as_view(), name="logout"),

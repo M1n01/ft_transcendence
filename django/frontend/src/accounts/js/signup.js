@@ -2,16 +2,16 @@ import '../scss/signup.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 export const SignupEvent = new Event('SignupEvent');
 
-function copyInput() {
-  const two_fa = document.getElementById('id_auth');
-  document.getElementById('common-mode').value = two_fa.value;
-  if (two_fa.value == 'SMS') {
-    document.getElementById('common-input').value =
-      document.getElementById('id_country_code').value + document.getElementById('id_phone').value;
-  } else {
-    document.getElementById('common-input').value = document.getElementById('id_email').value;
-  }
-}
+//function copyInput() {
+//  const two_fa = document.getElementById('id_auth');
+//  document.getElementById('common-mode').value = two_fa.value;
+//  if (two_fa.value == 'SMS') {
+//    document.getElementById('common-input').value =
+//      document.getElementById('id_country_code').value + document.getElementById('id_phone').value;
+//  } else {
+//    document.getElementById('common-input').value = document.getElementById('id_email').value;
+//  }
+//}
 
 function switchingTwoFA(mode) {
   const signup_form = document.getElementById('signup-form');
@@ -59,24 +59,33 @@ document.addEventListener('SignupEvent', function () {
   const auth_select = document.getElementById('id_auth');
   const phone_input = document.getElementById('id_phone');
   const phone_auth_error = document.getElementById('phone-auth-error');
+  //const submit_button = document.getElementById('validation-button');
   signup_form.addEventListener('submit', async function (e) {
-    e.preventDefault();
     if (auth_select.value == 'SMS' && phone_input.value == '') {
       phone_auth_error.hidden = false;
+      e.preventDefault();
       return;
     }
+    /*
     phone_auth_error.hidden = true;
     const form = e.target;
     form.action = '/accounts/signup-valid/';
 
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
+    const html = await response.text();
 
     if (response.status == 200) {
       document.getElementById('server-error').hidden = true;
-      const json = await response.json();
+      document.querySelector('#app').innerHTML = html;
+      return;
+    } else if (response.status == 400) {
+      document.querySelector('#app').innerHTML = html;
+      document.dispatchEvent(SignupEvent);
+
+      return;
+      /*
       if (json['valid'] == undefined || json['valid'] == false) {
-        document.querySelector('#app').innerHTML = json['html'];
         document.dispatchEvent(SignupEvent);
         return;
       }
@@ -84,7 +93,9 @@ document.addEventListener('SignupEvent', function () {
       document.getElementById('server-error').hidden = false;
       return;
     }
+    */
 
+    /*
     // ここからさきはバリデーションが成功したら実行される
     const errors = document.querySelectorAll('.errorlist');
     errors.forEach((element) => {
@@ -122,6 +133,7 @@ document.addEventListener('SignupEvent', function () {
         document.getElementById('server-error').hidden = false;
       }
     }
+    */
   });
   phone_input.addEventListener('input', function () {
     phone_auth_error.hidden = true;
