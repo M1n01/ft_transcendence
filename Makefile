@@ -28,6 +28,7 @@ all: $(NAME)
 clean: stop
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/*.pyc"  -delete
+	find . -type d -name __pycache__ -exec rm -r {} \+
 	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE) $(CONTRACT_IMAGE)
 
 fclean:
@@ -35,7 +36,8 @@ fclean:
 	docker system prune -f
 	docker volume prune -f
 	docker network prune -f
-	-rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
+	-rm django/backend/db.sqlite3
+	-rm -rf $(DB_VOLUME) $(DJANGODIR)/.my_pgpass
 
 re: fclean all
 
