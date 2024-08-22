@@ -1,5 +1,6 @@
 import '../scss/signup.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { SignupTwoFAEvent } from './signup_two_fa.js';
 export const SignupEvent = new Event('SignupEvent');
 
 //function copyInput() {
@@ -13,32 +14,32 @@ export const SignupEvent = new Event('SignupEvent');
 //  }
 //}
 
-function switchingTwoFA(mode) {
-  const signup_form = document.getElementById('signup-form');
-  const signup_form_elements = signup_form.querySelectorAll('input,radio,select, button');
-  const two_fa_button = document.getElementById('2fa-button');
-  const two_fa_form = document.getElementById('two-fa-form');
-  const back_button = document.getElementById('back-button');
-  if (mode) {
-    signup_form_elements.forEach((element) => {
-      element.disabled = true;
-    });
-    back_button.disabled = false;
-    two_fa_button.hidden = false;
-    two_fa_form.hidden = false;
-    two_fa_form.action = '/accounts/two-fa-verify/';
-    back_button.hidden = false;
-  } else {
-    signup_form_elements.forEach((element) => {
-      element.disabled = false;
-    });
-    back_button.disabled = true;
-    two_fa_button.hidden = true;
-    two_fa_form.hidden = true;
-    two_fa_form.action = '/accounts/two-fa/';
-    back_button.hidden = true;
-  }
-}
+//function switchingTwoFA(mode) {
+//  const signup_form = document.getElementById('signup-form');
+//  const signup_form_elements = signup_form.querySelectorAll('input,radio,select, button');
+//  const two_fa_button = document.getElementById('2fa-button');
+//  const two_fa_form = document.getElementById('two-fa-form');
+//  const back_button = document.getElementById('back-button');
+//  if (mode) {
+//    signup_form_elements.forEach((element) => {
+//      element.disabled = true;
+//    });
+//    back_button.disabled = false;
+//    two_fa_button.hidden = false;
+//    two_fa_form.hidden = false;
+//    two_fa_form.action = '/accounts/two-fa-verify/';
+//    back_button.hidden = false;
+//  } else {
+//    signup_form_elements.forEach((element) => {
+//      element.disabled = false;
+//    });
+//    back_button.disabled = true;
+//    two_fa_button.hidden = true;
+//    two_fa_form.hidden = true;
+//    two_fa_form.action = '/accounts/two-fa/';
+//    back_button.hidden = true;
+//  }
+//}
 
 function SetTime() {
   const Mytoday = new Date();
@@ -61,11 +62,26 @@ document.addEventListener('SignupEvent', function () {
   const phone_auth_error = document.getElementById('phone-auth-error');
   //const submit_button = document.getElementById('validation-button');
   signup_form.addEventListener('submit', async function (e) {
+    e.preventDefault();
     if (auth_select.value == 'SMS' && phone_input.value == '') {
       phone_auth_error.hidden = false;
-      e.preventDefault();
       return;
     }
+    const form = e.target;
+    const formData = new FormData(form);
+    let response = await fetchAsForm(form, formData);
+    const json = await response.json();
+    document.querySelector('#app').innerHTML = json.html;
+    if (json['valid'] == false) {
+      document.dispatchEvent(SignupEvent);
+      return;
+    }
+    //document.querySelector('#app').innerHTML = json.html;
+    document.dispatchEvent(SignupTwoFAEvent);
+
+    //form.action = '/accounts/signup-tmp/';
+    //response = await fetchAsForm(form, formData);
+
     /*
     phone_auth_error.hidden = true;
     const form = e.target;
@@ -139,10 +155,12 @@ document.addEventListener('SignupEvent', function () {
     phone_auth_error.hidden = true;
   });
 
+  /*
   const back_button = document.getElementById('back-button');
   back_button.addEventListener('click', function () {
     switchingTwoFA(false);
   });
+  */
   two_fa_button.addEventListener('click', async function (event) {
     event.preventDefault();
     const form = document.getElementById('two-fa-form');

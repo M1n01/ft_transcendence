@@ -1,20 +1,27 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
-from django.template import loader
-from django.db import models
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.csrf import csrf_protect
-from django.http import Http404
-from urllib.parse import urlparse
-from django.template import RequestContext, Template
-from django.views.decorators.http import condition
-import django.views.decorators.http
-import asyncio
-import hashlib
-from django.conf import settings
+from django.shortcuts import render
 
-from django.views.generic import ListView
+# from django.http import HttpResponse
+# from django.template import loader
+from django.db import models
+
+# from django.views.decorators.csrf import ensure_csrf_cookie
+# from django.views.decorators.csrf import csrf_protect
+from django.http import Http404
+
+# from urllib.parse import urlparse
+# from django.template import RequestContext, Template
+from django.views.decorators.http import condition
+
+# import django.views.decorators.http
+# import asyncio
+import hashlib
+
+# from django.conf import settings
+
+# from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+# from django.contrib.auth.decorators import login_not_required
 
 
 # loginしない限り見れない

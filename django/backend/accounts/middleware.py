@@ -3,18 +3,24 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.sessions.backends.base import UpdateError
 from django.contrib.sessions.exceptions import SessionInterrupted
 from django.utils.cache import patch_vary_headers
-from django.utils.deprecation import MiddlewareMixin
+
+# from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import http_date
+from .models import FtUser, FtTmpUser
+
+# from django.contrib.auth.models import AnonymousUser
 import jwt
 import time
 from datetime import datetime, timezone, timedelta
-from importlib import import_module
+
+# from importlib import import_module
 
 
 class CustomSessionMiddleware(SessionMiddleware):
     def process_request(self, request):
         tmp_session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
         session_key = tmp_session_key
+        is_provisional = True
         try:
             if tmp_session_key is not None:
                 jwt_decode = jwt.decode(
@@ -24,6 +30,8 @@ class CustomSessionMiddleware(SessionMiddleware):
                     algorithms=["HS256"],
                 )
                 session_key = jwt_decode["session_key"]
+                if "is_provisional" in jwt_decode:
+                    is_provisional = jwt_decode["is_provisional"]
         except jwt.ExpiredSignatureError:
             # leeway+expで設定した時間を超過したらここに入る
             pass
@@ -31,6 +39,7 @@ class CustomSessionMiddleware(SessionMiddleware):
             # tmp_session_keyが編集されていたらここに入る
             pass
         request.session = self.SessionStore(session_key)
+        request.session["is_provisional"] = is_provisional
 
     def process_response(self, request, response):
         try:
@@ -68,17 +77,26 @@ class CustomSessionMiddleware(SessionMiddleware):
                             "request completed. The user may have logged "
                             "out in a concurrent request, for example."
                         )
+                    user = request.user
+                    # is_provisional = True
+                    username = ""
+                    is_provisional = True
+                    if "is_provisional" in request.session:
+                        is_provisional = request.session["is_provisional"]
+                    if type(user) is FtTmpUser or type(user) is FtUser:
+                        # is_provisional = user.is_temporary
+                        username = user.username
+
                     jwt_session_key = jwt.encode(
                         {
                             "session_key": request.session.session_key,
                             "iss": "https://localhost",
-                            "sub": "user123",
+                            "sub": username,
+                            "is_tmp": is_provisional,
                             "exp": datetime.now(tz=timezone.utc)
                             + timedelta(seconds=14400),
                             "nbf": datetime.now(tz=timezone.utc)
-                            + timedelta(
-                                seconds=3
-                            ),  # この時間より前に処理されたらエラーにする
+                            + timedelta(seconds=3),  # この時間より前に処理されたらエラーにする
                             "iat": datetime.now(tz=timezone.utc),
                             # "jti":"token-id" #必要なら使う
                         },

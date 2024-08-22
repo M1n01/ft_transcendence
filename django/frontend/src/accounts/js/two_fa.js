@@ -1,6 +1,8 @@
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import '../scss/two_fa.scss';
 export const TwoFaEvent = new Event('TwoFaEvent');
+
+/*
 function displayInput(id) {
   document.getElementById('input_email').hidden = true;
   document.getElementById('input_sms').hidden = true;
@@ -54,22 +56,36 @@ function switchingAllInput(mode) {
     document.getElementById('common-input').disabled = true;
   }
 }
+*/
 
 document.addEventListener('TwoFaEvent', function () {
-  document.getElementById('two_fa_form').addEventListener('submit', async function (event) {
+  const two_fa_form = document.getElementById('two-fa-form');
+  const input_code = document.getElementById('verify-code');
+  const error_message = document.getElementById('failure-verify');
+  const send_error = document.getElementById('failure-send');
+  //const resend_form = document.getElementById('resend-form');
+
+  two_fa_form.addEventListener('submit', async function (event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
     if (response.status == 200) {
-      document.getElementById('failure-send-2fa').hidden = true;
-      switchingAllInput(true);
-      copyInput();
+      document.querySelector('#app').innerHTML = await response.text();
+      //document.getElementById('failure-send-2fa').hidden = true;
+      //switchingAllInput(true);
+      //copyInput();
     } else {
-      document.getElementById('failure-send-2fa').hidden = false;
+      error_message.hidden = false;
+      //document.getElementById('failure-send-2fa').hidden = false;
     }
   });
+  input_code.addEventListener('input', () => {
+    error_message.hidden = true;
+    send_error.hidden = true;
+  });
 
+  /*
   document.getElementById('two_fa_verify_form').addEventListener('submit', async function (event) {
     event.preventDefault();
     const form = event.target;
@@ -77,7 +93,7 @@ document.addEventListener('TwoFaEvent', function () {
     console.table(formData);
     const response = await fetchAsForm(form, formData);
     if (response.status == 200) {
-      switchingAllInput(true);
+      //switchingAllInput(true);
       document.querySelector('#app').innerHTML = await response.text();
     } else {
       document.getElementById('failure-verify').hidden = false;
@@ -110,4 +126,5 @@ document.addEventListener('TwoFaEvent', function () {
   VerifyInput.addEventListener('input', function () {
     document.getElementById('failure-verify').hidden = true;
   });
+  */
 });

@@ -6,8 +6,15 @@
     <title>2要素認証</title>
   </head>
   <body>
+    {% if is_auth_app %}
+    <div id="google-qr">
+      test APP
+      <img src="data:image/png;base64,{{ qr }}" id="app_qr" height="240" width="240" />
+    </div>
+    {% endif %}
+
     <form hidden>Dummy Form</form>
-    <form action="{% url 'accounts:two-fa-verify' %}" method="post" id="two-fa-form">
+    <form action="{% url 'accounts:signup-two-fa-verify' %}" method="post" id="two-fa-form">
       {% csrf_token %}
       <div id="verify-code-block">
         {% trans "認証コードを入力してください" %}

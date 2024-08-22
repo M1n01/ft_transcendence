@@ -1,18 +1,22 @@
 import os
-from django.conf import settings
+
+# from django.conf import settings
 
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 
 # from __future__ import print_function
 
-import time
+# import time
 import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
-from pprint import pprint
-import ast
-import time
-import urllib.parse
+
+# from sib_api_v3_sdk.rest import ApiException
+
+# from pprint import pprint
+# import ast
+
+# import time
+# import urllib.parse
 import pyotp
 
 # SMSサービスを一時的に無効にする
@@ -20,7 +24,7 @@ import pyotp
 # これがTrueであると、認証コードは何を入力しても通る
 DEV_SMS = True
 
-email_code_dict = {}
+# email_code_dict = {}
 
 
 class TwoFA:
@@ -32,8 +36,13 @@ class TwoFA:
     sms_auth_token = os.environ["TWILIO_AUTH_TOKEN"]
     sms_service_token = os.environ["TWILIO_SERVICE_SID"]
 
-    def sms(self, phone_number):
+    def sms(self, user):
+
+        print("send_two_fa No.5")
+        phone_number = user.country_code + user.phone
+        print("send_two_fa No.6")
         client = Client(self.sms_account_sid, self.sms_auth_token)
+        print("send_two_fa No.7")
         # phone_number = "+81" + phone_number[1:]
         print(f"{phone_number=}")
         if DEV_SMS:
@@ -50,8 +59,8 @@ class TwoFA:
         return True
         # return response.json()
 
-    def verify_sms(self, phone_number, code):
-        phone_number = "+81" + phone_number[1:]
+    def verify_sms(self, user, code):
+        phone_number = user.country_code + user.phone
         # account_sid = os.environ["TWILIO_ACCOUNT_SID"]
         # auth_token = os.environ["TWILIO_AUTH_TOKEN"]
         client = Client(self.sms_account_sid, self.sms_auth_token)
@@ -75,8 +84,17 @@ class TwoFA:
             print("Error")
         return True
 
-    def email(self, to_address, code):
-        email_code_dict[to_address] = code
+    def email(self, user):
+        # email_code_dict[to_address] = code
+        # print(f"save {code=}")
+
+        to_address = user.email
+        secret = user.app_secret
+        last_login = user.last_login
+        # twilio = TwoFA()
+
+        totp = pyotp.TOTP(secret)
+        code = totp.at(last_login)
         print(f"save {to_address=}")
         print(f"save {code=}")
         email_api_key = os.environ["BREVO_API_KEY"]
@@ -84,16 +102,19 @@ class TwoFA:
         # email_api_key = os.environ["BREVO_API_KEY"]
         configuration = sib_api_v3_sdk.Configuration()
         configuration.api_key["api-key"] = email_api_key
-        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
-            sib_api_v3_sdk.ApiClient(configuration)
-        )
+        sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
 
         subject = f"42Pongの認証コード:{code}"
         sender = {"name": "42PongGame", "email": email_sender_address}
-        html_content = f"<html><body><h1>This is my first transactional email2 Code:{code}</h1></body></html>"
+        html_content = (
+            "<html><body><h1>"
+            + f"This is my first transactional email2 Code:{code}"
+            + "</h1></body></html>"
+        )
         to = [{"email": to_address}]
         params = {"parameter": "My param value", "subject": "New Subject"}
-        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+        # send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+        sib_api_v3_sdk.SendSmtpEmail(
             to=to,
             html_content=html_content,
             sender=sender,
@@ -101,15 +122,15 @@ class TwoFA:
             params=params,
         )
 
-        try:
-            # Brevo側でrejectされてもここではerror判定ができない。
-            # message_idを利用して別途APIを利用すれば判定できるが、時間がかかる上に不安定
-            api_response = api_instance.send_transac_email(send_smtp_email)
-            res_dict = ast.literal_eval(str(api_response))
-            message_id = res_dict["message_id"]
-        except ApiException as e:
-            print(f"Brevo Error:{e}")
-            return False
+        # try:
+        #    # Brevo側でrejectされてもここではerror判定ができない。
+        #    # message_idを利用して別途APIを利用すれば判定できるが、時間がかかる上に不安定
+        #    api_response = api_instance.send_transac_email(send_smtp_email)
+        #    res_dict = ast.literal_eval(str(api_response))
+        #    # message_id = res_dict["message_id"]
+        # except ApiException as e:
+        #    print(f"Brevo Error:{e}")
+        #    return False
 
         # check
         """
@@ -127,23 +148,35 @@ class TwoFA:
 
         return True
 
-    def verify_email(self, email_address, code):
-        if code == str(email_code_dict[email_address]):
+    def verify_email(self, user, code):
+
+        secret = user.app_secret
+        last_login = user.last_login
+        totp = pyotp.TOTP(secret)
+
+        if code == totp.verify(code, last_login):
             return True
         return False
 
-    def init_app(self, email):
-        totp = pyotp.TOTP(pyotp.random_base32())
-        secret = totp.secret
+    def make_uri(self, email, secret):
+
+        print("test fwo-fa app No.10")
+        totp = pyotp.TOTP(secret)
+        print("test fwo-fa app No.11")
+        # secret = totp.secret
 
         # QRコードのURI生成
         uri = totp.provisioning_uri(name=email, issuer_name="42 Pong Game")
-        return (uri, secret)
+        print(f"test fwo-fa app No.12 {uri=}")
+        return uri
 
-    def app(self):
-        return True
+    def app(self, user):
+        email = user.email
+        secret = user.app_secret
+        return self.make_uri(email, secret)
 
-    def verify_app(self, secret, code):
+    def verify_app(self, user, code):
+        secret = user.app_secret
         totp = pyotp.TOTP(secret)
         totp.now()
 

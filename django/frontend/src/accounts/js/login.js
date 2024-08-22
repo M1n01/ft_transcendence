@@ -1,5 +1,7 @@
 import '../scss/login.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { TwoFaEvent } from './two_fa.js';
+
 function displayInstruction(id) {
   document.getElementById('instruction').hidden = true;
   document.getElementById('instruction-processing').hidden = true;
@@ -60,10 +62,11 @@ document.addEventListener('LoginEvent', function () {
         switchingForm(true);
         const len = response.headers.get('Content-Length');
         if (len != undefined && len > 0) {
-          // ２FAも通ったときはここに入る
           document.querySelector('#app').innerHTML = await response.text();
+          document.dispatchEvent(TwoFaEvent);
         }
       } else {
+        //document.querySelector('#app').innerHTML = await response.text();
         document.getElementById('form-error').hidden = false;
       }
     });
