@@ -23,11 +23,17 @@ contract ScoreKeeper is Ownable {
     int16 _winnerScore,
     int16 _loserScore
   ) external onlyOwner {
+    require(_winner != _loser, 'Winner and loser cannot be the same');
+    // idが重複していないか確認
+    for (uint256 i = 0; i < games.length; i++) {
+      require(games[i].matchId != nextGameId, 'Match ID already exists');
+    }
+
     games.push(Game(nextGameId, _winner, _loser, _winnerScore, _loserScore));
     nextGameId++;
   }
 
-  function createGame(uint256 _matchId) external view returns (Game memory) {
+  function getGame(uint256 _matchId) external view returns (Game memory) {
     require(games[_matchId].matchId != 0, 'Match not found');
     return games[_matchId];
   }
