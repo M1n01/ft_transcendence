@@ -9,6 +9,7 @@ from web3 import Web3
 import json
 import os
 from django.conf import settings
+import logging
 
 # ローカルのイーサリアム環境に接続
 web3 = Web3(Web3.HTTPProvider("http://contracts:8545"))
@@ -29,40 +30,41 @@ contract_address = os.getenv("CONTRACT_OWNER_ADDRESS")
 
 game_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
+logger = logging.getLogger(__name__)
+
 
 class SaveGameScoreView(APIView):
-    # def get(self, request, format=None):
-    #     game_id = request.query_params.get("game_id")  # クエリを使用
-    #     if game_id:
-    #         try:
-    #             # 試合データの取得
-    #             game = game_contract.functions.getGame(int(game_id)).call()
+    def get(self, request, format=None):
+        logger.debug("GET request received")
+        game_id = request.query_params.get("match_id")  # クエリを使用
+        if game_id:
+            logger.debug(f"Game data: {game_id}")
+            try:
+                # 試合データの取得
+                game = game_contract.functions.getGame(int(game_id)).call()
+                serializer = GameSerializer(game)
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-    #             # レスポンスの作成
-    #             response_data = {
-    #                 "message": "game retrieved",
-    #                 "game_id": game_id,
+            except Exception as e:
+                logger.error(f"Error retrieving game: {e}")
+                return Response(
+                    {"message": "Error retrieving game", "error": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            logger.debug("No game_id provided")
+            try:
+                game_count = game_contract.functions.getGameCount().call()
+                logger.debug(f"Game count: {game_count}")
+                serializer = GameSerializer(game_count)
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-    #             }
-
-    #             return Response(response_data, status=status.HTTP_200_OK)
-    #         except Exception as e:
-    #             return Response(
-    #                 {"message": "Error retrieving game", "error": str(e)},
-    #                 status=status.HTTP_400_BAD_REQUEST,
-    #             )
-    #     else:
-    #         try:
-    #             game_count = game_contract.functions.getGameCount().call()
-    #             return Response(
-    #                 {"message": "game count retrieved", "game_count": game_count},
-    #                 status=status.HTTP_200_OK,
-    #             )
-    #         except Exception as e:
-    #             return Response(
-    #                 {"message": "Error retrieving game count", "error": str(e)},
-    #                 status=status.HTTP_400_BAD_REQUEST,
-    #             )
+            except Exception as e:
+                logger.error(f"Error retrieving game count: {e}")
+                return Response(
+                    {"message": "Error retrieving game count", "error": str(e)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
     def post(self, request, format=None):
         serializer = GameSerializer(data=request.data)
