@@ -5,8 +5,11 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import AuthenticationForm
 from django.template.exceptions import TemplateDoesNotExist
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_not_required
 from django.db import IntegrityError
 from .models import FtTmpUser
+from datetime import datetime, timezone, timedelta
 
 # from django.contrib.auth.models import User
 
@@ -16,6 +19,7 @@ from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
     HttpResponseServerError,
+    HttpResponseForbidden,
     HttpResponse,
 )
 from django.urls import reverse_lazy
@@ -35,7 +39,8 @@ import qrcode.image.svg
 import base64
 import json
 import logging
-from django.contrib.auth import login as auth_login
+
+# from django.contrib.auth import login as auth_login
 from django.template.loader import render_to_string
 import secrets
 from accounts.models import AuthChoices
@@ -159,7 +164,8 @@ class UserTmpLogin(LoginView):
             rval = send_two_fa(user)
             print("form_valid User Login No.8")
             if rval:
-                self.request.session["is_provisional"] = True
+                self.request.session["is_provisional_login"] = True
+                self.request.session["user_id"] = user.id
                 print("form_valid User Login No.9")
                 return HttpResponse()
         except TemplateDoesNotExist as e:
@@ -170,18 +176,25 @@ class UserTmpLogin(LoginView):
             return HttpResponseBadRequest("Bad Request")
 
 
+@login_not_required
 def signup_two_fa(request):
-    print("signup_two_fa No.1")
+    is_provisional_login = False
+    if "is_provisional_login" in request.session:
+        is_provisional_login = request.session["is_provisional_login"]
+    if is_provisional_login is False:
+        return HttpResponseForbidden()
     if request.method == "POST":
         print("signup_two_fa No.2")
         pass
     elif request.method == "GET":
         print("signup_two_fa No.3")
         try:
-            user = request.user
-            print("signup_two_fa No.4")
-            two_fa_mode = user.auth
+            id = request.session["user_id"]
+            print("signup_two_fa No.4 id=")
+            user = FtTmpUser.objects.get(id=id)
+            # user = request.user
             print("signup_two_fa No.5")
+            two_fa_mode = user.auth
             # print(f"signup_two_fa No.6 {rval=}")
             # if rval is False:
             # print("signup_two_fa No.7")
@@ -255,13 +268,24 @@ def copy_tmpuser_to_ftuser(user):
         print(f"Copy Error:{e}")
 
 
+@login_not_required
 def signup_two_fa_verify(request):
     print("signup_two_fa_verify No.1")
+
+    is_provisional_login = False
+    if "is_provisional_login" in request.session:
+        is_provisional_login = request.session["is_provisional_login"]
+    if is_provisional_login is False:
+        return HttpResponseForbidden()
+
     if request.method == "POST":
         print("signup_two_fa_verify No.2")
         try:
             print("signup_two_fa_verify No.3")
-            user = request.user
+            # user = request.user
+            id = request.session["user_id"]
+            print("signup_two_fa No.4 id=")
+            user = FtTmpUser.objects.get(id=id)
             print("signup_two_fa_verify No.4")
             # copy_tmpuser_to_ftuser(user)
             print("signup_two_fa_verify No.5")
@@ -300,27 +324,59 @@ def signup_two_fa_verify(request):
         return HttpResponseBadRequest("Bad Request")
 
 
+@login_not_required
 def two_fa_verify(request):
+    print("two_fa_verify No.1")
     if request.method == "POST":
+        print("two_fa_verify No.2")
         try:
-            user = request.user
+
+            print("two_fa_verify No.3")
+            is_provisional_login = False
+            user_id = ""
+            if "is_provisional_login" in request.session:
+                is_provisional_login = request.session["is_provisional_login"]
+            if "user_id" in request.session:
+                user_id = request.session["user_id"]
+            print("two_fa_verify No.4")
+            if is_provisional_login is False or user_id == "":
+                return HttpResponseForbidden()
+            print("two_fa_verify No.5")
+            user = FtUser.objects.get(id=user_id)
+            print(f"signup_two_fa No.6 {user_id=}")
+
+            # user = request.user
             code = request.POST.get("code")
-            rval = False
+            print("two_fa_verify No.7")
+            # rval = False
 
             rval = verify_two_fa(user, code)
+            print("two_fa_verify No.8")
 
             if rval is True:
+                print(f"signup_two_fa No.4 {user.email=}")
+
+                new_user = FtUser.objects.get(email=user.email)
+                # src_user = FtTmpUser.objects.get(email=user.email)
+                login(
+                    request,
+                    new_user,
+                    backend="django.contrib.auth.backends.ModelBackend",
+                )
                 # return HttpResponse()
                 return render(request, "accounts/success-login.html")
             return HttpResponseBadRequest("Failure to verify")
 
         except json.JSONDecodeError:
+            print("two_fa_verify No.6")
             return HttpResponseServerError("Server Error")
             return HttpResponseBadRequest("Bad Request")
     else:
+        print("two_fa_verify No.7")
         return HttpResponseBadRequest("Bad Request")
 
 
+@method_decorator(login_not_required, name="dispatch")
 class UserLogin(LoginView):
     ft_oauth = FtOAuth()
     # ft_oauth = TmpUserBackend()
@@ -369,15 +425,21 @@ class UserLogin(LoginView):
                 print("User Is None")
             print(f"User Login No.5-1 {code=}")
             print(f"User Login No.5-2 {user.auth=}")
+            print(f"User Login No.5-3 {user.id=}")
             # rval = verify_two_fa(user, code)
             rval = send_two_fa(user)
             print("User Login No.6")
             if rval:
                 print("User Login No.7")
-                auth_login(self.request, form.get_user())
+                # auth_login(self.request, form.get_user())
                 is_app = user.auth == AuthChoices.APP
                 print(f"User Login No.8:{is_app=}")
                 data = {"is_auth_app": is_app}
+                self.request.session["is_provisional_login"] = True
+                self.request.session["user_id"] = user.id
+                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+                self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+
                 return render(self.request, "accounts/two-fa.html", context=data)
 
             print("User Login No.9")
@@ -408,6 +470,7 @@ class UserLogout(LogoutView):
         return super().post(request, *args, **kwargs)
 
 
+@method_decorator(login_not_required, name="dispatch")
 class SignupView(CreateView):
 
     form_class = SignUpTmpForm
@@ -498,6 +561,7 @@ class SignupTmpView(CreateView):
             return HttpResponseServerError("Bad Request:" + e)
 
 
+@login_not_required
 def signup_valid(request):
     print("signup_valid No.1")
     if request.method == "POST":
@@ -530,11 +594,11 @@ def signup_valid(request):
                 if user is None:
                     print("user Is None")
                 print(f"signup_valid No.9 {user=}")
-                login(
-                    request,
-                    user,
-                    backend="accounts.backend.TmpUserBackend",
-                )
+                # login(
+                #    request,
+                #    user,
+                #    backend="accounts.backend.TmpUserBackend",
+                # )
                 print("signup_valid No.10")
 
                 # url = "accounts/signup-two-fa.html"
@@ -558,6 +622,11 @@ def signup_valid(request):
                     html = render_to_string(
                         "accounts/signup-two-fa.html", request=request, context=context
                     )
+                request.session["is_provisional_login"] = True
+                request.session["user_id"] = user.id
+                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+                request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+                # request.session['exp'] = True
                 # rval = send_two_fa_with_form(form)
                 # rval = make_two_fa_html(form)
                 print("signup_valid No.13")
