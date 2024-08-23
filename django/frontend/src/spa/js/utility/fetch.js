@@ -2,11 +2,13 @@ function makeRequest(method, url) {
   return fetch(url, {
     method: method,
     headers: { SPA: 'spa' },
+    redirect: 'follow',
   }).then((response) => {
     if (!response.ok) {
       throw new Error(' Fetch() Error');
     }
-    return response.text();
+    //return response.text();
+    return response;
   });
 }
 
@@ -28,11 +30,25 @@ export async function fetchAsForm(form, FormData) {
 }
 
 export default async function fetchData(url) {
-  try {
-    const response = await makeRequest('GET', url);
-    return response;
-  } catch (error) {
-    console.error(error.message);
+  //try {
+  const response = await makeRequest('GET', url);
+  if (response.redirected) {
+    console.log('redirected');
+    //throw new Error(' redirected');
   }
-  return '';
+  /*
+    if (response.redirected) {
+      console.log('Rdirected');
+      throw new Error(' Reidrecrted');
+    }
+
+    if (response.status >= 400) {
+      throw new Error(' Fetch() Error');
+    }
+      */
+  return response.text();
+  //} catch (error) {
+  //console.error(error.message);
+  //}
+  //return '';
 }

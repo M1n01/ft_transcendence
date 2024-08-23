@@ -72,9 +72,9 @@ document.addEventListener('LoginEvent', function () {
     });
 
     // 42 OAuth
-    document.getElementById('openDialog').addEventListener('click', function () {
-      document.getElementById('myDialog').showModal();
-    });
+    //document.getElementById('openDialog').addEventListener('click', function () {
+    //document.getElementById('myDialog').showModal();
+    //});
     document.getElementById('back-button').addEventListener('click', function () {
       switchingForm(false);
     });
@@ -99,7 +99,8 @@ document.addEventListener('LoginEvent', function () {
           document.getElementById('instruction').style.color = 'red';
           return '';
         }
-        document.getElementById('myDialog').close();
+        //document.getElementById('myDialog').close();
+        document.getElementById('close-modal').click();
         document.getElementById('success-login').click();
       } catch (error) {
         displayInstruction('instruction-error');

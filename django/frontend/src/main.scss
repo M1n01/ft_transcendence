@@ -1,1 +1,74 @@
 @import 'bootstrap/scss/bootstrap';
+
+$nav-link-color: gray;
+.nav-item {
+  //background-color: red;
+}
+#tab-login {
+  //background-color: $nav-link-color;
+  //border-radius: 0%;
+}
+
+#tab-register {
+  //background-color: $nav-link-color;
+  //border-radius: 0%;
+}
+
+body {
+  //font-family: 'Roboto', sans-serif;
+  //font-family: 'Sawarabi Gothic', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #18181d;
+}
+
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  //'secondary': $indigo-600,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
+  //'btn-secondary': $indigo-600,
+);
+
+.text-pale {
+  color: #e0e0e0;
+}
+
+.btn-secondary {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+.btn-primary:hover {
+  background-color: $teal-600;
+  border-color: $teal-600;
+}
+
+.noto-sans-jp-normal {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+#login-nav {
+  max-width: 700px;
+  //background-color: red;
+}
+
+.nav-link:not(.active) {
+  background-color: #d3d3d3;
+  color: #696969;
+}
+.nav-link:not(.active):hover {
+  background-color: #c0c0c0;
+  color: #696969;
+}
+.nav-link.active:hover {
+  background-color: $blue-600;
+  border-color: $blue-400;
+}

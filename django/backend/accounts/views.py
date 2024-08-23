@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import login_not_required
 from django.db import IntegrityError
 from .models import FtTmpUser
 from datetime import datetime, timezone, timedelta
+from .forms import FtLoginForm
+from django import forms
+from django.views.generic import TemplateView
+from django.utils.translation import gettext_lazy as _
 
 # from django.contrib.auth.models import User
 
@@ -55,8 +59,30 @@ logger = logging.getLogger(__name__)
 
 
 class LoginFrom(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control w-100 rounded-0",
+                "type": "email",
+                "placeholder": _("email"),
+            }
+        ),
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control w-100 rounded-0 border-top-0",
+                "placeholder": _("password"),
+            }
+        ),
+    )
+
     class Meta:
         model = FtUser
+        fields = (
+            "username",
+            "email42",
+        )
 
 
 def make_qr(url):
@@ -137,6 +163,8 @@ def send_two_fa_with_form(form):
 
 
 class UserTmpLogin(LoginView):
+    form = FtLoginForm
+
     def form_invalid(self, form):
         return HttpResponseBadRequest("Bad Request")
 
@@ -374,6 +402,50 @@ def two_fa_verify(request):
     else:
         print("two_fa_verify No.7")
         return HttpResponseBadRequest("Bad Request")
+
+
+@method_decorator(login_not_required, name="dispatch")
+class LoginSignupView(TemplateView):
+    ft_oauth = FtOAuth()
+    url = ft_oauth.get_ft_authorization_url()
+    print(f"42 oauth {url=}")
+    # template_name = "login-signup.html"
+    # template_name = "login.html"
+    template_name = "accounts/login-signup.html"
+    signup_form = SignUpTmpForm
+    login_form = LoginFrom
+
+    # QRコード作成
+    try:
+        qr = make_qr(url)
+        extra_context = {
+            "qr": qr,
+            "ft_url": url,
+            "signup_form": signup_form,
+            "login_form": login_form,
+        }
+        print("QR OK")
+    except Exception as e:
+        print("QR NG")
+        logger.error(f"QRコードの作成に失敗しました:{e}")
+        error_page = getattr(settings, "ERROR_PAGE", None)
+        qr = make_qr(error_page)
+        extra_context = {
+            "qr": "qr",
+            "ft_url": url,
+            "signup_form": signup_form,
+            "login_form": login_form,
+        }
+
+    def get(self, request):
+        # form = SignUpTmpForm
+        # form = MyForm()
+        return render(
+            request,
+            "accounts/login-signup.html",
+            self.extra_context,
+            # {"signup_form": self.signup_form, "login_form": self.login_form},
+        )
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -713,6 +785,7 @@ class FtLoginFrom(AuthenticationForm):
         model = FtUser
 
 
+@login_not_required
 def redirect_oauth(request):
     """
     ユーザーが42認可サーバーに許可を出したときのリダイレクト先

@@ -4,6 +4,10 @@ import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
+//import { Pills } from 'bootstrap.bundle.min.js';
+//import Cookies from 'js-cookie';
+//import { Tooltip, Toast, Popover } from 'bootstrap';
+import 'bootstrap';
 import './accounts/js/two_fa.js';
 
 import './spa/scss/spa.scss';

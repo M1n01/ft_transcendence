@@ -5,3 +5,16 @@
 .error {
   color: red;
 }
+
+#div-test {
+  background-color: red;
+}
+
+#openDialog {
+  background-color: transparent;
+  border: none;
+}
+
+::placeholder {
+  color: red;
+}

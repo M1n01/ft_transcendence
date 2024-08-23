@@ -25,6 +25,7 @@ class SignUpForm(UserCreationForm):
         )
         widgets = {
             "app_secret": forms.HiddenInput(),
+            "username": forms.TextInput(attrs={"class": "form-control"}),
         }
 
         def clean_username(self):
@@ -90,10 +91,23 @@ class SignUpTmpForm(UserCreationForm):
             return phone
 
 
-class FtSignUpForm(UserCreationForm):
+class FtLoginForm(UserCreationForm):
     class Meta:
         model = FtUser
         fields = (
             "username",
             "email42",
         )
+        username = forms.CharField(
+            # max_length=100,
+            # label="ユーザー名",  # ここでラベルを指定
+            widget=forms.TextInput(attrs={"class": "form-control"}),
+        )
+        email42 = forms.CharField(
+            # max_length=100,
+            # label="パスワード",  # ここでラベルを指定
+            widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        )
+        # widgets = {
+        # "username": forms.TextInput(attrs={"class": "form-control"}),
+        # }

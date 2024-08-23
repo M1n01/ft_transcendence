@@ -59,10 +59,9 @@ export const router = async () => {
   }
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
-  const html = await view.getHtml();
-  document.querySelector('#app').innerHTML = html;
-
   try {
+    const html = await view.getHtml();
+    document.querySelector('#app').innerHTML = html;
     view.executeScript();
   } catch (error) {
     console.error('executeScript Error:' + error);

@@ -14,6 +14,7 @@ import Pong from '../views/Pong.js';
 import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
 import TwoFA from '../views/TwoFA.js';
+import LoginSignup from '../views/LoginSignup.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -34,4 +35,5 @@ export const Routes = [
   { path: '/success-login', view: LoginSuccess },
   { path: '/signup-two-fa', view: SignupTwoFA },
   { path: '/2fa', view: TwoFA },
+  { path: '/login-signup', view: LoginSignup },
 ];

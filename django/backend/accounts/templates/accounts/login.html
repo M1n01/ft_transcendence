@@ -21,52 +21,114 @@
 
     {% else %}
     <form id="dummy" hidden></form>
-    <form method="post" id="login-form" action="{% url 'accounts:login-tmp' %}">
-      {% csrf_token %} {{ form }}
-      <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" disabled hidden />
-      <button type="submit" class="form-button" id="login-tmp-button">{% trans "Log_in" %}</button>
-    </form>
+    <section>
+      <h2 hidden>ログイン</h2>
+      <form method="post" id="login-form" action="{% url 'accounts:login-tmp' %}">
+        {% csrf_token %}
+
+        <div class="form-floating bg-alert w-100 text-pale">
+          {{ form.username}}
+          <label for="id_username">{% trans "Email address" %}</label>
+        </div>
+        <div class="form-floating w-100 text-pale">
+          {{ form.password}}
+          <label for="id_password">{% trans "Password" %}</label>
+        </div>
+
+        <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" disabled hidden />
+        <button
+          type="submit"
+          data-mdb-button-init
+          data-mdb-ripple-init
+          class="btn btn-primary btn-block mb-4 w-100 mt-4 rounded-0 btn-secondary"
+          id="login-tmp-button"
+        >
+          {% trans "Log_in" %}
+        </button>
+      </form>
+    </section>
 
     <button id="back-button" hidden>{% trans "元に戻す" %}</button>
+
     <div id="form-error" class="error" hidden>
       {% trans "認証に失敗しました。" %}
       <br />
       {% trans "入力内容を見直してください" %}
     </div>
 
-    <button id="openDialog">{% trans "42認証" %}</button>
-    <p>{% trans "42認証" %}</p>
-    <dialog id="myDialog">
-      <a
-        href="{% static 'accounts/two-fa.html' %}"
-        id="success-login"
-        class="nav__link"
-        data-link
-        hidden
-      >
-        success
-      </a>
-      <div p id="instruction">
-        {% trans "QRコードから42でログインすることを許可してください" %}
-        <br />
-        {% trans "続けて認証ボタンを押すことでログインされます" %}
+    <section class="d-flex justify-content-center w-100 text-light">
+      <div class="row w-100 text-center">
+        <div class="mb-1">or login with</div>
+        <button id="openDialog" data-bs-toggle="modal" data-bs-target="#FtAuth-Modal">
+          <img
+            src="static/asset/login/42.svg"
+            class="img-fluid ft-logo"
+            id="ft-logo"
+            alt="42-logo"
+          />
+        </button>
       </div>
-      <div p id="instruction-processing" hidden>
-        {% trans "認証中です。" %}
-        <br />
-        {% trans "しばらくお待ちください" %}
+    </section>
+
+    <div
+      id="FtAuth-Modal"
+      class="modal fade"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">42 OAuth</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              id="close-modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <a
+              href="{% static 'accounts/two-fa.html' %}"
+              id="success-login"
+              class="nav__link"
+              data-link
+              hidden
+            >
+              success
+            </a>
+            <div p id="instruction">
+              {% trans "QRコードから42でログインすることを許可してください" %}
+              <br />
+              {% trans "続けて認証ボタンを押すことでログインされます" %}
+            </div>
+            <div p id="instruction-processing" hidden>
+              {% trans "認証中です。" %}
+              <br />
+              {% trans "しばらくお待ちください" %}
+            </div>
+            <div p id="instruction-error" stylesheet="{color:red}" hidden>
+              <font color="red">
+                {% trans "認証に失敗しました。" %}
+                <br />
+                {% trans "最初からやり直してください" %}
+              </font>
+            </div>
+            <img src="data:image/png;base64,{{ qr }}" height="480" width="480" />
+            <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer">URL</a>
+            <button id="closeDialog">{% trans "認証" %}</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Understood</button>
+          </div>
+        </div>
       </div>
-      <div p id="instruction-error" stylesheet="{color:red}" hidden>
-        <font color="red">
-          {% trans "認証に失敗しました。" %}
-          <br />
-          {% trans "最初からやり直してください" %}
-        </font>
-      </div>
-      <img src="data:image/png;base64,{{ qr }}" height="480" width="480" />
-      <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer">URL</a>
-      <button id="closeDialog">{% trans "認証" %}</button>
-    </dialog>
+    </div>
 
     {% endif %} {% render_bundle 'main' 'css' %}
   </body>
