@@ -38,6 +38,17 @@ $theme-colors: (
   color: #e0e0e0;
 }
 
+.btn-auth {
+  @extend .btn-secondary;
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+.btn-auth:hover {
+  background-color: #43a047;
+  border-color: #43a047;
+}
+
+/*
 .btn-secondary {
   background-color: #4caf50;
   border-color: #4caf50;
@@ -47,6 +58,7 @@ $theme-colors: (
   background-color: $teal-600;
   border-color: $teal-600;
 }
+  */
 
 .noto-sans-jp-normal {
   font-family: 'Noto Sans JP', sans-serif;
