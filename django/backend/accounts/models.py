@@ -337,6 +337,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         # 一度だけ実行するように
+        print("save")
         if not self.app_secret:
             totp = pyotp.TOTP(pyotp.random_base32())
             secret = totp.secret

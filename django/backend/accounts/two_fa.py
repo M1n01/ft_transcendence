@@ -1,4 +1,7 @@
 import os
+import ast
+from sib_api_v3_sdk.rest import ApiException
+
 
 # from django.conf import settings
 
@@ -69,49 +72,80 @@ class TwoFA:
             return False
         return True
 
-    def email(self, user):
+    def email(self, user, time):
         # email_code_dict[to_address] = code
+        print("email No.1")
 
         to_address = user.email
         secret = user.app_secret
-        last_login = user.last_login
+        # last_login = user.last_login
+        print("email No.2")
+        print(f"email No.2 {to_address=}")
+        print(f"email No.2 {secret=}")
+        print(f"email No.2 {time=}")
         # twilio = TwoFA()
 
         totp = pyotp.TOTP(secret)
-        code = totp.at(last_login)
+        print("email No.3")
+        code = totp.at(time)
+        print("email No.4")
         email_api_key = os.environ["BREVO_API_KEY"]
+        print("email No.5")
         email_sender_address = os.environ["BREVO_SENDER_ADDRESS"]
+        print("email No.3")
         # email_api_key = os.environ["BREVO_API_KEY"]
         configuration = sib_api_v3_sdk.Configuration()
+        print("email No.4")
         configuration.api_key["api-key"] = email_api_key
-        sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+        print(f"email No.5 {email_api_key=}")
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+            sib_api_v3_sdk.ApiClient(configuration)
+        )
+        print("email No.6")
 
         subject = f"42Pongの認証コード:{code}"
+        print(f"email No.7 {email_sender_address=}")
         sender = {"name": "42PongGame", "email": email_sender_address}
+        print("email No.8")
         html_content = (
             "<html><body><h1>"
-            + f"This is my first transactional email2 Code:{code}"
+            + f"This is my first transactional email Code:{code}"
             + "</h1></body></html>"
         )
+        print(f"email No.9:{html_content=}")
         to = [{"email": to_address}]
-        params = {"parameter": "My param value", "subject": "New Subject"}
+        print("email No.10")
+        # params = {"parameter": "My param value", "subject": "New Subject"}
+        # params = {"parameter": "My param value", "subject": "New Subject"}
+
+        params = {"contact": {"CODE": "******"}}
+
+        print(f"email No.11:{params=}")
+        print(f"email No.11:{to=}")
+        print(f"email No.11:{sender=}")
+        print(f"email No.11:{subject=}")
         # send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
-        sib_api_v3_sdk.SendSmtpEmail(
+        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
             to=to,
             html_content=html_content,
             sender=sender,
             subject=subject,
             params=params,
         )
+        print("email No.12")
 
-        # try:
-        #    # Brevo側でrejectされてもここではerror判定ができない。
-        #    # message_idを利用して別途APIを利用すれば判定できるが、時間がかかる上に不安定
-        #    api_response = api_instance.send_transac_email(send_smtp_email)
-        #    res_dict = ast.literal_eval(str(api_response))
-        #    # message_id = res_dict["message_id"]
-        # except ApiException as e:
-        #    return False
+        try:
+            # Brevo側でrejectされてもここではerror判定ができない。
+            # message_idを利用して別途APIを利用すれば判定できるが、時間がかかる上に不安定
+            api_response = api_instance.send_transac_email(send_smtp_email)
+            res_dict = ast.literal_eval(str(api_response))
+            message_id = str(res_dict["message_id"])
+            print(f"{message_id=}")
+
+            # message_id = res_dict["message_id"]
+        except ApiException as e:
+            print(e)
+            return False
 
         # check
         """
@@ -126,18 +160,19 @@ class TwoFA:
             )
             headers = {"accept": "application/json", "api-key": email_api_key}
         """
+        print("email No.13")
 
         return True
 
-    def verify_email(self, user, code):
+    def verify_email(self, user, time, code):
 
         secret = user.app_secret
-        last_login = user.last_login
+        print(f"{secret=}")
+        print(f"{code=}")
+        # last_login = user.last_login
         totp = pyotp.TOTP(secret)
 
-        if code == totp.verify(code, last_login):
-            return True
-        return False
+        return totp.verify(code, time)
 
     def make_uri(self, email, secret):
 

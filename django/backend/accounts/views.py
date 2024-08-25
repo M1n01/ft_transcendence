@@ -68,7 +68,7 @@ def make_qr(url):
     return base64.b64encode(buffer.getvalue()).decode().replace("'", "")
 
 
-def verify_two_fa(user, code):
+def verify_two_fa(user, code, request):
 
     if user is None:
         return False
@@ -79,7 +79,10 @@ def verify_two_fa(user, code):
     if two_fa_mode == AuthChoices.SMS:
         rval = two_fa.verify_sms(user, code)
     elif two_fa_mode == AuthChoices.EMAIL:
-        rval = two_fa.verify_email(user, code)
+        print("email")
+        time = datetime.fromtimestamp(float(request.session["exp"]))
+        print(f"verify email {time=}")
+        rval = two_fa.verify_email(user, time, code)
     elif two_fa_mode == AuthChoices.APP:
         rval = two_fa.verify_app(user, code)
     return rval
@@ -87,20 +90,21 @@ def verify_two_fa(user, code):
 
 def send_two_fa_view(request):
     user = request.user
-    rval = send_two_fa(user)
+    rval = send_two_fa(user, request)
     if rval is False:
         return HttpResponseServerError()
     return HttpResponse()
 
 
-def send_two_fa(user):
+def send_two_fa(user, request):
     try:
         two_fa_mode = user.auth
         two_fa = TwoFA()
         if two_fa_mode == AuthChoices.SMS:
             rval = two_fa.sms(user)
         elif two_fa_mode == AuthChoices.EMAIL:
-            rval = two_fa.email(user)
+            time = datetime.fromtimestamp(float(request.session["exp"]))
+            rval = two_fa.email(user, time)
         elif two_fa_mode == AuthChoices.APP:
             rval = two_fa.app(user)
         return rval
@@ -149,7 +153,7 @@ class UserTmpLogin(LoginView):
             user = authenticate(self.request, username=username, password=password)
             if user is None:
                 return HttpResponseBadRequest("Bad Request")
-            rval = send_two_fa(user)
+            rval = send_two_fa(user, self.request)
             if rval:
                 self.request.session["is_provisional_login"] = True
                 self.request.session["user_id"] = user.id
@@ -183,7 +187,7 @@ def signup_two_fa(request):
             two_fa_mode = user.auth
             # rval = send_two_fa(request)
 
-            rval = send_two_fa(user)
+            rval = send_two_fa(user, request)
             if rval is False:
                 return HttpResponseServerError("Bad Request")
             two_fa_mode = user.auth
@@ -248,23 +252,30 @@ def copy_tmpuser_to_ftuser(user):
 @login_not_required
 def signup_two_fa_verify(request):
 
+    print("signup_two_fa_verify No.1")
     is_provisional_login = False
     if "is_provisional_login" in request.session:
         is_provisional_login = request.session["is_provisional_login"]
     if is_provisional_login is False:
         return HttpResponseForbidden()
 
+    print("signup_two_fa_verify No.2")
     if request.method == "POST":
         try:
             # user = request.user
+            print("signup_two_fa_verify No.3")
             id = request.session["user_id"]
             user = FtTmpUser.objects.get(id=id)
+            print("signup_two_fa_verify No.4")
             # copy_tmpuser_to_ftuser(user)
             code = request.POST.get("code")
-            rval = verify_two_fa(user, code)
+            rval = verify_two_fa(user, code, request)
+            print("signup_two_fa_verify No.5")
 
             if rval is False:
+                print("signup_two_fa_verify No.6")
                 return HttpResponseBadRequest("Failure to verify")
+            print("signup_two_fa_verify No.7")
             copy_tmpuser_to_ftuser(user)
 
             # new_user = authenticate(
@@ -308,7 +319,7 @@ def two_fa_verify(request):
             code = request.POST.get("code")
             # rval = False
 
-            rval = verify_two_fa(user, code)
+            rval = verify_two_fa(user, code, request)
 
             if rval is True:
 
@@ -414,8 +425,27 @@ class UserLogin(LoginView):
             user = authenticate(self.request, username=username, password=password)
             if user is None:
                 return HttpResponseServerError("Bad Request")
+            print(f"{username=}")
+            print(f"{user.id=}")
+            print(f"{user.email=}")
+
+            user1 = FtUser.objects.get(id=user.id)
+            user2 = FtTmpUser.objects.get(id=user.id)
+            if user1 is None:
+                print("user1 is None")
+            else:
+                print(f"user1 email:{user1.email=}")
+            if user2 is None:
+                print("user2 is None")
+            else:
+                print(f"user2 email:{user2.email=}")
+
             # rval = verify_two_fa(user, code)
-            rval = send_two_fa(user)
+            tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+            self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+            self.request.session["is_provisional_login"] = True
+            self.request.session["user_id"] = user.id
+            rval = send_two_fa(user, self.request)
             if rval:
                 # auth_login(self.request, form.get_user())
                 is_app = user.auth == AuthChoices.APP
@@ -425,12 +455,11 @@ class UserLogin(LoginView):
                 #    data = {"is_auth_app": True, "qr": make_qr(rval)}
                 # else:
                 #    data = {"is_auth_app": is_app}
-                self.request.session["is_provisional_login"] = True
-                self.request.session["user_id"] = user.id
-                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
-                self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
 
                 return JsonResponse(data)
+            else:
+                self.request.session["is_provisional_login"] = False
+                self.request.session["user_id"] = 0
                 # return render(self.request, "accounts/two-fa.html", context=data)
 
             """Security check complete. Log the user in."""
@@ -470,23 +499,99 @@ class SignupView(CreateView):
     # except:
     #    cnt = "0-"
     # extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
-
     def form_valid(self, form):
-        """
-        CreateViewのメソッドをオーバーライド
-        """
         try:
-            if self.request.method != "POST":
-                return HttpResponseBadRequest("Bad Request")
+            print("form_valid No.1")
+            form = SignUpTmpForm(self.request.POST)
             rval = super().form_valid(form)
-            login(
-                self.request,
-                self.object,
-                backend="django.contrib.auth.backends.ModelBackend",
-            )
-            return rval
+            print(f"form_valid No.2 {rval.status_code=}")
+            if rval.status_code >= 300 and rval.status_code < 400:
+                print("form_valid No.3")
+                # tmp_form = SignUpTmpForm(self.request.POST)
+                print("form_valid No.4")
+                form.save()
+                print("form_valid No.5")
+
+                email = form.cleaned_data["email"]
+                password = form.cleaned_data["password1"]
+                print("form_valid No.6")
+                # user = FtTmpUser.objects.get(email=email)
+                backend = TmpUserBackend()
+                print("form_valid No.7")
+                user = backend.authenticate(
+                    self.request, email=email, password=password
+                )
+                print("form_valid No.8")
+                if user is None:
+                    return HttpResponseServerError("Server Error")
+                print("form_valid No.10")
+                # login(
+                #    request,
+                #    user,
+                #    backend="accounts.backend.TmpUserBackend",
+                # )
+                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+                self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+                self.request.session["is_provisional_login"] = True
+                self.request.session["user_id"] = user.id
+                print("form_valid No.15")
+
+                # url = "accounts/signup-two-fa.html"
+                rval = send_two_fa(user, self.request)
+                print("form_valid No.10-1")
+                if rval is False:
+                    print("form_valid No.10-2")
+                    return HttpResponseServerError("Bad Request")
+                print("form_valid No.11")
+                two_fa_mode = user.auth
+                print("form_valid No.12")
+                data = {"valid": True, "is_auth_app": False}
+                if two_fa_mode == AuthChoices.SMS:
+                    # response = render(request, "accounts/signup-two-fa.html")
+                    html = render_to_string(
+                        "accounts/signup-two-fa.html", request=self.request
+                    )
+                elif two_fa_mode == AuthChoices.EMAIL:
+                    html = render_to_string(
+                        "accounts/signup-two-fa.html", request=self.request
+                    )
+                elif two_fa_mode == AuthChoices.APP:
+                    # context = {"is_auth_app": True, "qr": make_qr(rval)}
+                    data = {"valid": True, "is_auth_app": True, "qr": make_qr(rval)}
+                    # html = render_to_string(
+                    # "accounts/signup-two-fa.html", request=request, context=context
+                    # )
+                print("form_valid No.13")
+
+                return JsonResponse(data)
+            else:
+                html = render_to_string(
+                    "accounts/signup.html", {"form": form}, request=self.request
+                )
+
+                data = {"valid": False, "html": html}
+                return JsonResponse(data)
         except Exception as e:
-            return HttpResponseBadRequest("Bad Request:" + e)
+            return HttpResponseServerError(f"Server Error:{e}")
+
+    # def form_valid(self, form):
+    #    """
+    #    CreateViewのメソッドをオーバーライド
+    #    """
+    #    print("form_valid No.1")
+    #    try:
+    #        if self.request.method != "POST":
+    #            return HttpResponseBadRequest("Bad Request")
+    #        print("form_valid No.2")
+    #        rval = super().form_valid(form)
+    #        login(
+    #            self.request,
+    #            self.object,
+    #            backend="django.contrib.auth.backends.ModelBackend",
+    #        )
+    #        return rval
+    #    except Exception as e:
+    #        return HttpResponseBadRequest("Bad Request:" + e)
 
 
 class SignupTmpView(CreateView):
@@ -542,7 +647,7 @@ class SignupTmpView(CreateView):
                 # )
 
                 # url = "accounts/signup-two-fa.html"
-                rval = send_two_fa(user)
+                rval = send_two_fa(user, self.request)
                 if rval is False:
                     return HttpResponseServerError("Bad Request")
                 two_fa_mode = user.auth
@@ -602,7 +707,7 @@ def signup_valid(request):
                 # )
 
                 # url = "accounts/signup-two-fa.html"
-                rval = send_two_fa(user)
+                rval = send_two_fa(user, request)
                 if rval is False:
                     return HttpResponseServerError("Bad Request")
                 two_fa_mode = user.auth
@@ -794,21 +899,31 @@ def two_fa(request):
 
             is_provisional_login = False
             user_id = ""
+            print("two_fa No.1")
+
             if "is_provisional_login" in request.session:
                 is_provisional_login = request.session["is_provisional_login"]
+            print("two_fa No.2")
             if "user_id" in request.session:
                 user_id = request.session["user_id"]
+            print(f"two_fa No.3 {user_id=}")
             if is_provisional_login is False or user_id == "":
                 return HttpResponseForbidden()
+            print(f"two_fa No.4 {is_provisional_login=}")
             # return HttpResponseForbidden()
             user = FtUser.objects.get(id=user_id)
+            if user is None:
+                print("user is None")
+                return HttpResponseServerError()
 
             mode = user.auth
             if mode == "EMAIL":
-                email_address = request.POST.get("id")
-                user = FtUser.objects.get(email=email_address)
+                # email_address = request.POST.get("id")
+                # user = FtUser.objects.get(email=email_address)
                 twilio = TwoFA()
-                rval = twilio.email(user)
+                time = datetime.fromtimestamp(float(request.session["exp"]))
+                print(f"{time=}")
+                rval = twilio.email(user, time)
                 if rval:
                     extra_context = {"app": False}
                     return JsonResponse(extra_context)
@@ -820,7 +935,7 @@ def two_fa(request):
                     extra_context = {"app": False}
                     return JsonResponse(extra_context)
             elif mode == "APP":
-                email_address = request.POST.get("id")
+                # email_address = request.POST.get("id")
                 twilio = TwoFA()
                 uri = twilio.app(user)
                 qr = make_qr(uri)
