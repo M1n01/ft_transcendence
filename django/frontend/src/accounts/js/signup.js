@@ -1,6 +1,8 @@
 import '../scss/signup.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
-import { SignupTwoFAEvent } from './signup_two_fa.js';
+//import { SignupTwoFAEvent } from './signup_two_fa.js';
+import { Modal } from 'bootstrap';
+import { TwoFaEvent } from './two_fa.js';
 export const SignupEvent = new Event('SignupEvent');
 
 //function copyInput() {
@@ -48,41 +50,66 @@ function SetTime() {
   const dd = String(Mytoday.getDate()).padStart(2, '0');
   const todayString = `${yyyy}-${mm}-${dd}`;
   document.getElementById('id_created_at').value = todayString;
-  document.getElementById('id_birth_date').type = 'date';
+  document.getElementById('birth_date_id').type = 'date';
 }
 
 document.addEventListener('SignupEvent', function () {
-  SetTime();
+  try {
+    SetTime();
 
-  const signup_form = document.getElementById('signup-form');
-  const two_fa_button = document.getElementById('2fa-button');
+    const signup_form = document.getElementById('signup-form');
+    const two_fa_button = document.getElementById('2fa-button');
 
-  const auth_select = document.getElementById('id_auth');
-  const phone_input = document.getElementById('id_phone');
-  const phone_auth_error = document.getElementById('phone-auth-error');
-  //const submit_button = document.getElementById('validation-button');
-  signup_form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    if (auth_select.value == 'SMS' && phone_input.value == '') {
-      phone_auth_error.hidden = false;
-      return;
-    }
-    const form = e.target;
-    const formData = new FormData(form);
-    let response = await fetchAsForm(form, formData);
-    const json = await response.json();
-    document.querySelector('#app').innerHTML = json.html;
-    if (json['valid'] == false) {
-      document.dispatchEvent(SignupEvent);
-      return;
-    }
-    //document.querySelector('#app').innerHTML = json.html;
-    document.dispatchEvent(SignupTwoFAEvent);
+    const auth_select = document.getElementById('auth_id');
+    const phone_input = document.getElementById('phone_id');
+    const phone_auth_error = document.getElementById('phone-auth-error');
+    //const submit_button = document.getElementById('validation-button');
+    signup_form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (auth_select.value == 'SMS' && phone_input.value == '') {
+        phone_auth_error.hidden = false;
+        return;
+      }
+      const form = e.target;
+      const formData = new FormData(form);
+      let response = await fetchAsForm(form, formData);
 
-    //form.action = '/accounts/signup-tmp/';
-    //response = await fetchAsForm(form, formData);
+      if (response.status == 200) {
+        try {
+          const json = await response.json();
+          if (json['valid'] == false) {
+            const html = json['html'];
+            document.querySelector('#signup-area').innerHTML = html;
+            document.dispatchEvent(SignupEvent);
+            return;
+          }
+          //document.querySelector('#app').innerHTML = json.html;
+          const two_fa_form = document.getElementById('two-fa-verify-form');
+          const resend_two_fa_form = document.getElementById('resend-two-fa');
+          two_fa_form.action = 'accounts/signup-two-fa-verify/';
+          resend_two_fa_form.action = 'accounts/signup-two-fa/';
+          if (json['is_auth_app']) {
+            document.getElementById('app_url_qr').hidden = false;
+            document.getElementById('app_url_qr').src = 'data:image/png;base64,' + json['qr'];
+          } else {
+            document.getElementById('app_url_qr').hidden = true;
+          }
+          //document.dispatchEvent(SignupEvent);
+          //document.querySelector('#app').innerHTML = json.html;
+          const modal_2fa = document.getElementById('TwoFa-Modal');
+          const modal = new Modal(modal_2fa);
+          modal.show();
+          document.dispatchEvent(TwoFaEvent);
+          return;
+        } catch (error) {
+          console.error(error);
+        }
+      }
 
-    /*
+      //form.action = '/accounts/signup-tmp/';
+      //response = await fetchAsForm(form, formData);
+
+      /*
     phone_auth_error.hidden = true;
     const form = e.target;
     form.action = '/accounts/signup-valid/';
@@ -111,7 +138,7 @@ document.addEventListener('SignupEvent', function () {
     }
     */
 
-    /*
+      /*
     // ここからさきはバリデーションが成功したら実行される
     const errors = document.querySelectorAll('.errorlist');
     errors.forEach((element) => {
@@ -150,48 +177,51 @@ document.addEventListener('SignupEvent', function () {
       }
     }
     */
-  });
-  phone_input.addEventListener('input', function () {
-    phone_auth_error.hidden = true;
-  });
+    });
+    phone_input.addEventListener('input', function () {
+      phone_auth_error.hidden = true;
+    });
 
-  /*
+    /*
   const back_button = document.getElementById('back-button');
   back_button.addEventListener('click', function () {
     switchingTwoFA(false);
   });
   */
-  two_fa_button.addEventListener('click', async function (event) {
-    event.preventDefault();
-    const form = document.getElementById('two-fa-form');
-    const failure_verify_2fa = document.getElementById('failure-verify-2fa');
-    failure_verify_2fa.hidden = true;
-    const formData = new FormData(form);
-    const response = await fetchAsForm(form, formData);
+    two_fa_button.addEventListener('click', async function (event) {
+      event.preventDefault();
+      const form = document.getElementById('two-fa-form');
+      const failure_verify_2fa = document.getElementById('failure-verify-2fa');
+      failure_verify_2fa.hidden = true;
+      const formData = new FormData(form);
+      const response = await fetchAsForm(form, formData);
 
-    if (response.status == 200) {
-      signup_form.action = '/accounts/signup/';
-
-      const signup_form_elements = signup_form.querySelectorAll('input,radio,select, button');
-      signup_form_elements.forEach((element) => {
-        element.disabled = false;
-      });
-
-      const formData = new FormData(signup_form);
-      const response = await fetchAsForm(signup_form, formData);
       if (response.status == 200) {
-        document.querySelector('#app').innerHTML = await response.text();
+        signup_form.action = '/accounts/signup/';
+
+        const signup_form_elements = signup_form.querySelectorAll('input,radio,select, button');
+        signup_form_elements.forEach((element) => {
+          element.disabled = false;
+        });
+
+        const formData = new FormData(signup_form);
+        const response = await fetchAsForm(signup_form, formData);
+        if (response.status == 200) {
+          document.querySelector('#app').innerHTML = await response.text();
+        } else {
+          failure_verify_2fa.hidden = false;
+        }
       } else {
         failure_verify_2fa.hidden = false;
       }
-    } else {
-      failure_verify_2fa.hidden = false;
-    }
-  });
+    });
 
-  const verify_code = document.getElementById('verify-code');
-  verify_code.addEventListener('input', function () {
-    const failure_verify_2fa = document.getElementById('failure-verify-2fa');
-    failure_verify_2fa.hidden = true;
-  });
+    const verify_code = document.getElementById('verify-code');
+    verify_code.addEventListener('input', function () {
+      const failure_verify_2fa = document.getElementById('failure-verify-2fa');
+      failure_verify_2fa.hidden = true;
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });

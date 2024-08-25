@@ -5,15 +5,11 @@ import os
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 
-# from __future__ import print_function
 
 # import time
 import sib_api_v3_sdk
 
 # from sib_api_v3_sdk.rest import ApiException
-
-# from pprint import pprint
-# import ast
 
 # import time
 # import urllib.parse
@@ -38,24 +34,18 @@ class TwoFA:
 
     def sms(self, user):
 
-        print("send_two_fa No.5")
         phone_number = user.country_code + user.phone
-        print("send_two_fa No.6")
         client = Client(self.sms_account_sid, self.sms_auth_token)
-        print("send_two_fa No.7")
         # phone_number = "+81" + phone_number[1:]
-        print(f"{phone_number=}")
         if DEV_SMS:
             return True
         try:
-            verification = client.verify.v2.services(
-                self.sms_service_token
-            ).verifications.create(to=phone_number, channel="sms")
+            client.verify.v2.services(self.sms_service_token).verifications.create(
+                to=phone_number, channel="sms"
+            )
         except TwilioRestException:
-            # print("Twilio Error")
             return False
 
-        print(verification.sid)
         return True
         # return response.json()
 
@@ -64,8 +54,6 @@ class TwoFA:
         # account_sid = os.environ["TWILIO_ACCOUNT_SID"]
         # auth_token = os.environ["TWILIO_AUTH_TOKEN"]
         client = Client(self.sms_account_sid, self.sms_auth_token)
-        print(f"{phone_number=}")
-        print(f"{code=}")
         # return False
 
         if DEV_SMS:
@@ -75,18 +63,14 @@ class TwoFA:
                 self.sms_service_token
             ).verification_checks.create(to=phone_number, code=code)
         except TwilioRestException:
-            print("Error")
             return False
 
-        print(verification_check.status)
         if verification_check.status == "pending":
             return False
-            print("Error")
         return True
 
     def email(self, user):
         # email_code_dict[to_address] = code
-        # print(f"save {code=}")
 
         to_address = user.email
         secret = user.app_secret
@@ -95,8 +79,6 @@ class TwoFA:
 
         totp = pyotp.TOTP(secret)
         code = totp.at(last_login)
-        print(f"save {to_address=}")
-        print(f"save {code=}")
         email_api_key = os.environ["BREVO_API_KEY"]
         email_sender_address = os.environ["BREVO_SENDER_ADDRESS"]
         # email_api_key = os.environ["BREVO_API_KEY"]
@@ -129,7 +111,6 @@ class TwoFA:
         #    res_dict = ast.literal_eval(str(api_response))
         #    # message_id = res_dict["message_id"]
         # except ApiException as e:
-        #    print(f"Brevo Error:{e}")
         #    return False
 
         # check
@@ -160,14 +141,11 @@ class TwoFA:
 
     def make_uri(self, email, secret):
 
-        print("test fwo-fa app No.10")
         totp = pyotp.TOTP(secret)
-        print("test fwo-fa app No.11")
         # secret = totp.secret
 
         # QRコードのURI生成
         uri = totp.provisioning_uri(name=email, issuer_name="42 Pong Game")
-        print(f"test fwo-fa app No.12 {uri=}")
         return uri
 
     def app(self, user):

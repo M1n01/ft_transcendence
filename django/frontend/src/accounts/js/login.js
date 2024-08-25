@@ -2,6 +2,9 @@ import '../scss/login.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
 
+import { Modal } from 'bootstrap';
+export const LoginEvent = new Event('LoginEvent');
+
 function displayInstruction(id) {
   document.getElementById('instruction').hidden = true;
   document.getElementById('instruction-processing').hidden = true;
@@ -9,6 +12,7 @@ function displayInstruction(id) {
   document.getElementById(id).hidden = false;
 }
 
+/*
 function switchingForm(flag) {
   const login_form = document.getElementById('login-form');
   const login_form_elements = login_form.querySelectorAll('input,radio,select, button');
@@ -37,8 +41,7 @@ function switchingForm(flag) {
     code_input.disabled = true;
   }
 }
-
-export const LoginEvent = new Event('LoginEvent');
+  */
 
 document.addEventListener('LoginEvent', function () {
   try {
@@ -59,11 +62,27 @@ document.addEventListener('LoginEvent', function () {
       const response = await fetchAsForm(form, formData);
 
       if (response.status == 200) {
-        switchingForm(true);
         const len = response.headers.get('Content-Length');
         if (len != undefined && len > 0) {
-          document.querySelector('#app').innerHTML = await response.text();
-          document.dispatchEvent(TwoFaEvent);
+          try {
+            const json = await response.json();
+            const two_fa_form = document.getElementById('two-fa-verify-form');
+            const resend_two_fa_form = document.getElementById('resend-two-fa');
+            two_fa_form.action = 'accounts/two-fa-verify/';
+            resend_two_fa_form.action = 'accounts/two-fa/';
+            document.getElementById('app_url_qr').hidden = true;
+            if (json['is_auth_app']) {
+              document.getElementById('resend-button').hidden = true;
+            }
+            const modal_2fa = document.getElementById('TwoFa-Modal');
+            const modal = new Modal(modal_2fa);
+            modal.show();
+            document.dispatchEvent(TwoFaEvent);
+          } catch (error) {
+            console.log(error);
+            document.getElementById('form-error').hidden = false;
+          }
+          //modal_2fa = modal_2fa
         }
       } else {
         //document.querySelector('#app').innerHTML = await response.text();
@@ -75,9 +94,11 @@ document.addEventListener('LoginEvent', function () {
     //document.getElementById('openDialog').addEventListener('click', function () {
     //document.getElementById('myDialog').showModal();
     //});
+    /*
     document.getElementById('back-button').addEventListener('click', function () {
       switchingForm(false);
     });
+    */
 
     document.getElementById('closeDialog').addEventListener('click', async function () {
       const ft_oauth_url = document.getElementById('ft-oauth-url').href;

@@ -5,8 +5,9 @@ from . import views
 app_name = "accounts"
 
 urlpatterns = [
-    path("signup/", views.SignupView.as_view(), name="signup"),
-    path("signup-valid/", views.signup_valid, name="signup-valid"),
+    # path("signup/", views.SignupView.as_view(), name="signup"),
+    path("signup-valid/", views.SignupView.as_view(), name="signup-valid"),
+    # path("signup-valid/", views.signup_valid, name="signup-valid"),
     path("signup-tmp/", views.SignupTmpView.as_view(), name="signup-tmp"),
     path("signup-two-fa/", views.signup_two_fa, name="signup-two-fa"),
     path(
@@ -24,6 +25,7 @@ urlpatterns = [
     path("success-logout/", views.LogoutSuccess, name="success-logout"),
     path("redirect-oauth/", views.redirect_oauth, name="redirect-oauth"),
     path("oauth-login/", views.oauth_login, name="oauth-login"),
+    # path("signup-two-fa/", views.signup_two_fa, name="signup-two-fa"),
     path("two-fa/", views.two_fa, name="two-fa"),
     path("two-fa-verify/", views.two_fa_verify, name="two-fa-verify"),
     path("login-signup/", views.LoginSignupView.as_view(), name="login-signup"),

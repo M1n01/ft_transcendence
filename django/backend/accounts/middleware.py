@@ -42,17 +42,13 @@ class CustomSessionMiddleware(SessionMiddleware):
                     user_id = jwt_decode["sub"]
         except jwt.ExpiredSignatureError:
             is_provisional_login = False
-            print("JWT ExpiredSignatureError")
             # leeway+expで設定した時間を超過したらここに入る
             pass
         except jwt.exceptions.DecodeError:
             is_provisional_login = False
-            print("JWT DecodeError")
             # tmp_session_keyが編集されていたらここに入る
             pass
         request.session = self.SessionStore(session_key)
-        print(f"jwt start {is_provisional_login=}")
-        print(f"jwt start {user_id=}")
         request.session["is_provisional_login"] = is_provisional_login
         request.session["exp"] = exp
         request.session["user_id"] = user_id
@@ -99,12 +95,9 @@ class CustomSessionMiddleware(SessionMiddleware):
                     id = ""
                     email = ""
                     is_provisional_login = False
-                    print("new JWT No.1")
                     exp = datetime.now(tz=timezone.utc) + timedelta(seconds=14400)
                     if "is_provisional_login" in request.session:
-                        print("new JWT No.2")
                         is_provisional_login = request.session["is_provisional_login"]
-                        print(f"new JWT No.3 {is_provisional_login=}")
                         if (is_provisional_login is True) and (
                             "exp" in request.session
                         ):
@@ -112,9 +105,6 @@ class CustomSessionMiddleware(SessionMiddleware):
                             id = request.session["user_id"]
                         # email = user.email
 
-                    print(f"new JWT No.3 {exp=}")
-                    print(f"new JWT No.4 {is_provisional_login=}")
-                    print(f"new JWT No.5 {id=}")
                     jwt_session_key = jwt.encode(
                         {
                             "session_key": request.session.session_key,

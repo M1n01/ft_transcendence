@@ -59,19 +59,22 @@ function switchingAllInput(mode) {
 */
 
 document.addEventListener('TwoFaEvent', function () {
-  const two_fa_form = document.getElementById('two-fa-form');
-  const input_code = document.getElementById('verify-code');
+  const two_fa_form = document.getElementById('two-fa-verify-form');
+  const input_code = document.getElementById('two-fa-verify-code');
   const error_message = document.getElementById('failure-verify');
-  const send_error = document.getElementById('failure-send');
+  const resend_error = document.getElementById('failure-resend');
   //const resend_form = document.getElementById('resend-form');
+  const resend_two_fa = document.getElementById('resend-two-fa');
 
   two_fa_form.addEventListener('submit', async function (event) {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
+    console.log('send');
     if (response.status == 200) {
-      document.querySelector('#app').innerHTML = await response.text();
+      console.log('send OK');
+      //document.querySelector('#app').innerHTML = await response.text();
       //document.getElementById('failure-send-2fa').hidden = true;
       //switchingAllInput(true);
       //copyInput();
@@ -82,7 +85,29 @@ document.addEventListener('TwoFaEvent', function () {
   });
   input_code.addEventListener('input', () => {
     error_message.hidden = true;
-    send_error.hidden = true;
+    resend_error.hidden = true;
+  });
+
+  resend_two_fa.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const response = await fetchAsForm(form, formData);
+    if (response.status == 200) {
+      try {
+        const json = await response.json();
+        if (json['app']) {
+          console.log('renew qr');
+          document.getElementById('app_url_qr').src = 'data:image/png;base64,' + json['qr'];
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      //document.querySelector('#app').innerHTML = await response.text();
+      //} else {
+    } else {
+      resend_error.hidden = false;
+    }
   });
 
   /*

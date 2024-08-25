@@ -21,11 +21,6 @@
     />
   </head>
   <body>
-    <h1>SPA TEST link</h1>
-    <div id="spa" class="spa_area">
-      <div id="app"></div>
-    </div>
-
     <a id="test" href="/home" class="nav__link" data-link>Index</a>
     <a href="/pong" class="nav__link pong" data-link>Pong</a>
     <a href="/accounts" class="nav__link" data-link>Accounts</a>
@@ -40,6 +35,10 @@
     <a href="/success-login" class="nav__link" data-link>Success-login</a>
     <a href="/signup-two-fa" class="nav__link" data-link>SignupTwoFA</a>
     <a href="/login-signup" class="nav__link" data-link>Login Signup</a>
+
+    <div id="spa" class="spa_area">
+      <div id="app"></div>
+    </div>
 
     {% csrf_token %} {% render_bundle 'main' 'js' %}
   </body>

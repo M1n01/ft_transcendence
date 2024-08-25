@@ -1,6 +1,10 @@
 #logined {
   background-color: blue;
 }
+.modal-backdrop {
+  background-color: #2c2c32; /* ここをお好みの色に変更 */
+  color: #ffffff; /* テキストの色も調整すると良い */
+}
 
 .error {
   color: red;
@@ -17,4 +21,8 @@
 
 ::placeholder {
   color: red;
+}
+
+#login-modal {
+  color: black;
 }

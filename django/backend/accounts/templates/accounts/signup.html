@@ -2,7 +2,53 @@
 <body>
   <form hidden>dummy form</form>
   <form method="POST" id="signup-form" action="{% url 'accounts:signup-valid' %}">
-    {% csrf_token %} {{ form }}
+    {% csrf_token %}
+
+    <div class="form-floating w-100 text-pale">
+      {{ form.username}}
+      <label for="username_id">{% trans "ユーザー名" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.email}}
+      <label for="email_id">{% trans "Email address" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.last_name}}
+      <label for="last_name_id">{% trans "氏" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.first_name}}
+      <label for="first_name_id">{% trans "名" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.birth_date}}
+      <label for="birth_date_id">{% trans "生年月日" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.country_code}}
+      <label for="country_code_id">{% trans "国コード" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.phone}}
+      <label for="phone_id">{% trans "電話番号" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.auth}}
+      <label for="auth_id">{% trans "2要素認証方法" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.language}}
+      <label for="language_id">{% trans "言語" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.password1}}
+      <label for="password_id1">{% trans "パスワード" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.password2}}
+      <label for="password_id2">{% trans "パスワード(確認用)" %}</label>
+    </div>
+
     <input type="text" name="created_at" id="id_created_at" hidden />
     <br />
     <div class="mt-3">
@@ -12,7 +58,14 @@
         {% trans "入力した内容を見直して再度実行してください" %}
       </div>
 
-      <button type="submit" id="validation-button" class="form-button">{% trans "認証"%}</button>
+        <button
+          type="submit"
+          data-mdb-button-init
+          data-mdb-ripple-init
+          class="btn btn-primary btn-block mb-4 w-100 mt-4 rounded-0 btn-auth"
+          id="validation-button"
+        >
+          {% trans "サインアップ" %}
       <!--
         <button id="back-button" class="form-button" hidden>{% trans "元に戻す"%}</button>
       -->

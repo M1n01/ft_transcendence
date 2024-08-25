@@ -26,7 +26,7 @@
       <form method="post" id="login-form" action="{% url 'accounts:login-tmp' %}">
         {% csrf_token %}
 
-        <div class="form-floating bg-alert w-100 text-pale">
+        <div class="form-floating w-100 text-pale">
           {{ form.username}}
           <label for="id_username">{% trans "Email address" %}</label>
         </div>
@@ -55,8 +55,6 @@
       <br />
       {% trans "入力内容を見直してください" %}
     </div>
-
-    {% include 'accounts/login-modal.html' with form=signup_form %} {% endif %} {% render_bundle
-    'main' 'css' %}
+    {% include 'accounts/login-modal.html' %} {% endif %}
   </body>
 </html>

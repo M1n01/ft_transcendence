@@ -18,7 +18,13 @@ body {
   //font-family: 'Roboto', sans-serif;
   //font-family: 'Sawarabi Gothic', sans-serif;
   font-family: 'Noto Sans JP', sans-serif;
+  color: $light;
   background-color: #18181d;
+}
+
+.modal-content {
+  background-color: white;
+  color: black;
 }
 
 $theme-colors: (
@@ -33,6 +39,10 @@ $theme-colors: (
   'dark': $dark,
   //'btn-secondary': $indigo-600,
 );
+
+.text-primary {
+  color: $light;
+}
 
 .text-pale {
   color: #e0e0e0;
