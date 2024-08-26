@@ -306,8 +306,7 @@ def two_fa_verify(request):
                     new_user,
                     backend="django.contrib.auth.backends.ModelBackend",
                 )
-                # return HttpResponse()
-                return render(request, "accounts/success-login.html")
+                return HttpResponse()
             return HttpResponseBadRequest("Failure to verify")
 
         except json.JSONDecodeError:

@@ -12,37 +12,6 @@ function displayInstruction(id) {
   document.getElementById(id).hidden = false;
 }
 
-/*
-function switchingForm(flag) {
-  const login_form = document.getElementById('login-form');
-  const login_form_elements = login_form.querySelectorAll('input,radio,select, button');
-  const dialog = document.getElementById('openDialog');
-  const back_button = document.getElementById('back-button');
-  const code_input = document.getElementById('verify-code');
-
-  if (flag) {
-    dialog.disabled = true;
-    back_button.hidden = false;
-    login_form_elements.forEach((element) => {
-      element.readOnly = true;
-    });
-    login_form.action = 'accounts/login/';
-    code_input.hidden = false;
-    code_input.disabled = false;
-    code_input.readOnly = false;
-  } else {
-    dialog.disabled = false;
-    back_button.hidden = true;
-    login_form_elements.forEach((element) => {
-      element.readOnly = false;
-    });
-    login_form.action = 'accounts/login-tmp/';
-    code_input.hidden = true;
-    code_input.disabled = true;
-  }
-}
-  */
-
 document.addEventListener('LoginEvent', function () {
   try {
     // 入力があったらエラーメッセージを消去
@@ -90,17 +59,7 @@ document.addEventListener('LoginEvent', function () {
       }
     });
 
-    // 42 OAuth
-    //document.getElementById('openDialog').addEventListener('click', function () {
-    //document.getElementById('myDialog').showModal();
-    //});
-    /*
-    document.getElementById('back-button').addEventListener('click', function () {
-      switchingForm(false);
-    });
-    */
-
-    document.getElementById('closeDialog').addEventListener('click', async function () {
+    document.getElementById('login-auth').addEventListener('click', async function () {
       const ft_oauth_url = document.getElementById('ft-oauth-url').href;
       displayInstruction('instruction-processing');
 
