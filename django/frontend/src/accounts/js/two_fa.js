@@ -32,7 +32,6 @@ document.addEventListener('TwoFaEvent', function () {
       try {
         const json = await response.json();
         if (json['app']) {
-          console.log('renew qr');
           document.getElementById('app_url_qr').src = 'data:image/png;base64,' + json['qr'];
         }
       } catch (e) {

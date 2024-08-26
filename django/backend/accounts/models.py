@@ -87,8 +87,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
 
     id = models.AutoField(primary_key=True)
     username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
-    email = models.CharField(verbose_name=_("email"), max_length=256, unique=True)
-    email42 = models.CharField(
+    email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
+    email42 = models.EmailField(
         verbose_name=_("email42"),
         max_length=256,
         unique=True,
@@ -245,8 +245,8 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
 
     id = models.AutoField(primary_key=True)
     username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
-    email = models.CharField(verbose_name=_("email"), max_length=256, unique=True)
-    email42 = models.CharField(
+    email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
+    email42 = models.EmailField(
         verbose_name=_("email42"),
         max_length=256,
         unique=True,
@@ -273,8 +273,6 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         max_length=5,
         default="+81",
     )
-    # country_code = models.CharField(max_length=5, verbose_name=_("国番号"), null=True)
-    # phone_number = models.CharField(max_length=15)
 
     phone = models.CharField(
         verbose_name=_("電話番号"), null=True, blank=True, unique=True, max_length=15
@@ -337,7 +335,6 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         # 一度だけ実行するように
-        print("save")
         if not self.app_secret:
             totp = pyotp.TOTP(pyotp.random_base32())
             secret = totp.secret
@@ -346,4 +343,3 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         if self._password is not None:
             password_validation.password_changed(self._password, self)
             self._password = None
-        print("save end")

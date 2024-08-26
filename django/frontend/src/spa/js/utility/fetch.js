@@ -7,7 +7,6 @@ function makeRequest(method, url) {
     if (!response.ok) {
       throw new Error(' Fetch() Error');
     }
-    //return response.text();
     return response;
   });
 }
@@ -21,7 +20,6 @@ export async function fetchAsForm(form, FormData) {
       mode: 'same-origin',
       body: FormData,
     });
-    //return res.text();
     return res;
   } catch (error) {
     console.error('Fetch Error:' + error.message);
@@ -30,25 +28,6 @@ export async function fetchAsForm(form, FormData) {
 }
 
 export default async function fetchData(url) {
-  //try {
   const response = await makeRequest('GET', url);
-  if (response.redirected) {
-    console.log('redirected');
-    //throw new Error(' redirected');
-  }
-  /*
-    if (response.redirected) {
-      console.log('Rdirected');
-      throw new Error(' Reidrecrted');
-    }
-
-    if (response.status >= 400) {
-      throw new Error(' Fetch() Error');
-    }
-      */
   return response.text();
-  //} catch (error) {
-  //console.error(error.message);
-  //}
-  //return '';
 }

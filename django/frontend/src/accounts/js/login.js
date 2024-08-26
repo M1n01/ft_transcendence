@@ -48,13 +48,11 @@ document.addEventListener('LoginEvent', function () {
             modal.show();
             document.dispatchEvent(TwoFaEvent);
           } catch (error) {
-            console.log(error);
+            console.error(error);
             document.getElementById('form-error').hidden = false;
           }
-          //modal_2fa = modal_2fa
         }
       } else {
-        //document.querySelector('#app').innerHTML = await response.text();
         document.getElementById('form-error').hidden = false;
       }
     });
@@ -79,9 +77,7 @@ document.addEventListener('LoginEvent', function () {
           document.getElementById('instruction').style.color = 'red';
           return '';
         }
-        //document.getElementById('myDialog').close();
         document.getElementById('close-modal').click();
-        document.getElementById('success-login').click();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);

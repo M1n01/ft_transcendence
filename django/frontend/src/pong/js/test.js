@@ -1,4 +1,3 @@
-console.log('test.js Replace Test ');
 import { navigateTo } from '../../spa/js/routing/routing.js';
 
 export const ScriptEvent = new Event('ScriptEvent');

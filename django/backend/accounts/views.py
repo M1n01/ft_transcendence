@@ -40,7 +40,7 @@ from accounts.models import FtUser
 from accounts.two_fa import TwoFA
 
 # from .forms import SignUpForm, SignUpTmpForm, LoginForm
-from .forms import SignUpTmpForm, LoginForm
+from .forms import SignUpForm, LoginForm
 from .oauth import FtOAuth
 
 from io import BytesIO
@@ -89,14 +89,6 @@ def verify_two_fa(user, code, request):
     return rval
 
 
-# def send_two_fa_view(request):
-#    user = request.user
-#    rval = send_two_fa(user, request)
-#    if rval is False:
-#        return HttpResponseServerError()
-#    return HttpResponse()
-
-
 def send_two_fa(user, request):
     try:
         two_fa_mode = user.auth
@@ -112,59 +104,6 @@ def send_two_fa(user, request):
     except Exception as e:
         print(f"{e=}")
         return False
-
-
-# def send_two_fa_with_form(form):
-#    try:
-#        two_fa_mode = form.cleaned_data["auth"]
-#        email = form.cleaned_data["email"]
-#        user = FtUser.objects.get(email=email)
-#        two_fa = TwoFA()
-#        if two_fa_mode == AuthChoices.SMS:
-#            rval = two_fa.sms(user)
-#        elif two_fa_mode == AuthChoices.EMAIL:
-#            email = form.cleaned_data["email"]
-#            rval = two_fa.email(user)
-#        elif two_fa_mode == AuthChoices.APP:
-#            # two_fa.make_qr(user)
-#            rval = two_fa.app(user)
-#        return rval
-#    except Exception as e:
-#        print(f"{e=}")
-#        return False
-
-
-# class UserTmpLogin(LoginView):
-#    form = FtLoginForm
-#
-#    def form_invalid(self, form):
-#        return HttpResponseBadRequest("Bad Request")
-#
-#    def form_valid(self, form):
-#        """
-#        Login認証が成功時の戻り値をオーバーライド
-#        """
-#
-#        """Security check complete. Log the user in."""
-#        try:
-#            if self.request.method != "POST":
-#                return HttpResponseBadRequest("Bad Request")
-#            username = self.request.POST.get("username")
-#            password = self.request.POST.get("password")
-#            user = authenticate(self.request, username=username, password=password)
-#            if user is None:
-#                return HttpResponseBadRequest("Bad Request")
-#            rval = send_two_fa(user, self.request)
-#            if rval:
-#                self.request.session["is_provisional_login"] = True
-#                self.request.session["user_id"] = user.id
-#                return HttpResponse()
-#        except TemplateDoesNotExist as e:
-#            return HttpResponseBadRequest(f"Bad Request:{e}")
-#        except Exception as e:
-#            return HttpResponseBadRequest(f"Bad Request:{e}")
-#        else:
-#            return HttpResponseBadRequest("Bad Request")
 
 
 @login_not_required
@@ -323,7 +262,7 @@ class LoginSignupView(TemplateView):
     # template_name = "login-signup.html"
     # template_name = "login.html"
     template_name = "accounts/login-signup.html"
-    signup_form = SignUpTmpForm
+    signup_form = SignUpForm
     login_form = LoginForm
 
     # QRコード作成
@@ -452,7 +391,7 @@ class UserLogout(LogoutView):
 @method_decorator(login_not_required, name="dispatch")
 class SignupView(CreateView):
 
-    form_class = SignUpTmpForm
+    form_class = SignUpForm
     template_name = "accounts/signup.html"
     # success_url = reverse_lazy("accounts:success-signup")
     success_url = reverse_lazy("spa:index")
@@ -482,7 +421,7 @@ class SignupView(CreateView):
 
     def form_valid(self, form):
         try:
-            form = SignUpTmpForm(self.request.POST)
+            form = SignUpForm(self.request.POST)
             tmp_res = super().form_valid(form)
             if tmp_res.status_code >= 300 and tmp_res.status_code < 400:
                 form.save()
@@ -523,62 +462,6 @@ class SignupView(CreateView):
         except Exception as e:
             print(f"{e=}")
             return HttpResponseServerError(f"Server Error:{e}")
-
-
-# @login_not_required
-# def signup_valid(request):
-#    if request.method == "POST":
-#        try:
-#            form = SignUpTmpForm(request.POST)
-#            if form.is_valid():
-#                tmp_form = SignUpTmpForm(request.POST)
-#
-#                tmp_form.save()
-#
-#                email = form.cleaned_data["email"]
-#                password = form.cleaned_data["password1"]
-#                # user = FtTmpUser.objects.get(email=email)
-#                backend = TmpUserBackend()
-#                user = backend.authenticate(request, email=email, password=password)
-#                if user is None:
-#                    return HttpResponseServerError("Server Error")
-#                # login(
-#                #    request,
-#                #    user,
-#                #    backend="accounts.backend.TmpUserBackend",
-#                # )
-#
-#                # url = "accounts/signup-two-fa.html"
-#                rval = send_two_fa(user, request)
-#                if rval is False:
-#                    return HttpResponseServerError("Bad Request")
-#                two_fa_mode = user.auth
-#                data = {"valid": True, "is_auth_app": False}
-#                if two_fa_mode == AuthChoices.SMS:
-#                    html = render_to_string(
-#                        "accounts/signup-two-fa.html", request=request
-#                    )
-#                elif two_fa_mode == AuthChoices.EMAIL:
-#                    html = render_to_string(
-#                        "accounts/signup-two-fa.html", request=request
-#                    )
-#                elif two_fa_mode == AuthChoices.APP:
-#                    data = {"valid": True, "is_auth_app": True, "qr": make_qr(rval)}
-#                request.session["is_provisional_login"] = True
-#                request.session["user_id"] = user.id
-#                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
-#                request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
-#                return JsonResponse(data)
-#            else:
-#                html = render_to_string(
-#                    "accounts/signup.html", {"form": form}, request=request
-#                )
-#
-#                data = {"valid": False, "html": html}
-#                return JsonResponse(data)
-#        except Exception as e:
-#            return HttpResponseServerError(f"Server Error:{e}")
-#    return HttpResponseBadRequest("Bad Request")
 
 
 @login_not_required
