@@ -23,7 +23,9 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "simple": {
-            "format": "%(asctime)s {module}:{filename}:{funcName}:{lineno} [%(levelname)s] %(message)s"
+            "format": "%(asctime)s"
+            + "{module}:{filename}:{funcName}:{lineno}"
+            + "[%(levelname)s] %(message)s"
         }
     },
     "handlers": {
@@ -99,12 +101,6 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
-    # "allauth",
-    # "allauth.account",
-    # "allauth.socialaccount",
-    #'allauth.account',
-    # "corsheaders",  #CORS設定
-    # "oauth2_provider",  # OAuth2設定
 ]
 
 MIDDLEWARE = [
@@ -115,11 +111,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "allauth.account.middleware.AccountMiddleware",
-    #'django.template.context_processors.media', #ユーザーアップロード用
 ]
 
 ROOT_URLCONF = "ft_trans.urls"
@@ -160,8 +155,6 @@ DATABASES = {
         "OPTIONS": {
             "service": "ft_trans",
             "passfile": ".my_pgpass",
-            # requireは認証局による証明書が必要
-            #'sslmode': 'require',
             "sslmode": "prefer",
             "sslcert": "server.crt",
             "sslkey": "server.key",
@@ -199,6 +192,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     "accounts.oauth.FtOAuth",
+    "accounts.backend.TmpUserBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -281,10 +275,11 @@ CSRF_COOKIE_SECURE = True
 
 
 # 認証
-LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
+LOGIN_URL = "accounts:login"
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"

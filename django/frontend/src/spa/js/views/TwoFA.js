@@ -10,7 +10,6 @@ export default class extends AbstractView {
   }
 
   getHtml = async () => {
-    console.log('2FA');
     const uri = getUrlWithLang('accounts/two-fa/');
     const data = fetchData(uri);
     return data;

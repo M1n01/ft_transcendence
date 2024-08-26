@@ -3,6 +3,7 @@ import Posts from '../views/Posts.js';
 import PostView from '../views/PostView.js';
 import Settings from '../views/Settings.js';
 import Signup from '../views/Signup.js';
+//import SignupTwoFA from '../views/SignupTwoFA.js';
 import Login from '../views/Login.js';
 import Logout from '../views/Logout.js';
 import Lang from '../views/Lang.js';
@@ -13,6 +14,7 @@ import Pong from '../views/Pong.js';
 import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
 import TwoFA from '../views/TwoFA.js';
+import LoginSignup from '../views/LoginSignup.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -31,5 +33,7 @@ export const Routes = [
   { path: '/scriptt', view: Script2 },
   { path: '/script', view: Script },
   { path: '/success-login', view: LoginSuccess },
+  //{ path: '/signup-two-fa', view: SignupTwoFA },
   { path: '/2fa', view: TwoFA },
+  { path: '/login-signup', view: LoginSignup },
 ];
