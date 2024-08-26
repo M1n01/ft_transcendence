@@ -81,6 +81,7 @@ document.addEventListener('SignupEvent', function () {
             const html = json['html'];
             document.querySelector('#signup-area').innerHTML = html;
             document.dispatchEvent(SignupEvent);
+
             return;
           }
           //document.querySelector('#app').innerHTML = json.html;
@@ -104,6 +105,10 @@ document.addEventListener('SignupEvent', function () {
         } catch (error) {
           console.error(error);
         }
+      } else if (response.status == 400) {
+        const html = await response.text();
+        document.querySelector('#signup-area').innerHTML = html;
+        document.dispatchEvent(SignupEvent);
       }
 
       //form.action = '/accounts/signup-tmp/';

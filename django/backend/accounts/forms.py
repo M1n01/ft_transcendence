@@ -8,6 +8,7 @@ from .models import FtTmpUser, AuthChoices, LanguageChoice, COUNTRY_CODE_CHOICES
 
 # from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 from django.utils.translation import gettext_lazy as _
+import re
 
 
 # COUNTRY_CODE_CHOICES = [
@@ -63,6 +64,7 @@ class SignUpForm(UserCreationForm):
         ),
     )
     first_name = forms.CharField(
+        max_length=64,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control w-100 rounded-0 border-top-0",
@@ -71,6 +73,7 @@ class SignUpForm(UserCreationForm):
         ),
     )
     last_name = forms.CharField(
+        max_length=100,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control w-100 rounded-0 border-top-0",
@@ -97,6 +100,7 @@ class SignUpForm(UserCreationForm):
     )
     phone = forms.CharField(
         required=False,
+        max_length=15,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control w-100 rounded-0 border-top-0",
@@ -148,26 +152,44 @@ class SignUpForm(UserCreationForm):
             "username": forms.TextInput(attrs={"class": "form-control"}),
         }
 
-        def clean_username(self):
-            username = self.cleaned_data.get("username")
-            if FtTmpUser.objects.filter(username=username).exists():
-                print(f"username Error:{username=}")
-                raise forms.ValidationError("このユーザー名は既に使用されています。")
-            return username
+    def clean_username(self):
+        print("clean usrname ")
+        username = self.cleaned_data.get("username")
+        if FtTmpUser.objects.filter(username=username).exists():
+            print(f"username Error:{username=}")
+            raise forms.ValidationError("このユーザー名は既に使用されています。")
+        print("clean usrname OK")
+        return username
 
-        def clean_email(self):
-            email = self.cleaned_data.get("email")
-            if FtTmpUser.objects.filter(email=email).exists():
-                print(f"email Error:{email=}")
-                raise forms.ValidationError("このメールアドレスは既に使用されています。......")
-            return email
+    def clean_email(self):
+        print("clean email ")
+        email = self.cleaned_data.get("email")
+        if FtTmpUser.objects.filter(email=email).exists():
+            print(f"email Error:{email=}")
+            raise forms.ValidationError("このメールアドレスは既に使用されています。......")
+        print("clean email OK")
+        return email
 
-        def clean_phone(self):
-            phone = self.cleaned_data.get("phone")
-            if FtTmpUser.objects.filter(phone=phone).exists():
-                print(f"phne Error:{phone=}")
-                raise forms.ValidationError("この電話番号は既に使用されています。")
-            return phone
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
+        pattern = "\\d*"
+        result = re.fullmatch(pattern, phone)
+        if result is None:
+            raise forms.ValidationError("数値以外は記入しないでください")
+
+        if len(phone) > 15:
+            raise forms.ValidationError("正しい電話番号を入力してください")
+        print("clean phone OK")
+        return phone
+
+    def clean_last_name(self):
+        print("clean lastname")
+        last_name = self.cleaned_data.get("last_name")
+        if len(last_name) > 80:
+            print(f"phne Error:{last_name=}")
+            raise forms.ValidationError("64文字以内にしてください")
+        print("clean lastname OK")
+        return last_name
 
 
 class SignUpTmpForm(UserCreationForm):
@@ -191,6 +213,7 @@ class SignUpTmpForm(UserCreationForm):
         ),
     )
     first_name = forms.CharField(
+        max_length=64,
         widget=forms.TextInput(
             attrs={
                 "id": "first_name_id",
@@ -200,6 +223,7 @@ class SignUpTmpForm(UserCreationForm):
         ),
     )
     last_name = forms.CharField(
+        max_length=100,
         widget=forms.TextInput(
             attrs={
                 "id": "last_name_id",
@@ -230,6 +254,7 @@ class SignUpTmpForm(UserCreationForm):
     )
     phone = forms.CharField(
         required=False,
+        max_length=15,
         widget=forms.TextInput(
             attrs={
                 "id": "phone_id",
@@ -297,26 +322,46 @@ class SignUpTmpForm(UserCreationForm):
             "app_secret": forms.HiddenInput(),
         }
 
-        def clean_username(self):
-            username = self.cleaned_data.get("username")
-            if FtTmpUser.objects.filter(username=username).exists():
-                print(f"username Error:{username=}")
-                raise forms.ValidationError("このユーザー名は既に使用されています。")
-            return username
+    def clean_username(self):
+        print("test username")
+        username = self.cleaned_data.get("username")
+        if FtUser.objects.filter(username=username).exists():
+            print(f"username Error:{username=}")
+            raise forms.ValidationError("このユーザー名は既に使用されています。")
+        print("test username OK")
+        return username
 
-        def clean_email(self):
-            email = self.cleaned_data.get("email")
-            if FtTmpUser.objects.filter(email=email).exists():
-                print(f"email Error:{email=}")
-                raise forms.ValidationError("このメールアドレスは既に使用されています。......")
-            return email
+    def clean_email(self):
+        print("test email")
+        email = self.cleaned_data.get("email")
+        if FtTmpUser.objects.filter(email=email).exists():
+            print(f"email Error:{email=}")
+            raise forms.ValidationError("このメールアドレスは既に使用されています。......")
+        print("test email OK")
+        return email
 
-        def clean_phone(self):
-            phone = self.cleaned_data.get("phone")
-            if FtTmpUser.objects.filter(phone=phone).exists():
-                print(f"phne Error:{phone=}")
-                raise forms.ValidationError("この電話番号は既に使用されています。")
-            return phone
+    def clean_phone(self):
+        print("phone")
+        phone = self.cleaned_data.get("phone")
+        pattern = "\\d*"
+        result = re.fullmatch(pattern, phone)
+        if result is None:
+            raise forms.ValidationError("数値以外は記入しないでください")
+
+        if len(phone) > 15:
+            raise forms.ValidationError("正しい電話番号を入力してください")
+        print("phone OK")
+        return phone
+
+    def clean_last_name(self):
+        print("last name")
+        last_name = self.cleaned_data.get("last_name")
+        print(f"clean lastname:{last_name=}")
+        if len(last_name) > 80:
+            print(f"phne Error:{last_name=}")
+            raise forms.ValidationError("64文字以内にしてください")
+        print("last name OK")
+        return last_name
 
 
 class FtLoginForm(UserCreationForm):

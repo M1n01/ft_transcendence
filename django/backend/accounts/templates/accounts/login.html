@@ -6,12 +6,9 @@
     <title>LoginViewテスト</title>
   </head>
   <body>
-    {{extra}} {% if user.is_authenticated %} {% if user.is_temporary %}
-    <div>is_temporary is True</div>
-    {% else%}
-    <div>is_temporary is False</div>
-    {% endif %}
+    {{extra}} {% if user.is_authenticated %}
     <div>
+      Logout
       <form id="logout-form" method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
         <button id="logined" type="submit" class="login-button">{% trans "Log_out" %}</button>

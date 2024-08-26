@@ -97,13 +97,13 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(
         verbose_name=_("姓"),
-        max_length=150,
+        max_length=64,
         null=True,
         blank=False,
     )
     last_name = models.CharField(
         verbose_name=_("名"),
-        max_length=150,
+        max_length=64,
         null=True,
         blank=False,
     )
@@ -255,13 +255,13 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(
         verbose_name=_("姓"),
-        max_length=150,
+        max_length=64,
         null=True,
         blank=False,
     )
     last_name = models.CharField(
         verbose_name=_("名"),
-        max_length=150,
+        max_length=64,
         null=True,
         blank=False,
     )
@@ -346,3 +346,4 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         if self._password is not None:
             password_validation.password_changed(self._password, self)
             self._password = None
+        print("save end")

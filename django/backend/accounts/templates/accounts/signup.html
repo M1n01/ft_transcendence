@@ -8,18 +8,46 @@
       {{ form.username}}
       <label for="username_id">{% trans "ユーザー名" %}</label>
     </div>
+        {% if form.username.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="form-floating w-100 text-pale">
       {{ form.email}}
       <label for="email_id">{% trans "Email address" %}</label>
     </div>
+        {% if form.email.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="form-floating w-100 text-pale">
       {{ form.last_name}}
       <label for="last_name_id">{% trans "氏" %}</label>
     </div>
+        {% if form.last_name.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.last_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="form-floating w-100 text-pale">
       {{ form.first_name}}
       <label for="first_name_id">{% trans "名" %}</label>
     </div>
+        {% if form.first_name.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.first_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="form-floating w-100 text-pale">
       {{ form.birth_date}}
       <label for="birth_date_id">{% trans "生年月日" %}</label>
@@ -32,6 +60,13 @@
       {{ form.phone}}
       <label for="phone_id">{% trans "電話番号" %}</label>
     </div>
+        {% if form.phone.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.phone.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="form-floating w-100 text-pale">
       {{ form.auth}}
       <label for="auth_id">{% trans "2要素認証方法" %}</label>
@@ -48,6 +83,13 @@
       {{ form.password2}}
       <label for="password_id2">{% trans "パスワード(確認用)" %}</label>
     </div>
+        {% if form.password2.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
     <input type="text" name="created_at" id="id_created_at" hidden />
     <br />
@@ -69,7 +111,6 @@
       <!--
         <button id="back-button" class="form-button" hidden>{% trans "元に戻す"%}</button>
       -->
-    </div>
   </form>
   <div id="phone-auth-error" class="error-message" hidden>
     {% trans "2要素認証をSMSにする場合、電話番号を入力してください" %}

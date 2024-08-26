@@ -281,8 +281,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # 認証
-LOGIN_REDIRECT_URL = "accounts:success-login"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "accounts:success-logout"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
 # AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
