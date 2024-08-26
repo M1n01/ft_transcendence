@@ -395,6 +395,7 @@ class SignupView(CreateView):
     template_name = "accounts/signup.html"
     # success_url = reverse_lazy("accounts:success-signup")
     success_url = reverse_lazy("spa:index")
+    usable_password = None
 
     # cnt = "0-"
     # try:
