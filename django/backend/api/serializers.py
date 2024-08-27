@@ -2,7 +2,13 @@ from rest_framework import serializers
 from .models import Game
 
 
-class GameSerializer(serializers.ModelSerializer):
+class GameRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ["winner", "loser", "winner_score", "loser_score"]
+        fields = ["winner", "winner_score", "loser", "loser_score"]
+
+
+class GameResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = "__all__"

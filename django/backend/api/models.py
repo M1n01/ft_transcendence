@@ -1,10 +1,9 @@
 from django.db import models
 
-from accounts.models import FtUser
-
 
 class Game(models.Model):
     id = models.BigAutoField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     winner = models.IntegerField()
     loser = models.IntegerField()
     winner_score = models.SmallIntegerField()

@@ -6,9 +6,10 @@ import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 contract ScoreKeeper is Ownable {
   struct Game {
     uint256 matchId;
+    uint256 createdAt;
     uint256 winner;
-    uint256 loser;
     int16 winnerScore;
+    uint256 loser;
     int16 loserScore;
   }
 
@@ -19,8 +20,8 @@ contract ScoreKeeper is Ownable {
 
   function createGame(
     uint256 _winner,
-    uint256 _loser,
     int16 _winnerScore,
+    uint256 _loser,
     int16 _loserScore
   ) external onlyOwner {
     require(_winner != _loser, 'Winner and loser cannot be the same');
@@ -29,16 +30,47 @@ contract ScoreKeeper is Ownable {
       require(games[i].matchId != nextGameId, 'Match ID already exists');
     }
 
-    games.push(Game(nextGameId, _winner, _loser, _winnerScore, _loserScore));
+    games.push(Game(nextGameId, block.timestamp, _winner, _winnerScore, _loser, _loserScore));
     nextGameId++;
   }
 
-  function getGame(uint256 _matchId) external view returns (Game memory) {
-    require(games[_matchId].matchId != 0, 'Match not found');
-    return games[_matchId];
+  function getGame(uint256 _matchId) external view onlyOwner returns (Game memory) {
+    for (uint256 i = 0; i < games.length; i++) {
+      if (games[i].matchId == _matchId) {
+        return games[i];
+      }
+    }
+    revert('Match not found');
+  }
+
+  function getAllGame() external view returns (Game[] memory) {
+    return games;
   }
 
   function getGameCount() external view returns (uint256) {
-    return nextGameId;
+    return games.length;
+  }
+
+  function findGameByUserId(uint256 _userId) external view returns (Game[] memory) {
+    uint256 count = 0;
+    // 関連するゲームの数を数える
+    for (uint256 i = 0; i < games.length; i++) {
+      if (games[i].winner == _userId || games[i].loser == _userId) {
+        count++;
+      }
+    }
+
+    require(count > 0, 'No games found for the given user ID');
+
+    Game[] memory _games = new Game[](count);
+    uint256 index = 0;
+    // 関連するゲームを配列に追加
+    for (uint256 i = 0; i < games.length; i++) {
+      if (games[i].winner == _userId || games[i].loser == _userId) {
+        _games[index] = games[i];
+        index++;
+      }
+    }
+    return _games;
   }
 }

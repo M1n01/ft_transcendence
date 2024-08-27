@@ -4,12 +4,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Game
-from .serializers import GameSerializer
+from .serializers import GameRequestSerializer, GameResponseSerializer
 from web3 import Web3
 import json
 import os
 from django.conf import settings
-import logging
+
 
 # ローカルのイーサリアム環境に接続
 web3 = Web3(Web3.HTTPProvider("http://contracts:8545"))
@@ -30,51 +30,38 @@ contract_address = os.getenv("CONTRACT_OWNER_ADDRESS")
 
 game_contract = web3.eth.contract(address=contract_address, abi=contract_abi)
 
-logger = logging.getLogger(__name__)
-
 
 class SaveGameScoreView(APIView):
     def get(self, request, format=None):
-        logger.debug("GET request received")
         game_id = request.query_params.get("match_id")  # クエリを使用
         if game_id:
-            logger.debug(f"Game data: {game_id}")
+            logger.debug(f"Received request with game_id: {game_id}")
+            request_data = request.data.copy()
+            request_data["match_id"] = game_id
             try:
-                # 試合データの取得
                 game = game_contract.functions.getGame(int(game_id)).call()
-                serializer = GameSerializer(game)
+                serializer = GameResponseSerializer(game)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-
             except Exception as e:
-                logger.error(f"Error retrieving game: {e}")
                 return Response(
                     {"message": "Error retrieving game", "error": str(e)},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-        else:
-            logger.debug("No game_id provided")
-            try:
-                game_count = game_contract.functions.getGameCount().call()
-                logger.debug(f"Game count: {game_count}")
-                serializer = GameSerializer(game_count)
-                return Response(serializer.data, status=status.HTTP_200_OK)
 
-            except Exception as e:
-                logger.error(f"Error retrieving game count: {e}")
-                return Response(
-                    {"message": "Error retrieving game count", "error": str(e)},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        else:
+            return Response(
+                {"message": "No game_id provided"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def post(self, request, format=None):
-        serializer = GameSerializer(data=request.data)
+        serializer = GameRequestSerializer(data=request.data)
         if serializer.is_valid():
-
             try:
                 txn = game_contract.functions.createGame(
                     serializer.validated_data["winner"],
-                    serializer.validated_data["loser"],
                     serializer.validated_data["winner_score"],
+                    serializer.validated_data["loser"],
                     serializer.validated_data["loser_score"],
                 ).build_transaction(
                     {
@@ -86,7 +73,7 @@ class SaveGameScoreView(APIView):
                 signed_txn = web3.eth.account.sign_transaction(
                     txn, private_key=os.getenv("CONTRACT_OWNER_PRIVATE_KEY")
                 )
-                tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+                tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
                 receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
                 return Response(
                     {
