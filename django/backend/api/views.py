@@ -35,7 +35,6 @@ class SaveGameScoreView(APIView):
     def get(self, request, format=None):
         game_id = request.query_params.get("match_id")  # クエリを使用
         if game_id:
-            logger.debug(f"Received request with game_id: {game_id}")
             request_data = request.data.copy()
             request_data["match_id"] = game_id
             try:
