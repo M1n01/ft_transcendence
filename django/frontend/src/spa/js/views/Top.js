@@ -3,7 +3,7 @@ import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { executeScriptTab } from '../utility/script.js';
 import { LoginEvent } from '../../../accounts/js/login.js';
-//import { SignupEvent } from '../../../accounts/js/signup.js';
+import { SignupEvent } from '../../../accounts/js/signup.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -20,6 +20,8 @@ export default class extends AbstractView {
 
   executeScript = () => {
     executeScriptTab('');
+    document.dispatchEvent(LoginEvent);
+    document.dispatchEvent(SignupEvent);
     if (LoginEvent == undefined) console.log('spa top test No.2');
     //document.dispatchEvent(LoginEvent);
     //document.dispatchEvent(SignupEvent);

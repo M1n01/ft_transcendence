@@ -1,6 +1,7 @@
 import '../scss/login.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
+import { handlePostLogin } from '../../spa/js/utility/user.js';
 
 import { Modal } from 'bootstrap';
 export const LoginEvent = new Event('LoginEvent');
@@ -78,6 +79,8 @@ document.addEventListener('LoginEvent', function () {
           return '';
         }
         document.getElementById('close-modal').click();
+        console.log('handlePostLogin No.0');
+        handlePostLogin();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);
