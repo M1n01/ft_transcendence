@@ -19,18 +19,23 @@ const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
 export const navigateTo = async (url) => {
-  const setState = async () => {
-    if (view !== undefined) {
-      const state = await view.getState();
-      history.pushState(state, null, url);
-    } else {
-      history.pushState(null, null, url);
-    }
-    view = router();
-    return await view;
-  };
-  view = await setState();
-  return view;
+  try {
+    const setState = async () => {
+      if (view !== undefined) {
+        const state = await view.getState();
+        history.pushState(state, null, url);
+      } else {
+        history.pushState(null, null, url);
+      }
+      view = router();
+      return await view;
+    };
+    view = await setState();
+    return view;
+  } catch (error) {
+    console.error('ignore:' + error);
+  }
+  return null;
 };
 
 export const router = async () => {

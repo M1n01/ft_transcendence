@@ -1,29 +1,30 @@
 import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
-//import { executeScriptTab } from '../utility/script.js';
-//import { LoginEvent } from '../../../accounts/js/login.js';
-//import { SignupEvent } from '../../../accounts/js/signup.js';
 import { executeScriptTab } from '../utility/script.js';
+import { LoginEvent } from '../../../accounts/js/login.js';
+//import { SignupEvent } from '../../../accounts/js/signup.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Login/Signup');
+    this.setTitle('Top Page');
   }
 
   getHtml = async () => {
-    const uri = getUrlWithLang('accounts/login-signup');
+    console.log('spa top test');
+    const uri = getUrlWithLang('spa/top');
     const data = fetchData(uri);
     return data;
   };
-  executeScript = () => {
-    executeScriptTab();
-    /*
-    document.dispatchEvent(LoginEvent);
-    document.dispatchEvent(SignupEvent);
 
-    document.getElementById('index-nav').hidden = true;
+  executeScript = () => {
+    executeScriptTab('');
+    if (LoginEvent == undefined) console.log('spa top test No.2');
+    //document.dispatchEvent(LoginEvent);
+    //document.dispatchEvent(SignupEvent);
+
+    /*
     const login_link = document.getElementById('tab-login');
     const signup_link = document.getElementById('tab-signup');
     const login_area = document.getElementById('login-area');
@@ -42,6 +43,7 @@ export default class extends AbstractView {
     });
     */
   };
+
   getState = () => {
     return null;
   };
