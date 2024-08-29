@@ -1,3 +1,4 @@
+import Top from '../views/Top.js';
 import Dashboard from '../views/Dashboard.js';
 import Posts from '../views/Posts.js';
 import PostView from '../views/PostView.js';
@@ -17,7 +18,8 @@ import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
 
 export const Routes = [
-  { path: '/', view: Dashboard },
+  { path: '/', view: Top },
+  { path: '/dashboard', view: Dashboard },
   { path: '/home', view: Index },
   { path: '/pong', view: Pong },
   { path: '/sign', view: Index },

@@ -279,7 +279,7 @@ LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるペー
 LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
-LOGIN_URL = "accounts:login"
+LOGIN_URL = "spa:index"
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"

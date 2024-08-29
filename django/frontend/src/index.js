@@ -3,15 +3,24 @@ import { Routes } from './spa/js/routing/routes.js';
 import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
+//import { fetchAsForm, fetchData } from './spa/js/utility/fetch.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
+import { getUrlWithLang } from './spa/js/utility/url.js';
+//import { getUrlWithLang } from '../utility/url.js';
+import fetchData from './spa/js/utility/fetch.js';
 //import { Pills } from 'bootstrap.bundle.min.js';
 //import Cookies from 'js-cookie';
 //import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap';
 import './accounts/js/two_fa.js';
+import './accounts/js/login.js';
+import './accounts/js/signup.js';
 
 import './spa/scss/spa.scss';
 import './main.scss';
+import { logout } from './spa/js/utility/user.js';
+
+console.log('test No.1');
 
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
@@ -23,7 +32,33 @@ const getDisplayedURI = (pathname) => {
   return getUrl(path);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+const loadNav = async () => {
+  try {
+    const nav_uri = getUrlWithLang('spa/nav');
+    const nav_html = await fetchData(nav_uri);
+    document.querySelector('#nav').innerHTML = nav_html;
+
+    const logout_button = document.getElementById('nav-logout-button');
+    logout_button.addEventListener('click', async () => {
+      await logout();
+    });
+  } catch (error) {
+    console.warning('ignore:' + error);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  loadNav();
+  /*
+  console.log('nav test No.2');
+  const nav_uri = getUrlWithLang('/spa/nav/');
+  console.log('nav test No.3');
+  const nav_html = await fetchData(nav_uri);
+  console.log('nav test No.4');
+  document.querySelector('#nav').innerHTML = nav_html;
+  console.log('nav test No.5');
+  */
+
   let tmp_path = window.location.pathname;
   document.body.addEventListener('click', (e) => {
     // ページ切替
