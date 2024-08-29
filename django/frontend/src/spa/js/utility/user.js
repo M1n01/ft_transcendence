@@ -27,7 +27,7 @@ export const loadNav = async () => {
       await logout();
     });
   } catch (error) {
-    console.warning('ignore:' + error);
+    console.log('ignore error:' + error);
   }
 };
 

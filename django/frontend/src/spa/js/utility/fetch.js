@@ -31,3 +31,7 @@ export default async function fetchData(url) {
   const response = await makeRequest('GET', url);
   return response.text();
 }
+export async function fetchJsonData(url) {
+  const response = await makeRequest('GET', url);
+  return response.json();
+}
