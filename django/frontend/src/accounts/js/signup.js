@@ -69,12 +69,12 @@ document.addEventListener('SignupEvent', function () {
       phone_auth_error.hidden = true;
     });
 
-    const verify_code = document.getElementById('verify-code');
+    const verify_code = document.getElementById('signup-verify-code');
     verify_code.addEventListener('input', function () {
       const failure_verify_2fa = document.getElementById('failure-verify-2fa');
       failure_verify_2fa.hidden = true;
     });
   } catch (error) {
-    console.error(error);
+    console.warning('ignore:' + error);
   }
 });
