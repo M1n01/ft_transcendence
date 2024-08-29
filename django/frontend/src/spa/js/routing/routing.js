@@ -64,9 +64,12 @@ export const router = async () => {
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
+    console.log('get HTML No.1');
     const html = await view.getHtml();
     document.querySelector('#app').innerHTML = html;
+    //console.log('get HTML No.2 execute Script html=' + html);
     view.executeScript();
+    console.log('get HTML No.3 execute Script');
   } catch (error) {
     console.error('executeScript Error:' + error);
   }
