@@ -1,11 +1,22 @@
 from django.shortcuts import render
+from django.template import loader
+from django.http import JsonResponse
+
+# from django.conf import settings
 
 # from django.http import HttpResponse
 # import asyncio
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_not_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import redirect
+
+# from django.shortcuts import redirect
+
+# from accounts.oauth import FtOAuth
+# from accounts.forms import SignUpForm, LoginForm
+from accounts.views import LoginSignupView
+
+# from django.urls import reverse_lazy
 
 # from accounts.views import LoginSignupView
 
@@ -32,11 +43,22 @@ def index(request):
 @method_decorator(login_not_required, name="dispatch")
 class Top(TemplateView):
     def get(self, request):
-        print("Top No.1")
         user = request.user
-        if user.is_authenticated:
-            print("Error ")
-        return redirect("/accounts/login-signup")
+        html = "accounts/login-signup.html"
+        is_auth = user.is_authenticated
+        extra_context = LoginSignupView.extra_context
+        if is_auth:
+            html = "accounts/login-signup.html"
+        content = loader.render_to_string(
+            html, context=extra_context, request=request, using=None
+        )
+        # test = redirect("/accounts/login-signup")
+        # byte = test.content()
+        # str = str(byte)
+        data = {"is_auth": is_auth, "html": content}
+        return JsonResponse(data)
+
+        # return redirect("/accounts/login-signup")
         # return redirect(LoginSignupView)
         # view = LoginSignupView()
         # return view
