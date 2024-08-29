@@ -75,6 +75,6 @@ document.addEventListener('SignupEvent', function () {
       failure_verify_2fa.hidden = true;
     });
   } catch (error) {
-    console.warning('ignore:' + error);
+    console.log('ignore error:' + error);
   }
 });

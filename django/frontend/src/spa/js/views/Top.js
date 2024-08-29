@@ -1,9 +1,12 @@
 import AbstractView from './AbstractView.js';
-import fetchData from '../utility/fetch.js';
+//import fetchData from '../utility/fetch.js';
+import { fetchJsonData } from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { executeScriptTab } from '../utility/script.js';
 import { LoginEvent } from '../../../accounts/js/login.js';
 import { SignupEvent } from '../../../accounts/js/signup.js';
+
+//let dispatchEvent = [];
 
 export default class extends AbstractView {
   constructor(params) {
@@ -14,8 +17,15 @@ export default class extends AbstractView {
   getHtml = async () => {
     console.log('spa top test');
     const uri = getUrlWithLang('spa/top');
-    const data = fetchData(uri);
-    return data;
+    const data = await fetchJsonData(uri);
+    //console.log('is_auth:' + data['is_auth']);
+    //console.log('html:' + data['html']);
+    if (data['is_auth']) {
+      return data['html'];
+    }
+    //dispatchEvent.push();
+
+    return data['html'];
   };
 
   executeScript = () => {
