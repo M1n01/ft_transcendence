@@ -13,7 +13,8 @@ contract ScoreKeeper is Ownable {
     int16 loserScore;
   }
 
-  Game[] public games;
+  mapping(uint256 => Game) public games;
+  mapping(uint256 => bool) public gameExists;
   uint256 public nextGameId;
 
   constructor(address initialOwner) Ownable(initialOwner) {}
@@ -25,36 +26,52 @@ contract ScoreKeeper is Ownable {
     int16 _loserScore
   ) external onlyOwner {
     require(_winner != _loser, 'Winner and loser cannot be the same');
-    // idが重複していないか確認
-    for (uint256 i = 0; i < games.length; i++) {
-      require(games[i].matchId != nextGameId, 'Match ID already exists');
-    }
+    require(!gameExists[nextGameId], 'Match ID already exists');
 
-    games.push(Game(nextGameId, block.timestamp, _winner, _winnerScore, _loser, _loserScore));
+    games[nextGameId] = Game(
+      nextGameId,
+      block.timestamp,
+      _winner,
+      _winnerScore,
+      _loser,
+      _loserScore
+    );
+    gameExists[nextGameId] = true;
     nextGameId++;
   }
 
   function getGame(uint256 _matchId) external view onlyOwner returns (Game memory) {
-    for (uint256 i = 0; i < games.length; i++) {
-      if (games[i].matchId == _matchId) {
-        return games[i];
-      }
-    }
-    revert('Match not found');
+    require(gameExists[_matchId], 'Match not found');
+    return games[_matchId];
   }
 
   function getAllGame() external view returns (Game[] memory) {
-    return games;
+    uint256 count = 0;
+    for (uint256 i = 0; i < nextGameId; i++) {
+      if (gameExists[i]) {
+        count++;
+      }
+    }
+
+    Game[] memory _games = new Game[](count);
+    uint256 index = 0;
+    for (uint256 i = 0; i < nextGameId; i++) {
+      if (gameExists[i]) {
+        _games[index] = games[i];
+        index++;
+      }
+    }
+    return _games;
   }
 
   function getGameCount() external view returns (uint256) {
-    return games.length;
+    return nextGameId;
   }
 
   function findGameByUserId(uint256 _userId) external view returns (Game[] memory) {
     uint256 count = 0;
     // 関連するゲームの数を数える
-    for (uint256 i = 0; i < games.length; i++) {
+    for (uint256 i = 0; i < nextGameId; i++) {
       if (games[i].winner == _userId || games[i].loser == _userId) {
         count++;
       }
@@ -65,7 +82,7 @@ contract ScoreKeeper is Ownable {
     Game[] memory _games = new Game[](count);
     uint256 index = 0;
     // 関連するゲームを配列に追加
-    for (uint256 i = 0; i < games.length; i++) {
+    for (uint256 i = 0; i < nextGameId; i++) {
       if (games[i].winner == _userId || games[i].loser == _userId) {
         _games[index] = games[i];
         index++;
