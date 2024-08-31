@@ -1,0 +1,65 @@
+@import '~bootstrap/scss/bootstrap';
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  //'secondary': $indigo-600,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': #18181d,
+  //'btn-secondary': $indigo-600,
+);
+
+.modal-content {
+  background-color: white;
+  color: black;
+}
+
+$body-bg: #18181d;
+.body-bg {
+  background-color: #18181d;
+  color: $white;
+}
+.bg-black {
+  background-color: #ffffff;
+  color: $white;
+}
+$black: #ffffff;
+
+.text-primary {
+  color: $light;
+}
+
+.text-pale {
+  color: #e0e0e0;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+//@import '~bootstrap/scss/bootstrap';
+
+$nav-link-color: gray;
+$black: #18181d;
+
+.nav-link {
+  border-bottom: 2px solid white;
+  //transition: border-bottom 0.3s ease;
+}
+.nav-link:not(.active) {
+  background-color: #d3d3d3;
+  color: #696969;
+}
+.nav-link:not(.active):hover {
+  background-color: #c0c0c0;
+  color: #696969;
+}
+.nav-link.active:hover {
+  background-color: $blue-600;
+  border-color: $blue-400;
+}
+
+@import '~bootstrap/scss/bootstrap';
