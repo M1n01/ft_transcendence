@@ -4,7 +4,7 @@ import globals from 'globals';
 export default [
   eslint.configs.recommended,
   {
-    files: ['django/frontend/**/*.{js,jsx}', 'eth-core/**/*.{js,jsx}'],
+    files: ['django/frontend/**/*.{js,jsx}', 'eth/**/*.{js,jsx}'],
     ignores: ['node_modules', 'django/public/', 'db_volume'],
     languageOptions: {
       globals: {

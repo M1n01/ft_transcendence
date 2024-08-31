@@ -1,7 +1,7 @@
 {
   "type": "module",
   "devDependencies": {
-    "@babel/core": "^7.24.7",
+    "@babel": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@eslint/eslintrc": "^3.1.0",
@@ -13,8 +13,8 @@
     "prettier-plugin-solidity": "^1.3.1"
   },
   "scripts": {
-    "lint": "eslint django/frontend/**/*.js eth-core/**/*.js",
-    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'eth-core/**/*.js'",
+    "lint": "eslint django/frontend/**/*.js eth/**/*.js",
+    "lint:fix": "eslint --fix 'django/frontend/**/*.{js,jsx}' 'eth/**/*.js'",
     "start": "webpack serve --hot --config webpack.dev.js",
     "build": "webpack build --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,11 +28,11 @@
     "{public,django/frontend}/**/*.{html,gql,graphql,json}": [
       "prettier --write --log-level=error"
     ],
-    "eth-core/**/*.js": [
+    "eth/**/*.js": [
       "prettier --write --log-level=error",
       "eslint --fix --quiet"
     ],
-    "eth-core/**/*.sol": [
+    "eth/**/*.sol": [
       "prettier --write --plugin=prettier-plugin-solidity --log-level=error",
       "solhint"
     ]

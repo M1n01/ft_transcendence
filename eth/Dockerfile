@@ -9,8 +9,5 @@ COPY . .
 # パッケージをインストール
 RUN npm install
 
-# solidityのコンパイル
-RUN npx hardhat compile
-
 # Hardhatノードを起動
 CMD ["npx", "hardhat", "node"]

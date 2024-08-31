@@ -34,6 +34,7 @@ requests \
 django-webpack-loader \
 djangorestframework \
 web3 \
+py-solc-x \
 pyjwt \
 sendgrid \
 twilio \

@@ -11,8 +11,8 @@ networks:
     ipam:
       config:
         - subnet: 172.38.20.0/24
-  contracts_net:
-    name: contracts_net
+  eth_net:
+    name: eth_net
     driver: bridge
     ipam:
       config:
@@ -68,15 +68,15 @@ services:
     networks:
       - django_net
       - db_net
-      - contracts_net
+      - eth_net
     tty: true
     volumes:
       - ./django/:/workspace
-      - ./eth-core/:/workspace/eth-core
+      - ./eth/:/workspace/eth
     depends_on:
       db:
         condition: service_healthy
-      contracts:
+      eth:
         condition: service_healthy
     ports:
       - 3000:3000
@@ -95,7 +95,8 @@ services:
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
       - CONTRACT_OWNER_ADDRESS=$CONTRACT_OWNER_ADDRESS
-      - CONTRACT_OWNER_PRIVATE_KEY=$CONTRACT_OWNER_PRIVATE_KEY
+      - CONTRACT_USER_ADDRESS=$CONTRACT_USER_ADDRESS
+      - CONTRACT_USER_PRIVATE_KEY=$CONTRACT_USER_PRIVATE_KEY
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
@@ -107,16 +108,16 @@ services:
       daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '
 
-  contracts:
-    container_name: 'contracts'
+  eth:
+    container_name: 'eth'
     build:
-      context: ./eth-core
+      context: ./eth
       dockerfile: Dockerfile
     networks:
-      - contracts_net
+      - eth_net
     tty: true
     volumes:
-      - ./eth-core/:/workspace
+      - ./eth/:/workspace
     expose:
       - '8545'
     healthcheck:

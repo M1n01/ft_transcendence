@@ -136,7 +136,7 @@ PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
 FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 # ブロックチェーン用ディレクトリ
-BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth-core")
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
 TEMPLATES = [
     {
