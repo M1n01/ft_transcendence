@@ -13,6 +13,7 @@ import './accounts/js/login.js';
 import './accounts/js/signup.js';
 
 import './spa/scss/spa.scss';
+import './custom_bootstrap.scss';
 import './main.scss';
 import { loadNav } from './spa/js/utility/user.js';
 
