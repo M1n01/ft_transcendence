@@ -16,12 +16,16 @@ import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
 import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
+import Games from '../views/Games.js';
+import Tournament from '../views/Tournament.js';
 
 export const Routes = [
   { path: '/', view: Top },
   { path: '/dashboard', view: Dashboard },
   { path: '/home', view: Index },
   { path: '/pong', view: Pong },
+  { path: '/games', view: Games },
+  { path: '/tournament', view: Tournament },
   { path: '/sign', view: Index },
   { path: '/signup', view: Signup },
   { path: '/login', view: Login },
