@@ -1,5 +1,7 @@
 @import 'bootstrap/scss/bootstrap';
 
+$enable-negative-margins: true;
+
 .nav-item {
   //background-color: red;
 }
@@ -46,4 +48,43 @@ body {
 .bg-nav {
   background-color: #18181d;
   color: text-white;
+}
+
+.spa-test {
+  color: #4caf50;
+}
+
+.line-height-container {
+  display: flex;
+  text-align: end;
+  align-items: end;
+  a {
+    display: flex;
+    text-align: end;
+    align-items: end;
+    vertical-align: bottom; // 下詰めにするための調整
+    display: inline-block; // インラインブロックに設定
+    line-height: normal; // リンク内のテキストの行の高さをリセット
+  }
+  span {
+    display: flex;
+    text-align: end;
+    align-items: end;
+    vertical-align: bottom; // 下詰めにするための調整
+    display: inline-block; // インラインブロックに設定
+    line-height: normal; // リンク内のテキストの行の高さをリセット
+  }
+}
+
+#alerm-number {
+  margin-left: -0.5rem !important;
+}
+
+#nav-dropdown-menu {
+  display: none;
+  background-color: red;
+}
+
+#small-menu-dropdown::before {
+  display: none !important;
 }

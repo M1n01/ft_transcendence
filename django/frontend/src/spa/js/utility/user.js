@@ -2,6 +2,8 @@ import { fetchAsForm } from './fetch.js';
 import { router } from '../routing/routing.js';
 import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
+//import 'bootstrap';
+import { Dropdown } from 'bootstrap';
 
 export function isLogined() {
   //todo
@@ -25,6 +27,28 @@ export const loadNav = async () => {
     const logout_button = document.getElementById('nav-logout-button');
     logout_button.addEventListener('click', async () => {
       await logout();
+    });
+
+    const small_menu_icon = document.getElementById('small_menu_icon');
+    //var navbarToggler = document.querySelector('.navbar-toggler');
+    const dropdown = document.getElementById('small-menu-dropdown');
+
+    const isExpanded = small_menu_icon.getAttribute('aria-expanded') === 'true';
+    console.log('test No.1');
+
+    small_menu_icon.addEventListener('click', async () => {
+      console.log('test No.2');
+      if (!isExpanded) {
+        console.log('test No.3');
+        // Bootstrapのdropdownメソッドに相当するコードを実装
+        var dropdownMenu = new Dropdown(dropdown);
+        console.log('test No.4');
+        dropdownMenu.toggle();
+        console.log('test No.5');
+      }
+      console.log('test No.6');
+
+      //await logout();
     });
   } catch (error) {
     console.log('ignore error:' + error);

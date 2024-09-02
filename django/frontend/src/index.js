@@ -7,7 +7,6 @@ import { fetchAsForm } from './spa/js/utility/fetch.js';
 //import { getUrlWithLang } from './spa/js/utility/url.js';
 //import { getUrlWithLang } from './spa/js/utility/url.js';
 //import fetchData from './spa/js/utility/fetch.js';
-import 'bootstrap';
 import './accounts/js/two_fa.js';
 import './accounts/js/login.js';
 import './accounts/js/signup.js';
