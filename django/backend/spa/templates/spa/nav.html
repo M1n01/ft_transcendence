@@ -1,18 +1,23 @@
+{% load static %} {% load i18n %}
 <body>
   <nav
     class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom pb-2 pb-md-0"
     display="{{hidden}}"
   >
     <div class="container-fluid d-flex d-flex justify-content-around">
-      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/">42 FtTranscendence</a>
+      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/" data-link>42 FtTranscendence</a>
 
       <div class="collapse navbar-collapse" id="navbar-content">
         <ul class="navbar-nav me-auto d-flex align-items-end d-none d-md-flex">
           <li class="nav-item">
-            <a class="nav-link bg-dark text-white pb-0" href="#about">ゲーム</a>
+            <a class="nav-link bg-dark text-white pb-0" href="/pong" data-link>
+              {% trans "ゲーム" %}
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link bg-dark text-white pb-0" href="#about">トーナメント</a>
+            <a class="nav-link bg-dark text-white pb-0" href="#about" data-link>
+              {% trans "トーナメント" %}
+            </a>
           </li>
         </ul>
 
@@ -67,11 +72,13 @@
                 />
               </svg>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#shop">ユーザーページ</a>
+                <a class="dropdown-item" href="#shop"> {% trans "マイページ" %} </a>
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}
-                    <a id="nav-logout-button" type="submit" class="dropdown-item">logout</a>
+                    <a id="nav-logout-button" type="submit" class="dropdown-item"
+                      >{% trans "ログアウト" %}</a
+                    >
                   </form>
                 </div>
               </div>
@@ -100,9 +107,19 @@
                 <li class="nav-item dropdown"></li>
               </ul>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action1</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/pong" data-link>{% trans "ゲーム" %}</a>
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/pong" data-link
+                    >{% trans "トーナメント" %}</a
+                  >
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/pong" data-link
+                    >{% trans "マイページ" %}</a
+                  >
+                </li>
               </ul>
             </li>
           </ul>

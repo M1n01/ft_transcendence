@@ -29,8 +29,6 @@ const getDisplayedURI = (pathname) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('load No.1');
-
   /*
   const LoginEvent = new Event('LoginEvent');
   const SignupEvent = new Event('SignupEvent');
