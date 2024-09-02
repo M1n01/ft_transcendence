@@ -1,27 +1,26 @@
 {% load static %} {% load i18n %}
 <body>
-  <nav
-    class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom pb-2 pb-md-0"
-    display="{{hidden}}"
-  >
+  <nav class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom pb-2 pb-md-0">
     <div class="container-fluid d-flex d-flex justify-content-around">
-      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/" data-link>42 FtTranscendence</a>
+      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/pong" data-link
+        >42 FtTranscendence</a
+      >
 
       <div class="collapse navbar-collapse" id="navbar-content">
-        <ul class="navbar-nav me-auto d-flex align-items-end d-none d-md-flex">
+        <ul class="navbar-nav me-auto d-flex align-items-end d-none d-md-flex  {{hidden}}">
           <li class="nav-item">
-            <a class="nav-link bg-dark text-white pb-0" href="/pong" data-link>
+            <a class="nav-link bg-dark text-white pb-0" href="/games" data-link>
               {% trans "ゲーム" %}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link bg-dark text-white pb-0" href="#about" data-link>
+            <a class="nav-link bg-dark text-white pb-0" href="/tournament" data-link>
               {% trans "トーナメント" %}
             </a>
           </li>
         </ul>
 
-        <ul class="navbar-nav me-2 d-none d-md-flex">
+        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
           <li class="nav-item dropdown">
             <div class="position-relative z-3">
               <svg
@@ -45,7 +44,7 @@
           </li>
         </ul>
 
-        <ul class="navbar-nav me-2 d-none d-md-flex">
+        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
           <li class="nav-item dropdown">
             <div
               class="d-flex nav-link dropdown-toggle bg-dark"
@@ -72,7 +71,7 @@
                 />
               </svg>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#shop"> {% trans "マイページ" %} </a>
+                <a class="dropdown-item" href="/pong"> {% trans "マイページ" %} </a>
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}
@@ -86,7 +85,7 @@
           </li>
         </ul>
       </div>
-      <div class="pe-3">
+      <div class="pe-3  {{hidden}}">
         <div
           class="collapse navbar-collapse d-md-none bg-dark justify-content-end bg-primary"
           id="nav-dropdown-menu"
@@ -108,10 +107,10 @@
               </ul>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="nav-link bg-white pb-0" href="/pong" data-link>{% trans "ゲーム" %}</a>
+                  <a class="nav-link bg-white pb-0" href="/games" data-link>{% trans "ゲーム" %}</a>
                 </li>
                 <li>
-                  <a class="nav-link bg-white pb-0" href="/pong" data-link
+                  <a class="nav-link bg-white pb-0" href="/tournament" data-link
                     >{% trans "トーナメント" %}</a
                   >
                 </li>
