@@ -93,10 +93,9 @@ class SaveGameScoreView(APIView):
         if game_id:
             try:
                 game = self.game_contract.functions.getGame(int(game_id)).call()
-                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
                 game_data = {
                     "id": game[0],
-                    "created_at": created_at,
+                    "created_at": datetime.datetime.fromtimestamp(game[1]),
                     "winner": game[2],
                     "winner_score": game[3],
                     "loser": game[4],
@@ -112,12 +111,11 @@ class SaveGameScoreView(APIView):
 
         elif user_id:
             try:
-                games = self.game_contract.functions.getGamesByUser(int(user_id)).call()
-                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
+                games = self.game_contract.functions.findGameByUserId(int(user_id)).call()
                 games_data = [
                     {
                         "id": game[0],
-                        "created_at": created_at,
+                        "created_at": datetime.datetime.fromtimestamp(game[1]),
                         "winner": game[2],
                         "winner_score": game[3],
                         "loser": game[4],
@@ -136,11 +134,10 @@ class SaveGameScoreView(APIView):
         else:
             try:
                 games = self.game_contract.functions.getAllGame().call()
-                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
                 games_data = [
                     {
                         "id": game[0],
-                        "created_at": created_at,
+                        "created_at": datetime.datetime.fromtimestamp(game[1]),
                         "winner": game[2],
                         "winner_score": game[3],
                         "loser": game[4],
