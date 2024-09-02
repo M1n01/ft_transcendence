@@ -11,6 +11,7 @@ from django.http import Http404
 # from urllib.parse import urlparse
 # from django.template import RequestContext, Template
 from django.views.decorators.http import condition
+from django.views.generic import TemplateView
 
 # import django.views.decorators.http
 # import asyncio
@@ -95,3 +96,11 @@ def index(request):
         "latest_question_list": "abcdefg",
     }
     return render(request, "pong/index.html", context)
+
+
+class GamesView(TemplateView):
+    template_name = "pong/games.html"
+
+
+class TournamentView(TemplateView):
+    template_name = "pong/tournament.html"

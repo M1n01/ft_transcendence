@@ -1,6 +1,5 @@
-from django.urls import include, path
-from django.views.generic import TemplateView
-from django.conf.urls.i18n import i18n_patterns
+from django.urls import path
+from django.views.generic import RedirectView
 from pong import views
 
 # from views import Pong
@@ -13,7 +12,9 @@ urlpatterns = [
     path("script2", views.script2, name="script2"),
     path("test", views.test),
     path("index", views.index),
-    path("", views.index),
+    path("tournament", views.TournamentView.as_view(), name="games"),
+    path("games", views.GamesView.as_view(), name="games"),
+    path("", RedirectView.as_view(url="/games")),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、
 # それらを保持するディレクトリを定義する

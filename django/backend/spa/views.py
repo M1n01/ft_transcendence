@@ -70,14 +70,13 @@ class Nav(TemplateView):
     # template_name = "/spa/nav.html"
 
     def get(self, request):
-        print("spa Nav No.1")
         user = request.user
-        print("spa Nav No.2")
+        context = {"hidden": "d-none d-md-none"}
         if user.is_authenticated:
+            context = {"hidden": ""}
             print("Error ")
 
-        print("spa Nav No.3")
-        return render(request, "spa/nav.html")
+        return render(request, "spa/nav.html", context=context)
         # return redirect("/spa/nav")
         # return redirect(LoginSignupView)
         # view = LoginSignupView()
