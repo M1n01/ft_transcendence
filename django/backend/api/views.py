@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Game, SmartContract
+from .models import Game
 from .serializers import GameRequestSerializer, GameResponseSerializer
 import json
 import os
@@ -15,84 +15,53 @@ import datetime
 # from web3.gas_strategies.time_based import medium_gas_price_strategy
 
 
+def get_hardhat_compiled_contract():
+    contract_path = os.path.join(
+        settings.BLOCKCHAIN_DIR,
+        "artifacts",
+        "contracts",
+        "ScoreKeeper.sol",
+        "ScoreKeeper.json",
+    )
+    with open(contract_path, "r") as file:
+        contract_json = json.load(file)
+    return {"abi": contract_json["abi"], "bin": contract_json["bytecode"]}
+
+
+def deploy_contract(contract_interface):
+    contract = w3.eth.contract(
+        abi=contract_interface["abi"], bytecode=contract_interface["bin"]
+    )
+
+    address = account.address
+
+    transaction = contract.constructor(address).build_transaction(
+        {
+            "from": address,
+            "nonce": w3.eth.get_transaction_count(address),
+        }
+    )
+    signed_txn = w3.eth.account.sign_transaction(transaction, settings.PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    return tx_receipt.contractAddress
+
+
+# ブロックチェーンの接続
+w3 = Web3(Web3.HTTPProvider("http://eth:8545"))
+account = w3.eth.account.from_key(settings.PRIVATE_KEY)
+contract_interface = get_hardhat_compiled_contract()
+address = deploy_contract(contract_interface)
+game_contract = w3.eth.contract(address=address, abi=contract_interface["abi"])
+
+
 class SaveGameScoreView(APIView):
-    def __init__(self):
-        self.w3 = Web3(Web3.HTTPProvider("http://eth:8545"))
-        # self.w3.eth.set_gas_price_strategy(medium_gas_price_strategy)  # ガス価格を設定
-        self.account = self.w3.eth.account.from_key(settings.PRIVATE_KEY)
-        self.setup_contract()
-
-    def setup_contract(self):
-        try:
-            contract = SmartContract.objects.get(name="ScoreKeeper")
-            self.game_contract = self.w3.eth.contract(
-                address=contract.address, abi=contract.abi
-            )
-        except SmartContract.DoesNotExist:
-            contract_interface = self.get_hardhat_compiled_contract()
-            address = self.deploy_contract(contract_interface)
-            SmartContract.objects.create(
-                name="ScoreKeeper", address=address, abi=contract_interface["abi"]
-            )
-            self.game_contract = self.w3.eth.contract(
-                address=address, abi=contract_interface["abi"]
-            )
-
-    # def compile_source_file(self):
-    #     install_solc(version="0.8.24")
-    #     contract_path = os.path.join(
-    #         settings.BLOCKCHAIN_DIR, "contracts", "ScoreKeeper.sol"
-    #     )
-    #     with open(contract_path, "r") as file:
-    #         contract_source_file = file.read()
-
-    #     compiled_sol = compile_source(
-    #         contract_source_file, output_values=["abi", "bin"]
-    #     )
-    #     return compiled_sol
-
-    def get_hardhat_compiled_contract(self):
-        contract_path = os.path.join(
-            settings.BLOCKCHAIN_DIR,
-            "artifacts",
-            "contracts",
-            "ScoreKeeper.sol",
-            "ScoreKeeper.json",
-        )
-        with open(contract_path, "r") as file:
-            contract_json = json.load(file)
-
-        return {"abi": contract_json["abi"], "bin": contract_json["bytecode"]}
-
-    def deploy_contract(self, contract_interface):
-        contract = self.w3.eth.contract(
-            abi=contract_interface["abi"], bytecode=contract_interface["bin"]
-        )
-
-        address = self.account.address
-
-        transaction = contract.constructor(address).build_transaction(
-            {
-                "from": address,
-                "nonce": self.w3.eth.get_transaction_count(address),
-            }
-        )
-        signed_txn = self.w3.eth.account.sign_transaction(
-            transaction, settings.PRIVATE_KEY
-        )
-        tx_hash = self.w3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        tx_receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
-        return tx_receipt.contractAddress
-
-    def get_contract(self):
-        return self.game_contract
-
     def get(self, request):
         game_id = request.query_params.get("game_id")
         user_id = request.query_params.get("user_id")
         if game_id:
             try:
-                game = self.game_contract.functions.getGame(int(game_id)).call()
+                game = game_contract.functions.getGame(int(game_id)).call()
                 game_data = {
                     "id": game[0],
                     "created_at": datetime.datetime.fromtimestamp(game[1]),
@@ -111,7 +80,7 @@ class SaveGameScoreView(APIView):
 
         elif user_id:
             try:
-                games = self.game_contract.functions.findGameByUserId(int(user_id)).call()
+                games = game_contract.functions.findGameByUserId(int(user_id)).call()
                 games_data = [
                     {
                         "id": game[0],
@@ -133,7 +102,7 @@ class SaveGameScoreView(APIView):
 
         else:
             try:
-                games = self.game_contract.functions.getAllGame().call()
+                games = game_contract.functions.getAllGame().call()
                 games_data = [
                     {
                         "id": game[0],
@@ -159,29 +128,36 @@ class SaveGameScoreView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            transaction = self.game_contract.functions.createGame(
+            transaction = game_contract.functions.createGame(
                 serializer.validated_data["winner"],
                 serializer.validated_data["winner_score"],
                 serializer.validated_data["loser"],
                 serializer.validated_data["loser_score"],
             ).build_transaction(
                 {
-                    "from": self.account.address,
-                    "nonce": self.w3.eth.get_transaction_count(self.account.address),
+                    "from": account.address,
+                    "nonce": w3.eth.get_transaction_count(account.address),
                 }
             )
 
-            signed_txn = self.w3.eth.account.sign_transaction(
+            signed_txn = w3.eth.account.sign_transaction(
                 transaction, settings.PRIVATE_KEY
             )
-            tx_hash = self.w3.eth.send_raw_transaction(signed_txn.raw_transaction)
-            receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
+            tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
+            receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+            # イベントをキャッチしてタイムスタンプを取得
+            logs = game_contract.events.GameCreated().process_receipt(receipt)
+            game_id = logs[0]["args"]["matchId"]
+            created_at = logs[0]["args"]["createdAt"]
 
             return Response(
                 {
                     "status": "game created",
                     "tx_hash": tx_hash.hex(),
                     "data": serializer.data,
+                    "id": game_id,
+                    "created_at": created_at,
                 },
                 status=status.HTTP_201_CREATED,
             )

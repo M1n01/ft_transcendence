@@ -19,6 +19,8 @@ contract ScoreKeeper is Ownable {
 
   constructor(address initialOwner) Ownable(initialOwner) {}
 
+  event GameCreated(uint256 matchId, uint256 createdAt);
+
   function createGame(
     uint256 _winner,
     int16 _winnerScore,
@@ -37,6 +39,9 @@ contract ScoreKeeper is Ownable {
       _loserScore
     );
     gameExists[nextGameId] = true;
+
+    emit GameCreated(nextGameId, block.timestamp);
+
     nextGameId++;
   }
 
