@@ -1,36 +1,28 @@
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark border-bottom">
-    <div class="container-fluid">
-      <a class="navbar-brand ms-3" href="index.html">42 FtTranscendence</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasDarkNavbar"
-        aria-controls="offcanvasDarkNavbar"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- ナビゲーション -->
-      <div class="collapse navbar-collapse" id="navbar-content">
-        <!-- ナビゲーションメニュー -->
-        <!-- 左側メニュー：トップページの各コンテンツへのリンク -->
+  <nav
+    class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom"
+    display="{{hidden}}"
+  >
+    <div class="container-fluid d-flex d-flex justify-content-around">
+      <a class="navbar-brand ms-3 fw-bold fs-3 mb-2" href="/">42 FtTranscendence</a>
 
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link bg-dark text-white" href="#"
-              >Game<span class="visually-hidden">(current)</span></a
+      <div class="collapse navbar-collapse" id="navbar-content">
+        <ul class="navbar-nav me-auto d-flex align-items-end d-none d-md-flex">
+          <li class="nav-item d-flex align-items-end">
+            <div class="line-height-container">
+              <a class="nav-link bg-dark text-white" href="#"
+                >Game<span class="visually-hidden">(current)</span></a
+              >
+            </div>
+          </li>
+          <li class="nav-item h-100">
+            <a class="nav-link bg-dark text-white" href="#about"
+              ><span class="align-text-bottom d-flex align-items-end">トーナメント</span></a
             >
           </li>
-          <li class="nav-item">
-            <a class="nav-link bg-dark text-white" href="#about">トーナメント</a>
-          </li>
-          <!-- ドロップダウン -->
         </ul>
-        <!-- 右側メニュー：お問い合わせページへのリンク -->
 
-        <ul class="navbar-nav me-2">
+        <ul class="navbar-nav me-2 d-none d-md-flex">
           <li class="nav-item dropdown">
             <div class="position-relative z-3">
               <svg
@@ -38,7 +30,7 @@
                 width="32"
                 height="32"
                 fill="white"
-                class="bi bi-bell"
+                class="bi-bell"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -46,14 +38,15 @@
                 />
               </svg>
               <span
-                class="position-absolute top-0 start-100 z-2 translate-middle badge rounded-pill bg-secondary"
+                id="alerm-number"
+                class="top-0 start-100 z-2 translate-middle badge rounded-pill bg-secondary text-red"
                 >1 <span class="visually-hidden">unread messages</span></span
               >
             </div>
           </li>
         </ul>
 
-        <ul class="navbar-nav me-2">
+        <ul class="navbar-nav me-2 d-none d-md-flex">
           <li class="nav-item dropdown">
             <div
               class="d-flex nav-link dropdown-toggle bg-dark"
@@ -91,38 +84,38 @@
             </div>
           </li>
         </ul>
-        <!-- /ナビゲーションメニュー -->
       </div>
+      <div class="pe-3">
+        <div
+          class="collapse navbar-collapse d-md-none bg-dark justify-content-end bg-primary"
+          id="nav-dropdown-menu"
+        >
+          <ul class="navbar-nav ml-auto d-md-none">
+            <li class="nav-item dropstart">
+              <button
+                id="small-menu-dropdown"
+                class="btn btn-secondary dropdown-toggle bg-dark"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <ul class="navbar-nav ml-auto d-md-none">
+                <li class="nav-item dropdown"></li>
+              </ul>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action1</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <!-- /サブコンポーネント -->
     </div>
   </nav>
-
-  <!--
-  <nav class="navbar nabvar-expand-md" id="index-nav">
-    <a id="top" href="/top" class="nav__link" data-link>Top</a>
-    <a id="test" href="/home" class="nav__link" data-link>Index</a>
-    <a href="/pong" class="nav__link pong" data-link>Pong</a>
-    <a href="/accounts" class="nav__link" data-link>Accounts</a>
-    <a href="/admin" class="nav__link" data-link>Admin</a>
-    <a href="/posts" class="nav__link" data-link>Posts</a>
-    <a href="/settings" class="nav__link" data-link>Settings</a>
-    <a href="/lang" class="nav__link" data-link id="lang-page">Lang</a>
-    <a href="/script" class="nav__link" data-link>Script</a>
-    <a href="/scriptt" class="nav__link" data-link>Script2</a>
-    <a href="/signup-two-fa" class="nav__link" data-link>SignupTwoFA</a>
-  </nav>
-
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              インフォメーション
-            </a>
-
-
---></body>
+</body>
