@@ -10,6 +10,7 @@ import os
 from django.conf import settings
 from web3 import Web3
 from solcx import compile_source, install_solc, set_solc_version
+import datetime
 
 # from web3.gas_strategies.time_based import medium_gas_price_strategy
 
@@ -92,7 +93,16 @@ class SaveGameScoreView(APIView):
         if game_id:
             try:
                 game = self.game_contract.functions.getGame(int(game_id)).call()
-                serializer = GameResponseSerializer(game)
+                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
+                game_data = {
+                    "id": game[0],
+                    "created_at": created_at,
+                    "winner": game[2],
+                    "winner_score": game[3],
+                    "loser": game[4],
+                    "loser_score": game[5],
+                }
+                serializer = GameResponseSerializer(game_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(
@@ -103,7 +113,19 @@ class SaveGameScoreView(APIView):
         elif user_id:
             try:
                 games = self.game_contract.functions.getGamesByUser(int(user_id)).call()
-                serializer = GameResponseSerializer(games, many=True)
+                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
+                games_data = [
+                    {
+                        "id": game[0],
+                        "created_at": created_at,
+                        "winner": game[2],
+                        "winner_score": game[3],
+                        "loser": game[4],
+                        "loser_score": game[5],
+                    }
+                    for game in games
+                ]
+                serializer = GameResponseSerializer(games_data, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(
@@ -114,7 +136,19 @@ class SaveGameScoreView(APIView):
         else:
             try:
                 games = self.game_contract.functions.getAllGame().call()
-                serializer = GameResponseSerializer(games, many=True)
+                created_at = datetime.datetime.fromtimestamp(game[1])  # エポックタイムから変換
+                games_data = [
+                    {
+                        "id": game[0],
+                        "created_at": created_at,
+                        "winner": game[2],
+                        "winner_score": game[3],
+                        "loser": game[4],
+                        "loser_score": game[5],
+                    }
+                    for game in games
+                ]
+                serializer = GameResponseSerializer(games_data, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(
