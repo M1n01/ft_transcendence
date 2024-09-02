@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import SaveGameScoreView
+from .views import SaveMatchScoreView
 
 urlpatterns = [
-    path("scores/", SaveGameScoreView.as_view(), name="scores"),
+    path("scores/", SaveMatchScoreView.as_view(), name="scores"),
 ]
