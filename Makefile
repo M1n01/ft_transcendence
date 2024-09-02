@@ -14,7 +14,7 @@ DJANGO_PROD_SETTING	:= $(SRCDIR)/settings_prod.py
 NGINX_IMAGE		:= ft_transcendence-nginx
 DB_IMAGE			:= ft_transcendence-db
 DJANGO_IMAGE	:= ft_transcendence-django
-CONTRACT_IMAGE	:= ft_transcendence-contracts
+ETH_IMAGE	:= ft_transcendence-eth
 
 DB_NET				:= db_net
 DJANGO_NET		:= django_net
@@ -29,7 +29,7 @@ clean: stop
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/*.pyc"  -delete
 	find . -type d -name __pycache__ -exec rm -r {} \+
-	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE) $(CONTRACT_IMAGE)
+	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE) $(ETH_IMAGE)
 
 fclean:
 	-$(MAKE) clean

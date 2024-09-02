@@ -94,9 +94,6 @@ services:
       - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
-      - CONTRACT_OWNER_ADDRESS=$CONTRACT_OWNER_ADDRESS
-      - CONTRACT_USER_ADDRESS=$CONTRACT_USER_ADDRESS
-      - CONTRACT_USER_PRIVATE_KEY=$CONTRACT_USER_PRIVATE_KEY
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
