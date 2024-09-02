@@ -111,8 +111,8 @@ services:
   eth:
     container_name: 'eth'
     build:
-      context: ./eth
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/eth/Dockerfile
     networks:
       - eth_net
     tty: true
