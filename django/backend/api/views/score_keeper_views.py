@@ -47,7 +47,7 @@ def deploy_contract(contract_interface):
 
 
 # ブロックチェーンの接続
-w3 = Web3(Web3.HTTPProvider("http://eth:8545"))
+w3 = Web3(Web3.HTTPProvider(settings.PROVIDER_URL))
 account = w3.eth.account.from_key(settings.PRIVATE_KEY)
 contract_interface = get_hardhat_compiled_contract()
 address = deploy_contract(contract_interface)
