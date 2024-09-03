@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from .views.score_keeper_views import SaveMatchScoreView
 
 urlpatterns = [
