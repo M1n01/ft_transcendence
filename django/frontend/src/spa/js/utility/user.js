@@ -2,6 +2,7 @@ import { fetchAsForm } from './fetch.js';
 import { router } from '../routing/routing.js';
 import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
+import { navigateTo } from '..//routing/routing.js';
 //import 'bootstrap';
 import { Dropdown } from 'bootstrap';
 
@@ -65,7 +66,9 @@ export const logout = async () => {
   const formData = new FormData(form);
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
+    navigateTo('login-signup');
+    //history.pushState(null, null, 'login-signup');
     await reload();
-    document.getElementById('nav').hidden = true;
+    //document.getElementById('nav').hidden = true;
   }
 };

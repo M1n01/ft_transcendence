@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.template import loader
+
+# from django.template import loader
 from django.http import JsonResponse
 
 # from django.conf import settings
@@ -14,7 +15,7 @@ from django.utils.decorators import method_decorator
 
 # from accounts.oauth import FtOAuth
 # from accounts.forms import SignUpForm, LoginForm
-from accounts.views import LoginSignupView
+# from accounts.views import LoginSignupView
 
 # from django.urls import reverse_lazy
 
@@ -40,35 +41,12 @@ def index(request):
     return render(request, "spa/index.html")
 
 
-@method_decorator(login_not_required, name="dispatch")
 class Top(TemplateView):
-    def get(self, request):
-        user = request.user
-        html = "accounts/login-signup.html"
-        is_auth = user.is_authenticated
-        extra_context = LoginSignupView.extra_context
-        if is_auth:
-            html = "accounts/login-signup.html"
-        content = loader.render_to_string(
-            html, context=extra_context, request=request, using=None
-        )
-        # test = redirect("/accounts/login-signup")
-        # byte = test.content()
-        # str = str(byte)
-        data = {"is_auth": is_auth, "html": content}
-        return JsonResponse(data)
-
-        # return redirect("/accounts/login-signup")
-        # return redirect(LoginSignupView)
-        # view = LoginSignupView()
-        # return view
-        # return RedirectView.as_view(url="/accounts/login-signup/")
+    template_name = "pong/games.html"
 
 
 @method_decorator(login_not_required, name="dispatch")
 class Nav(TemplateView):
-    # template_name = "/spa/nav.html"
-
     def get(self, request):
         user = request.user
         context = {"hidden": "d-none d-md-none"}
@@ -82,6 +60,30 @@ class Nav(TemplateView):
         # view = LoginSignupView()
         # return view
         # return RedirectView.as_view(url="/accounts/login-signup/")
+
+
+@method_decorator(login_not_required, name="dispatch")
+class ToLogin(TemplateView):
+    template_name = "spa/error.html"
+
+
+@method_decorator(login_not_required, name="dispatch")
+class isLogin(TemplateView):
+    print("isLogin No.0")
+
+    def get(self, request):
+        print("isLogin No.1")
+        user = request.user
+        is_redirect = True
+        uri = "/login-signup"
+        print("isLogin No.2")
+        if user.is_authenticated:
+            is_redirect = False
+
+        json = {"is_redirect": is_redirect, "uri": uri}
+        # data = {"is_auth": "is_auth", "html": "content", "uri": uri}
+        print("isLogin No.3")
+        return JsonResponse(json)
 
 
 # テスト用　後で消す

@@ -114,7 +114,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -281,10 +281,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # 認証
-LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:top"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "accounts:login-signup"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
+LOGIN_URL = "spa:to-login"
 # AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH

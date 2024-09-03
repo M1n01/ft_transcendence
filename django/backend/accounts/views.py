@@ -383,11 +383,12 @@ class UserLogin(LoginView):
 class UserLogout(LogoutView):
     redirect_field_name = "redirect"
     # success_url = reverse_lazy("accounts:success-logout")
-    success_url = reverse_lazy("spa:index")
+    # success_url = reverse_lazy("spa:top")
+    success_url = reverse_lazy("spa:top")
 
-    def post(self, request, *args, **kwargs):
-        # request.session["is_2fa"] = False
-        return super().post(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    # request.session["is_2fa"] = False
+    # return super().post(request, *args, **kwargs)
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -396,7 +397,7 @@ class SignupView(CreateView):
     form_class = SignUpForm
     template_name = "accounts/signup.html"
     # success_url = reverse_lazy("accounts:success-signup")
-    success_url = reverse_lazy("spa:index")
+    success_url = reverse_lazy("spa:top")
     usable_password = None
 
     # cnt = "0-"

@@ -21,14 +21,15 @@ const pathToRegex = (path) =>
 export const navigateTo = async (url) => {
   try {
     const setState = async () => {
-      if (view !== undefined) {
+      console.log('view:' + view);
+      if (view !== undefined && view !== null) {
         const state = await view.getState();
         history.pushState(state, null, url);
       } else {
         history.pushState(null, null, url);
       }
-      view = router();
-      return await view;
+      view = await router();
+      return view;
     };
     view = await setState();
     return view;
@@ -64,7 +65,16 @@ export const router = async () => {
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
-    console.log('get HTML No.1');
+    const json = await view.checkRedirect();
+    if (json['is_redirect']) {
+      console.log('is redirected OK No.1');
+
+      //history.pushState(null, null, json['uri']);
+      navigateTo(json['uri']);
+      router();
+      return;
+    }
+    console.log('is redirected OK No.2');
     const html = await view.getHtml();
     document.querySelector('#app').innerHTML = html;
     //console.log('get HTML No.2 execute Script html=' + html);
