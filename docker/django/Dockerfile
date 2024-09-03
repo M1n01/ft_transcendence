@@ -6,7 +6,6 @@ ENV NVM_VERSION v0.39.7
 ENV NVM_DIR /usr/local/nvm
 #ENV NODE_VERSION v20.15.1
 ENV NODE_VERSION v21.4.0
-# ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 
 RUN mkdir /usr/local/nvm \
     && curl https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash \
