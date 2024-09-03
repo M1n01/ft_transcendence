@@ -114,7 +114,7 @@ services:
       - eth_net
     tty: true
     volumes:
-      - ./eth/:/workspace
+      - ./eth/:/workspace/eth
     expose:
       - '8545'
     healthcheck:
