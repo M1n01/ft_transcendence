@@ -4,9 +4,7 @@ import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
-//import { getUrlWithLang } from './spa/js/utility/url.js';
-//import { getUrlWithLang } from './spa/js/utility/url.js';
-//import fetchData from './spa/js/utility/fetch.js';
+
 import './accounts/js/two_fa.js';
 import './accounts/js/login.js';
 import './accounts/js/signup.js';

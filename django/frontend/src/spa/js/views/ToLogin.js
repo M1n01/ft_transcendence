@@ -1,26 +1,24 @@
 import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
-import { fetchJsonData } from '../utility/fetch.js';
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Log in Success');
+    this.setTitle('Error Page');
   }
-
   checkRedirect = async () => {
-    const json = fetchJsonData('/spa/is-login');
-    return json;
+    return { is_redirect: false };
   };
+
   getHtml = async () => {
-    const uri = getUrlWithLang('accounts/signup-two-fa/');
+    const uri = getUrlWithLang('spa/top');
     const data = fetchData(uri);
     return data;
   };
-  executeScript = () => {
-    //executeScriptTab('');
-  };
+
+  executeScript = () => {};
+
   getState = () => {
     return null;
   };
