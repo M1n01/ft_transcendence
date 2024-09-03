@@ -10,6 +10,9 @@ export default class extends AbstractView {
     this.setTitle('Log in');
   }
 
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
   getHtml = async () => {
     const uri = getUrlWithLang('accounts/login');
     const data = fetchData(uri);

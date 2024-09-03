@@ -1,5 +1,6 @@
 import AbstractView from './AbstractView.js';
 import { executeScriptTab } from '../utility/script.js';
+import { fetchJsonData } from '../utility/fetch.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -7,6 +8,10 @@ export default class extends AbstractView {
     this.setTitle('Posts');
   }
 
+  checkRedirect = async () => {
+    const json = fetchJsonData('/spa/is-login');
+    return json;
+  };
   getHtml = async () => {
     return `
             <h1>Posts2</h1>

@@ -9,6 +9,9 @@ export default class extends AbstractView {
     this.setTitle('Lang');
   }
 
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
   getHtml = async () => {
     const uri = getUrlWithLang('pong/lang');
     const data = await fetchData(uri);

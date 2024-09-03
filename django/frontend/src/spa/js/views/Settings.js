@@ -7,6 +7,9 @@ export default class extends AbstractView {
     this.setTitle('Settings');
   }
 
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
   getHtml = async () => {
     return `
             <h1>Settings</h1>

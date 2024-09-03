@@ -9,6 +9,9 @@ export default class extends AbstractView {
     this.setTitle('Two-Factor Authentication');
   }
 
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
   getHtml = async () => {
     const uri = getUrlWithLang('accounts/two-fa/');
     const data = fetchData(uri);

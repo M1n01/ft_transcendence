@@ -2,7 +2,7 @@
 <body>
   <nav class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom pb-2 pb-md-0">
     <div class="container-fluid d-flex d-flex justify-content-around">
-      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/pong" data-link
+      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/top" data-link
         >42 FtTranscendence</a
       >
 
@@ -71,11 +71,11 @@
                 />
               </svg>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/pong"> {% trans "マイページ" %} </a>
+                <a class="dropdown-item" href="/pong" data-link> {% trans "マイページ" %} </a>
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}
-                    <a id="nav-logout-button" type="submit" class="dropdown-item"
+                    <a id="nav-logout-button" type="submit" class="dropdown-item" data-link
                       >{% trans "ログアウト" %}</a
                     >
                   </form>
