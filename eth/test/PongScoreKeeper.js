@@ -50,27 +50,6 @@ describe('PongScoreKeeper contract', function () {
     await addAndVerifyMatch(109, 70, 110, 65);
   });
 
-  // it('Should handle concurrent matches correctly', async function () {
-  //   await Promise.all([
-  //     pongScoreKeeper.connect(owner).createMatch(111, 80, 112, 75),
-  //     pongScoreKeeper.connect(owner).createMatch(113, 90, 114, 85),
-  //   ]);
-
-  //   const match1 = await pongScoreKeeper.getMatch(6);
-  //   expect(match1.matchId).to.equal(6);
-  //   expect(match1.winner).to.equal(111);
-  //   expect(match1.winnerScore).to.equal(80);
-  //   expect(match1.loser).to.equal(112);
-  //   expect(match1.loserScore).to.equal(75);
-
-  //   const match2 = await pongScoreKeeper.getMatch(7);
-  //   expect(match2.matchId).to.equal(7);
-  //   expect(match2.winner).to.equal(113);
-  //   expect(match2.winnerScore).to.equal(90);
-  //   expect(match2.loser).to.equal(114);
-  //   expect(match2.loserScore).to.equal(85);
-  // });
-
   it('Should estimate gas usage for adding a match', async function () {
     const tx = await pongScoreKeeper.createMatch(101, 50, 102, 45);
     const receipt = await tx.wait();
@@ -85,16 +64,4 @@ describe('PongScoreKeeper contract', function () {
       pongScoreKeeper.connect(nonOwner).createMatch(1, 100, 2, 200)
     ).to.be.revertedWithCustomError(pongScoreKeeper, 'OwnableUnauthorizedAccount');
   });
-
-  // it('Should handle adding multiple matches', async function () {
-  //   const matchesToAdd = 100;
-  //   for (let i = 0; i < matchesToAdd; i++) {
-  //     await pongScoreKeeper.createMatch(i + 101, i + 50, i + 102, i + 45);
-  //   }
-  //   const lastMatch = await pongScoreKeeper.getMatch(matchesToAdd);
-  //   expect(lastMatch.winner).to.equal(matchesToAdd + 101);
-  //   expect(lastMatch.winnerScore).to.equal(matchesToAdd + 50);
-  //   expect(lastMatch.loser).to.equal(matchesToAdd + 102);
-  //   expect(lastMatch.loserScore).to.equal(matchesToAdd + 45);
-  // });
 });
