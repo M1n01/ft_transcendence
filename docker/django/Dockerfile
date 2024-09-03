@@ -23,7 +23,7 @@ COPY ./make_ca.sh /tmp/make_ca.sh
 COPY ./make_db_setting.sh /tmp/make_db_setting.sh
 RUN python -m pip install --upgrade pip && \
 python -m pip install django-cors-headers \
-Django==5.0.6 \
+Django==5.1.0 \
 daphne \
 psycopg \
 django-oauth-toolkit \

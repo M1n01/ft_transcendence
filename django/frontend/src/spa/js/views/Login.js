@@ -11,7 +11,6 @@ export default class extends AbstractView {
   }
 
   getHtml = async () => {
-    console.log('Login Test');
     const uri = getUrlWithLang('accounts/login');
     const data = fetchData(uri);
     return data;

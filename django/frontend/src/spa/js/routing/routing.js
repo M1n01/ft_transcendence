@@ -8,7 +8,6 @@ window.addEventListener('popstate', async (event) => {
   try {
     const stateJson = await event.state;
     for (let key in stateJson) {
-      console.log(key + ': ' + stateJson[key]);
       document.getElementById(key).value = stateJson[key];
     }
   } catch (error) {
@@ -59,10 +58,9 @@ export const router = async () => {
   }
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
-  const html = await view.getHtml();
-  document.querySelector('#app').innerHTML = html;
-
   try {
+    const html = await view.getHtml();
+    document.querySelector('#app').innerHTML = html;
     view.executeScript();
   } catch (error) {
     console.error('executeScript Error:' + error);
@@ -85,7 +83,6 @@ export async function updatePage(res) {
       return;
     }
     const contentType = await res.headers.get('content-type');
-    console.log('header=' + contentType);
     if (contentType && contentType.indexOf('application/json') !== -1) {
       // 他にどうしようもなかったので特別対応
       // Jsonで遷移するurlを取得する。

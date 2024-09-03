@@ -4,6 +4,10 @@ import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
+//import { Pills } from 'bootstrap.bundle.min.js';
+//import Cookies from 'js-cookie';
+//import { Tooltip, Toast, Popover } from 'bootstrap';
+import 'bootstrap';
 import './accounts/js/two_fa.js';
 
 import './spa/scss/spa.scss';
@@ -24,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', (e) => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
-      console.log('click a tag');
       e.preventDefault();
       tmp_path = e.target.href;
       navigateTo(tmp_path);
@@ -34,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const document_form = document.getElementsByTagName('FORM');
     if (document_form && document_form.length > 0) {
       document.getElementsByTagName('FORM')[0].addEventListener('submit', async function (event) {
-        console.log('click submit');
         event.preventDefault(); // フォームのデフォルトの送信を防止
         const form = event.target;
         if (form.disabled == true) {
@@ -60,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //多言語切替
     if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
-      console.log('click chang lang');
       e.preventDefault();
 
       const lang_url = '/i18n/setlang/';

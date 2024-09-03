@@ -9,7 +9,7 @@ export default class extends AbstractView {
   }
 
   getHtml = async () => {
-    const uri = getUrlWithLang('accounts/success-login/');
+    const uri = getUrlWithLang('accounts/signup-two-fa/');
     const data = fetchData(uri);
     return data;
   };

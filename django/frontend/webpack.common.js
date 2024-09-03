@@ -26,6 +26,10 @@ export default {
   module: {
     rules: [
       {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: '../public/asset/',
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -70,7 +74,9 @@ export default {
   resolve: {
     extensions: ['.js'],
     alias: {
-      '@': path.resolve(__dirname, 'static/spa/js'),
+      '@': path.resolve(__dirname, './src/'),
+      '@spa': path.resolve(__dirname, './src/spa/'),
+      '@asset': path.resolve(__dirname, '../public/static/asset/'),
       '~': __dirname,
     },
   },

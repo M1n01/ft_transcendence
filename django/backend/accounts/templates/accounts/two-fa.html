@@ -8,6 +8,11 @@
   <body>
     <div>{% trans "2段階認証を行います" %}</div>
     <form hidden>dummy form</form>
+
+      <div>{% trans "認証コードが届いていない場合、下記ボタンからやり直してください"%}<div>
+        <button id="resend">{% trans "再送信"%}</button>
+      </div>
+      <!--
     <form action="{% url 'accounts:two-fa' %}" method="post" id="two_fa_form">
       {% csrf_token %}
       <div for="phone">{% trans "認証方法を選択してください" %}:</div>
@@ -21,24 +26,7 @@
       <input type="radio" id="option_app" name="mode" value="APP" />
       <label for="option3">{% trans "App認証" %}</label><br /><br />
 
-      <div id="input_sms" hidden>
-        <label>{% trans "電話番号" %}:</label>
-        <input type="tel" id="phone_number" name="id" pattern="[0-9]*" />
-        <div>{% trans "ハイフン(-)はつけないで、数字のみで記入してください" %}</div>
-      </div>
-      <div id="input_email">
-        <label>{% trans "メールアドレス" %}:</label>
-        <input type="email" id="email_address" name="id" />
-        <div>{% trans "有効なメールアドレスを入力してください" %}</div>
-      </div>
-      <div id="input_app" hidden>
-        <label>{% trans "App" %}:</label>
-        <input type="email" id="app_name" name="id" />
-        <div>{% trans "有効なメールアドレスを入力してください" %}</div>
-      </div>
-      <br /><br />
-
-      <input id="two-fa-submit" , type="submit" value={% trans "送信" %} />
+      <input id="two-fa-verify" , type="submit" value={% trans "送信" %} />
     </form>
 
     <div id="failure-send-2fa" class ="failure-word" hidden>
@@ -46,25 +34,28 @@
       <br/>
       {% trans "入力した内容を見直して再度実行してください" %}
     </div>
+-->
 
-    <div id="verify-input" hidden>
-      <form action="{% url 'accounts:two-fa-verify' %}" method="post" id="two_fa_verify_form">
-        {% csrf_token %}
-        <div>{% trans "認証コードを入力してください" %}</div>
+    <div id="verify-input">
+    <form action="{% url 'accounts:two-fa-verify' %}" method="post" id="two-fa-form">
+      {% csrf_token %}
+      <!--
+      <input type="text" id="common-mode" name="mode" hidden />
+      <input type="text" id="common-input" name="id" hidden />
+      <input type="text" id="app-url" name="app_secret" hidden />
+-->
+      <div id="verify-code-block">
+        {% trans "認証コードを入力してください" %}
         <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
-        <input type="text" id="common-mode" name="mode" hidden>
-        <input type="text" id="common-input" name="id" hidden>
-        <input id="verify-submit" , type="submit" value="送信" />
-      </form>
+      </div>
+      <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
+    </form>
       <div class ="failure-word" id="failure-verify" hidden>{%trans "認証に失敗しました"%}
         <div>{% trans "認証コードを見直して再度実行してください"%}</div>
 
       </div>
       <br/>
       <br/>
-      <div>{% trans "認証コードが届いていない場合、下記ボタンからやり直してください"%}<div>
-      <button id="resend">{% trans "やり直す"%}</button>
-    </div>
 
     <script>
       console.log('2FA Event Test');

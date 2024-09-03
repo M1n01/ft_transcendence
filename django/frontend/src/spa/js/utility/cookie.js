@@ -1,7 +1,7 @@
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 
-const lang = Cookies.get('lang');
-console.log(lang);
+//const lang = Cookies.get('lang');
+//console.log(lang);
 
 export function getCookie(name) {
   let cookieValue = null;

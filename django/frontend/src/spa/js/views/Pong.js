@@ -11,7 +11,6 @@ export default class extends AbstractView {
   getHtml = async () => {
     const uri = getUrlWithLang('/pong/');
     const data = await fetchData(uri);
-    //console.log("Pong:" + data);
     return data;
   };
   executeScript = () => {

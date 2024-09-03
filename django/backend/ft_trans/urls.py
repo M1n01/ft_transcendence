@@ -16,7 +16,6 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
 from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
 import pong.urls
@@ -27,15 +26,16 @@ import accounts.urls
 
 # API
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls, name="admin"),
     path("api/", include(api.urls)),
     # path("login/", include(login.urls)),
-    path("accounts/", include(accounts.urls)),
+    path("accounts/", include(accounts.urls), name="accounts"),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 urlpatterns += i18n_patterns(
-    path("pong/", include(pong.urls)),
-    re_path(r"[\w\-\/]*", include(spa.urls)),
+    path("pong/", include(pong.urls), name="pong"),
+    path("spa/", include(spa.urls), name="spa2"),
+    re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,
 )

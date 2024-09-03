@@ -1,11 +1,14 @@
 from django.conf import settings
 import urllib.parse
-import random, string
+import random
+import string
 import requests
-import json
+
+# import json
 from urllib.parse import urlparse, parse_qs
-from django.contrib.auth.backends import BaseBackend, ModelBackend, RemoteUserBackend
-from django.contrib.auth.middleware import RemoteUserMiddleware
+from django.contrib.auth.backends import ModelBackend
+
+# from django.contrib.auth.middleware import RemoteUserMiddleware
 import datetime
 import logging
 
@@ -63,7 +66,7 @@ class FtOAuth(ModelBackend):
             cnt = 0
             try:
                 cnt = FtUser.objects.count()
-            except:
+            except Exception:
                 cnt = 0
             user.username = username
             user.email = str(cnt) + email  # dummy email
@@ -133,9 +136,7 @@ class FtOAuth(ModelBackend):
         response = requests.post(ft_oauth_url, params=params)
         if response.status_code >= 400:
             logger.error(f"error:{response.status_code=}")
-            raise RuntimeError(
-                f"42認可サーバーに対する通信に失敗しました：{response.status_code}"
-            )
+            raise RuntimeError(f"42認可サーバーに対する通信に失敗しました：{response.status_code}")
         return response
 
     # 42認可サーバーへ送信
@@ -154,11 +155,11 @@ class FtOAuth(ModelBackend):
         """
         query = query_to_dict(url)
         if "state" not in query:
-            logger.error(f"not find state in query")
+            logger.error("not find state in query")
             raise ValueError("Requestされたデータは無効です")
         state = query["state"][0]
         if state not in state_code_dict:
-            logger.error(f"not find state in state_code_dict")
+            logger.error("not find state in state_code_dict")
             raise ValueError("Requestされたデータは無効です")
 
         code = state_code_dict[state]

@@ -1,50 +1,141 @@
 {% load static %} {% load i18n %}
 <body>
-  <div>
+  <form hidden>dummy form</form>
+  <form method="POST" id="signup-form" action="{% url 'accounts:signup-valid' %}">
+    {% csrf_token %}
+
+    <div class="form-floating w-100 text-pale">
+      {{ form.username}}
+      <label for="username_id">{% trans "ユーザー名" %}</label>
+    </div>
+        {% if form.username.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-floating w-100 text-pale">
+      {{ form.email}}
+      <label for="email_id">{% trans "Email address" %}</label>
+    </div>
+        {% if form.email.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-floating w-100 text-pale">
+      {{ form.last_name}}
+      <label for="last_name_id">{% trans "氏" %}</label>
+    </div>
+        {% if form.last_name.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.last_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-floating w-100 text-pale">
+      {{ form.first_name}}
+      <label for="first_name_id">{% trans "名" %}</label>
+    </div>
+        {% if form.first_name.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.first_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-floating w-100 text-pale">
+      {{ form.birth_date}}
+      <label for="birth_date_id">{% trans "生年月日" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.country_code}}
+      <label for="country_code_id">{% trans "国コード" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.phone}}
+      <label for="phone_id">{% trans "電話番号" %}</label>
+    </div>
+        {% if form.phone.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.phone.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    <div class="form-floating w-100 text-pale">
+      {{ form.auth}}
+      <label for="auth_id">{% trans "2要素認証方法" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.language}}
+      <label for="language_id">{% trans "言語" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.password1}}
+      <label for="password_id1">{% trans "パスワード" %}</label>
+    </div>
+    <div class="form-floating w-100 text-pale">
+      {{ form.password2}}
+      <label for="password_id2">{% trans "パスワード(確認用)" %}</label>
+    </div>
+        {% if form.password2.errors %}
+            <div class="alert alert-danger rounded-0">
+                {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    <input type="text" name="created_at" id="id_created_at" hidden />
     <br />
-    <form hidden>dummy form</form>
-    <form method="POST" id="signup-form" action="{% url 'accounts:signup' %}">
-      {% csrf_token %} {{ form }}
-      <input type="text" name="created_at" id="id_created_at" hidden />
-      <input type="text" name="email42" id="id_email42" value="{{dummy_email}}" hidden />
-      <input type="text" id="app-auth-url" name="app_secret" hidden />
+    <div class="mt-3">
+      <div id="failure-verify-2fa" class="error-message" hidden>
+        {% trans "認証コードの送信に失敗しました" %}
+        <br />
+        {% trans "入力した内容を見直して再度実行してください" %}
+      </div>
 
-      <br />
-      <div class="mt-3">
-        <div id="failure-verify-2fa" class="error-message" hidden>
-          {% trans "認証コードの送信に失敗しました" %}
-          <br />
-          {% trans "入力した内容を見直して再度実行してください" %}
-        </div>
-
-        <button type="submit" id="validation-button" class="form-button">{% trans "認証"%}</button>
+        <button
+          type="submit"
+          data-mdb-button-init
+          data-mdb-ripple-init
+          class="btn btn-primary btn-block mb-4 w-100 mt-4 rounded-0 btn-auth"
+          id="validation-button"
+        >
+          {% trans "サインアップ" %}
+      <!--
         <button id="back-button" class="form-button" hidden>{% trans "元に戻す"%}</button>
-      </div>
-    </form>
-    <div id="phone-auth-error" class="error-message" hidden>
-      {% trans "2要素認証をSMSにする場合、電話番号を入力してください" %}
-    </div>
-    <div id="server-error" class="error-message" hidden>
-      {% trans "サーバー内でエラーが発生しました。" %} <br\>
-      {% trans "記入内容を見直して、もう一度最初から実行してください" %}
-    </div>
-    <div id="google-qr">
-      <img src="test" id="app_qr" height="320" width="320"  hidden/>
-    </div>
+      -->
+  </form>
+  <div id="phone-auth-error" class="error-message" hidden>
+    {% trans "2要素認証をSMSにする場合、電話番号を入力してください" %}
+  </div>
+  <div id="server-error" class="error-message" hidden>
+    {% trans "サーバー内でエラーが発生しました。" %} <br />
+    {% trans "記入内容を見直して、もう一度最初から実行してください" %}
+  </div>
+  <div id="google-qr">
+    <img src="test" id="app_qr" height="320" width="320" hidden />
+  </div>
 
-    <form action="{% url 'accounts:two-fa' %}" method="post" id="two-fa-form" hidden>
-      {% csrf_token %}
-      <input type="text" id="common-mode" name="mode" hidden />
-      <input type="text" id="common-input" name="id" hidden />
-      <input type="text" id="app-url" name="app_secret" hidden />
-      <div id="verify-code-block">
-        {% trans "認証コードを入力してください" %}
-        <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
-      </div>
-      <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
-    </form>
-    <div class="error-message" id="failure-verify" hidden>
-      {%trans "認証に失敗しました"%}<br\> {% trans "認証コードを見直して再度実行してください"%}
+  <form action="{% url 'accounts:two-fa' %}" method="post" id="two-fa-form" hidden>
+    {% csrf_token %}
+    <input type="text" id="common-mode" name="mode" hidden />
+    <input type="text" id="common-input" name="id" hidden />
+    <input type="text" id="app-url" name="app_secret" hidden />
+    <div id="verify-code-block">
+      {% trans "認証コードを入力してください" %}
+      <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
     </div>
+    <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
+  </form>
+  <div class="error-message" id="failure-verify" hidden>
+    {% trans "認証に失敗しました" %}<br />
+    {% trans "認証コードを見直して再度実行してください" %}
   </div>
 </body>
