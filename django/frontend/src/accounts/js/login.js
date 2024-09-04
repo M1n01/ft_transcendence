@@ -77,7 +77,6 @@ document.addEventListener('LoginEvent', function () {
           return '';
         }
         document.getElementById('close-modal').click();
-        console.log('handlePostLogin No.0');
         handlePostLogin();
       } catch (error) {
         displayInstruction('instruction-error');

@@ -1,5 +1,4 @@
 import { Routes } from './spa/js/routing/routes.js';
-//import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
 import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
@@ -14,8 +13,6 @@ import './custom_bootstrap.scss';
 import './main.scss';
 import { loadNav } from './spa/js/utility/user.js';
 
-console.log('test No.1');
-
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
   const splits = pathname.split('/').filter((uri) => uri !== '');
@@ -27,22 +24,7 @@ const getDisplayedURI = (pathname) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  /*
-  const LoginEvent = new Event('LoginEvent');
-  const SignupEvent = new Event('SignupEvent');
-  document.dispatchEvent(LoginEvent);
-  document.dispatchEvent(SignupEvent);
-  */
   loadNav();
-  /*
-  console.log('nav test No.2');
-  const nav_uri = getUrlWithLang('/spa/nav/');
-  console.log('nav test No.3');
-  const nav_html = await fetchData(nav_uri);
-  console.log('nav test No.4');
-  document.querySelector('#nav').innerHTML = nav_html;
-  console.log('nav test No.5');
-  */
 
   let tmp_path = window.location.pathname;
   document.body.addEventListener('click', (e) => {
@@ -69,14 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const formData = new FormData(form);
         const response = await fetchAsForm(form, formData);
-        //if (response && response !== '') {
-        //const res = await response;
-        //console.log('htmp:' + text);
-        //response.then((data) => {
         updatePage(response);
         form.disabled = false;
-        //});
-        //}
       });
     }
 
