@@ -35,21 +35,13 @@ export const loadNav = async () => {
     const dropdown = document.getElementById('small-menu-dropdown');
 
     const isExpanded = small_menu_icon.getAttribute('aria-expanded') === 'true';
-    console.log('test No.1');
 
     small_menu_icon.addEventListener('click', async () => {
-      console.log('test No.2');
       if (!isExpanded) {
-        console.log('test No.3');
         // Bootstrapのdropdownメソッドに相当するコードを実装
         var dropdownMenu = new Dropdown(dropdown);
-        console.log('test No.4');
         dropdownMenu.toggle();
-        console.log('test No.5');
       }
-      console.log('test No.6');
-
-      //await logout();
     });
   } catch (error) {
     console.log('ignore error:' + error);

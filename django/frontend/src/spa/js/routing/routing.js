@@ -27,7 +27,6 @@ export const moveTo = async (url) => {
 export const navigateTo = async (url) => {
   try {
     const setState = async () => {
-      console.log('view:' + view);
       if (view !== undefined && view !== null) {
         const state = await view.getState();
         history.pushState(state, null, url);
@@ -73,32 +72,18 @@ export const router = async () => {
   try {
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
-      console.log('is redirected OK No.1');
-
-      //history.pushState(null, null, json['uri']);
       navigateTo(json['uri']);
       router();
       return;
     }
-    console.log('is redirected OK No.2');
     const html = await view.getHtml();
     document.querySelector('#app').innerHTML = html;
-    //console.log('get HTML No.2 execute Script html=' + html);
     view.executeScript();
-    console.log('get HTML No.3 execute Script');
   } catch (error) {
     console.error('executeScript Error:' + error);
   }
   return view;
 };
-
-/*
-function dispatch(event) {
-  if (event == 'TwoFaEvent') {
-    document.dispatchEvent(TwoFaEvent);
-  }
-}
-  */
 
 export async function updatePage(res) {
   try {
