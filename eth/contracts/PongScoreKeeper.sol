@@ -2,40 +2,54 @@
 pragma solidity ^0.8.24;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { Pausable } from '@openzeppelin/contracts/utils/Pausable.sol';
 
-contract PongScoreKeeper is Ownable {
+contract PongScoreKeeper is Ownable, Pausable {
   struct Match {
     uint256 matchId;
     uint256 createdAt;
     uint256 updatedAt;
     uint256 winner;
-    int16 winnerScore;
+    uint16 winnerScore;
     uint256 loser;
-    int16 loserScore;
-    bool isActive; // 試合の削除フラグ
+    uint16 loserScore;
+    bool isActive; // Matchの削除フラグ
   }
 
   mapping(uint256 => Match) public matches;
   uint256 public nextMatchId;
 
-  constructor(address initialOwner) Ownable(initialOwner) {}
+  event MatchCreated(
+    uint256 indexed matchId,
+    uint256 createdAt,
+    uint256 indexed winner,
+    uint256 indexed loser
+  );
+  event MatchUpdated(
+    uint256 indexed matchId,
+    uint256 updatedAt,
+    uint256 indexed winner,
+    uint256 indexed loser,
+    uint16 winnerScore,
+    uint16 loserScore
+  );
+  event MatchStatusChanged(uint256 indexed matchId, bool isActive);
 
-  event MatchCreated(uint256 matchId, uint256 createdAt);
-  event MatchUpdated(uint256 matchId, uint256 updatedAt);
-  event MatchStatusChanged(uint256 matchId, bool isActive);
+  constructor(address initialOwner) Ownable(initialOwner) {}
 
   // POST method
   function createMatch(
     uint256 _winner,
-    int16 _winnerScore,
+    uint16 _winnerScore,
     uint256 _loser,
-    int16 _loserScore
-  ) external onlyOwner {
+    uint16 _loserScore
+  ) external onlyOwner whenNotPaused {
     require(_winner != _loser, 'Winner and loser cannot be the same');
-    require(matches[nextMatchId].createdAt == 0, 'Match ID already exists'); // Solidityでは存在しないキーにアクセスした場合、型のデフォ値が返されるためセグフォしない
+    require(_winnerScore > _loserScore, 'Winner score must be higher');
 
-    matches[nextMatchId] = Match(
-      nextMatchId,
+    uint256 matchId = nextMatchId;
+    matches[matchId] = Match(
+      matchId,
       block.timestamp,
       0,
       _winner,
@@ -44,94 +58,113 @@ contract PongScoreKeeper is Ownable {
       _loserScore,
       true
     );
-
-    emit MatchCreated(nextMatchId, block.timestamp);
-
     nextMatchId++;
+    emit MatchCreated(matchId, block.timestamp, _winner, _loser);
   }
 
-  // GET method
-  function getMatch(uint256 _matchId) external view onlyOwner returns (Match memory) {
+  function getMatch(uint256 _matchId) external view returns (Match memory) {
     require(matches[_matchId].createdAt != 0, 'Match not found');
     return matches[_matchId];
   }
 
   // GET method
-  function getAllMatches(bool _onlyActive) external view returns (Match[] memory) {
-    uint256 count = 0;
-    for (uint256 i = 0; i < nextMatchId; i++) {
-      if (matches[i].createdAt != 0 && (matches[i].isActive || !_onlyActive)) {
-        count++;
-      }
+  function getAllMatches(
+    bool _onlyActive,
+    uint256 _page,
+    uint256 _limit
+  ) external view returns (Match[] memory, uint256) {
+    require(_limit > 0 && _limit <= 100, 'Invalid limit');
+    uint256 start = _page * _limit;
+    uint256 end = start + _limit;
+    if (end > nextMatchId) {
+      end = nextMatchId;
     }
 
-    Match[] memory _matches = new Match[](count);
+    Match[] memory _matches = new Match[](end - start);
+
     uint256 index = 0;
-    for (uint256 i = 0; i < nextMatchId; i++) {
+    for (uint256 i = start; i < end; i++) {
       if (matches[i].createdAt != 0 && (matches[i].isActive || !_onlyActive)) {
         _matches[index] = matches[i];
         index++;
       }
     }
-    return _matches;
-  }
 
-  // GET method
-  function getMatchesByUserId(
-    uint256 _userId,
-    bool _onlyActive
-  ) external view returns (Match[] memory) {
-    uint256 count = 0;
-    // 関連するゲームの数を数える
-    for (uint256 i = 0; i < nextMatchId; i++) {
-      if (
-        matches[i].winner == _userId ||
-        (matches[i].loser == _userId && (matches[i].isActive || !_onlyActive))
-      ) {
-        count++;
-      }
+    // Resize the array to remove empty slots
+    assembly {
+      mstore(_matches, index)
     }
 
-    require(count > 0, 'No matches found for the given user ID');
+    return (_matches, nextMatchId);
+  }
 
-    Match[] memory _matches = new Match[](count);
+  function getMatchesByUserId(
+    uint256 _userId,
+    bool _onlyActive,
+    uint256 _page,
+    uint256 _limit
+  ) external view returns (Match[] memory, uint256) {
+    require(_limit > 0 && _limit <= 100, 'Invalid limit');
+    uint256 start = _page * _limit;
+    uint256 end = start + _limit;
+
+    Match[] memory _matches = new Match[](_limit);
     uint256 index = 0;
-    // 関連するゲームを配列に追加
-    for (uint256 i = 0; i < nextMatchId; i++) {
+    uint256 totalMatches = 0;
+
+    for (uint256 i = 0; i < nextMatchId && index < _limit; i++) {
       if (
         (matches[i].winner == _userId || matches[i].loser == _userId) &&
         (matches[i].isActive || !_onlyActive)
       ) {
-        _matches[index] = matches[i];
-        index++;
+        if (totalMatches >= start) {
+          _matches[index] = matches[i];
+          index++;
+        }
+        totalMatches++;
       }
     }
-    return _matches;
+
+    // Resize the array to remove empty slots
+    assembly {
+      mstore(_matches, index)
+    }
+
+    return (_matches, totalMatches);
   }
 
   // PUT method
   function updateMatch(
     uint256 _matchId,
     uint256 _winner,
-    int16 _winnerScore,
+    uint16 _winnerScore,
     uint256 _loser,
-    int16 _loserScore
-  ) external onlyOwner {
+    uint16 _loserScore
+  ) external onlyOwner whenNotPaused {
     require(matches[_matchId].createdAt != 0, 'Match not found');
+    require(matches[_matchId].isActive, 'Cannot update inactive match');
     require(_winner != _loser, 'Winner and loser cannot be the same');
+    require(_winnerScore > _loserScore, 'Winner score must be higher');
 
     Match storage matchData = matches[_matchId];
-    matchData.winner = _winner;
-    matchData.winnerScore = _winnerScore;
-    matchData.loser = _loser;
-    matchData.loserScore = _loserScore;
-    matchData.updatedAt = block.timestamp;
+    if (
+      matchData.winner != _winner ||
+      matchData.winnerScore != _winnerScore ||
+      matchData.loser != _loser ||
+      matchData.loserScore != _loserScore
+    ) {
+      matchData.winner = _winner;
+      matchData.winnerScore = _winnerScore;
+      matchData.loser = _loser;
+      matchData.loserScore = _loserScore;
+      matchData.updatedAt = block.timestamp;
 
-    emit MatchUpdated(_matchId, block.timestamp);
+      emit MatchUpdated(_matchId, block.timestamp, _winner, _loser, _winnerScore, _loserScore);
+    }
   }
 
   // DELETE method
-  function toggleMatchStatus(uint256 _matchId) external onlyOwner {
+  function toggleMatchStatus(uint256 _matchId) external onlyOwner whenNotPaused {
     require(matches[_matchId].createdAt != 0, 'Match not found');
 
     Match storage matchData = matches[_matchId];
@@ -139,5 +172,13 @@ contract PongScoreKeeper is Ownable {
     matchData.updatedAt = block.timestamp;
 
     emit MatchStatusChanged(_matchId, matchData.isActive);
+  }
+
+  function pause() external onlyOwner {
+    _pause();
+  }
+
+  function unpause() external onlyOwner {
+    _unpause();
   }
 }
