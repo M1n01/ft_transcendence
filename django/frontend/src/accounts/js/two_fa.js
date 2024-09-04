@@ -33,9 +33,9 @@ document.addEventListener('TwoFaEvent', function () {
     if (response.status != 200) {
       error_message.hidden = false;
     }
+    input_code.value = '';
     navModal(false);
 
-    console.log('two_fa_form No.1');
     moveTo('games');
   });
   input_code.addEventListener('input', () => {
