@@ -52,7 +52,6 @@ class Nav(TemplateView):
         context = {"hidden": "d-none d-md-none"}
         if user.is_authenticated:
             context = {"hidden": ""}
-            print("Error ")
 
         return render(request, "spa/nav.html", context=context)
         # return redirect("/spa/nav")
@@ -69,20 +68,14 @@ class ToLogin(TemplateView):
 
 @method_decorator(login_not_required, name="dispatch")
 class isLogin(TemplateView):
-    print("isLogin No.0")
-
     def get(self, request):
-        print("isLogin No.1")
         user = request.user
         is_redirect = True
         uri = "/login-signup"
-        print("isLogin No.2")
         if user.is_authenticated:
             is_redirect = False
 
         json = {"is_redirect": is_redirect, "uri": uri}
-        # data = {"is_auth": "is_auth", "html": "content", "uri": uri}
-        print("isLogin No.3")
         return JsonResponse(json)
 
 

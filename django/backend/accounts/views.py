@@ -195,14 +195,7 @@ def signup_two_fa_verify(request):
                 return HttpResponseBadRequest("Failure to verify")
             copy_tmpuser_to_ftuser(user)
 
-            # new_user = authenticate(
-            # request, username=user.email, password=test_user.password
-            # )
-            # if new_user is None:
-            # else:
-            # print("New User Exist")
             new_user = FtUser.objects.get(email=user.email)
-            # src_user = FtTmpUser.objects.get(email=user.email)
             login(
                 request,
                 new_user,
@@ -408,19 +401,10 @@ class SignupView(CreateView):
     # extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
 
     def form_invalid(self, form):
-        print("form_invalid No.1")
         # ここでエラーメッセージを追加したり、カスタマイズしたりできる
         # form.add_error(None, "全体に関するエラーメッセージを追加することができます。")
         res = super().form_invalid(form)
         res.status_code = 400
-        # print("form_invalid No.2")
-        # print(f"{res.content=}")
-        # body_bytes = res.content  # バイト形式のボディ
-        # body_str = body_bytes.decode("utf-8")  # UTF-8としてデコードして文字列に変換
-
-        # デバッグまたは他の処理に使用する
-        # print(f"{body_str=}")  # 例: レスポンスボディを出力
-        # print("form_invalid No.3")
         return res
 
     def form_valid(self, form):

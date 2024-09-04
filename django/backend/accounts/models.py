@@ -54,8 +54,8 @@ class FtUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        for field in extra_fields:
-            print(f"{field=}")
+        # for field in extra_fields:
+        # print(f"{field=}")
 
         return self._create_user(
             email=email,
@@ -214,8 +214,8 @@ class FtTmpUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        for field in extra_fields:
-            print(f"{field=}")
+        # for field in extra_fields:
+        # print(f"{field=}")
 
         return self._create_user(
             email=email,

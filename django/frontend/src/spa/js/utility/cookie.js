@@ -1,8 +1,5 @@
 //import Cookies from 'js-cookie';
 
-//const lang = Cookies.get('lang');
-//console.log(lang);
-
 export function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
