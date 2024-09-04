@@ -1,7 +1,7 @@
 import '../scss/signup.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
-import { Modal } from 'bootstrap';
 import { TwoFaEvent } from './two_fa.js';
+import { navModal } from './two_fa.js';
 export const SignupEvent = new Event('SignupEvent');
 
 function SetTime() {
@@ -51,9 +51,8 @@ document.addEventListener('SignupEvent', function () {
           } else {
             document.getElementById('app_url_qr').hidden = true;
           }
-          const modal_2fa = document.getElementById('TwoFa-Modal');
-          const modal = new Modal(modal_2fa);
-          modal.show();
+
+          navModal(true);
           document.dispatchEvent(TwoFaEvent);
           return;
         } catch (error) {
