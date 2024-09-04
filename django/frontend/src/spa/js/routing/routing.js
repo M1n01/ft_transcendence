@@ -2,6 +2,7 @@ import { Routes } from './routes.js';
 import { getUrl } from '../utility/url.js';
 import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
+import { reload } from '..//utility/user.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
@@ -17,6 +18,11 @@ window.addEventListener('popstate', async (event) => {
 
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
+
+export const moveTo = async (url) => {
+  navigateTo(url);
+  await reload();
+};
 
 export const navigateTo = async (url) => {
   try {
