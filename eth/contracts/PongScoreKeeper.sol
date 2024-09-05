@@ -106,7 +106,6 @@ contract PongScoreKeeper is Ownable, Pausable {
   ) external view returns (Match[] memory, uint256) {
     require(_limit > 0 && _limit <= 100, 'Invalid limit');
     uint256 start = _page * _limit;
-    uint256 end = start + _limit;
 
     Match[] memory _matches = new Match[](_limit);
     uint256 index = 0;
