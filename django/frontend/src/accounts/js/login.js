@@ -12,6 +12,7 @@ function displayInstruction(id) {
   document.getElementById('instruction-error').hidden = true;
   document.getElementById(id).hidden = false;
 }
+//const two_fa_form = document.getElementById('two-fa-verify-form');
 
 document.addEventListener('LoginEvent', function () {
   try {

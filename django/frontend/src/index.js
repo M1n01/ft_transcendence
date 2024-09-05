@@ -12,6 +12,7 @@ import './spa/scss/spa.scss';
 import './custom_bootstrap.scss';
 import './main.scss';
 import { loadNav } from './spa/js/utility/user.js';
+//import 'login.js'
 
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
