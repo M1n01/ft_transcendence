@@ -9,6 +9,7 @@ class MatchRequestSerializer(serializers.ModelSerializer):
 
 
 class MatchResponseSerializer(serializers.ModelSerializer):
+    updated_at = serializers.DateTimeField(allow_null=True)
     class Meta:
         model = Match
         fields = "__all__"

@@ -4,7 +4,10 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import Match
-from ..serializers.score_keeper_serializers import MatchRequestSerializer, MatchResponseSerializer
+from ..serializers.score_keeper_serializers import (
+    MatchRequestSerializer,
+    MatchResponseSerializer,
+)
 import json
 import os
 from django.conf import settings
@@ -79,8 +82,11 @@ class SaveMatchScoreView(APIView):
 
         elif user_id:
             try:
-                matches = match_contract.functions.getMatchesByUserId(
-                    int(user_id)
+                matches, match_length = match_contract.functions.getMatchesByUserId(
+                    int(user_id),
+                    True,
+                    0,
+                    100,
                 ).call()
                 matches_data = [
                     {
@@ -94,7 +100,10 @@ class SaveMatchScoreView(APIView):
                     for match in matches
                 ]
                 serializer = MatchResponseSerializer(matches_data, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(
+                    {"data": serializer.data, "match_length": match_length},
+                    status=status.HTTP_200_OK,
+                )
             except Exception as e:
                 return Response(
                     {"message": "Error retrieving matches", "error": str(e)},
@@ -103,7 +112,11 @@ class SaveMatchScoreView(APIView):
 
         else:
             try:
-                matches = match_contract.functions.getAllMatches().call()
+                matches, match_length = match_contract.functions.getAllMatches(
+                    True,
+                    0,
+                    100,
+                ).call()
                 matches_data = [
                     {
                         "id": match[0],
@@ -116,7 +129,10 @@ class SaveMatchScoreView(APIView):
                     for match in matches
                 ]
                 serializer = MatchResponseSerializer(matches_data, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(
+                    {"data": serializer.data, "match_length": match_length},
+                    status=status.HTTP_200_OK,
+                )
             except Exception as e:
                 return Response(
                     {"message": "Error retrieving match", "error": str(e)},
