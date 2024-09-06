@@ -18,6 +18,9 @@ export default class Branch {
     this.user2 = null;
   }
 
+  set_seed(flag) {
+    this.seed_flag = flag;
+  }
   draw_seed(ctx) {
     ctx.beginPath();
     this.line.moveTo(ctx);
