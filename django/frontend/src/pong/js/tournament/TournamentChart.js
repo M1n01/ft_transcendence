@@ -1,16 +1,16 @@
-import Line from './/Line.js';
 import Point from './/Point.js';
-import Branch from './/Branch.js';
+//import Branch from './/Branch.js';
+import Game from './/Game.js';
 
-const OffsetX = 400;
+const OffsetX = 200;
 export default class TournmentChart {
-  constructor(canvas, size) {
-    this.canvas = canvas;
+  constructor(parent, size) {
+    this.parent = parent;
     this.size = size;
     this.leftBranches = [];
     this.rightBranches = [];
     this.offsetPoint;
-    //this.participants = null;
+    this.final = null;
   }
 
   setParticipants(participants) {
@@ -38,9 +38,9 @@ export default class TournmentChart {
       edge.setUser(user1, user2);
     });
 
-    this.leftBranches.forEach((branch) => {
-      branch.print();
-    });
+    // this.leftBranches.forEach((branch) => {
+    //   branch.print();
+    // });
 
     return true;
   }
@@ -55,7 +55,7 @@ export default class TournmentChart {
     }
 
     seed_list.forEach((i) => {
-      edges[i].seed_flag = true;
+      edges[i].setSeed(true);
     });
   };
 
@@ -70,11 +70,12 @@ export default class TournmentChart {
 
   recurMakeBranch = (ctx, branch, cnt, maxCnt, branches) => {
     if (cnt >= maxCnt) {
+      console.log('end');
       return;
     }
     //branch.write(ctx);
-    const seed_flag = maxCnt - cnt == 1;
-    let new_branches = branch.getNewBranches(seed_flag);
+    const edge_flag = maxCnt - cnt == 1;
+    let new_branches = branch.getNewGames(edge_flag);
     branches.push(new_branches[0]);
     branches.push(new_branches[1]);
     this.recurMakeBranch(ctx, new_branches[0], cnt + 1, maxCnt, branches);
@@ -83,60 +84,67 @@ export default class TournmentChart {
 
   init = () => {
     const BranchDepth = this.calcBranchDepth(this.size);
-    this.canvas.width = this.canvas.width + (BranchDepth - 1) * 100 + OffsetX;
-    this.canvas.height = this.canvas.height + parseInt((BranchDepth * BranchDepth - 2) / 4) * 200;
+    const initWidth = this.parent.clientWidth;
+    const initHeight = this.parent.clientHeight;
+    const curWidth = initWidth + (BranchDepth - 1) * 50 + OffsetX;
+    const curHeight = initHeight + parseInt((BranchDepth * BranchDepth - 4) / 4) * 150;
+    this.parent.style.width = `${curWidth}px`;
+    this.parent.style.height = `${curHeight}px`;
 
-    const ctx = this.canvas.getContext('2d');
+    const ctx = document.createElement('div');
 
     // 塗りつぶされた四角形
     //ctx.fillStyle = 'blue';
 
     // 線の色と太さ
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 3;
+    //ctx.strokeStyle = 'black';
+    //ctx.lineWidth = 3;
 
     // キャンバスの幅と高さ
-    const canvasWidth = this.canvas.width - OffsetX;
-    const canvasHeight = this.canvas.height;
+    const canvasWidth = this.parent.clientWidth - OffsetX;
+    const canvasHeight = this.parent.clientHeight;
 
     // 円の中心座標（キャンバスの中央）
     const centerX = (canvasWidth + OffsetX) / 2;
     const centerY = canvasHeight / 2;
-    const CanvasCenter = new Point(centerX, centerY);
 
+    const CanvasCenter = new Point(centerX, centerY);
     const LeftOffsetPoint = new Point(
-      -(centerX - 250) / ((2 * parseInt(BranchDepth + 1)) / 2),
-      (centerY - 10) / 2
+      parseInt(-(centerX - 150) / ((2 * parseInt(BranchDepth + 1)) / 2)),
+      parseInt((centerY - 10) / 2)
     );
     const RightOffsetPoint = new Point(
-      (centerX - 250) / ((2 * parseInt(BranchDepth + 1)) / 2),
-      (centerY - 10) / 2
+      parseInt((centerX - 150) / ((2 * parseInt(BranchDepth + 1)) / 2)),
+      parseInt((centerY - 10) / 2)
     );
+
     this.offsetPoint = RightOffsetPoint;
 
-    const BaseWidthLength = RightOffsetPoint.x / 1.5;
+    const BaseWidthLength = parseInt(RightOffsetPoint.x / 1.5);
     //const BaseHeightLength = RightOffsetPoint.y;
 
+    const offset = new Point(-BaseWidthLength, 0);
     const LeftOffBase = new Point(-BaseWidthLength, 0);
     const RightOffBase = new Point(BaseWidthLength, 0);
 
-    let leftLine = new Line(CanvasCenter.copyOffset(LeftOffBase));
-    let rightLine = new Line(CanvasCenter.copyOffset(RightOffBase));
+    let leftPoint = CanvasCenter.copyOffset(LeftOffBase);
+    let rightPoint = CanvasCenter.copyOffset(RightOffBase);
 
-    // center
-    //line.print();
-
-    // branch
-    const leftBranch = new Branch(leftLine, LeftOffsetPoint, false, 1);
-    const rightBranch = new Branch(rightLine, RightOffsetPoint, false, 2);
+    this.final = new Game(CanvasCenter, offset, false, 0, '', CanvasCenter);
+    const leftBranch = new Game(leftPoint, LeftOffsetPoint, false, 1, 'left', this.final);
+    const rightBranch = new Game(rightPoint, RightOffsetPoint, false, 2, 'right', this.final);
+    console.log('init No.5');
 
     //const JointBaseLeft = CanvasCenter.copyOffset(LeftOffsetPoint);
     //const JointBaseRight = CanvasCenter.copyOffset(RightOffsetPoint);
     this.leftBranches = [leftBranch];
     this.rightBranches = [rightBranch];
 
+    console.log('init No.6');
     this.recurMakeBranch(ctx, leftBranch, 1, BranchDepth, this.leftBranches);
+    console.log('init No.7');
     this.recurMakeBranch(ctx, rightBranch, 1, BranchDepth, this.rightBranches);
+    console.log('init No.8');
 
     //const branches_cnt = leftBranches.length + rightBranches.length;
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
@@ -148,57 +156,64 @@ export default class TournmentChart {
 
     this.setSeedFlag(leftEdge, seed_left_cnt);
     this.setSeedFlag(rightEdge, seed_right_cnt);
+
+    return;
   };
 
   draw = () => {
-    const ctx = this.canvas.getContext('2d');
-    ctx.strokeStyle = 'blue';
+    //const ctx = this.canvas.getContext('2d');
+    //ctx.strokeStyle = 'blue';
 
-    const left_branch = this.leftBranches[0];
-    const right_branch = this.rightBranches[0];
+    //const left_branch = this.leftBranches[0];
+    //const right_branch = this.rightBranches[0];
 
-    ctx.beginPath();
-    const BaseWidthLength = this.offsetPoint.x / 1.5;
+    //ctx.beginPath();
+    //const BaseWidthLength = this.offsetPoint.x / 1.5;
 
+    /*
     left_branch.line.moveTo(ctx);
     left_branch.line.lineToX(ctx, BaseWidthLength);
     right_branch.line.moveTo(ctx);
     right_branch.line.lineToX(ctx, -BaseWidthLength);
-    ctx.stroke();
+    */
+    //ctx.stroke();
 
+    this.final.draw(this.parent);
     this.leftBranches.forEach((branch) => {
-      branch.draw(ctx);
+      branch.draw(this.parent);
     });
     this.rightBranches.forEach((branch) => {
-      branch.draw(ctx);
+      branch.draw(this.parent);
     });
 
     // キャンバスの幅と高さ
     //const canvasWidth = this.canvas.width;
-    const canvasWidth = this.canvas.width - OffsetX;
-    const canvasHeight = this.canvas.height;
+    //const canvasWidth = this.canvas.width - OffsetX;
+    //const canvasHeight = this.canvas.height;
+    //const initWidth = this.parent.clientWidth;
+    //const initHeight = this.parent.clientHeight;
 
-    const centerX = (canvasWidth + OffsetX) / 2;
-    const centerY = canvasHeight / 2;
+    //const centerX = (initWidth + OffsetX) / 2;
+    //const centerY = initHeight / 2;
 
     // 円の半径
-    const radius = 5;
+    //const radius = 5;
     // Center Red Circle
-    ctx.fillStyle = 'red';
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.fill();
+    //ctx.fillStyle = 'red';
+    //ctx.beginPath();
+    ////ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    //ctx.fill();
   };
   drawParticipants = () => {
-    const ctx = this.canvas.getContext('2d');
+    //const ctx = this.canvas.getContext('2d');
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
     const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
 
     leftEdge.forEach((edge) => {
-      edge.drawUser(ctx, 'left');
+      edge.drawUser(this.parent);
     });
     rightEdge.forEach((edge) => {
-      edge.drawUser(ctx, 'right');
+      edge.drawUser(this.parent);
     });
   };
 

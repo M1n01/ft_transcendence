@@ -1,10 +1,26 @@
+//import TournmentChart from './tournament/TournamentChart.js';
 import TournmentChart from './tournament/TournamentChart.js';
+import '../scss/tournament.scss';
 
 export const TournmentEvent = new Event('TournmentEvent');
 document.addEventListener('TournmentEvent', () => {
-  const canvas = document.getElementById('tournment-canvas');
-  const totalParticipants = 40;
-  const chart = new TournmentChart(canvas, totalParticipants);
+  const tournment = document.getElementById('tournment-div'); // 既存の要素を取得
+
+  /*
+  const newDiv = document.createElement('div');
+  const width = 500;
+  newDiv.classList.add('tournamentLine');
+  newDiv.style.width = `${width}px`;
+  newDiv.style.height = '200px';
+  newDiv.style.top = '30px';
+  newDiv.style.left = '0px';
+  tournment.appendChild(newDiv);
+  */
+
+  //const = document.getElementById('tournment-canvas');
+  const totalParticipants = 22;
+
+  const chart = new TournmentChart(tournment, totalParticipants);
   chart.init();
   chart.draw();
 
@@ -31,24 +47,24 @@ document.addEventListener('TournmentEvent', () => {
     'testA10',
     'testB1',
     'testB2',
-    'testB3',
-    'testB4',
-    'testB5',
-    'testB6',
-    'testB7',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
-    'testB8',
+    //  'testB3',
+    //  'testB4',
+    //  'testB5',
+    //  'testB6',
+    //  'testB7',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
+    //  'testB8',
   ];
 
   if (chart.setParticipants(users) == false) {

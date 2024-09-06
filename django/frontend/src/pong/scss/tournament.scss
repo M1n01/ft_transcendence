@@ -1,0 +1,58 @@
+//@import 'bootstrap/scss/bootstrap';
+
+.tournamentTopLeftBranch {
+  border: 3px solid;
+  border-color: blue;
+  border-left: none;
+  border-bottom: none;
+  position: absolute;
+}
+.tournamentBottomBranch {
+  border: 3px solid;
+  border-color: blue;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  position: absolute;
+}
+
+.tournamentTopRightBranch {
+  border: 3px solid;
+  border-color: blue;
+  border-right: none;
+  border-bottom: none;
+  position: absolute;
+}
+
+.tournamentLeftBranch {
+  border: 3px solid;
+  border-color: blue;
+  border-left: none;
+  position: absolute;
+}
+
+.tournamentRightBranch {
+  border: 3px solid;
+  border-color: blue;
+  border-right: none;
+  position: absolute;
+}
+
+.tournamentLine {
+  border: 3px solid;
+  border-color: blue;
+  border-right: none;
+  border-bottom: none;
+  position: absolute;
+  //width: 10px;
+  //height: 10px;
+  //background-color: blue;
+}
+
+.userTextArea {
+  position: absolute;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  //text-align: right;
+}
