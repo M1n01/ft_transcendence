@@ -152,13 +152,14 @@ contract PongScoreKeeper is Ownable, Pausable {
       matchData.loser != _loser ||
       matchData.loserScore != _loserScore
     ) {
+      uint256 _updatedAt = block.timestamp;
       matchData.winner = _winner;
       matchData.winnerScore = _winnerScore;
       matchData.loser = _loser;
       matchData.loserScore = _loserScore;
-      matchData.updatedAt = block.timestamp;
+      matchData.updatedAt = _updatedAt;
 
-      emit MatchUpdated(_matchId, block.timestamp, _winner, _loser, _winnerScore, _loserScore);
+      emit MatchUpdated(_matchId, _updatedAt, _winner, _loser, _winnerScore, _loserScore);
     }
   }
 
