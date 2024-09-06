@@ -101,6 +101,8 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
+    "rest_framework",
+    "web3",
 ]
 
 MIDDLEWARE = [
@@ -119,10 +121,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+PROJECT_ROOT = os.path.join(BASE_DIR, "..")
+
 # 出力ディレクトリ(nginxと共有)
-PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+# ブロックチェーン用ディレクトリ
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
 TEMPLATES = [
     {
@@ -291,3 +297,7 @@ PONG_DOMAIN = "https://localhost/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"
+
+# WEB3
+PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+PROVIDER_URL = "http://eth:8545"
