@@ -3,8 +3,8 @@ export default class Point {
     this.x = x;
     this.y = y;
   }
-  copy(point) {
-    return new Point(point.x, point.y);
+  copy() {
+    return new Point(this.x, this.y);
   }
 
   copyOffset(point) {
