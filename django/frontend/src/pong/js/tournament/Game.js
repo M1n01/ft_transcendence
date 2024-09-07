@@ -16,6 +16,7 @@ export default class Game {
     this.user1 = null;
     this.user2 = null;
     this.position = position;
+    this.winner = null;
 
     this.div = document.createElement('div');
   }
@@ -102,21 +103,21 @@ export default class Game {
     const y = this.point.y - this.offset.y;
 
     //const seed_point1 = new Point(0, this.point.y + this.offset.y - 3 + (this.offset.y % 2) * 200);
-    const seed_point1 = new Point(0, y + this.offset.y * 2);
-    const seed_point2 = new Point(0, y);
+    const seed_point1 = new Point(0, y);
+    const seed_point2 = new Point(0, y + this.offset.y * 2);
     const new_game1 = new Game(
-      new Point(this.point.x + this.offset.x, this.point.y + this.offset.y + 3),
-      //new Point(this.offset.x, parseInt(this.offset.y / 2) + (this.offset.y % 2)),
-      new Point(this.offset.x, parseInt(this.offset.y / 2)),
+      new Point(this.point.x + this.offset.x, this.point.y - this.offset.y),
+      //new Point(this.offset.x, parseInt(this.offset.y / 2) + 1 + (this.offset.y % 2)), // +1がないとずれる
+      new Point(this.offset.x, parseInt(this.offset.y / 2)), // +1がないとずれる
       edge_flag,
       this.id * 10 + 1,
       this.position,
       seed_point1
     );
     const new_game2 = new Game(
-      new Point(this.point.x + this.offset.x, this.point.y - this.offset.y),
-      //new Point(this.offset.x, parseInt(this.offset.y / 2) + 1 + (this.offset.y % 2)), // +1がないとずれる
-      new Point(this.offset.x, parseInt(this.offset.y / 2)), // +1がないとずれる
+      new Point(this.point.x + this.offset.x, this.point.y + this.offset.y + 3),
+      //new Point(this.offset.x, parseInt(this.offset.y / 2) + (this.offset.y % 2)),
+      new Point(this.offset.x, parseInt(this.offset.y / 2)),
       edge_flag,
       this.id * 10 + 2,
       this.position,
@@ -138,6 +139,7 @@ export default class Game {
     }
     text.classList.add('userTextArea');
     text.textContent = user;
+    //text.textContent = this.id;
     parent.appendChild(text);
   }
 
