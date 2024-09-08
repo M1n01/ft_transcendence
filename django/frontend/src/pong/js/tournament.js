@@ -18,7 +18,7 @@ document.addEventListener('TournmentEvent', () => {
   */
 
   //const = document.getElementById('tournment-canvas');
-  const totalParticipants = 6;
+  const totalParticipants = 12;
 
   const chart = new TournmentChart(tournment, totalParticipants);
   chart.init();
@@ -30,12 +30,12 @@ document.addEventListener('TournmentEvent', () => {
     'test4',
     'test5',
     'test6',
-    //'test7',
-    //'test8',
-    //'test9',
-    //'test10',
-    //'testA1',
-    //'testA2',
+    'test7',
+    'test8',
+    'test9',
+    'test10',
+    'testA1',
+    'testA2',
     //'testA3',
     //'testA4',
     //'testA5',
@@ -46,12 +46,12 @@ document.addEventListener('TournmentEvent', () => {
     //'testA10',
     //'testB1',
     //'testB2',
-    //  'testB3',
-    //  'testB4',
-    //  'testB5',
-    //  'testB6',
-    //  'testB7',
-    //  'testB8',
+    //'testB3',
+    //'testB4',
+    //'testB5',
+    //'testB6',
+    //'testB7',
+    //'testB8',
     //  'testB8',
     //  'testB8',
     //  'testB8',
