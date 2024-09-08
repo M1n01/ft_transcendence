@@ -123,43 +123,6 @@ describe('PongScoreKeeper contract', function () {
     });
   });
 
-  describe('Match Update', function () {
-    beforeEach(async function () {
-      await pongScoreKeeper.createMatch(addr1.address, 11, addr2.address, 5);
-    });
-
-    it('Should update a match correctly', async function () {
-      await pongScoreKeeper.updateMatch(0, addr2.address, 15, addr1.address, 13);
-      const match = await pongScoreKeeper.getMatch(0);
-      expect(match.winner).to.equal(addr2.address);
-      expect(match.winnerScore).to.equal(15);
-      expect(match.loser).to.equal(addr1.address);
-      expect(match.loserScore).to.equal(13);
-    });
-
-    it('Should fail to update a non-existent match', async function () {
-      await expect(
-        pongScoreKeeper.updateMatch(3, addr1.address, 100, addr2.address, 10)
-      ).to.be.revertedWith('Match not found');
-    });
-
-    it('Should emit MatchUpdated event', async function () {
-      await pongScoreKeeper.updateMatch(0, addr2.address, 15, addr1.address, 13);
-      const match = await pongScoreKeeper.getMatch(0);
-      expect(match.winner).to.equal(addr2.address);
-      expect(match.winnerScore).to.equal(15);
-      expect(match.loser).to.equal(addr1.address);
-      expect(match.loserScore).to.equal(13);
-    });
-
-    it('Should not emit MatchUpdated event if no changes', async function () {
-      await expect(pongScoreKeeper.updateMatch(0, addr1.address, 11, addr2.address, 5)).to.not.emit(
-        pongScoreKeeper,
-        'MatchUpdated'
-      );
-    });
-  });
-
   describe('Match Status Toggle', function () {
     beforeEach(async function () {
       await pongScoreKeeper.createMatch(addr1.address, 11, addr2.address, 5);
@@ -209,13 +172,6 @@ describe('PongScoreKeeper contract', function () {
     it('Should not allow non-owners to create matches', async function () {
       await expect(pongScoreKeeper.connect(addr1).createMatch(addr2.address, 11, addr3.address, 5))
         .to.be.reverted;
-    });
-
-    it('Should not allow updating inactive matches', async function () {
-      await pongScoreKeeper.createMatch(addr1.address, 11, addr2.address, 5);
-      await pongScoreKeeper.toggleMatchStatus(0);
-      await expect(pongScoreKeeper.updateMatch(0, addr2.address, 15, addr1.address, 13)).to.be
-        .reverted;
     });
   });
 });

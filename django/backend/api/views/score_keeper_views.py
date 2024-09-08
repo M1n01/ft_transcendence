@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from ..serializers.score_keeper_serializers import (
     MatchRequestSerializer,
     MatchResponseSerializer,
-    MatchPutRequestSerializer,
 )
 import json
 import os
@@ -58,8 +57,9 @@ match_contract = w3.eth.contract(address=address, abi=contract_interface["abi"])
 
 
 class SaveMatchScoreView(APIView):
-    http_method_names = ["get", "post", "put", "delete"]
+    http_method_names = ["get", "post", "delete"]
 
+    # TODO: クエリでのページネーション実装
     def get(self, request):
         match_id = request.query_params.get("match_id")
         user_id = request.query_params.get("user_id")
@@ -69,7 +69,6 @@ class SaveMatchScoreView(APIView):
                 match_data = {
                     "id": match[0],
                     "created_at": datetime.datetime.fromtimestamp(match[1]),
-                    "updated_at": datetime.datetime.fromtimestamp(match[2]) if match[2] != 0 else None,
                     "winner": match[3],
                     "winner_score": match[4],
                     "loser": match[5],
@@ -88,14 +87,13 @@ class SaveMatchScoreView(APIView):
                 matches, match_length = match_contract.functions.getMatchesByUserId(
                     int(user_id),
                     True,  # DELETEした試合も含める場合はFalse
-                    0,
-                    100,
+                    0,  # pagination page
+                    100,  # pagination limit
                 ).call()
                 matches_data = [
                     {
                         "id": match[0],
                         "created_at": datetime.datetime.fromtimestamp(match[1]),
-                        "updated_at": datetime.datetime.fromtimestamp(match[2]) if match[2] != 0 else None,
                         "winner": match[3],
                         "winner_score": match[4],
                         "loser": match[5],
@@ -118,14 +116,13 @@ class SaveMatchScoreView(APIView):
             try:
                 matches, match_length = match_contract.functions.getAllMatches(
                     True,  # isActive
-                    0,
-                    100,
+                    0,  # pagination page
+                    100,  # pagination limit
                 ).call()
                 matches_data = [
                     {
                         "id": match[0],
                         "created_at": datetime.datetime.fromtimestamp(match[1]),
-                        "updated_at": datetime.datetime.fromtimestamp(match[2]) if match[2] != 0 else None,
                         "winner": match[3],
                         "winner_score": match[4],
                         "loser": match[5],
@@ -186,52 +183,6 @@ class SaveMatchScoreView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request):
-        match_id = request.query_params.get("match_id")
-        if not match_id:
-            return Response(
-                {"error": "match_id is required"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = MatchPutRequestSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            transaction = match_contract.functions.updateMatch(
-                int(match_id),
-                serializer.validated_data["winner"],
-                serializer.validated_data["winner_score"],
-                serializer.validated_data["loser"],
-                serializer.validated_data["loser_score"],
-            ).build_transaction(
-                {
-                    "from": account.address,
-                    "nonce": w3.eth.get_transaction_count(account.address),
-                }
-            )
-
-            signed_txn = w3.eth.account.sign_transaction(
-                transaction, settings.PRIVATE_KEY
-            )
-            tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
-            receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-
-            logs = match_contract.events.MatchUpdated().process_receipt(receipt)
-            updated_at = logs[0]["args"]["updatedAt"]
-
-            return Response(
-                {
-                    "status": "match updated",
-                    "tx_hash": tx_hash.hex(),
-                    "data": serializer.data,
-                    "updated_at": datetime.datetime.fromtimestamp(updated_at),
-                },
-                status=status.HTTP_200_OK,
-            )
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
     def delete(self, request):
         match_id = request.query_params.get("match_id")
         if not match_id:
@@ -240,7 +191,9 @@ class SaveMatchScoreView(APIView):
             )
 
         try:
-            transaction = match_contract.functions.toggleMatchStatus(int(match_id)).build_transaction(
+            transaction = match_contract.functions.toggleMatchStatus(
+                int(match_id)
+            ).build_transaction(
                 {
                     "from": account.address,
                     "nonce": w3.eth.get_transaction_count(account.address),
@@ -265,4 +218,3 @@ class SaveMatchScoreView(APIView):
             )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-

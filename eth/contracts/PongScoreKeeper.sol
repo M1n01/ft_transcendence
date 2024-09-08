@@ -8,7 +8,6 @@ contract PongScoreKeeper is Ownable, Pausable {
   struct Match {
     uint256 matchId;
     uint256 createdAt;
-    uint256 updatedAt;
     uint256 winner;
     uint16 winnerScore;
     uint256 loser;
@@ -24,14 +23,6 @@ contract PongScoreKeeper is Ownable, Pausable {
     uint256 createdAt,
     uint256 indexed winner,
     uint256 indexed loser
-  );
-  event MatchUpdated(
-    uint256 indexed matchId,
-    uint256 updatedAt,
-    uint256 indexed winner,
-    uint256 indexed loser,
-    uint16 winnerScore,
-    uint16 loserScore
   );
   event MatchStatusChanged(uint256 indexed matchId, bool isActive);
 
@@ -51,7 +42,6 @@ contract PongScoreKeeper is Ownable, Pausable {
     matches[matchId] = Match(
       matchId,
       block.timestamp,
-      0,
       _winner,
       _winnerScore,
       _loser,
@@ -132,44 +122,12 @@ contract PongScoreKeeper is Ownable, Pausable {
     return (_matches, totalMatches);
   }
 
-  // PUT method
-  function updateMatch(
-    uint256 _matchId,
-    uint256 _winner,
-    uint16 _winnerScore,
-    uint256 _loser,
-    uint16 _loserScore
-  ) external onlyOwner whenNotPaused {
-    require(matches[_matchId].createdAt != 0, 'Match not found');
-    require(matches[_matchId].isActive, 'Cannot update inactive match');
-    require(_winner != _loser, 'Winner and loser cannot be the same');
-    require(_winnerScore > _loserScore, 'Winner score must be higher');
-
-    Match storage matchData = matches[_matchId];
-    if (
-      matchData.winner != _winner ||
-      matchData.winnerScore != _winnerScore ||
-      matchData.loser != _loser ||
-      matchData.loserScore != _loserScore
-    ) {
-      uint256 _updatedAt = block.timestamp;
-      matchData.winner = _winner;
-      matchData.winnerScore = _winnerScore;
-      matchData.loser = _loser;
-      matchData.loserScore = _loserScore;
-      matchData.updatedAt = _updatedAt;
-
-      emit MatchUpdated(_matchId, _updatedAt, _winner, _loser, _winnerScore, _loserScore);
-    }
-  }
-
   // DELETE method
   function toggleMatchStatus(uint256 _matchId) external onlyOwner whenNotPaused {
     require(matches[_matchId].createdAt != 0, 'Match not found');
 
     Match storage matchData = matches[_matchId];
     matchData.isActive = !matchData.isActive;
-    matchData.updatedAt = block.timestamp;
 
     emit MatchStatusChanged(_matchId, matchData.isActive);
   }
