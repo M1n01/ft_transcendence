@@ -2,6 +2,7 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
+import { TournmentEvent } from '../../../pong/js/tournament.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -19,7 +20,8 @@ export default class extends AbstractView {
     return data;
   };
   executeScript = () => {
-    //document.dispatchEvent(SignupEvent);
+    document.dispatchEvent(TournmentEvent);
+    //document.dispatchEvent(RebuildTournmentEvent);
   };
   getState = () => {
     return null;

@@ -1,3 +1,4 @@
+//import { RedirectHandler } from '../../../../../../../../../../.cache/typescript/5.5/node_modules/undici-types/handlers.js';
 import Point from './Point.js';
 
 export default class Game {
@@ -24,16 +25,32 @@ export default class Game {
   draw_final(parent) {
     const width = Math.abs(this.offset.x);
     let x = this.point.x - width;
-    let y = this.prePoint.y;
+    let y = this.prePoint.y - 3;
 
+    //bottom.style.top = `${y + this.offset.y * 2}px`;
     this.div.style.top = `${y}px`;
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width * 2}px`;
     this.div.style.height = '1px';
     this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
+
+    if (this.winner != null) {
+      const winner = document.createElement('div');
+      winner.style.top = `${y}px`;
+      winner.style.width = `${width + 2}px`;
+      winner.classList.add('winner');
+      winner.style.height = '1px';
+
+      if (this.winner == this.user1) {
+        winner.style.left = `${x - 2}px`;
+      } else {
+        winner.style.left = `${x + width - 2}px`;
+      }
+      parent.appendChild(winner);
+    }
   }
-  draw_seed(parent) {
+  draw_seed(parent, next_game) {
     let x = this.point.x;
     let y = this.prePoint.y;
     const width = Math.abs(this.offset.x);
@@ -45,11 +62,27 @@ export default class Game {
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width}px`;
     this.div.style.height = '1px';
-    this.div.classList.add('tournamentLine');
+
+    // 次の試合で勝った時だけ赤くする
+    if (this.winner != null && next_game.winner == this.winner) {
+      this.div.classList.add('winner');
+    } else {
+      this.div.classList.add('tournamentLine');
+    }
+    //this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
   }
 
   draw_normal(parent) {
+    const circle = document.createElement('div');
+    circle.style.top = `${this.point.y - 5}px`;
+    circle.style.left = `${this.point.x - 3}px`;
+    circle.style.width = '10px';
+    circle.style.height = '10px';
+    circle.style.backgroundColor = 'white';
+    circle.classList.add('gameCircle');
+    //parent.appendChild(circle);
+
     const bottom = document.createElement('div');
     if (this.position == 'left') {
       const width = Math.abs(this.offset.x);
@@ -67,6 +100,42 @@ export default class Game {
       bottom.style.left = `${x}px`;
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
+
+      if (this.winner != null) {
+        this.div.style.borderColor = 'red';
+        this.div.style.zIndex = 2;
+
+        const loserX = document.createElement('div');
+        const loserY = document.createElement('div');
+        loserX.style.top = `${y}px`;
+        loserX.style.left = `${x}px`;
+        loserX.style.width = `${width}px`;
+        loserX.classList.add('loser');
+        loserX.style.height = '1px';
+
+        loserY.style.top = `${y}px`;
+        loserY.style.left = `${x}px`;
+        loserY.style.width = `${width}px`;
+        loserY.classList.add('loserY');
+        loserY.style.height = `${height / 2}px`;
+
+        if (this.winner == this.user1) {
+          loserX.style.top = `${y + height}px`;
+          loserY.style.top = `${y + height / 2 + 1}px`;
+          this.div.style.height = `${height / 2 + 2}px`;
+        } else {
+          loserX.style.top = `${y}px`;
+          loserY.style.top = `${y + height / 2 + 2}px`;
+          this.div.style.height = `${height / 2 + 2}px`;
+        }
+        if (this.edge_flag) {
+          parent.appendChild(loserX);
+        } else {
+          bottom.style.borderColor = 'red';
+          bottom.style.zIndex = 2;
+        }
+        parent.appendChild(loserY);
+      }
     } else {
       const width = Math.abs(this.offset.x);
       const height = Math.abs(this.offset.y) * 2;
@@ -89,12 +158,12 @@ export default class Game {
     parent.appendChild(bottom);
   }
 
-  draw(parent) {
+  draw(parent, next_game) {
     if (this.id == 0) {
       //決勝戦
       this.draw_final(parent);
     } else if (this.seed_flag == true) {
-      this.draw_seed(parent);
+      this.draw_seed(parent, next_game);
     } else {
       this.draw_normal(parent);
     }
