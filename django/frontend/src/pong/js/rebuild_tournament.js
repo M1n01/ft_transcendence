@@ -13,16 +13,16 @@ document.addEventListener('RebuildTournmentEvent', () => {
 
   const games = [
     {
-      id: 11,
+      id: 12,
       winner: 'test1',
       loser: '',
       winner_score: '3',
       loser_score: '2',
     },
     {
-      id: 12,
-      winner: 'test4',
-      loser: 'test3',
+      id: 11,
+      winner: 'test3',
+      loser: 'test2',
       winner_score: '5',
       loser_score: '2',
     },
@@ -43,14 +43,14 @@ document.addEventListener('RebuildTournmentEvent', () => {
     {
       id: 1,
       winner: 'test1',
-      loser: 'test4',
+      loser: 'test3',
       winner_score: '4',
       loser_score: '0',
     },
     {
       id: 2,
-      winner: 'test6',
-      loser: 'test5',
+      winner: 'test5',
+      loser: 'test6',
       winner_score: '7',
       loser_score: '3',
     },

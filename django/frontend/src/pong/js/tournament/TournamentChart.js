@@ -15,6 +15,7 @@ export default class TournmentChart {
 
   recursiveSetGame(games, cur_game) {
     console.log('set final No.4 cur_game=' + cur_game);
+    // 再帰終了条件
     if (cur_game.edge_flag == true) {
       const cur_game_data = games.find((game) => game.id == cur_game.id);
 
@@ -23,6 +24,7 @@ export default class TournmentChart {
 
       if (cur_game_data.loser === '') {
         cur_game.seed_flag = true;
+        cur_game.winner = cur_game_data.winner;
         cur_game.user1 = cur_game_data.winner;
         return;
       }
@@ -35,13 +37,29 @@ export default class TournmentChart {
         tmp_user1 = cur_game_data.loser;
       }
 
-      cur_game.user1 = tmp_user1;
-      if (cur_game_data.loser == '') {
-        cur_game.seed_flag = true;
-      } else {
+      // 初期位置は、ユーザー名が大きい方が上になる
+      if (tmp_user1 > tmp_user2) {
+        cur_game.user1 = tmp_user1;
         cur_game.user2 = tmp_user2;
-        cur_game.seed_flag = false;
+      } else {
+        cur_game.user1 = tmp_user2;
+        cur_game.user2 = tmp_user1;
       }
+
+      if (cur_game.user1 == cur_game_data.winner) {
+        cur_game.winner = cur_game.user1;
+      } else {
+        cur_game.winner = cur_game.user2;
+      }
+      console.log('cur_game winner=' + cur_game.winner);
+      console.log('cur_game_data winner=' + cur_game_data.winner);
+      console.log('cur_game_data loser=' + cur_game_data.loser);
+      //if (cur_game_data.loser == '') {
+      //cur_game.seed_flag = true;
+      //} else {
+      //cur_game.user2 = tmp_user2;
+      //cur_game.seed_flag = false;
+      //}
       console.log('tmp_user1=' + tmp_user1);
       console.log('tmp_user2=' + tmp_user2);
 
@@ -57,14 +75,17 @@ export default class TournmentChart {
     const next_game_data1 = games.find((game) => game.id == next_id1);
     const next_game_data2 = games.find((game) => game.id == next_id2);
 
-    cur_game_data.user1 = next_game_data1.winner;
-    cur_game_data.user2 = next_game_data2.winner;
+    cur_game.user1 = next_game_data1.winner;
+    cur_game.user2 = next_game_data2.winner;
 
     if (cur_game_data.winner == next_game_data1.winner) {
       cur_game.winner = next_game_data1.winner;
     } else {
       cur_game.winner = next_game_data2.winner;
     }
+    console.log('cur_game.winner:' + cur_game.winner);
+    console.log('cur_game.user1:' + cur_game.user1);
+    console.log('cur_game.user2:' + cur_game.user2);
 
     let next_game1;
     let next_game2;
@@ -290,12 +311,16 @@ export default class TournmentChart {
     */
     //ctx.stroke();
 
-    this.final.draw(this.parent);
-    this.leftBranches.forEach((branch) => {
-      branch.draw(this.parent);
+    this.final.draw(this.parent, null);
+    this.leftBranches.forEach((game) => {
+      const next_id = parseInt(game.id / 10);
+      const next_game = this.leftBranches.find((game) => game.id == next_id);
+      game.draw(this.parent, next_game);
     });
-    this.rightBranches.forEach((branch) => {
-      branch.draw(this.parent);
+    this.rightBranches.forEach((game) => {
+      const next_id = parseInt(game.id / 10);
+      const next_game = this.rightBranches.find((game) => game.id == next_id);
+      game.draw(this.parent, next_game);
     });
 
     // キャンバスの幅と高さ
