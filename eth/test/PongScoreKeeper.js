@@ -34,20 +34,20 @@ describe('PongScoreKeeper contract', function () {
     it('Should create a match correctly', async function () {
       await pongScoreKeeper.createMatch(addr1.address, 11, addr2.address, 5);
       const match = await pongScoreKeeper.getMatch(0);
-      expect(match.winner).to.equal(addr1.address);
-      expect(match.loser).to.equal(addr2.address);
-      expect(match.winnerScore).to.equal(11);
-      expect(match.loserScore).to.equal(5);
+      expect(match.player1).to.equal(addr1.address);
+      expect(match.player2).to.equal(addr2.address);
+      expect(match.player1Score).to.equal(11);
+      expect(match.player2Score).to.equal(5);
       expect(match.isActive).to.be.true;
     });
 
-    it('Should fail if winner and loser are the same', async function () {
+    it('Should fail if player1 and player2 are the same', async function () {
       await expect(
         pongScoreKeeper.createMatch(addr1.address, 11, addr1.address, 5)
-      ).to.be.revertedWith('Winner and loser cannot be the same');
+      ).to.be.revertedWith('Winner and player2 cannot be the same');
     });
 
-    it('Should fail if winner score is not higher', async function () {
+    it('Should fail if player1 score is not higher', async function () {
       await expect(
         pongScoreKeeper.createMatch(addr1.address, 5, addr2.address, 11)
       ).to.be.revertedWith('Winner score must be higher');
@@ -84,7 +84,7 @@ describe('PongScoreKeeper contract', function () {
 
     it('Should retrieve a single match correctly', async function () {
       const match = await pongScoreKeeper.getMatch(0);
-      expect(match.winner).to.equal(addr1.address);
+      expect(match.player1).to.equal(addr1.address);
     });
 
     it('Should fail to retrieve a non-existent match', async function () {

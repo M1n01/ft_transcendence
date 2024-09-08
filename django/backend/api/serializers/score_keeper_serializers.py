@@ -5,7 +5,7 @@ from ...pong.models import Match
 class MatchRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
-        fields = ["winner", "winner_score", "loser", "loser_score"]
+        fields = ["player1", "player1_score", "player2", "player2_score"]
 
 
 class MatchResponseSerializer(serializers.ModelSerializer):

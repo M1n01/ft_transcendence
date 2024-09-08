@@ -8,10 +8,10 @@ contract PongScoreKeeper is Ownable, Pausable {
   struct Match {
     uint256 matchId;
     uint256 createdAt;
-    uint256 winner;
-    uint16 winnerScore;
-    uint256 loser;
-    uint16 loserScore;
+    uint256 player1;
+    uint16 player1Score;
+    uint256 player2;
+    uint16 player2Score;
     bool isActive; // Matchの削除フラグ
   }
 
@@ -21,8 +21,8 @@ contract PongScoreKeeper is Ownable, Pausable {
   event MatchCreated(
     uint256 indexed matchId,
     uint256 createdAt,
-    uint256 indexed winner,
-    uint256 indexed loser
+    uint256 indexed player1,
+    uint256 indexed player2
   );
   event MatchStatusChanged(uint256 indexed matchId, bool isActive);
 
@@ -30,26 +30,26 @@ contract PongScoreKeeper is Ownable, Pausable {
 
   // POST method
   function createMatch(
-    uint256 _winner,
-    uint16 _winnerScore,
-    uint256 _loser,
-    uint16 _loserScore
+    uint256 _player1,
+    uint16 _player1Score,
+    uint256 _player2,
+    uint16 _player2Score
   ) external onlyOwner whenNotPaused {
-    require(_winner != _loser, 'Winner and loser cannot be the same');
-    require(_winnerScore > _loserScore, 'Winner score must be higher');
+    require(_player1 != _player2, 'Winner and player2 cannot be the same');
+    require(_player1Score > _player2Score, 'Winner score must be higher');
 
     uint256 matchId = nextMatchId;
     matches[matchId] = Match(
       matchId,
       block.timestamp,
-      _winner,
-      _winnerScore,
-      _loser,
-      _loserScore,
+      _player1,
+      _player1Score,
+      _player2,
+      _player2Score,
       true
     );
     nextMatchId++;
-    emit MatchCreated(matchId, block.timestamp, _winner, _loser);
+    emit MatchCreated(matchId, block.timestamp, _player1, _player2);
   }
 
   function getMatch(uint256 _matchId) external view returns (Match memory) {
@@ -103,7 +103,7 @@ contract PongScoreKeeper is Ownable, Pausable {
 
     for (uint256 i = 0; i < nextMatchId && index < _limit; i++) {
       if (
-        (matches[i].winner == _userId || matches[i].loser == _userId) &&
+        (matches[i].player1 == _userId || matches[i].player2 == _userId) &&
         (matches[i].isActive || !_onlyActive)
       ) {
         if (totalMatches >= start) {
