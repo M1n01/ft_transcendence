@@ -29,4 +29,4 @@ class Match(models.Model):
     player2_score = models.SmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f"id={self.id}: {self.winner} vs {self.loser} (winner_score={self.winner_score}, loser_score={self.loser_score})"
+        return f"id={self.id}: {self.player1} vs {self.player2} (player1_score={self.player1_score}, player2_score={self.player2_score})"
