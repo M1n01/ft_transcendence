@@ -1,5 +1,6 @@
 //import { RedirectHandler } from '../../../../../../../../../../.cache/typescript/5.5/node_modules/undici-types/handlers.js';
 import Point from './Point.js';
+import crown_img from '../../assets//medal-crown-10328-gold.png';
 
 export default class Game {
   constructor(point, offset, edge_flag, id, position, pre_point) {
@@ -24,6 +25,7 @@ export default class Game {
 
   draw_final(parent) {
     const width = Math.abs(this.offset.x);
+    ///const height = Math.abs(this.offset.y);
     let x = this.point.x - width;
     let y = this.prePoint.y - 3;
 
@@ -36,6 +38,27 @@ export default class Game {
     parent.appendChild(this.div);
 
     if (this.winner != null) {
+      const circle = document.createElement('div');
+      circle.style.top = `${this.point.y - 7}px`;
+      circle.style.left = `${this.point.x - 9}px`;
+      circle.classList.add('gameCircle');
+      parent.appendChild(circle);
+
+      const winnerTop = document.createElement('div');
+      const winner_image = document.createElement('img');
+      //winner_image.src = 'static/asset/pong/medal-crown-10328-gold.png';
+      winner_image.src = crown_img;
+      winner_image.classList.add('w-100');
+
+      winnerTop.style.bottom = `${y + width}px`;
+      winnerTop.style.left = `${x + (width * 0.5) / 2 + 1}px`;
+      winnerTop.style.width = `${width * 1.5}px`;
+      winnerTop.style.height = `${width * 1.5}px`;
+      //winnerTop.classList.add('winner');
+      winnerTop.style.position = 'absolute';
+      //winnerTop.classList.add('validRight');
+      winnerTop.appendChild(winner_image);
+
       const winner = document.createElement('div');
       winner.style.top = `${y}px`;
       winner.style.width = `${width + 2}px`;
@@ -49,6 +72,7 @@ export default class Game {
         winner.style.left = `${x + width - 2}px`;
       }
       parent.appendChild(winner);
+      parent.appendChild(winnerTop);
     }
   }
   draw_seed(parent, next_game) {
@@ -174,12 +198,6 @@ export default class Game {
     const bottom = document.createElement('div');
 
     if (this.position == 'left') {
-      const circle = document.createElement('div');
-      circle.style.top = `${this.point.y - 7}px`;
-      circle.style.left = `${this.point.x - 9}px`;
-      circle.classList.add('gameCircle');
-      parent.appendChild(circle);
-
       const width = Math.abs(this.offset.x);
       const height = Math.abs(this.offset.y);
       const x = this.point.x + this.offset.x;
@@ -197,14 +215,15 @@ export default class Game {
       bottom.classList.add('tournamentBottomBranch');
 
       if (this.winner != null) {
+        const circle = document.createElement('div');
+        circle.style.top = `${this.point.y - 7}px`;
+        circle.style.left = `${this.point.x - 9}px`;
+        circle.classList.add('gameCircle');
+        parent.appendChild(circle);
+
         this.draw_left_winner(parent, x, y, width, height, next_game);
       }
     } else {
-      const circle = document.createElement('div');
-      circle.style.top = `${this.point.y - 7}px`;
-      circle.style.left = `${this.point.x - 5}px`;
-      circle.classList.add('gameCircle');
-      parent.appendChild(circle);
       // right
       const width = Math.abs(this.offset.x);
       const height = Math.abs(this.offset.y);
@@ -224,6 +243,11 @@ export default class Game {
       bottom.classList.add('tournamentBottomBranch');
 
       if (this.winner != null) {
+        const circle = document.createElement('div');
+        circle.style.top = `${this.point.y - 7}px`;
+        circle.style.left = `${this.point.x - 5}px`;
+        circle.classList.add('gameCircle');
+        parent.appendChild(circle);
         this.draw_right_winner(parent, x, y, width, height, next_game);
       }
     }
