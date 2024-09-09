@@ -2,6 +2,7 @@ import '../scss/login.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
 import { handlePostLogin } from '../../spa/js/utility/user.js';
+import ft_logo from '../assets/42.svg';
 
 import { navModal } from './two_fa.js';
 export const LoginEvent = new Event('LoginEvent');
@@ -15,6 +16,8 @@ function displayInstruction(id) {
 //const two_fa_form = document.getElementById('two-fa-verify-form');
 
 document.addEventListener('LoginEvent', function () {
+  document.getElementById('ft-logo').src = ft_logo;
+
   try {
     // 入力があったらエラーメッセージを消去
     const input_elements = document
