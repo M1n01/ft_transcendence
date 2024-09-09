@@ -6,50 +6,54 @@ import { Pausable } from '@openzeppelin/contracts/utils/Pausable.sol';
 
 contract PongScoreKeeper is Ownable, Pausable {
   struct Match {
-    uint256 matchId;
+    uint256 tournamentId;
     uint256 createdAt;
     uint256 player1;
     uint16 player1Score;
     uint256 player2;
     uint16 player2Score;
     bool isActive; // Matchの削除フラグ
+    uint16 round;
   }
 
   mapping(uint256 => Match) public matches;
   uint256 public nextMatchId;
 
   event MatchCreated(
-    uint256 indexed matchId,
+    uint256 indexed tournamentId,
     uint256 createdAt,
     uint256 indexed player1,
-    uint256 indexed player2
+    uint256 indexed player2,
+    uint16 round
   );
-  event MatchStatusChanged(uint256 indexed matchId, bool isActive);
+  event MatchStatusChanged(uint256 indexed tournamentId, bool isActive);
 
   constructor(address initialOwner) Ownable(initialOwner) {}
 
   // POST method
   function createMatch(
+    uint256 _tournamentId,
     uint256 _player1,
     uint16 _player1Score,
     uint256 _player2,
-    uint16 _player2Score
+    uint16 _player2Score,
+    uint16 _round
   ) external onlyOwner whenNotPaused {
     require(_player1 != _player2, 'Winner and player2 cannot be the same');
     require(_player1Score > _player2Score, 'Winner score must be higher');
 
-    uint256 matchId = nextMatchId;
-    matches[matchId] = Match(
-      matchId,
+    matches[nextMatchId] = Match(
+      _tournamentId,
       block.timestamp,
       _player1,
       _player1Score,
       _player2,
       _player2Score,
-      true
+      true, // アクティブフラグ
+      _round
     );
     nextMatchId++;
-    emit MatchCreated(matchId, block.timestamp, _player1, _player2);
+    emit MatchCreated(_tournamentId, block.timestamp, _player1, _player2, _round);
   }
 
   function getMatch(uint256 _matchId) external view returns (Match memory) {
@@ -123,13 +127,13 @@ contract PongScoreKeeper is Ownable, Pausable {
   }
 
   // DELETE method
-  function toggleMatchStatus(uint256 _matchId) external onlyOwner whenNotPaused {
-    require(matches[_matchId].createdAt != 0, 'Match not found');
+  function toggleMatchStatus(uint256 _tournamentId) external onlyOwner whenNotPaused {
+    require(matches[_tournamentId].createdAt != 0, 'Match not found');
 
-    Match storage matchData = matches[_matchId];
+    Match storage matchData = matches[_tournamentId];
     matchData.isActive = !matchData.isActive;
 
-    emit MatchStatusChanged(_matchId, matchData.isActive);
+    emit MatchStatusChanged(_tournamentId, matchData.isActive);
   }
 
   function pause() external onlyOwner {
