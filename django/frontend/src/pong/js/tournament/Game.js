@@ -39,7 +39,8 @@ export default class Game {
       const winner = document.createElement('div');
       winner.style.top = `${y}px`;
       winner.style.width = `${width + 2}px`;
-      winner.classList.add('winnerLeft');
+      winner.classList.add('winner');
+      winner.classList.add('validTop');
       winner.style.height = '1px';
 
       if (this.winner == this.user1) {
