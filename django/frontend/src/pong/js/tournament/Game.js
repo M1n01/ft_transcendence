@@ -39,7 +39,7 @@ export default class Game {
       const winner = document.createElement('div');
       winner.style.top = `${y}px`;
       winner.style.width = `${width + 2}px`;
-      winner.classList.add('winner');
+      winner.classList.add('winnerLeft');
       winner.style.height = '1px';
 
       if (this.winner == this.user1) {
@@ -61,39 +61,133 @@ export default class Game {
     this.div.style.top = `${y}px`;
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width}px`;
-    this.div.style.height = '1px';
+    this.div.style.height = '0px';
 
     // 次の試合で勝った時だけ赤くする
     if (this.winner != null && next_game.winner == this.winner) {
       this.div.classList.add('winner');
+      this.div.classList.add('validTop');
     } else {
       this.div.classList.add('tournamentLine');
     }
-    //this.div.classList.add('tournamentLine');
+    //this.div.classList.add('winnerLeft');
     parent.appendChild(this.div);
   }
 
-  draw_normal(parent) {
-    const circle = document.createElement('div');
-    circle.style.top = `${this.point.y - 5}px`;
-    circle.style.left = `${this.point.x - 3}px`;
-    circle.style.width = '10px';
-    circle.style.height = '10px';
-    circle.style.backgroundColor = 'white';
-    circle.classList.add('gameCircle');
-    //parent.appendChild(circle);
+  draw_right_winner(parent, x, y, width, height, next_game) {
+    const winnerTop = document.createElement('div');
+    const winnerBottom = document.createElement('div');
+    const winnerLeft = document.createElement('div');
 
+    winnerTop.style.top = `${y}px`;
+    winnerTop.style.left = `${x}px`;
+    winnerTop.style.width = `${width}px`;
+    winnerTop.style.height = `${height}px`;
+    winnerTop.classList.add('winner');
+    winnerTop.classList.add('validTop');
+
+    winnerBottom.style.top = `${y + this.offset.y * 2}px`;
+    winnerBottom.style.left = `${x}px`;
+    winnerBottom.style.width = `${width}px`;
+    winnerBottom.style.height = `${height}px`;
+    winnerBottom.classList.add('winner');
+    winnerBottom.classList.add('validTop');
+
+    winnerLeft.style.top = `${y}px`;
+    winnerLeft.style.left = `${x}px`;
+    winnerLeft.style.width = `${width}px`;
+    winnerLeft.style.height = `${height}px`;
+    winnerLeft.classList.add('winner');
+    winnerLeft.classList.add('validLeft');
+
+    if (this.winner == this.user1) {
+      winnerTop.style.width = `${width}px`;
+      winnerLeft.style.top = `${y}px`;
+      winnerBottom.style.left = `${x + width / 2}px`;
+      winnerBottom.style.width = `${width / 2}px`;
+
+      parent.appendChild(winnerTop);
+      if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
+        parent.appendChild(winnerBottom);
+      }
+    } else {
+      winnerTop.style.left = `${x + width / 2}px`;
+      winnerTop.style.width = `${width / 2}px`;
+      winnerLeft.style.top = `${y + height}px`;
+      winnerBottom.style.width = `${width}px`;
+      parent.appendChild(winnerBottom);
+      if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
+        parent.appendChild(winnerTop);
+      }
+    }
+    parent.appendChild(winnerLeft);
+  }
+  draw_left_winner(parent, x, y, width, height, next_game) {
+    const winnerTop = document.createElement('div');
+    const winnerBottom = document.createElement('div');
+    const winnerRight = document.createElement('div');
+
+    winnerTop.style.top = `${y}px`;
+    winnerTop.style.left = `${x}px`;
+    winnerTop.style.width = `${width}px`;
+    winnerTop.style.height = `${height}px`;
+    winnerTop.classList.add('winner');
+    winnerTop.classList.add('validTop');
+
+    winnerBottom.style.top = `${y + this.offset.y * 2}px`;
+    winnerBottom.style.left = `${x}px`;
+    winnerBottom.style.width = `${width}px`;
+    winnerBottom.style.height = `${height}px`;
+    winnerBottom.classList.add('winner');
+    winnerBottom.classList.add('validTop');
+
+    winnerRight.style.top = `${y}px`;
+    winnerRight.style.left = `${x}px`;
+    winnerRight.style.width = `${width}px`;
+    winnerRight.style.height = `${height}px`;
+    winnerRight.classList.add('winner');
+    winnerRight.classList.add('validRight');
+
+    if (this.winner == this.user1) {
+      winnerTop.style.width = `${width}px`;
+      winnerRight.style.top = `${y}px`;
+      winnerBottom.style.width = `${width / 2}px`;
+
+      parent.appendChild(winnerTop);
+      if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
+        parent.appendChild(winnerBottom);
+      }
+    } else {
+      winnerTop.style.width = `${width / 2}px`;
+      winnerRight.style.top = `${y + height}px`;
+      winnerBottom.style.width = `${width}px`;
+      parent.appendChild(winnerBottom);
+      if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
+        parent.appendChild(winnerTop);
+      }
+    }
+    parent.appendChild(winnerRight);
+  }
+
+  draw_normal(parent, next_game) {
     const bottom = document.createElement('div');
+
     if (this.position == 'left') {
+      const circle = document.createElement('div');
+      circle.style.top = `${this.point.y - 7}px`;
+      circle.style.left = `${this.point.x - 9}px`;
+      circle.classList.add('gameCircle');
+      parent.appendChild(circle);
+
       const width = Math.abs(this.offset.x);
-      const height = Math.abs(this.offset.y) * 2;
+      const height = Math.abs(this.offset.y);
       const x = this.point.x + this.offset.x;
       const y = this.point.y - this.offset.y;
 
       this.div.style.top = `${y}px`;
       this.div.style.left = `${x}px`;
       this.div.style.width = `${width}px`;
-      this.div.style.height = `${height}px`;
+      this.div.style.height = `${height * 2}px`;
       this.div.classList.add('tournamentTopLeftBranch');
 
       bottom.style.top = `${y + this.offset.y * 2}px`;
@@ -102,50 +196,24 @@ export default class Game {
       bottom.classList.add('tournamentBottomBranch');
 
       if (this.winner != null) {
-        this.div.style.borderColor = 'red';
-        this.div.style.zIndex = 2;
-
-        const loserX = document.createElement('div');
-        const loserY = document.createElement('div');
-        loserX.style.top = `${y}px`;
-        loserX.style.left = `${x}px`;
-        loserX.style.width = `${width}px`;
-        loserX.classList.add('loser');
-        loserX.style.height = '1px';
-
-        loserY.style.top = `${y}px`;
-        loserY.style.left = `${x}px`;
-        loserY.style.width = `${width}px`;
-        loserY.classList.add('loserY');
-        loserY.style.height = `${height / 2}px`;
-
-        if (this.winner == this.user1) {
-          loserX.style.top = `${y + height}px`;
-          loserY.style.top = `${y + height / 2 + 1}px`;
-          this.div.style.height = `${height / 2 + 2}px`;
-        } else {
-          loserX.style.top = `${y}px`;
-          loserY.style.top = `${y + height / 2 + 2}px`;
-          this.div.style.height = `${height / 2 + 2}px`;
-        }
-        if (this.edge_flag) {
-          parent.appendChild(loserX);
-        } else {
-          bottom.style.borderColor = 'red';
-          bottom.style.zIndex = 2;
-        }
-        parent.appendChild(loserY);
+        this.draw_left_winner(parent, x, y, width, height, next_game);
       }
     } else {
+      const circle = document.createElement('div');
+      circle.style.top = `${this.point.y - 7}px`;
+      circle.style.left = `${this.point.x - 5}px`;
+      circle.classList.add('gameCircle');
+      parent.appendChild(circle);
+      // right
       const width = Math.abs(this.offset.x);
-      const height = Math.abs(this.offset.y) * 2;
-      const x = this.point.x; // + this.offset.x;
+      const height = Math.abs(this.offset.y);
+      const x = this.point.x;
       const y = this.point.y - this.offset.y;
 
       this.div.style.top = `${y}px`;
       this.div.style.left = `${x}px`;
       this.div.style.width = `${width}px`;
-      this.div.style.height = `${height}px`;
+      this.div.style.height = `${height * 2}px`;
       this.div.classList.add('tournamentTopRightBranch');
       //this.div.classList.add('tournamentTopLeftBranch');
 
@@ -153,6 +221,10 @@ export default class Game {
       bottom.style.left = `${x}px`;
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
+
+      if (this.winner != null) {
+        this.draw_right_winner(parent, x, y, width, height, next_game);
+      }
     }
     parent.appendChild(this.div);
     parent.appendChild(bottom);
@@ -165,7 +237,7 @@ export default class Game {
     } else if (this.seed_flag == true) {
       this.draw_seed(parent, next_game);
     } else {
-      this.draw_normal(parent);
+      this.draw_normal(parent, next_game);
     }
   }
   getNewGames(edge_flag) {
@@ -235,8 +307,8 @@ export default class Game {
 
     //const offset1 = New Point();
 
-    const point1 = this.point.copyOffset(new Point(0, this.offset.y));
-    const point2 = this.point.copyOffset(new Point(0, -this.offset.y));
+    const point1 = this.point.copyOffset(new Point(0, -this.offset.y));
+    const point2 = this.point.copyOffset(new Point(0, this.offset.y));
 
     if (this.position == 'left') {
       tmp_offset = new Point(-width * 1.5 - 10, -height / 2);
@@ -260,6 +332,9 @@ export default class Game {
   }
 
   setUser(user1, user2) {
+    console.log('SetUser No.1');
+    console.log('user1=' + user1);
+    console.log('user2=' + user2);
     this.user1 = user1;
     if (this.seed_flag == false) {
       this.user2 = user2;

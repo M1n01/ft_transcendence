@@ -29,7 +29,7 @@ export default class TournmentChart {
         return;
       }
 
-      if (cur_game_data.winner > cur_game_data.loser) {
+      if (cur_game_data.winner < cur_game_data.loser) {
         tmp_user1 = cur_game_data.winner;
         tmp_user2 = cur_game_data.loser;
       } else {
@@ -37,14 +37,23 @@ export default class TournmentChart {
         tmp_user1 = cur_game_data.loser;
       }
 
+      //console.log('cur_game winner=' + cur_game.winner);
+      console.log('cur_game_data tmp_user1=' + tmp_user1);
+      console.log('cur_game_data tmp_user2=' + tmp_user2);
+      cur_game.user1 = tmp_user1;
+      cur_game.user2 = tmp_user2;
       // 初期位置は、ユーザー名が大きい方が上になる
+      /*
       if (tmp_user1 > tmp_user2) {
+        console.log('user1:' + tmp_user1);
+        console.log('user2:' + tmp_user2);
         cur_game.user1 = tmp_user1;
         cur_game.user2 = tmp_user2;
       } else {
         cur_game.user1 = tmp_user2;
         cur_game.user2 = tmp_user1;
       }
+      */
 
       if (cur_game.user1 == cur_game_data.winner) {
         cur_game.winner = cur_game.user1;
@@ -162,9 +171,13 @@ export default class TournmentChart {
     });
     const offset = seed_edges.length;
     not_seed_edges.forEach((edge, index) => {
-      const user1 = participants[offset + index];
-      const user2 = participants[offset + index + 1];
-      edge.setUser(user1, user2);
+      const tmp_user1 = participants[offset + index];
+      const tmp_user2 = participants[offset + index + 1];
+      if (tmp_user1 < tmp_user2) {
+        edge.setUser(tmp_user1, tmp_user2);
+      } else {
+        edge.setUser(tmp_user2, tmp_user1);
+      }
     });
 
     // this.leftBranches.forEach((branch) => {
