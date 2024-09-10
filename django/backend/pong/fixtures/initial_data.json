@@ -1,0 +1,18 @@
+[
+  {
+    "model": "pong.tournament",
+    "pk": 1,
+    "fields": {
+      "start_at": "2024-01-01T00:00:00Z",
+      "current_players": 4
+    }
+  },
+  {
+    "model": "pong.tournament",
+    "pk": 2,
+    "fields": {
+      "start_at": "2024-01-02T00:00:00Z",
+      "current_players": 7
+    }
+  }
+]

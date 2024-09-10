@@ -41,8 +41,9 @@ re: fclean all
 stop:
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
 
-update:
+update: stop
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
+
 up:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
 	python $(BACKEND_DIR)/manage.py makemigrations
