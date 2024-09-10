@@ -14,7 +14,6 @@ export default class TournmentChart {
   }
 
   recursiveSetGame(games, cur_game) {
-    console.log('set final No.4 cur_game=' + cur_game);
     // 再帰終了条件
     if (cur_game.edge_flag == true) {
       const cur_game_data = games.find((game) => game.id == cur_game.id);
@@ -262,7 +261,7 @@ export default class TournmentChart {
 
     this.offsetPoint = RightOffsetPoint;
 
-    const BaseWidthLength = parseInt(RightOffsetPoint.x / 1.5);
+    const BaseWidthLength = parseInt(RightOffsetPoint.x);
     //const BaseHeightLength = RightOffsetPoint.y;
 
     const offset = new Point(-BaseWidthLength, 0);

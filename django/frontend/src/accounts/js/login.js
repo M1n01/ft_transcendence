@@ -16,7 +16,11 @@ function displayInstruction(id) {
 //const two_fa_form = document.getElementById('two-fa-verify-form');
 
 document.addEventListener('LoginEvent', function () {
-  document.getElementById('ft-logo').src = ft_logo;
+  const logo = document.querySelector('#ft-logo');
+  if (logo == null) {
+    return;
+  }
+  logo.src = ft_logo;
 
   try {
     // 入力があったらエラーメッセージを消去

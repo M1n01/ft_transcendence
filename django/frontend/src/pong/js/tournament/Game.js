@@ -1,4 +1,3 @@
-//import { RedirectHandler } from '../../../../../../../../../../.cache/typescript/5.5/node_modules/undici-types/handlers.js';
 import Point from './Point.js';
 import crown_img from '../../assets//medal-crown-10328-gold.png';
 
@@ -25,11 +24,9 @@ export default class Game {
 
   draw_final(parent) {
     const width = Math.abs(this.offset.x);
-    ///const height = Math.abs(this.offset.y);
     let x = this.point.x - width;
     let y = this.prePoint.y - 3;
 
-    //bottom.style.top = `${y + this.offset.y * 2}px`;
     this.div.style.top = `${y}px`;
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width * 2}px`;
@@ -46,17 +43,14 @@ export default class Game {
 
       const winnerTop = document.createElement('div');
       const winner_image = document.createElement('img');
-      //winner_image.src = 'static/asset/pong/medal-crown-10328-gold.png';
       winner_image.src = crown_img;
       winner_image.classList.add('w-100');
 
-      winnerTop.style.bottom = `${y + width}px`;
-      winnerTop.style.left = `${x + (width * 0.5) / 2 + 1}px`;
-      winnerTop.style.width = `${width * 1.5}px`;
-      winnerTop.style.height = `${width * 1.5}px`;
-      //winnerTop.classList.add('winner');
+      winnerTop.style.bottom = `${y + width * 0.7}px`;
+      winnerTop.style.left = `${x + width / 2}px`;
+      winnerTop.style.width = `${width * 1}px`;
+      winnerTop.style.height = `${width * 1}px`;
       winnerTop.style.position = 'absolute';
-      //winnerTop.classList.add('validRight');
       winnerTop.appendChild(winner_image);
 
       const winner = document.createElement('div');
@@ -95,7 +89,6 @@ export default class Game {
     } else {
       this.div.classList.add('tournamentLine');
     }
-    //this.div.classList.add('winnerLeft');
     parent.appendChild(this.div);
   }
 
@@ -235,7 +228,6 @@ export default class Game {
       this.div.style.width = `${width}px`;
       this.div.style.height = `${height * 2}px`;
       this.div.classList.add('tournamentTopRightBranch');
-      //this.div.classList.add('tournamentTopLeftBranch');
 
       bottom.style.top = `${y + this.offset.y * 2}px`;
       bottom.style.left = `${x}px`;
@@ -268,12 +260,10 @@ export default class Game {
   getNewGames(edge_flag) {
     const y = this.point.y - this.offset.y;
 
-    //const seed_point1 = new Point(0, this.point.y + this.offset.y - 3 + (this.offset.y % 2) * 200);
     const seed_point1 = new Point(0, y);
     const seed_point2 = new Point(0, y + this.offset.y * 2);
     const new_game1 = new Game(
       new Point(this.point.x + this.offset.x, this.point.y - this.offset.y),
-      //new Point(this.offset.x, parseInt(this.offset.y / 2) + 1 + (this.offset.y % 2)), // +1がないとずれる
       new Point(this.offset.x, parseInt(this.offset.y / 2)), // +1がないとずれる
       edge_flag,
       this.id * 10 + 1,
@@ -282,7 +272,6 @@ export default class Game {
     );
     const new_game2 = new Game(
       new Point(this.point.x + this.offset.x, this.point.y + this.offset.y + 3),
-      //new Point(this.offset.x, parseInt(this.offset.y / 2) + (this.offset.y % 2)),
       new Point(this.offset.x, parseInt(this.offset.y / 2)),
       edge_flag,
       this.id * 10 + 2,
@@ -305,14 +294,13 @@ export default class Game {
     }
     text.classList.add('userTextArea');
     text.textContent = user;
-    //text.textContent = this.id;
     parent.appendChild(text);
   }
 
   drawSeedUser(parent) {
     let tmp_offset;
     const height = Math.abs(this.offset.y) * 1.5;
-    const width = Math.abs(this.offset.x) * 2.5;
+    const width = Math.abs(this.offset.x) * 2;
 
     if (this.position == 'left') {
       tmp_offset = new Point(-width * 1.5 - 10, -height / 2);
@@ -324,14 +312,9 @@ export default class Game {
     this.appendUserText(this.user1, parent, text_point, width, height);
   }
   drawNotSeedUser(parent) {
-    //const tmp_point = new Point(this.offset.x, -this.offset.y);
-
     let tmp_offset;
     const height = Math.abs(this.offset.y) * 1.5;
-    const width = Math.abs(this.offset.x) * 2.5;
-
-    //const offset1 = New Point();
-
+    const width = Math.abs(this.offset.x) * 2;
     const point1 = this.point.copyOffset(new Point(0, -this.offset.y));
     const point2 = this.point.copyOffset(new Point(0, this.offset.y));
 
@@ -357,9 +340,6 @@ export default class Game {
   }
 
   setUser(user1, user2) {
-    console.log('SetUser No.1');
-    console.log('user1=' + user1);
-    console.log('user2=' + user2);
     this.user1 = user1;
     if (this.seed_flag == false) {
       this.user2 = user2;

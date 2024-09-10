@@ -14,7 +14,7 @@ document.addEventListener('RebuildTournmentEvent', () => {
   const games = [
     {
       id: 12,
-      winner: 'test1',
+      winner: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
       loser: '',
       winner_score: '3',
       loser_score: '2',
