@@ -3,7 +3,9 @@
     "model": "pong.tournament",
     "pk": 1,
     "fields": {
+      "name": "トーナメント1",
       "start_at": "2024-01-01T00:00:00Z",
+      "is_only_friend": true,
       "current_players": 4
     }
   },
@@ -11,7 +13,9 @@
     "model": "pong.tournament",
     "pk": 2,
     "fields": {
+      "name": "トーナメント2",
       "start_at": "2024-01-02T00:00:00Z",
+      "is_only_friend": false,
       "current_players": 7
     }
   }

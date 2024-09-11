@@ -1,3 +1,4 @@
+{% load i18n %}
 <!doctype html>
 <html lang="ja">
   <head>
@@ -7,11 +8,11 @@
   </head>
   <body>
     <h1>Tournment</h1>
-    <div class="position-absolute border" id="tournment-div" style="width: 400px; height: 200px">
-      Test
-    </div>
-    <!--
-    <canvas id="tournment-canvas" width="400" height="200" class="border border-primary"></canvas>
--->
+    <form id="make-tournment" action="{% url 'pong:tournament' %}">
+      {{form}}
+
+      <button type="submit">{% trans "作成" %}</button>
+    </form>
+    <div hidden id="chart-div">{% include 'pong/tournament-chart.html' %}</div>
   </body>
 </html>

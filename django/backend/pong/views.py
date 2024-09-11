@@ -1,33 +1,15 @@
 from django.shortcuts import render
-
-# from django.http import HttpResponse
-# from django.template import loader
 from django.db import models
-
-# from django.views.decorators.csrf import ensure_csrf_cookie
-# from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
-
-# from urllib.parse import urlparse
-# from django.template import RequestContext, Template
 from django.views.decorators.http import condition
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-
-# import django.views.decorators.http
-# import asyncio
+from django.views.generic import ListView
+from django.views.generic import CreateView
 import hashlib
 
-# from django.conf import settings
-
-# from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# from django.contrib.auth.decorators import login_not_required
-
-
-# loginしない限り見れない
-# class Pong(LoginRequiredMixin, ListView):
-# model = "test"
+from .models import Tournament
+from .forms import TournamentForm
 
 
 def checkSPA(request):
@@ -94,5 +76,22 @@ class GamesView(TemplateView):
     template_name = "pong/games.html"
 
 
-class TournamentView(TemplateView):
+class TournamentListView(ListView):
+    model = Tournament
+    template_name = "pong/tournament-list.html"
+    context_object_name = "notifications"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Tournament.objects.order_by("start_at").reverse().first()
+
+
+# class TournamentView(TemplateView):
+class TournamentView(LoginRequiredMixin, CreateView):
+    # model = Tournament
+    # form = TournamentForm
+    form_class = TournamentForm
     template_name = "pong/tournament.html"
+
+    def post(request):
+        print("post")
