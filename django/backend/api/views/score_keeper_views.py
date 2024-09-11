@@ -68,11 +68,13 @@ class SaveMatchScoreView(APIView):
                 match = match_contract.functions.getMatch(int(match_id)).call()
                 match_data = {
                     "id": match[0],
-                    "created_at": datetime.datetime.fromtimestamp(match[1]),
+                    "tournament_id": match[1],
+                    "created_at": datetime.datetime.fromtimestamp(match[2]),
                     "player1": match[3],
                     "player1_score": match[4],
                     "player2": match[5],
                     "player2_score": match[6],
+                    "round": match[8],
                 }
                 serializer = MatchResponseSerializer(match_data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -93,11 +95,13 @@ class SaveMatchScoreView(APIView):
                 matches_data = [
                     {
                         "id": match[0],
-                        "created_at": datetime.datetime.fromtimestamp(match[1]),
+                        "tournament_id": match[1],
+                        "created_at": datetime.datetime.fromtimestamp(match[2]),
                         "player1": match[3],
                         "player1_score": match[4],
                         "player2": match[5],
                         "player2_score": match[6],
+                        "round": match[8],
                     }
                     for match in matches
                 ]
@@ -122,11 +126,13 @@ class SaveMatchScoreView(APIView):
                 matches_data = [
                     {
                         "id": match[0],
-                        "created_at": datetime.datetime.fromtimestamp(match[1]),
+                        "tournament_id": match[1],
+                        "created_at": datetime.datetime.fromtimestamp(match[2]),
                         "player1": match[3],
                         "player1_score": match[4],
                         "player2": match[5],
                         "player2_score": match[6],
+                        "round": match[8],
                     }
                     for match in matches
                 ]
@@ -148,10 +154,12 @@ class SaveMatchScoreView(APIView):
 
         try:
             transaction = match_contract.functions.createMatch(
+                serializer.validated_data["tournament_id"].id,
                 serializer.validated_data["player1"],
                 serializer.validated_data["player1_score"],
                 serializer.validated_data["player2"],
                 serializer.validated_data["player2_score"],
+                serializer.validated_data["round"],
             ).build_transaction(
                 {
                     "from": account.address,

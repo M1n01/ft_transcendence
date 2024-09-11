@@ -6,6 +6,7 @@ import { Pausable } from '@openzeppelin/contracts/utils/Pausable.sol';
 
 contract PongScoreKeeper is Ownable, Pausable {
   struct Match {
+    uint256 matchId;
     uint256 tournamentId;
     uint256 createdAt;
     uint256 player1;
@@ -20,7 +21,8 @@ contract PongScoreKeeper is Ownable, Pausable {
   uint256 public nextMatchId;
 
   event MatchCreated(
-    uint256 indexed tournamentId,
+    uint256 indexed matchId,
+    uint256 tournamentId,
     uint256 createdAt,
     uint256 indexed player1,
     uint256 indexed player2,
@@ -43,6 +45,7 @@ contract PongScoreKeeper is Ownable, Pausable {
     require(_player1Score > _player2Score, 'Winner score must be higher');
 
     matches[nextMatchId] = Match(
+      nextMatchId,
       _tournamentId,
       block.timestamp,
       _player1,
@@ -53,7 +56,7 @@ contract PongScoreKeeper is Ownable, Pausable {
       _round
     );
     nextMatchId++;
-    emit MatchCreated(_tournamentId, block.timestamp, _player1, _player2, _round);
+    emit MatchCreated(nextMatchId, _tournamentId, block.timestamp, _player1, _player2, _round);
   }
 
   function getMatch(uint256 _matchId) external view returns (Match memory) {
