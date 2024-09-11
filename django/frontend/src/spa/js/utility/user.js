@@ -3,8 +3,9 @@ import { router } from '../routing/routing.js';
 import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
+import { moveTo } from '../routing/routing.js';
 //import 'bootstrap';
-import { Dropdown } from 'bootstrap';
+//import { Dropdown } from 'bootstrap';
 //import ft_logo from '../../assets/42.svg';
 
 export function isLogined() {
@@ -31,6 +32,7 @@ export const loadNav = async () => {
       await logout();
     });
 
+    /*
     const small_menu_icon = document.getElementById('small_menu_icon');
     //var navbarToggler = document.querySelector('.navbar-toggler');
     const dropdown = document.getElementById('small-menu-dropdown');
@@ -44,13 +46,16 @@ export const loadNav = async () => {
         dropdownMenu.toggle();
       }
     });
+    */
   } catch (error) {
     console.log('ignore error:' + error);
   }
 };
 
 export const handlePostLogin = async () => {
-  await reload();
+  console.log('handlePostLogin No.1');
+  //await reload();
+  moveTo('games');
   document.getElementById('nav').hidden = false;
 };
 

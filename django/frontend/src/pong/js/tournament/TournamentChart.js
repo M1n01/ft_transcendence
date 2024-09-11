@@ -1,6 +1,6 @@
 import Point from './/Point.js';
 //import Branch from './/Branch.js';
-import Game from './/Game.js';
+import Game from './Game.js';
 
 const OffsetX = 200;
 export default class TournmentChart {
