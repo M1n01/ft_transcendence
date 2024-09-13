@@ -18,6 +18,7 @@ import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
 import Games from '../views/Games.js';
 import Tournament from '../views/Tournament.js';
+import Friend from '../views/Friend.js';
 
 export const Routes = [
   { path: '/', view: Top },
@@ -26,6 +27,7 @@ export const Routes = [
   { path: '/pong', view: Pong },
   { path: '/games', view: Games },
   { path: '/tournament', view: Tournament },
+  { path: '/friend', view: Friend },
   { path: '/sign', view: Index },
   { path: '/signup', view: Signup },
   { path: '/login', view: Login },

@@ -281,6 +281,7 @@ class LoginSignupView(TemplateView):
         }
 
     def get(self, request):
+        print("login-signup No.1")
         # form = SignUpTmpForm
         # form = MyForm()
         return render(

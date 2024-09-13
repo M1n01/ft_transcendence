@@ -22,6 +22,7 @@ import pong.urls
 
 import spa.urls
 import accounts.urls
+import friend.urls
 
 
 # API
@@ -29,12 +30,13 @@ urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
     # path('api/', include(api.urls)),
     # path("login/", include(login.urls)),
-    path("accounts/", include(accounts.urls), name="accounts"),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 urlpatterns += i18n_patterns(
+    path("accounts/", include(accounts.urls), name="accounts"),
     path("pong/", include(pong.urls), name="pong"),
+    path("friend/", include(friend.urls), name="friend"),
     path("spa/", include(spa.urls), name="spa2"),
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,

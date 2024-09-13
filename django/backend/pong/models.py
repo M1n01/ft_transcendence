@@ -10,7 +10,7 @@ class Tournament(models.Model):
         FtUser, on_delete=models.CASCADE, verbose_name=_("主催者")
     )
     start_at = models.DateTimeField(verbose_name=_("開始時間"))
-    is_only_friend = models.BooleanField("フレンドのみ")
+    is_only_friend = models.BooleanField(verbose_name=_("フレンドのみ"))
     current_players = models.IntegerField(verbose_name=_("最大参加人数"))
 
     def save(self, *args, **kwargs):

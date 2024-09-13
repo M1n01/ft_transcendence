@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "webpack_loader",
     "spa",
     "pong",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",

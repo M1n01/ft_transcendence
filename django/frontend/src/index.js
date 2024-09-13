@@ -16,11 +16,13 @@ import { loadNav } from './spa/js/utility/user.js';
 
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
+  const tmp_params = new URLSearchParams(window.location.search);
+  const params = tmp_params == '' ? '' : '?' + tmp_params;
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
-  path = path === undefined ? '' : path;
+  path = path === undefined ? '' : path + params;
   return getUrl(path);
 };
 

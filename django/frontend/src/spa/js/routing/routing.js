@@ -45,14 +45,17 @@ export const navigateTo = async (url) => {
 };
 
 export const router = async () => {
+  console.log('test No.1');
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
       result: location.pathname.match(pathToRegex(route.path)),
     };
   });
+  console.log('test No.2');
 
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
+  console.log('test No.3 match=' + match);
 
   if (!match) {
     match = {
@@ -60,6 +63,7 @@ export const router = async () => {
       result: [getUrl(Routes[0].path)],
     };
   }
+  console.log('test No.4 match=' + match.route);
 
   if (isLogined() == false) {
     match = {
@@ -67,6 +71,7 @@ export const router = async () => {
       result: [getUrl(Routes[0].path)],
     };
   }
+  console.log('test No.5 match.path=' + match.route.path);
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
@@ -99,8 +104,10 @@ export async function updatePage(res) {
       if ('html' in data) {
         navigateTo(data['html']);
       }
-    } else {
+    } else if (contentType && contentType.indexOf('text/html') !== -1) {
       document.querySelector('#app').innerHTML = await res.text();
+    } else {
+      console.error('Error');
     }
     executeScriptTab('');
   } catch (error) {
