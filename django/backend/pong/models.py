@@ -24,7 +24,7 @@ class Tournament(models.Model):
 
 class TournamentParticipant(models.Model):
     id = models.BigAutoField(primary_key=True)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     participant = models.ForeignKey(FtUser, on_delete=models.CASCADE)
     is_accept = models.BooleanField()
 
@@ -37,11 +37,11 @@ class TournamentParticipant(models.Model):
 
 class Match(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     round = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    player1 = models.IntegerField()
-    player2 = models.IntegerField(null=True)  # シード(不戦勝)の場合はnull
+    player1 = models.ForeignKey(FtUser, on_delete=models.PROTECT, related_name="player1")
+    player2 = models.ForeignKey(FtUser, on_delete=models.PROTECT, related_name="player2", null=True)
     player1_score = models.SmallIntegerField(null=True)
     player2_score = models.SmallIntegerField(null=True)
 
