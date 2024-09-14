@@ -30,12 +30,12 @@ document.addEventListener('TwoFaEvent', function () {
     const form = event.target;
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
+    input_code.value = '';
     if (response.status != 200) {
       error_message.hidden = false;
+      return;
     }
-    input_code.value = '';
     navModal(false);
-
     moveTo('games');
   });
   input_code.addEventListener('input', () => {

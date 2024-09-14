@@ -224,17 +224,10 @@ def two_fa_verify(request):
             if is_provisional_login is False or user_id == "":
                 return HttpResponseForbidden()
             user = FtUser.objects.get(id=user_id)
-
-            # user = request.user
             code = request.POST.get("code")
-            # rval = False
-
             rval = verify_two_fa(user, code, request)
-
             if rval is True:
-
                 new_user = FtUser.objects.get(email=user.email)
-                # src_user = FtTmpUser.objects.get(email=user.email)
                 login(
                     request,
                     new_user,
