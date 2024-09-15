@@ -23,6 +23,7 @@ import pong.urls
 import spa.urls
 import accounts.urls
 import friend.urls
+import notification.urls
 
 
 # API
@@ -34,6 +35,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path("notification/", include(notification.urls), name="notification"),
     path("accounts/", include(accounts.urls), name="accounts"),
     path("pong/", include(pong.urls), name="pong"),
     path("friend/", include(friend.urls), name="friend"),

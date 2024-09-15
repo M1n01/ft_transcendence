@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
     "friend",
     # "login",

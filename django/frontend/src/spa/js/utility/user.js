@@ -53,8 +53,6 @@ export const loadNav = async () => {
 };
 
 export const handlePostLogin = async () => {
-  console.log('handlePostLogin No.1');
-  //await reload();
   moveTo('games');
   document.getElementById('nav').hidden = false;
 };
@@ -65,8 +63,6 @@ export const logout = async () => {
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
     navigateTo('login-signup');
-    //history.pushState(null, null, 'login-signup');
     await reload();
-    //document.getElementById('nav').hidden = true;
   }
 };

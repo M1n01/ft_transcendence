@@ -3,8 +3,8 @@
     "model": "accounts.ftuser",
     "pk": 1,
     "fields": {
-      "id": 1,
       "username": "testA1",
+      "password": "AAdfBC3DfwFi49",
       "email": "testA1@gmail.com",
       "email42": "testA142@gmail.com",
       "first_name": "test",
@@ -14,61 +14,217 @@
       "language": "jp",
       "birth_date": "2024-01-01",
       "created_at": "2024-01-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
     }
   },
   {
     "model": "accounts.ftuser",
     "pk": 2,
     "fields": {
-      "id": 2,
       "username": "testA2",
+      "password": "AAdfBC3DfwFi49",
       "email": "testA2@gmail.com",
       "email42": "testA242@gmail.com",
       "first_name": "test",
       "last_name": "A2",
       "country_code": "+81",
-      "phone": "9022345678",
+      "phone": "9022325678",
       "language": "jp",
       "birth_date": "2024-01-01",
       "created_at": "2024-01-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
     }
   },
   {
     "model": "accounts.ftuser",
     "pk": 3,
     "fields": {
-      "id": 3,
       "username": "testA3",
+      "password": "AAdfBC3DfwFi49",
       "email": "testA3@gmail.com",
       "email42": "testA342@gmail.com",
       "first_name": "test",
       "last_name": "A3",
       "country_code": "+81",
-      "phone": "9022945678",
+      "phone": "9022945978",
       "language": "jp",
       "birth_date": "2024-01-01",
       "created_at": "2024-01-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
     }
   },
   {
     "model": "accounts.ftuser",
     "pk": 4,
     "fields": {
-      "id": 4,
       "username": "testA4",
+      "password": "AAdfBC3DfwFi49",
       "email": "testA4@gmail.com",
       "email42": "testA442@gmail.com",
       "first_name": "test",
       "last_name": "A4",
       "country_code": "+81",
-      "phone": "9032945678",
+      "phone": "9032245678",
       "language": "jp",
       "birth_date": "2024-01-01",
       "created_at": "2024-01-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 5,
+    "fields": {
+      "username": "testA5",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA5@gmail.com",
+      "email42": "testA542@gmail.com",
+      "first_name": "test",
+      "last_name": "A5",
+      "country_code": "+81",
+      "phone": "9032949278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 6,
+    "fields": {
+      "username": "testA6",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA6@gmail.com",
+      "email42": "testA642@gmail.com",
+      "first_name": "test",
+      "last_name": "A6",
+      "country_code": "+81",
+      "phone": "9032926278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 7,
+    "fields": {
+      "username": "testA7",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA7@gmail.com",
+      "email42": "testA742@gmail.com",
+      "first_name": "test",
+      "last_name": "A7",
+      "country_code": "+81",
+      "phone": "9032746278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 8,
+    "fields": {
+      "username": "testA8",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA8@gmail.com",
+      "email42": "testA842@gmail.com",
+      "first_name": "test",
+      "last_name": "A8",
+      "country_code": "+81",
+      "phone": "9038741278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 9,
+    "fields": {
+      "username": "testA9",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA9@gmail.com",
+      "email42": "testA942@gmail.com",
+      "first_name": "test",
+      "last_name": "A9",
+      "country_code": "+81",
+      "phone": "9038779278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 10,
+    "fields": {
+      "username": "testA10",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA10@gmail.com",
+      "email42": "testA1042@gmail.com",
+      "first_name": "test",
+      "last_name": "A10",
+      "country_code": "+81",
+      "phone": "9038749271",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 11,
+    "fields": {
+      "username": "testA11",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA11@gmail.com",
+      "email42": "testA1142@gmail.com",
+      "first_name": "test",
+      "last_name": "A11",
+      "country_code": "+81",
+      "phone": "9031874278",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 12,
+    "fields": {
+      "username": "testA12",
+      "password": "AAdfBC3DfwFi49",
+      "email": "testA12@gmail.com",
+      "email42": "testA1242@gmail.com",
+      "first_name": "test",
+      "last_name": "A12",
+      "country_code": "+81",
+      "phone": "9032874978",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false
     }
   }
 ]
