@@ -97,11 +97,10 @@ INSTALLED_APPS = [
     "webpack_loader",
     "spa",
     "pong",
+    "pong.score_keeper.apps.ScoreKeeperConfig",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
-    "api",
-    "rest_framework",
     "web3",
 ]
 
@@ -301,3 +300,5 @@ ERROR_PAGE = PONG_DOMAIN + "error.html"
 # WEB3
 PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 PROVIDER_URL = "http://eth:8545"
+PONG_SCORE_CONTRACT_ADDRESS = None
+

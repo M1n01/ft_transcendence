@@ -31,7 +31,6 @@ djangorestframework  \
 qrcode \
 requests \
 django-webpack-loader \
-djangorestframework \
 web3 \
 pyjwt \
 sendgrid \

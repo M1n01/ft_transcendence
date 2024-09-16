@@ -41,8 +41,7 @@ contract PongScoreKeeper is Ownable, Pausable {
     uint16 _player2Score,
     uint16 _round
   ) external onlyOwner whenNotPaused {
-    require(_player1 != _player2, 'Winner and player2 cannot be the same');
-    require(_player1Score > _player2Score, 'Winner score must be higher');
+    require(_player1 != _player2, 'player1 and player2 cannot be the same');
 
     matches[nextMatchId] = Match(
       nextMatchId,
@@ -69,7 +68,7 @@ contract PongScoreKeeper is Ownable, Pausable {
     bool _onlyActive,
     uint256 _page,
     uint256 _limit
-  ) external view returns (Match[] memory, uint256) {
+  ) external view returns (Match[] memory) {
     require(_limit > 0 && _limit <= 100, 'Invalid limit');
     uint256 start = _page * _limit;
     uint256 end = start + _limit;
@@ -92,7 +91,7 @@ contract PongScoreKeeper is Ownable, Pausable {
       mstore(_matches, index)
     }
 
-    return (_matches, nextMatchId);
+    return _matches;
   }
 
   function getMatchesByUserId(
@@ -100,7 +99,7 @@ contract PongScoreKeeper is Ownable, Pausable {
     bool _onlyActive,
     uint256 _page,
     uint256 _limit
-  ) external view returns (Match[] memory, uint256) {
+  ) external view returns (Match[] memory) {
     require(_limit > 0 && _limit <= 100, 'Invalid limit');
     uint256 start = _page * _limit;
 
@@ -126,7 +125,7 @@ contract PongScoreKeeper is Ownable, Pausable {
       mstore(_matches, index)
     }
 
-    return (_matches, totalMatches);
+    return _matches;
   }
 
   // DELETE method
