@@ -13,6 +13,21 @@ urlpatterns = [
     path("test", views.test),
     path("index", views.index),
     path("tournament", views.TournamentView.as_view(), name="tournament"),
+    path(
+        "tournament/recruiting",
+        views.TournamentRecruitingView.as_view(),
+        name="tournament-recruiting",
+    ),
+    path(
+        "tournament/organized",
+        views.TournamentOrganizedView.as_view(),
+        name="tournament-organized",
+    ),
+    path(
+        "tournament/participant",
+        views.TournamentParticipantView.as_view(),
+        name="tournament-participant",
+    ),
     path("tournament-chart", views.TournamentView.as_view(), name="tournament-chart"),
     path("games", views.GamesView.as_view(), name="games"),
     path(

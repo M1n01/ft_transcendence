@@ -95,10 +95,21 @@
     </div>
 
     <div id="tournament-accept">
-      {% include 'pong/tournament-register.html' with tournaments=recruiting_tournaments %}
+      {% include 'pong/card.html' with tournaments=recruiting_tournaments attr=recruit_status %}
     </div>
+
+    <div id="tournament-accept">
+      {% include 'pong/card.html' with tournaments=as_organizer attr=organizer_status %}
+    </div>
+
+    <div id="tournament-accept">
+      {% include 'pong/card.html' with tournaments=as_participant attr=participant_status %}
+    </div>
+
+    <!--
     <div id="tournament-list">
       {% include 'pong/tournament-list.html' with as_organizer=as_organizer others=as_participant %}
     </div>
+-->
   </body>
 </html>

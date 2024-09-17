@@ -97,7 +97,9 @@ class CustomSessionMiddleware(SessionMiddleware):
                     id = ""
                     email = ""
                     is_provisional_login = False
-                    exp = datetime.now(tz=timezone.utc) + timedelta(seconds=14400)
+                    exp = datetime.now(tz=timezone.utc) + timedelta(
+                        seconds=getattr(settings, "JWT_VALID_TIME", None)
+                    )
                     if "is_provisional_login" in request.session:
                         is_provisional_login = request.session["is_provisional_login"]
                         if (is_provisional_login is True) and (

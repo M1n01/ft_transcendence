@@ -23,12 +23,24 @@
           <div class="col-md-4 mb-4">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">{{tournament.name}}</h5>
+                <h5 class="card-title text-center">{{tournament.name}}</h5>
               </div>
               <div class="card-body text-truncate">
-                <p><strong>{% trans '主催者'%}:</strong>{{tournament.organizer.username}}</p>
-                <p><strong>{% trans '最大参加人数'%}:</strong>{{tournament.current_players}}</p>
-                <p><strong>{% trans '開始日時'%}:</strong>{{tournament.start_at}}</p>
+                <div class="text-center">
+                  <strong class="card-label d-flex justify-content-center"
+                    >{% trans '主催者'%}<br /></strong
+                  ><span><span class="text-center">{{tournament.organizer.username}}</span></span>
+                </div>
+                <div class="text-center mt-2">
+                  <strong class="card-label d-flex justify-content-center"
+                    >{% trans '最大参加人数'%}<br /></strong
+                  ><span class="d-flex justify-content-center">{{tournament.current_players}}</span>
+                </div>
+                <div class="text-center mt-2">
+                  <strong class="card-label d-flex justify-content-center"
+                    >{% trans '開始日時'%}<br /></strong
+                  ><span class="d-flex justify-content-center">{{tournament.start_at}}</span>
+                </div>
               </div>
 
               <form
