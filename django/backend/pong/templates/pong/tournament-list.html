@@ -1,0 +1,28 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournment List</title>
+  </head>
+  <body>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br />
+    <ul>
+      {% trans "主催" %} {% for tournament in as_organizer %}
+      <li>
+        <span class=""> {{tournament}} </span>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <ul>
+      {% trans "参加" %} {% for tournament in others%}
+      <li>
+        <span class=""> {{tournament}} </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

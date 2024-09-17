@@ -40,10 +40,10 @@ class UserNotification(models.Model):
     created_at = models.DateTimeField(verbose_name=_("作成日"), auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name=_("変更日"), auto_now=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=["user", "message"], name="message_unique"),
-        ]
+    # class Meta:
+    #    constraints = [
+    #        models.UniqueConstraint(fields=["user", "message"], name="message_unique"),
+    #    ]
 
     def __str__(self):
         return f"Notification for {self.user.username} - {self.message.message[:20]}"

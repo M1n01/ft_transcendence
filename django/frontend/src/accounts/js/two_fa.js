@@ -2,11 +2,13 @@ import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import '../scss/two_fa.scss';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { Modal } from 'bootstrap';
+console.log('New TwoFaEvent');
 export const TwoFaEvent = new Event('TwoFaEvent');
 
 let modal = null;
 export function navModal(open) {
   if (modal == null) {
+    console.log('New Modal');
     const modal_2fa = document.getElementById('TwoFa-Modal');
     modal = new Modal(modal_2fa);
   }

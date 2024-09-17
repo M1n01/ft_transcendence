@@ -14,13 +14,13 @@
     <form id="accept-request" method="post" action="{% url 'friend:respond'  %}">
       {% csrf_token %}
       <input name="id" type="hidden" value="{{request.id}}" />
-      <input name="status" type="hidden" value="accepted" />
+      <input name="status" type="hidden" value="ACCEPTED" />
       <button type="submit">{% trans "許可" %}</button>
     </form>
     <form id="reject-request" method="post" action="{% url 'friend:respond'  %}">
       {% csrf_token %}
       <input name="id" type="hidden" value="{{request.id}}" />
-      <input name="status" type="hidden" value="blocked" />
+      <input name="status" type="hidden" value="BLOCKED" />
       <button type="submit">{% trans "ブロック" %}</button>
     </form>
 

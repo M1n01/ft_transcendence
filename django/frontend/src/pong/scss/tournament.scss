@@ -75,3 +75,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.card {
+  max-width: 20rem; /* 横幅を最大20remに制限 */
+  margin: 0 auto; /* カードを中央揃えにする */
+}

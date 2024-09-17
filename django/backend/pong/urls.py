@@ -15,6 +15,11 @@ urlpatterns = [
     path("tournament", views.TournamentView.as_view(), name="tournament"),
     path("tournament-chart", views.TournamentView.as_view(), name="tournament-chart"),
     path("games", views.GamesView.as_view(), name="games"),
+    path(
+        "register-tournament",
+        views.RegisterTournament.as_view(),
+        name="register-tournament",
+    ),
     path("", RedirectView.as_view(url="/games")),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、

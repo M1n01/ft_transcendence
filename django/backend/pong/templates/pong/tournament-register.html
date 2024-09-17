@@ -1,0 +1,54 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournment Accept</title>
+  </head>
+  <body>
+    <br />
+    <ul>
+      <div class="container mt-4">
+        <div class="d-flex align-items-end">
+          <h3>{% trans "参加可能トーナメント" %}</h3>
+          <span class="h6 ps-2">
+            <a href="/games" class="">{% trans 'すべての項目を表示' %}</a>
+          </span>
+        </div>
+
+        <div class="row">
+          {% for tournament in tournaments %}
+
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">{{tournament.name}}</h5>
+              </div>
+              <div class="card-body text-truncate">
+                <p><strong>{% trans '主催者'%}:</strong>{{tournament.organizer.username}}</p>
+                <p><strong>{% trans '最大参加人数'%}:</strong>{{tournament.current_players}}</p>
+                <p><strong>{% trans '開始日時'%}:</strong>{{tournament.start_at}}</p>
+              </div>
+
+              <form
+                id="register-tournament"
+                method="post"
+                action="{% url 'pong:register-tournament'  %}"
+              >
+                {% csrf_token %}
+                <input name="id" type="hidden" value="{{tournament.id}}" />
+                <input name="status" type="hidden" value="ACCEPTED" />
+                <div class="card-footer text-center">
+                  <button type="submit" class="btn btn-primary">{% trans "参加" %}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+    </ul>
+  </body>
+</html>

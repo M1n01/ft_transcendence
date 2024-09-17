@@ -84,7 +84,7 @@ def verify_two_fa(user, code, request):
     if two_fa_mode == AuthChoices.SMS:
         rval = two_fa.verify_sms(user, code)
     elif two_fa_mode == AuthChoices.EMAIL:
-        time = datetime.fromtimestamp(float(request.session["exp"]))
+        time = datetime.fromtimestamp(float(request.session["exp"]), tz=timezone.utc)
         rval = two_fa.verify_email(user, time, code)
     elif two_fa_mode == AuthChoices.APP:
         rval = two_fa.verify_app(user, code)
@@ -98,7 +98,9 @@ def send_two_fa(user, request):
         if two_fa_mode == AuthChoices.SMS:
             rval = two_fa.sms(user)
         elif two_fa_mode == AuthChoices.EMAIL:
-            time = datetime.fromtimestamp(float(request.session["exp"]))
+            time = datetime.fromtimestamp(
+                float(request.session["exp"]), tz=timezone.utc
+            )
             rval = two_fa.email(user, time)
         elif two_fa_mode == AuthChoices.APP:
             rval = two_fa.app(user)
@@ -201,6 +203,11 @@ def signup_two_fa_verify(request):
                 new_user,
                 backend="django.contrib.auth.backends.ModelBackend",
             )
+
+            tmp_time = datetime.now(tz=timezone.utc) + timedelta(
+                seconds=getattr(settings, "JWT_VALID_TIME", None)
+            )
+            request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
             return HttpResponse()
 
         except json.JSONDecodeError:
@@ -233,6 +240,11 @@ def two_fa_verify(request):
                     new_user,
                     backend="django.contrib.auth.backends.ModelBackend",
                 )
+                tmp_time = datetime.now(tz=timezone.utc) + timedelta(
+                    seconds=getattr(settings, "JWT_VALID_TIME", None)
+                )
+                request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+
                 return HttpResponse()
             return HttpResponseBadRequest("Failure to verify")
 
@@ -419,7 +431,9 @@ class SignupView(CreateView):
                 )
                 if user is None:
                     return HttpResponseServerError("Server Error")
-                tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+                tmp_time = datetime.now(tz=timezone.utc) + timedelta(
+                    seconds=getattr(settings, "JWT_TMP_VALID_TIME", None)
+                )
                 self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
                 self.request.session["is_provisional_login"] = True
                 self.request.session["user_id"] = user.id
@@ -488,6 +502,11 @@ def oauth_login(request):
             logger.error("failure to authenticate")
             return HttpResponseServerError("failure to authenticate")
         login(request, user, backend="accounts.oauth.FtOAuth")
+        tmp_time = datetime.now(tz=timezone.utc) + timedelta(
+            seconds=getattr(settings, "JWT_VALID_TIME", None)
+        )
+        request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+
         return HttpResponse()
     except RuntimeError as e:
         return HttpResponseServerError("failure to login:" + e)
@@ -551,7 +570,9 @@ def two_fa(request):
                 # email_address = request.POST.get("id")
                 # user = FtUser.objects.get(email=email_address)
                 twilio = TwoFA()
-                time = datetime.fromtimestamp(float(request.session["exp"]))
+                time = datetime.fromtimestamp(
+                    float(request.session["exp"]), tz=timezone.utc
+                )
                 rval = twilio.email(user, time)
                 if rval:
                     extra_context = {"app": False}

@@ -9,5 +9,16 @@
       "fr": "Vous avez reçu un message d'ami",
       "link": "/friend"
     }
+  },
+  {
+    "model": "notification.notificationmessage",
+    "pk": 2,
+    "fields": {
+      "name": "new_tournament",
+      "jp": "新しいトーナメントが作成されました",
+      "en": "New tournaments have been created",
+      "fr": "De nouveaux tournois ont été créés",
+      "link": "/tournament"
+    }
   }
 ]

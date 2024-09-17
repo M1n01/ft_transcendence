@@ -57,7 +57,7 @@ class FriendView(ListView):
     def get_friendlist(self):
         return Friendships.objects.filter(
             user=self.request.user,
-            status=FriendshipsStatusChoices.ACCEPTED.label,
+            status=FriendshipsStatusChoices.ACCEPTED,
         )
 
     def get(self, request):
@@ -67,13 +67,22 @@ class FriendView(ListView):
         friend_request = self.request_model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )
-        print(f"{len(friend_request)=}")
+        not_search1 = friend_request.values_list("friend", flat=True)
+        # print(f"{not_search=}")
 
         results = []
         friends = self.get_friendlist()
+        not_search2 = friends.values_list("friend", flat=True)
+        not_search = not_search1 | not_search2
+        # not_search.extend(not_search_tmp)
+        # print(f"{not_search_tmp=}")
+        # print(f"{not_search=}")
         username = request.GET.get("username", "")
         if username:
-            results = FtUser.objects.filter(username__icontains=username)
+            results = FtUser.objects.exclude(id__in=not_search).filter(
+                username__icontains=username
+            )
+            # results = FtUser.objects.filter(username__icontains=username)
         return render(
             request,
             "friend/friend.html",
@@ -109,7 +118,7 @@ class RespondFriendRequest(UpdateView):
     fields = ["id", "status"]
     template_name = "friend/friend.html"  # 使わない
     success_url = reverse_lazy("friend:friend")
-    queryset = Friendships.objects.all()
+    # queryset = Friendships.objects.all()
 
     def get(self, request):
         print("respond No.1")
