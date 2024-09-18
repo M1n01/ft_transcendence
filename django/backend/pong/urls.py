@@ -12,30 +12,30 @@ urlpatterns = [
     path("script2", views.script2, name="script2"),
     path("test", views.test),
     path("index", views.index),
-    path("tournament", views.TournamentView.as_view(), name="tournament"),
-    path(
-        "tournament/recruiting",
-        views.TournamentRecruitingView.as_view(),
-        name="tournament-recruiting",
-    ),
-    path(
-        "tournament/organized",
-        views.TournamentOrganizedView.as_view(),
-        name="tournament-organized",
-    ),
-    path(
-        "tournament/participant",
-        views.TournamentParticipantView.as_view(),
-        name="tournament-participant",
-    ),
-    path("tournament-chart", views.TournamentView.as_view(), name="tournament-chart"),
-    path("games", views.GamesView.as_view(), name="games"),
-    path(
-        "register-tournament",
-        views.RegisterTournament.as_view(),
-        name="register-tournament",
-    ),
     path("", RedirectView.as_view(url="/games")),
+    path("games", views.GamesView.as_view(), name="games"),
+    # path("tournament", views.TournamentView.as_view(), name="tournament"),
+    # path(
+    #    "tournament/recruiting",
+    #    views.TournamentRecruitingView.as_view(),
+    #    name="tournament-recruiting",
+    # ),
+    # path(
+    #    "tournament/organized",
+    #    views.TournamentOrganizedView.as_view(),
+    #    name="tournament-organized",
+    # ),
+    # path(
+    #    "tournament/participant",
+    #    views.TournamentParticipantView.as_view(),
+    #    name="tournament-participant",
+    # ),
+    # path("tournament-chart", views.TournamentView.as_view(), name="tournament-chart"),
+    # path(
+    #    "register-tournament",
+    #    views.RegisterTournament.as_view(),
+    #    name="register-tournament",
+    # ),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、
 # それらを保持するディレクトリを定義する

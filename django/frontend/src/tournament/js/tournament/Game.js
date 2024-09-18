@@ -1,5 +1,5 @@
 import Point from './Point.js';
-import crown_img from '../../assets//medal-crown-10328-gold.png';
+import crown_img from '../../assets/medal-crown-10328-gold.png';
 
 export default class Game {
   constructor(point, offset, edge_flag, id, position, pre_point) {

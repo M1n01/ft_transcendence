@@ -46,7 +46,7 @@
               <form
                 id="register-tournament"
                 method="post"
-                action="{% url 'pong:register-tournament'  %}"
+                action="{% url 'tournament:register'  %}"
               >
                 {% csrf_token %}
                 <input name="id" type="hidden" value="{{tournament.id}}" />

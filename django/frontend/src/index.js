@@ -23,13 +23,25 @@ const getDisplayedURI = (pathname) => {
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
   path = path === undefined ? '' : path + params;
-  return getUrl(path);
+
+  let rest_path = '';
+  if (path !== '') {
+    // http://localhost/abc/def/ghi
+    // 上記URLなら、/def/ghiがrest_pathとなる
+    const test = splits.findIndex((tmp_path) => tmp_path == path);
+    const slice_splits = splits.slice(test + 1);
+    rest_path = '/' + slice_splits.join('/');
+  }
+  return { path: getUrl(path), rest: rest_path };
+  //return getUrl(path);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadNav();
 
   let tmp_path = window.location.pathname;
+  console.log('tmp_path=' + tmp_path);
+
   document.body.addEventListener('click', (e) => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
@@ -66,11 +78,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       const lang_url = '/i18n/setlang/';
       const form = document.getElementById('lang_form');
       let formData = new FormData(form);
-      const current_uri = getDisplayedURI(tmp_path);
+      const current_uri = getDisplayedURI(tmp_path).path;
       changingLanguage(lang_url, formData, current_uri);
     }
   });
 
+  console.log('No.2 tmp_path = ' + tmp_path);
   const uri = getDisplayedURI(tmp_path);
-  navigateTo(uri);
+  console.log('uri = ' + uri);
+  navigateTo(uri.path, uri.rest);
 });

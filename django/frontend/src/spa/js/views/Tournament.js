@@ -2,7 +2,7 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
-import { TournmentEvent } from '../../../pong/js/tournament.js';
+import { TournmentEvent } from '../../../tournament/js/tournament.js';
 //import { LoginEvent } from '../../../accounts/js/login.js';
 
 export default class extends AbstractView {
@@ -16,7 +16,7 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async () => {
-    const uri = getUrlWithLang('pong/tournament');
+    const uri = getUrlWithLang('tournament/');
     const data = fetchData(uri);
     return data;
   };

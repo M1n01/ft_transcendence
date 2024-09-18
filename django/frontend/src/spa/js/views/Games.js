@@ -2,7 +2,7 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
-import { RebuildTournmentEvent } from '../../../pong/js/rebuild_tournament.js';
+import { RebuildTournmentEvent } from '../../../tournament/js/rebuild_tournament.js';
 
 export default class extends AbstractView {
   constructor(params) {

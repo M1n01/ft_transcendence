@@ -19,12 +19,16 @@ window.addEventListener('popstate', async (event) => {
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
+const secondPathToRegex = (path) =>
+  new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
+
 export const moveTo = async (url) => {
   navigateTo(url);
   await reload();
 };
 
-export const navigateTo = async (url) => {
+export const navigateTo = async (url, rest = '') => {
+  console.log('rest=' + rest);
   try {
     const setState = async () => {
       if (view !== undefined && view !== null) {
@@ -45,14 +49,17 @@ export const navigateTo = async (url) => {
 };
 
 export const router = async () => {
-  console.log('test No.1');
   const potentialMatches = Routes.map((route) => {
+    console.log('test No.1 route.path=' + route.path);
+    console.log('test No.2 location.pathname=' + location.pathname);
+    console.log('test No.3 pathToRegex(route.path)=' + pathToRegex(route.path));
     return {
       route: route,
       result: location.pathname.match(pathToRegex(route.path)),
+      param: location.pathname.match(secondPathToRegex(route.path)),
     };
   });
-  console.log('test No.2');
+  console.log('test No.3');
 
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
   console.log('test No.3 match=' + match);

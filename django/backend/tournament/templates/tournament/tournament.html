@@ -41,7 +41,7 @@
             ></button>
           </div>
           <div class="modal-body px-4">
-            <form id="make-tournment" action="{% url 'pong:tournament' %}">
+            <form id="make-tournment" action="{% url 'tournament:tournament' %}">
               {% csrf_token %}
 
               <div class="mt-3">
@@ -70,12 +70,24 @@
                 </div>
               </div>
 
-              <div class="mt-3">
-                <label for="id_name" class="form-label text-dark">{% trans '開始日時'%}</label>
+              <div class="d-flex flex-column flex-sm-row">
+              <div class="mt-3 w-50 me-4">
+                <label for="id_name" class="form-label text-dark">{% trans '開始日'%}</label>
                 <div class="input-group">{{form.start_at}}</div>
               </div>
+              <div class="d-flex ">
+              <div class="mt-3 me-4">
+                <label for="id_name" class="form-label text-dark bg-light">{% trans '時'%}</label>
+                <div class="input-group dropdown">{{form.start_hour}}</div>
+              </div>
+              <div class="mt-3">
+                <label for="id_name" class="form-label text-dark">{% trans '分'%}</label>
+                <div class="input-group  dropdown">{{form.start_minute}}</div>
+              </div>
+              </div>
+            </div>
             </form>
-            <div hidden id="chart-div">{% include 'pong/tournament-chart.html' %}</div>
+            <div hidden id="chart-div">{% include 'tournament/chart.html' %}</div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -95,21 +107,14 @@
     </div>
 
     <div id="tournament-accept">
-      {% include 'pong/card.html' with tournaments=recruiting_tournaments attr=recruit_status %}
+      {% include 'tournament/card.html' with tournaments=recruiting attr=recruit_status %}
     </div>
 
     <div id="tournament-accept">
-      {% include 'pong/card.html' with tournaments=as_organizer attr=organizer_status %}
+      {% include 'tournament/card.html' with tournaments=as_organizer attr=organizer_status %}
     </div>
 
     <div id="tournament-accept">
-      {% include 'pong/card.html' with tournaments=as_participant attr=participant_status %}
+      {% include 'tournament/card.html' with tournaments=as_participant attr=participant_status %}
     </div>
-
-    <!--
-    <div id="tournament-list">
-      {% include 'pong/tournament-list.html' with as_organizer=as_organizer others=as_participant %}
-    </div>
--->
-  </body>
 </html>

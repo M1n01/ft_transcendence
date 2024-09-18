@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "spa",
     "notification",
     "pong",
+    "tournament",
     "friend",
     # "login",
     "accounts",
