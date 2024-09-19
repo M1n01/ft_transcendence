@@ -15,9 +15,9 @@ export default class extends AbstractView {
     const json = fetchJsonData('/spa/is-login');
     return json;
   };
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('friend/');
-    const data = fetchData(uri);
+    const data = fetchData(uri + rest + params);
     return data;
   };
   executeScript = () => {

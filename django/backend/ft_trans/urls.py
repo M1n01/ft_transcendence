@@ -43,6 +43,7 @@ urlpatterns += i18n_patterns(
     path("tournament/", include(tournament.urls), name="tournament"),
     path("friend/", include(friend.urls), name="friend"),
     path("spa/", include(spa.urls), name="spa2"),
+    path("", include(spa.urls), name="blank"),
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,
 )

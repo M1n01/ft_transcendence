@@ -10,7 +10,8 @@ export default class {
   checkRedirect = async () => {
     return { is_redirect: false };
   };
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return '';
   };
   executeScript = () => {

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Tournament
+from .models import Tournament, TournamentParticipant
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime, timezone
 
@@ -8,6 +8,15 @@ TIME_HOUR_CHOICES = [((f"{hour:02d}"), f"{hour:02d}") for hour in range(0, 24)]
 TIME_MINUTE_CHOICES = [
     ((f"{minute:02d}"), f"{minute:02d}") for minute in [0, 15, 30, 45]
 ]
+
+
+class TournamentParticipantForm(forms.ModelForm):
+    # is_accept = forms.BooleanField()
+    # participant = forms.CharField()
+
+    class Meta:
+        model = TournamentParticipant
+        fields = ("alias_name", "tournament_id")
 
 
 class TournamentForm(forms.ModelForm):

@@ -1,9 +1,6 @@
-from django.urls import path
-
-# from django.views.generic import RedirectView
+import spa.urls
 from tournament import views
-
-# from views import Pong
+from django.urls import include, path, re_path
 
 app_name = "tournament"
 
@@ -29,6 +26,7 @@ urlpatterns = [
         views.RegisterApi.as_view(),
         name="register",
     ),
+    re_path(r"[\w\-\/]*", include(spa.urls), name="error"),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、
 # それらを保持するディレクトリを定義する

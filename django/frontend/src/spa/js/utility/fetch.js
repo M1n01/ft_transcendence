@@ -7,6 +7,10 @@ function makeRequest(method, url) {
     if (!response.ok) {
       throw new Error(' Fetch() Error');
     }
+    console.log('response.status=' + response.status);
+    if (response.status >= 400) {
+      throw new Error(' Status Error:' + response.status);
+    }
     return response;
   });
 }

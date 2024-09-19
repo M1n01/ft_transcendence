@@ -14,7 +14,7 @@
       </div>
 
       {% if tournaments %}
-      <div class="row d-flex justify-content-center justify-content-sm-between overflow-hidden">
+      <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
         {% for tournament in tournaments %}
 
         <div class="col-md-4 mb-4 w-auto">
@@ -40,21 +40,73 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-center w-100">
+            <div class="d-flex justify-content-around w-100">
               {% if attr.display_register %}
-              <form
-                id="register-tournament"
-                method="post"
-                action="{% url 'tournament:register'  %}"
-                class="w-100 register"
+              <div class="card-footer w-100">
+                <button
+                  type="button"
+                  class="btn btn-primary text-nowrap"
+                  data-bs-toggle="modal"
+                  data-bs-target="#registerModal"
+                >
+                  {% trans '参加' %}
+                </button>
+              </div>
+
+              <div
+                class="modal fade"
+                id="registerModal"
+                tabindex="-1"
+                aria-labelledby="registerModalLabel"
+                aria-hidden="true"
               >
-                {% csrf_token %}
-                <input name="id" type="hidden" value="{{tournament.id}}" />
-                <input name="status" type="hidden" value="ACCEPTED" />
-                <div class="card-footer text-center">
-                  <button type="submit" class="btn btn-primary">{{attr.button}}</button>
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <div class="d-flex justify-content-center w-100">
+                        <h5 class="modal-title">{% trans "参加申し込み" %}</h5>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <form
+                        id="register-tournament"
+                        method="post"
+                        action="{% url 'tournament:register'  %}"
+                        class="w-100 register-tournament"
+                      >
+                        {% csrf_token %}
+                        <input name="tournament_id" type="hidden" value="{{tournament.id}}" />
+
+                        <label for="id_name" class="form-label text-dark"
+                          >{% trans 'プレイヤー名'%}</label
+                        >
+                        <br />
+                        <input name="alias_name" type="text" value="{{attr.username}}" />
+                        <div class="d-flex justify-content-end mt-3">
+                          <button
+                            id="close-register-modal"
+                            type="button"
+                            class="btn btn-secondary me-4"
+                            data-bs-dismiss="modal"
+                          >
+                            {% trans 'キャンセル' %}
+                          </button>
+                          <button type="submit" class="btn btn-primary me-4">
+                            {% trans '登録' %}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
-              </form>
+              </div>
+
               {% endif %}
 
               <form method="post" action="{% url 'tournament:register'  %}" class="w-100 details">
@@ -62,7 +114,9 @@
                 <input name="id" type="hidden" value="{{tournament.id}}" />
                 <input name="status" type="hidden" value="ACCEPTED" />
                 <div class="card-footer text-center">
-                  <button type="submit" class="btn btn-primary">{% trans '詳細 '%}</button>
+                  <button type="submit" class="btn btn-primary text-nowrap">
+                    {% trans '詳細 '%}
+                  </button>
                 </div>
               </form>
             </div>

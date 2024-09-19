@@ -15,10 +15,23 @@ export default class extends AbstractView {
     const json = fetchJsonData('/spa/is-login');
     return json;
   };
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('tournament/');
-    const data = fetchData(uri);
-    return data;
+    console.log('tournament No.1 rest:' + rest);
+    const split = rest.split('/');
+    console.log('tournament No.2 rest:' + split);
+    if (split[0] === 'register') {
+      console.log('tournament No.2');
+      const data = fetchData(uri + rest + params);
+      return data;
+    } else if (rest === '') {
+      console.log('tournament No.3');
+      const data = fetchData(uri + rest + params);
+      return data;
+    } else {
+      console.log('tournament No.4');
+      throw new Error(' Fetch() Error');
+    }
   };
   executeScript = () => {
     document.dispatchEvent(TournmentEvent);

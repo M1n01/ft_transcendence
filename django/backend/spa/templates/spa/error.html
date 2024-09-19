@@ -10,7 +10,9 @@
     <div>
       {% trans "指定するページにアクセスするにはログインする必要があります" %}
       <br />
-      <a id="to-login" class="" href="login-signup" data-link>{% trans "ログインページ" %}</a>
+      <a id="to-login" class="" href="{% url 'accounts:login-signup' %}" data-link
+        >{% trans "ログインページ" %}</a
+      >
     </div>
   </body>
 </html>

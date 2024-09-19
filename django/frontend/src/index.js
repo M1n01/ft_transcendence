@@ -14,6 +14,8 @@ import './main.scss';
 import { loadNav } from './spa/js/utility/user.js';
 //import 'login.js'
 
+console.log('load index.js');
+
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
   const tmp_params = new URLSearchParams(window.location.search);
@@ -22,7 +24,18 @@ const getDisplayedURI = (pathname) => {
   let path = splits.find(
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
-  path = path === undefined ? '' : path + params;
+  path = path === undefined ? '' : path;
+  if (path == '') {
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+    console.log('path is undefined');
+  }
 
   let rest_path = '';
   if (path !== '') {
@@ -32,7 +45,7 @@ const getDisplayedURI = (pathname) => {
     const slice_splits = splits.slice(test + 1);
     rest_path = '/' + slice_splits.join('/');
   }
-  return { path: getUrl(path), rest: rest_path };
+  return { path: getUrl(path), rest: rest_path, params: params };
   //return getUrl(path);
 };
 
@@ -85,6 +98,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   console.log('No.2 tmp_path = ' + tmp_path);
   const uri = getDisplayedURI(tmp_path);
-  console.log('uri = ' + uri);
-  navigateTo(uri.path, uri.rest);
+  console.log('uri = ' + uri.path);
+  console.log('rest= ' + uri.rest);
+  console.log('params= ' + uri.params);
+  navigateTo(uri.path, uri.rest, uri.params);
 });

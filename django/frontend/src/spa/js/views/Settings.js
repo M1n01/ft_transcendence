@@ -10,7 +10,8 @@ export default class extends AbstractView {
   checkRedirect = async () => {
     return { is_redirect: false };
   };
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Settings</h1>
             <p>Manage your privacy and configuration.</p>

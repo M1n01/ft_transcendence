@@ -10,7 +10,8 @@ export default class extends AbstractView {
     return { is_redirect: false };
   };
 
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Welcome back, Dom</h1>
             <p>

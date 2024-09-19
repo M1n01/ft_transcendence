@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class TournamentStatusChoices(models.TextChoices):
     RECRUITING = "RECRUITING", _("recruiting")
     ONGOING = "ONGOING", _("ongoing")
-    END = "END", _("END")
+    ENDED = "ENDED", _("ended")
 
 
 class Tournament(models.Model):

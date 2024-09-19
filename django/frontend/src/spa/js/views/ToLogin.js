@@ -11,9 +11,9 @@ export default class extends AbstractView {
     return { is_redirect: false };
   };
 
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('spa/top');
-    const data = fetchData(uri);
+    const data = fetchData(uri + rest + params);
     return data;
   };
 

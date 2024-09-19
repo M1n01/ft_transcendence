@@ -19,25 +19,22 @@ window.addEventListener('popstate', async (event) => {
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
-const secondPathToRegex = (path) =>
-  new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
-
 export const moveTo = async (url) => {
   navigateTo(url);
   await reload();
 };
 
-export const navigateTo = async (url, rest = '') => {
-  console.log('rest=' + rest);
+export const navigateTo = async (url, rest = '', params = '') => {
+  const history_url = url + rest + params;
   try {
     const setState = async () => {
       if (view !== undefined && view !== null) {
         const state = await view.getState();
-        history.pushState(state, null, url);
+        history.pushState(state, null, history_url);
       } else {
-        history.pushState(null, null, url);
+        history.pushState(null, null, history_url);
       }
-      view = await router();
+      view = await router(rest, params);
       return view;
     };
     view = await setState();
@@ -48,29 +45,27 @@ export const navigateTo = async (url, rest = '') => {
   return null;
 };
 
-export const router = async () => {
+export const router = async (rest = '', params = '') => {
+  let url;
+  if (rest !== '') {
+    url = location.pathname.substring(0, location.pathname.indexOf(rest));
+  } else {
+    url = location.pathname;
+  }
   const potentialMatches = Routes.map((route) => {
-    console.log('test No.1 route.path=' + route.path);
-    console.log('test No.2 location.pathname=' + location.pathname);
-    console.log('test No.3 pathToRegex(route.path)=' + pathToRegex(route.path));
     return {
       route: route,
-      result: location.pathname.match(pathToRegex(route.path)),
-      param: location.pathname.match(secondPathToRegex(route.path)),
+      result: url.match(pathToRegex(route.path)),
     };
   });
-  console.log('test No.3');
 
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
-  console.log('test No.3 match=' + match);
-
   if (!match) {
     match = {
       route: Routes[0],
       result: [getUrl(Routes[0].path)],
     };
   }
-  console.log('test No.4 match=' + match.route);
 
   if (isLogined() == false) {
     match = {
@@ -78,17 +73,21 @@ export const router = async () => {
       result: [getUrl(Routes[0].path)],
     };
   }
-  console.log('test No.5 match.path=' + match.route.path);
-  //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
       navigateTo(json['uri']);
-      router();
       return;
     }
-    const html = await view.getHtml();
+    let html;
+    try {
+      html = await view.getHtml(rest, params);
+    } catch (e) {
+      console.warn('404 Error. move to Top page:' + e);
+      moveTo('/');
+      return;
+    }
     document.querySelector('#app').innerHTML = html;
     view.executeScript();
   } catch (error) {
