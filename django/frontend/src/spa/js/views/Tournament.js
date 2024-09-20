@@ -16,10 +16,12 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
+    console.log('tournament No.1');
     console.log('tournament rest=' + rest);
     const split = rest.split('/');
     console.log('split[0]=' + split[0]);
     if (split[0] === '/organized' || rest === '/organized') {
+      console.log('tournament No.2');
       const uri = getUrlWithLang('tournament/organized/');
       console.log('in url=' + uri + rest + params);
       const new_url = uri + rest + params;
@@ -28,11 +30,13 @@ export default class extends AbstractView {
       const data = fetchData(uri + params);
       return data;
     } else if (rest === '') {
+      console.log('tournament No.3');
       const uri = getUrlWithLang('tournament/');
       console.log('url=' + uri);
       const data = fetchData(uri);
       return data;
     } else {
+      console.log('tournament No.4');
       console.log('tournament ERROR');
       console.log('tournament ERROR');
       console.log('tournament ERROR');

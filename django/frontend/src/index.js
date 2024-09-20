@@ -1,5 +1,6 @@
 import { Routes } from './spa/js/routing/routes.js';
-import { navigateTo, updatePage } from './spa/js/routing/routing.js';
+//import { router } from './spa/js/routing/routing.js';
+import { navigateTo, updatePage, savePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
@@ -45,6 +46,9 @@ export const getDisplayedURI = (pathname) => {
     const slice_splits = splits.slice(test + 1);
     rest_path = '/' + slice_splits.join('/');
   }
+  if (rest_path === '/') {
+    rest_path = '';
+  }
   return { path: getUrl(path), rest: rest_path, params: params };
   //return getUrl(path);
 };
@@ -56,11 +60,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('tmp_path=' + tmp_path);
 
   document.body.addEventListener('click', (e) => {
+    console.log('a Tag click No.1 :' + window.location.pathname);
     // ページ切替
     if (e.target.matches('[data-link]')) {
+      savePage(window.location.pathname);
       e.preventDefault();
       tmp_path = e.target.href;
-      navigateTo(tmp_path);
+      const uri = getDisplayedURI(tmp_path);
+      console.log('uri:' + uri.path);
+      console.log('rest:' + uri.rest);
+      console.log('params:' + uri.params);
+      console.log('navigateTo No.5 router() click a Tag');
+      navigateTo(uri.path, uri.rest, uri.params);
     }
 
     // Form送信
@@ -82,17 +93,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         updatePage(response);
         form.disabled = false;
       });
-    }
 
-    //多言語切替
-    if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
-      e.preventDefault();
+      //多言語切替
+      if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
+        e.preventDefault();
 
-      const lang_url = '/i18n/setlang/';
-      const form = document.getElementById('lang_form');
-      let formData = new FormData(form);
-      const current_uri = getDisplayedURI(tmp_path).path;
-      changingLanguage(lang_url, formData, current_uri);
+        const lang_url = '/i18n/setlang/';
+        const form = document.getElementById('lang_form');
+        let formData = new FormData(form);
+        const current_uri = getDisplayedURI(tmp_path).path;
+        changingLanguage(lang_url, formData, current_uri);
+      }
     }
   });
 
@@ -101,5 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('uri = ' + uri.path);
   console.log('rest= ' + uri.rest);
   console.log('params= ' + uri.params);
+
+  console.log('navigateTo No.6 Load');
   navigateTo(uri.path, uri.rest, uri.params);
+  //router(uri.rest, uri.params);
 });
