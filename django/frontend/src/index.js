@@ -17,7 +17,7 @@ import { loadNav } from './spa/js/utility/user.js';
 console.log('load index.js');
 
 // パス名を取得する関数
-const getDisplayedURI = (pathname) => {
+export const getDisplayedURI = (pathname) => {
   const tmp_params = new URLSearchParams(window.location.search);
   const params = tmp_params == '' ? '' : '?' + tmp_params;
   const splits = pathname.split('/').filter((uri) => uri !== '');

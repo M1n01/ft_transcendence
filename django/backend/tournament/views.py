@@ -44,7 +44,7 @@ class OrganizedView(ListView):
     model = Tournament
     template_name = "tournament/list.html"
     context_object_name = "tournaments"
-    paginate_by = 9
+    paginate_by = 3
 
     def get_queryset(self):
         return Tournament.objects.filter(organizer=self.request.user).order_by(

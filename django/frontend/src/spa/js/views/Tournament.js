@@ -16,24 +16,33 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    const uri = getUrlWithLang('tournament/');
-    console.log('tournament No.1 rest:' + rest);
+    console.log('tournament rest=' + rest);
     const split = rest.split('/');
-    console.log('tournament No.2 rest:' + split);
-    if (split[0] === 'register') {
-      console.log('tournament No.2');
-      const data = fetchData(uri + rest + params);
+    console.log('split[0]=' + split[0]);
+    if (split[0] === '/organized' || rest === '/organized') {
+      const uri = getUrlWithLang('tournament/organized/');
+      console.log('in url=' + uri + rest + params);
+      const new_url = uri + rest + params;
+      console.log('new_url=' + new_url);
+      //const data = fetchData(new_url.replace('//', '/') + '/');
+      const data = fetchData(uri + params);
       return data;
     } else if (rest === '') {
-      console.log('tournament No.3');
-      const data = fetchData(uri + rest + params);
+      const uri = getUrlWithLang('tournament/');
+      console.log('url=' + uri);
+      const data = fetchData(uri);
       return data;
     } else {
-      console.log('tournament No.4');
+      console.log('tournament ERROR');
+      console.log('tournament ERROR');
+      console.log('tournament ERROR');
+      console.log('tournament ERROR');
       throw new Error(' Fetch() Error');
     }
   };
   executeScript = () => {
+    //const split = rest.split('/');
+    console.log('TournmentEvent No.0');
     document.dispatchEvent(TournmentEvent);
     //document.dispatchEvent(RebuildTournmentEvent);
     //document.dispatchEvent(TournmentEvent);
