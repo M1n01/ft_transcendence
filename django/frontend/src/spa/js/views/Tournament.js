@@ -29,6 +29,14 @@ export default class extends AbstractView {
       //const data = fetchData(new_url.replace('//', '/') + '/');
       const data = fetchData(uri + params);
       return data;
+    } else if (split[0] === '/participant' || rest === '/participant') {
+      const uri = getUrlWithLang('tournament/participant/');
+      const data = fetchData(uri + params);
+      return data;
+    } else if (split[0] === '/recruiting' || rest === '/recruiting') {
+      const uri = getUrlWithLang('tournament/recruiting/');
+      const data = fetchData(uri + params);
+      return data;
     } else if (rest === '') {
       console.log('tournament No.3');
       const uri = getUrlWithLang('tournament/');

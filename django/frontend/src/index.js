@@ -19,6 +19,7 @@ console.log('load index.js');
 
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
+  console.log('pathname=' + pathname);
   //const tmp_params = new URLSearchParams(window.location.search);
 
   let query_index = pathname.lastIndexOf('?');
@@ -27,6 +28,7 @@ export const getDisplayedURI = (pathname) => {
   }
 
   const params = query_index == 0 ? '' : pathname.substring(query_index);
+  pathname.replace(params, '');
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
@@ -52,14 +54,10 @@ export const getDisplayedURI = (pathname) => {
     const slice_splits = splits.slice(test + 1);
     rest_path = '/' + slice_splits.join('/');
   }
-  console.log('rest_path No.1:' + rest_path);
-  console.log('params No.1:' + params);
   rest_path = rest_path.replace(params, '');
-  console.log('rest_path No.2:' + rest_path);
   if (rest_path === '/') {
     rest_path = '';
   }
-  console.log('rest_path No.3:' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
   //return getUrl(path);
 };
@@ -85,6 +83,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.log('rest:' + uri.rest);
       console.log('params:' + uri.params);
       console.log('navigateTo No.5 router() click a Tag');
+      //router(uri.rest, uri.params);
+      console.log('End click A tag');
       navigateTo(uri.path, uri.rest, uri.params);
     }
 

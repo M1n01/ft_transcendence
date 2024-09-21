@@ -14,7 +14,7 @@ window.addEventListener('popstate', async (event) => {
         document.getElementById(key).value = stateJson[key];
       }
     } else {
-      const uri = getDisplayedURI(window.location.pathname);
+      const uri = getDisplayedURI(window.location.href);
       router(uri.rest, uri.params);
     }
   } catch (error) {
@@ -33,6 +33,7 @@ export const moveTo = async (url) => {
 
 export const savePage = async (url, rest = '', params = '') => {
   const history_url = url + rest + params;
+  console.log('savePage():' + history_url);
   if (view !== undefined && view !== null) {
     const state = await view.getState();
     history.pushState(state, null, history_url);
@@ -86,6 +87,9 @@ export const router = async (rest = '', params = '') => {
   } else {
     url = location.pathname;
   }
+  console.log('router No.1 url=' + url);
+  console.log('router No.1 pathname=' + location.pathname);
+  console.log('router No.1 href=' + location.href);
   console.log('router No.2');
   const potentialMatches = Routes.map((route) => {
     return {

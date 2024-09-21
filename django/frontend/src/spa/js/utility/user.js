@@ -17,6 +17,7 @@ export function isLogined() {
 }
 
 export const reload = async () => {
+  console.log('reload No.1');
   await router();
   await loadNav();
 };

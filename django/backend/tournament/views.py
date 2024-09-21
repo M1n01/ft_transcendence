@@ -30,9 +30,12 @@ class RecruitingView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        return Tournament.objects.filter(
-            status=TournamentStatusChoices.RECRUITING.value
-        ).order_by("-start_at")
+        tmp_data = get_participants(self.request)
+        return (
+            Tournament.objects.exclude(id__in=tmp_data)
+            .filter(status=TournamentStatusChoices.RECRUITING.value)
+            .order_by("-start_at")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -118,6 +121,13 @@ class RegisterApi(CreateView):
     pass
 
 
+def get_participants(request):
+    tmp_participant = TournamentParticipant.objects.filter(
+        participant=request.user, is_accept=True
+    )
+    return tmp_participant.values_list("tournament_id", flat=True)
+
+
 # class TournamentView(TemplateView):
 class TournamentView(LoginRequiredMixin, CreateView):
     # model = Tournament
@@ -125,14 +135,8 @@ class TournamentView(LoginRequiredMixin, CreateView):
     form_class = TournamentForm
     template_name = "tournament/tournament.html"
 
-    def get_participants(self):
-        tmp_participant = TournamentParticipant.objects.filter(
-            participant=self.request.user, is_accept=True
-        )
-        return tmp_participant.values_list("tournament_id", flat=True)
-
     def get_recruiting_data(self):
-        tmp_data = self.get_participants()
+        tmp_data = get_participants(self.request)
         return (
             Tournament.objects.exclude(id__in=tmp_data)
             .filter(status=TournamentStatusChoices.RECRUITING.value)
@@ -140,7 +144,7 @@ class TournamentView(LoginRequiredMixin, CreateView):
         )[:4]
 
     def get_participant_data(self):
-        tmp_data = self.get_participants()
+        tmp_data = get_participants(self.request)
         return Tournament.objects.filter(id__in=tmp_data).order_by("-start_at")[:4]
 
     def get_organizer_data(self):
@@ -162,7 +166,7 @@ class TournamentView(LoginRequiredMixin, CreateView):
 
         context["recruit_status"] = {
             "title": _("参加可能トーナメント"),
-            "link": _("/tournament/register/"),
+            "link": _("/tournament/recruiting/"),
             "button": _("登録"),
             "display_register": True,
             "username": self.request.user.username,
