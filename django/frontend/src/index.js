@@ -19,8 +19,14 @@ console.log('load index.js');
 
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
-  const tmp_params = new URLSearchParams(window.location.search);
-  const params = tmp_params == '' ? '' : '?' + tmp_params;
+  //const tmp_params = new URLSearchParams(window.location.search);
+
+  let query_index = pathname.lastIndexOf('?');
+  if (pathname.lastIndexOf('/') > query_index) {
+    query_index = 0;
+  }
+
+  const params = query_index == 0 ? '' : pathname.substring(query_index);
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
@@ -46,9 +52,14 @@ export const getDisplayedURI = (pathname) => {
     const slice_splits = splits.slice(test + 1);
     rest_path = '/' + slice_splits.join('/');
   }
+  console.log('rest_path No.1:' + rest_path);
+  console.log('params No.1:' + params);
+  rest_path = rest_path.replace(params, '');
+  console.log('rest_path No.2:' + rest_path);
   if (rest_path === '/') {
     rest_path = '';
   }
+  console.log('rest_path No.3:' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
   //return getUrl(path);
 };
@@ -60,12 +71,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('tmp_path=' + tmp_path);
 
   document.body.addEventListener('click', (e) => {
-    console.log('a Tag click No.1 :' + window.location.pathname);
     // ページ切替
     if (e.target.matches('[data-link]')) {
-      savePage(window.location.pathname);
+      console.log('save page:' + window.location.href);
+      savePage(window.location.href);
+
       e.preventDefault();
       tmp_path = e.target.href;
+      console.log('No.1 replaceState:' + tmp_path);
+      //history.replaceState(null, null, tmp_path);
       const uri = getDisplayedURI(tmp_path);
       console.log('uri:' + uri.path);
       console.log('rest:' + uri.rest);

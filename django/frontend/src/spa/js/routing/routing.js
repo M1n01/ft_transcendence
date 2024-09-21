@@ -43,7 +43,8 @@ export const savePage = async (url, rest = '', params = '') => {
 
 export const navigateTo = async (url, rest = '', params = '') => {
   const history_url = url + rest + params;
-  console.log('history_url=' + history_url);
+
+  console.log('No.2 replaceState:' + history_url);
   if (view !== undefined && view !== null) {
     const state = await view.getState();
     history.replaceState(state, null, history_url);
@@ -87,19 +88,14 @@ export const router = async (rest = '', params = '') => {
   }
   console.log('router No.2');
   const potentialMatches = Routes.map((route) => {
-    console.log('url=' + url);
-    console.log('path=' + route.path);
-    console.log('path=' + pathToRegex(route.path));
     return {
       route: route,
       result: url.match(pathToRegex(route.path)),
     };
   });
 
-  console.log('router No.3');
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
   if (!match) {
-    console.log('router No.4');
     match = {
       route: Routes[0],
       result: [getUrl(Routes[0].path)],
@@ -107,43 +103,31 @@ export const router = async (rest = '', params = '') => {
   }
 
   if (isLogined() == false) {
-    console.log('router No.5');
     match = {
       route: Routes[0],
       result: [getUrl(Routes[0].path)],
     };
   }
-  console.log('router No.6');
   const view = new match.route.view();
   try {
-    console.log('router No.7');
-    console.log('router No.7 view:' + view.setTitle);
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
-      console.log('router No.8');
-      console.log('navigateTo No.3 router()');
       navigateTo(json['uri']);
       return;
     }
     let html;
-    console.log('router No.9');
     try {
       html = await view.getHtml(rest, params);
-      console.log('router No.10');
     } catch (e) {
       console.warn('404 Error. move to Top page:' + e);
       moveTo('/');
-      console.log('router No.11');
       return;
     }
     document.querySelector('#app').innerHTML = html;
     view.executeScript();
-    console.log('router No.12');
   } catch (error) {
     console.error('executeScript Error:' + error);
-    console.log('router No.13');
   }
-  console.log('router No.14');
   return view;
 };
 
