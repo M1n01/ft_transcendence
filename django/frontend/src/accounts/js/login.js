@@ -66,17 +66,14 @@ document.addEventListener('LoginEvent', function () {
       }
     });
 
-    console.log('login-auth');
     document.getElementById('login-auth').addEventListener('click', async function () {
       const ft_oauth_url = document.getElementById('ft-oauth-url').href;
-      console.log('ft_oauth_url=' + ft_oauth_url);
       displayInstruction('instruction-processing');
 
       try {
         //const url =
         //window.location.protocol + '//' + window.location.host + '/accounts/oauth-login';
         const url = getUrlWithLang('accounts/oauth-login');
-        console.log('url=' + url);
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const res = await fetch(url, {
           method: 'POST',
@@ -85,7 +82,6 @@ document.addEventListener('LoginEvent', function () {
           body: JSON.stringify({ url: ft_oauth_url }),
           credentials: 'include',
         });
-        console.log('status=' + res.status);
         if (res.status >= 400) {
           displayInstruction('instruction-error');
           document.getElementById('instruction').style.color = 'red';

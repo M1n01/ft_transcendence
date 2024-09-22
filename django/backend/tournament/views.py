@@ -1,10 +1,4 @@
-# from django.shortcuts import render
-# from django.db import models
-# from django.http import Http404
-# from django.views.decorators.http import condition
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-# from django.views.generic import TemplateView
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
 
@@ -12,10 +6,8 @@ from .models import Tournament, TournamentParticipant, TournamentStatusChoices
 from .forms import TournamentForm, TournamentParticipantForm
 
 from django.http import (
-    # JsonResponse,
     HttpResponseBadRequest,
     HttpResponseServerError,
-    # HttpResponseForbidden,
     HttpResponse,
 )
 from django.urls import reverse_lazy
@@ -94,7 +86,6 @@ class RegisterApi(CreateView):
         return HttpResponse()
 
     def form_valid(self, form):
-        # モデルを保存する
         try:
             data = self.request.POST.copy()
             data["participant"] = self.request.user
@@ -123,10 +114,7 @@ def get_participants(request):
     return tmp_participant.values_list("tournament_id", flat=True)
 
 
-# class TournamentView(TemplateView):
 class TournamentView(LoginRequiredMixin, CreateView):
-    # model = Tournament
-    # form = TournamentForm
     form_class = TournamentForm
     template_name = "tournament/tournament.html"
 
@@ -190,8 +178,6 @@ class TournamentView(LoginRequiredMixin, CreateView):
     def post(self, request):
         form = TournamentForm(self.request.POST)
         form.set_organizer(request.user)
-        # form.set_only_user(self.request.POST.get("is_only_friend"))
-        # tmp_res = super().form_valid(form)
 
         name = self.request.POST.get("name")
         start_at = self.request.POST.get("start_at")
@@ -241,13 +227,6 @@ class DetailView(DetailView):
     model = Tournament
     template_name = "tournament/detail.html"
     context_object_name = "tournament"
-    # context_object_name = 'tournament'
-    # paginate_by = 1
-
-    # def get_queryset(self):
-    #   id = self.request.GET.get("id")
-    #   print(f"Tournamnet id={id}")
-    #   return Tournament.objects.get(id=id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -258,11 +237,8 @@ class DetailView(DetailView):
         print(f"{len(participants)=}")
         context["len_participants"] = len(participants)
         if len(participants) > 0:
-            # context["participants"] = " ".join(participants)
             context["participants"] = participants
-            # context["participants"] = 'Test'
         else:
             context["participants"] = _("参加者はいません")
 
-        # context["title"] = _("登録可能トーナメント")
         return context

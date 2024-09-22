@@ -13,15 +13,9 @@ import './spa/scss/spa.scss';
 import './custom_bootstrap.scss';
 import './main.scss';
 import { loadNav } from './spa/js/utility/user.js';
-//import 'login.js'
-
-console.log('load index.js');
 
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
-  console.log('pathname=' + pathname);
-  //const tmp_params = new URLSearchParams(window.location.search);
-
   let query_index = pathname.lastIndexOf('?');
   if (pathname.lastIndexOf('/') > query_index) {
     query_index = 0;
@@ -34,17 +28,6 @@ export const getDisplayedURI = (pathname) => {
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
   path = path === undefined ? '' : path;
-  if (path == '') {
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-    console.log('path is undefined');
-  }
 
   let rest_path = '';
   if (path !== '') {
@@ -63,34 +46,22 @@ export const getDisplayedURI = (pathname) => {
       rest_path = rest_path.substring(0, rest_path.length - 1);
     }
   }
-  console.log('rest_path=' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
-  //return getUrl(path);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadNav();
 
   let tmp_path = window.location.pathname;
-  console.log('tmp_path=' + tmp_path);
 
   document.body.addEventListener('click', (e) => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
-      console.log('save page:' + window.location.href);
       savePage(window.location.href);
 
       e.preventDefault();
       tmp_path = e.target.href;
-      console.log('No.1 replaceState:' + tmp_path);
-      //history.replaceState(null, null, tmp_path);
       const uri = getDisplayedURI(tmp_path);
-      console.log('uri:' + uri.path);
-      console.log('rest:' + uri.rest);
-      console.log('params:' + uri.params);
-      console.log('navigateTo No.5 router() click a Tag');
-      //router(uri.rest, uri.params);
-      console.log('End click A tag');
       navigateTo(uri.path, uri.rest, uri.params);
     }
 
@@ -127,13 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  console.log('No.2 tmp_path = ' + tmp_path);
   const uri = getDisplayedURI(tmp_path);
-  console.log('uri = ' + uri.path);
-  console.log('rest= ' + uri.rest);
-  console.log('params= ' + uri.params);
-
-  console.log('navigateTo No.6 Load');
   navigateTo(uri.path, uri.rest, uri.params);
-  //router(uri.rest, uri.params);
 });

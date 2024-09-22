@@ -26,14 +26,12 @@ const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
 export const moveTo = async (url) => {
-  console.log('navigateTo No.2 MoveTo');
   navigateTo(url);
   await reload();
 };
 
 export const savePage = async (url, rest = '', params = '') => {
   const history_url = url + rest + params;
-  console.log('savePage():' + history_url);
   if (view !== undefined && view !== null) {
     const state = await view.getState();
     history.pushState(state, null, history_url);
@@ -45,7 +43,6 @@ export const savePage = async (url, rest = '', params = '') => {
 export const navigateTo = async (url, rest = '', params = '') => {
   const history_url = url + rest + params;
 
-  console.log('No.2 replaceState:' + history_url);
   if (view !== undefined && view !== null) {
     const state = await view.getState();
     history.replaceState(state, null, history_url);
@@ -57,40 +54,15 @@ export const navigateTo = async (url, rest = '', params = '') => {
   if (tmp_view !== null) {
     view = tmp_view;
   }
-  /*
-  const history_url = url + rest + params;
-  try {
-    const setState = async () => {
-      if (view !== undefined && view !== null) {
-        const state = await view.getState();
-        history.pushState(state, null, history_url);
-      } else {
-        history.pushState(null, null, history_url);
-      }
-      //view = await router(rest, params);
-      //return view;
-    };
-    view = await setState();
-    return view;
-  } catch (error) {
-    console.error('ignore:' + error);
-  }
-  return null;
-  */
 };
 
 export const router = async (rest = '', params = '') => {
   let url;
-  console.log('router No.1 location.pathname=' + location.pathname);
   if (rest !== '') {
     url = location.pathname.substring(0, location.pathname.indexOf(rest));
   } else {
     url = location.pathname;
   }
-  console.log('router No.1 url=' + url);
-  console.log('router No.1 pathname=' + location.pathname);
-  console.log('router No.1 href=' + location.href);
-  console.log('router No.2');
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
@@ -147,8 +119,6 @@ export async function updatePage(res) {
       // Jsonで遷移するurlを取得する。
       const data = await res.json();
       if ('html' in data) {
-        console.log('navigateTo No.1');
-        console.log('navigateTo No.4 router() updatePage');
         navigateTo(data['html']);
       }
     } else if (contentType && contentType.indexOf('text/html') !== -1) {

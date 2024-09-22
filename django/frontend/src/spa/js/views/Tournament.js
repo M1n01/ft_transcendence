@@ -3,7 +3,6 @@ import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
 import { TournmentEvent } from '../../../tournament/js/tournament.js';
-//import { LoginEvent } from '../../../accounts/js/login.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -16,25 +15,15 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    console.log('tournament No.1');
-    console.log('tournament rest=' + rest);
     const split = rest.split('/');
-    console.log('split[0]=' + split[0]);
-
     const detail_values = rest.match(/^\/detail\/(\d*)$/);
     let detail_value = 0;
     if (detail_values) {
       detail_value = detail_values[1];
     }
-    console.log('tournamnet No.1 detail_value' + detail_value);
 
     if (split[0] === '/organized' || rest === '/organized') {
-      console.log('tournament No.2');
       const uri = getUrlWithLang('tournament/organized/');
-      console.log('in url=' + uri + rest + params);
-      const new_url = uri + rest + params;
-      console.log('new_url=' + new_url);
-      //const data = fetchData(new_url.replace('//', '/') + '/');
       const data = fetchData(uri + params);
       return data;
     } else if (split[0] === '/participant' || rest === '/participant') {
@@ -45,37 +34,20 @@ export default class extends AbstractView {
       const uri = getUrlWithLang('tournament/recruiting/');
       const data = fetchData(uri + params);
       return data;
-      //} else if (split[0] === '/detail' || rest === '/detail') {
     } else if (detail_value > 0) {
-      console.log('tournamnet No.2 detail_value' + detail_value);
       const uri = getUrlWithLang('tournament/details/' + detail_value);
-      console.log('tournamnet No.3 uri' + uri);
-      //console.log('detail ? uri=' + uri);
-      //console.log('detail ? params=' + params);
       const data = fetchData(uri);
       return data;
     } else if (rest === '') {
-      console.log('tournament No.3');
       const uri = getUrlWithLang('tournament/');
-      console.log('url=' + uri);
       const data = fetchData(uri);
       return data;
     } else {
-      console.log('tournament No.4');
-      console.log('tournament ERROR');
-      console.log('tournament ERROR');
-      console.log('tournament ERROR');
-      console.log('tournament ERROR');
       throw new Error(' Fetch() Error');
     }
   };
   executeScript = () => {
-    //const split = rest.split('/');
-    console.log('TournmentEvent No.0');
     document.dispatchEvent(TournmentEvent);
-    //document.dispatchEvent(RebuildTournmentEvent);
-    //document.dispatchEvent(TournmentEvent);
-    //document.dispatchEvent(RebuildTournmentEvent);
   };
   getState = () => {
     return null;

@@ -267,7 +267,6 @@ class LoginSignupView(TemplateView):
 
     # QRコード作成
     try:
-        print(f"{url=}")
         qr = make_qr(url)
         extra_context = {
             "qr": qr,
@@ -287,22 +286,16 @@ class LoginSignupView(TemplateView):
         }
 
     def get(self, request):
-        print(f"{self.url=}")
-        print("login-signup No.1")
-        # form = SignUpTmpForm
-        # form = MyForm()
         return render(
             request,
             "accounts/login-signup.html",
             self.extra_context,
-            # {"signup_form": self.signup_form, "login_form": self.login_form},
         )
 
 
 @method_decorator(login_not_required, name="dispatch")
 class UserLogin(LoginView):
     ft_oauth = FtOAuth()
-    # ft_oauth = TmpUserBackend()
     url = ft_oauth.get_ft_authorization_url()
     form_class = LoginForm
     template_name = "accounts/login.html"

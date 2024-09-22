@@ -17,7 +17,6 @@ export function isLogined() {
 }
 
 export const reload = async () => {
-  console.log('reload No.1');
   await router();
   await loadNav();
 };
@@ -63,7 +62,6 @@ export const logout = async () => {
   const formData = new FormData(form);
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
-    console.log('navigateTo No.7 logout');
     navigateTo('login-signup');
     await reload();
   }

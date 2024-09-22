@@ -1,7 +1,6 @@
 import Point from './Point.js';
 export default class Line extends Point {
   constructor(point) {
-    console.log();
     super(point.x, point.y);
   }
 
@@ -35,7 +34,6 @@ export default class Line extends Point {
   }
 
   print() {
-    //console.log(`x=${this.point.x}, y=${this.point.y}`);
     console.log(`(x, y)=(${this.x}, ${this.y})`);
   }
 }

@@ -7,7 +7,6 @@ export const TournmentEvent = new Event('TournmentEvent');
 document.addEventListener('TournmentEvent', () => {
   const links = () => {
     const links = document.querySelector('#app').querySelectorAll('a');
-    console.log('links.size=' + links.length);
     links.forEach((event) => {
       event.dataset.link = '';
     });
