@@ -10,12 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import password_validation
 import logging
 
-# import datetime
-# from phonenumber_field.modelfields import PhoneNumberField
-# from django.utils.translation import gettext_lazy as _
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
-
-# from django.conf import settings
 import pyotp
 
 
@@ -43,7 +38,6 @@ class FtUserManager(BaseUserManager):
         logging.info("_create_user")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        # user.set_password(email)
         user.save(using=self._db)
 
         return user
@@ -53,9 +47,6 @@ class FtUserManager(BaseUserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-
-        # for field in extra_fields:
-        # print(f"{field=}")
 
         return self._create_user(
             email=email,
@@ -77,8 +68,6 @@ class FtUserManager(BaseUserManager):
 
 
 class FtUser(AbstractBaseUser, PermissionsMixin):
-    # def __init__(self, groups):
-    # self.groups = groups
 
     groups = models.ManyToManyField(Group, related_name="ft_user_groups")
     user_permissions = models.ManyToManyField(
@@ -115,8 +104,6 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         max_length=5,
         default="+81",
     )
-    # country_code = models.CharField(max_length=5, verbose_name=_("国番号"), null=True)
-    # phone_number = models.CharField(max_length=15)
 
     phone = models.CharField(
         verbose_name=_("電話番号"), null=True, blank=True, unique=True, max_length=15
@@ -190,20 +177,12 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
             password_validation.password_changed(self._password, self)
             self._password = None
 
-    # @property
-    # def is_authenticated(self):
-    # return super().is_authenticated
 
-
-# class FtTmpUser(FtUser):
-# pass
-#
 class FtTmpUserManager(BaseUserManager):
     def _create_user(self, email, username, **extra_fields):
         logging.info("_create_user")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        # user.set_password(email)
         user.save(using=self._db)
 
         return user
@@ -214,13 +193,9 @@ class FtTmpUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        # for field in extra_fields:
-        # print(f"{field=}")
-
         return self._create_user(
             email=email,
             username=username,
-            # password=password,
             **extra_fields,
         )
 

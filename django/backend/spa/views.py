@@ -1,27 +1,8 @@
 from django.shortcuts import render
-
-# from django.template import loader
 from django.http import JsonResponse
-
-# from django.conf import settings
-
-# from django.http import HttpResponse
-# import asyncio
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_not_required
 from django.utils.decorators import method_decorator
-
-# from django.shortcuts import redirect
-
-# from accounts.oauth import FtOAuth
-# from accounts.forms import SignUpForm, LoginForm
-# from accounts.views import LoginSignupView
-
-# from django.urls import reverse_lazy
-
-# from accounts.views import LoginSignupView
-
-# from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -77,6 +58,15 @@ class isLogin(TemplateView):
 
         json = {"is_redirect": is_redirect, "uri": uri}
         return JsonResponse(json)
+
+
+class errorPageView(TemplateView):
+    template_name = "spa/error.html"
+
+    def get(self, request):
+        # return HttpResponseNotFound()
+        request.status = 404
+        return render(request, "spa/error.html")
 
 
 # テスト用　後で消す

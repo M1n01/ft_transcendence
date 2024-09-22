@@ -97,7 +97,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
+    "tournament",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
@@ -313,3 +316,7 @@ TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 # Brevo(Email)
 BREVO_API_KEY = os.environ["BREVO_API_KEY"]
 BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400

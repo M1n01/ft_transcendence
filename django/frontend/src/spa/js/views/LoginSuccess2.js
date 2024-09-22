@@ -12,7 +12,8 @@ export default class extends AbstractView {
     const json = fetchJsonData('/spa/is-login');
     return json;
   };
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Posts2</h1>
             <p>You are viewing the posts!!!1234A</p>

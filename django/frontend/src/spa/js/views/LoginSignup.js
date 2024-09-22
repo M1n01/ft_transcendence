@@ -15,12 +15,13 @@ export default class extends AbstractView {
   checkRedirect = async () => {
     return { is_redirect: false };
   };
-  getHtml = async () => {
-    const uri = getUrlWithLang('accounts/login-signup');
-    const data = fetchData(uri);
+  getHtml = async (rest = '', params = '') => {
+    const uri = getUrlWithLang('accounts/login-signup/');
+    const data = fetchData(uri + rest + params);
     return data;
   };
   executeScript = () => {
+    console.log('executeScript Execute Sript load');
     executeScriptTab();
     document.dispatchEvent(LoginEvent);
     document.dispatchEvent(SignupEvent);

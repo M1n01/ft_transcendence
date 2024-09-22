@@ -1,0 +1,29 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Friend</title>
+  </head>
+  <body>
+    --------------------------------------------------------------
+    <br />
+    {% trans 'フレンドリクエスト' %} {% for request in friend_requests %} {{request.user.username}}
+    status={{request.status}}
+    <form id="accept-request" method="post" action="{% url 'friend:respond'  %}">
+      {% csrf_token %}
+      <input name="id" type="hidden" value="{{request.id}}" />
+      <input name="status" type="hidden" value="ACCEPTED" />
+      <button type="submit">{% trans "許可" %}</button>
+    </form>
+    <form id="reject-request" method="post" action="{% url 'friend:respond'  %}">
+      {% csrf_token %}
+      <input name="id" type="hidden" value="{{request.id}}" />
+      <input name="status" type="hidden" value="BLOCKED" />
+      <button type="submit">{% trans "ブロック" %}</button>
+    </form>
+
+    {% endfor %}
+  </body>
+</html>

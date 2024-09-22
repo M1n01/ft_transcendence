@@ -13,9 +13,9 @@ export default class extends AbstractView {
     return json;
   };
 
-  getHtml = async () => {
+  getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('spa/top');
-    const data = fetchData(uri);
+    const data = fetchData(uri + rest + params);
     return data;
   };
 

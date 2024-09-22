@@ -3,8 +3,7 @@ import { router } from '../routing/routing.js';
 import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
-//import 'bootstrap';
-import { Dropdown } from 'bootstrap';
+import { moveTo } from '../routing/routing.js';
 
 export function isLogined() {
   //todo
@@ -30,6 +29,7 @@ export const loadNav = async () => {
       await logout();
     });
 
+    /*
     const small_menu_icon = document.getElementById('small_menu_icon');
     //var navbarToggler = document.querySelector('.navbar-toggler');
     const dropdown = document.getElementById('small-menu-dropdown');
@@ -43,13 +43,14 @@ export const loadNav = async () => {
         dropdownMenu.toggle();
       }
     });
+    */
   } catch (error) {
     console.log('ignore error:' + error);
   }
 };
 
 export const handlePostLogin = async () => {
-  await reload();
+  moveTo('games');
   document.getElementById('nav').hidden = false;
 };
 
@@ -59,8 +60,6 @@ export const logout = async () => {
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
     navigateTo('login-signup');
-    //history.pushState(null, null, 'login-signup');
     await reload();
-    //document.getElementById('nav').hidden = true;
   }
 };

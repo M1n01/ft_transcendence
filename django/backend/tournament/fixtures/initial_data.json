@@ -1,6 +1,6 @@
 [
   {
-    "model": "pong.tournament",
+    "model": "tournament.tournament",
     "pk": 1,
     "fields": {
       "name": "トーナメント1",
@@ -11,7 +11,7 @@
     }
   },
   {
-    "model": "pong.tournament",
+    "model": "tournament.tournament",
     "pk": 2,
     "fields": {
       "name": "トーナメント2",

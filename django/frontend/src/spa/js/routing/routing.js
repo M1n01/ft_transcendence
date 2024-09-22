@@ -3,13 +3,19 @@ import { getUrl } from '../utility/url.js';
 import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
 import { reload } from '..//utility/user.js';
+import { getDisplayedURI } from '../../../../src/index.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
   try {
     const stateJson = await event.state;
-    for (let key in stateJson) {
-      document.getElementById(key).value = stateJson[key];
+    if (stateJson) {
+      for (let key in stateJson) {
+        document.getElementById(key).value = stateJson[key];
+      }
+    } else {
+      const uri = getDisplayedURI(window.location.href);
+      router(uri.rest, uri.params);
     }
   } catch (error) {
     console.error(error);
@@ -24,36 +30,47 @@ export const moveTo = async (url) => {
   await reload();
 };
 
-export const navigateTo = async (url) => {
-  try {
-    const setState = async () => {
-      if (view !== undefined && view !== null) {
-        const state = await view.getState();
-        history.pushState(state, null, url);
-      } else {
-        history.pushState(null, null, url);
-      }
-      view = await router();
-      return view;
-    };
-    view = await setState();
-    return view;
-  } catch (error) {
-    console.error('ignore:' + error);
+export const savePage = async (url, rest = '', params = '') => {
+  const history_url = url + rest + params;
+  if (view !== undefined && view !== null) {
+    const state = await view.getState();
+    history.pushState(state, null, history_url);
+  } else {
+    history.pushState(null, null, history_url);
   }
-  return null;
 };
 
-export const router = async () => {
+export const navigateTo = async (url, rest = '', params = '') => {
+  const history_url = url + rest + params;
+
+  if (view !== undefined && view !== null) {
+    const state = await view.getState();
+    history.replaceState(state, null, history_url);
+  } else {
+    history.replaceState(null, null, history_url);
+  }
+
+  const tmp_view = await router(rest, params);
+  if (tmp_view !== null) {
+    view = tmp_view;
+  }
+};
+
+export const router = async (rest = '', params = '') => {
+  let url;
+  if (rest !== '') {
+    url = location.pathname.substring(0, location.pathname.indexOf(rest));
+  } else {
+    url = location.pathname;
+  }
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
-      result: location.pathname.match(pathToRegex(route.path)),
+      result: url.match(pathToRegex(route.path)),
     };
   });
 
   let match = potentialMatches.find((potentialMatch) => potentialMatch.result !== null);
-
   if (!match) {
     match = {
       route: Routes[0],
@@ -67,16 +84,21 @@ export const router = async () => {
       result: [getUrl(Routes[0].path)],
     };
   }
-  //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
       navigateTo(json['uri']);
-      router();
       return;
     }
-    const html = await view.getHtml();
+    let html;
+    try {
+      html = await view.getHtml(rest, params);
+    } catch (e) {
+      console.warn('404 Error. move to Top page:' + e);
+      moveTo('/');
+      return;
+    }
     document.querySelector('#app').innerHTML = html;
     view.executeScript();
   } catch (error) {
@@ -99,8 +121,10 @@ export async function updatePage(res) {
       if ('html' in data) {
         navigateTo(data['html']);
       }
-    } else {
+    } else if (contentType && contentType.indexOf('text/html') !== -1) {
       document.querySelector('#app').innerHTML = await res.text();
+    } else {
+      console.error('Error');
     }
     executeScriptTab('');
   } catch (error) {

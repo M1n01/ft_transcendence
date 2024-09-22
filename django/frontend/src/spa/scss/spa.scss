@@ -14,6 +14,16 @@ body {
   font-weight: 500;
 }
 
+h1::after {
+  display: block;
+  background-color: #00babc;
+  width: 84px;
+  height: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  content: '';
+}
+
 a {
   color: blue;
 }

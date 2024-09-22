@@ -1,33 +1,12 @@
 from django.shortcuts import render
-
-# from django.http import HttpResponse
-# from django.template import loader
 from django.db import models
-
-# from django.views.decorators.csrf import ensure_csrf_cookie
-# from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
-
-# from urllib.parse import urlparse
-# from django.template import RequestContext, Template
 from django.views.decorators.http import condition
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-
-# import django.views.decorators.http
-# import asyncio
 import hashlib
 
-# from django.conf import settings
-
-# from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# from django.contrib.auth.decorators import login_not_required
-
-
-# loginしない限り見れない
-# class Pong(LoginRequiredMixin, ListView):
-# model = "test"
+# from django.utils.translation import gettext_lazy as _
 
 
 def checkSPA(request):
@@ -92,7 +71,3 @@ def index(request):
 
 class GamesView(TemplateView):
     template_name = "pong/games.html"
-
-
-class TournamentView(TemplateView):
-    template_name = "pong/tournament.html"

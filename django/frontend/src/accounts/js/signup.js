@@ -2,6 +2,7 @@ import '../scss/signup.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
 import { navModal } from './two_fa.js';
+import { getUrlWithLang } from '../../spa/js/utility/url.js';
 export const SignupEvent = new Event('SignupEvent');
 
 function SetTime() {
@@ -43,7 +44,7 @@ document.addEventListener('SignupEvent', function () {
           }
           const two_fa_form = document.getElementById('two-fa-verify-form');
           const resend_two_fa_form = document.getElementById('resend-two-fa');
-          two_fa_form.action = 'accounts/signup-two-fa-verify/';
+          two_fa_form.action = getUrlWithLang('accounts/signup-two-fa-verify/');
           resend_two_fa_form.action = 'accounts/signup-two-fa/';
           if (json['is_auth_app']) {
             document.getElementById('app_url_qr').hidden = false;
