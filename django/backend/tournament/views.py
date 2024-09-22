@@ -5,7 +5,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # from django.views.generic import TemplateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
 
 from .models import Tournament, TournamentParticipant, TournamentStatusChoices
@@ -27,7 +27,7 @@ class RecruitingView(ListView):
     model = Tournament
     template_name = "tournament/list.html"
     context_object_name = "tournaments"
-    paginate_by = 9
+    paginate_by = 16
 
     def get_queryset(self):
         tmp_data = get_participants(self.request)
@@ -47,7 +47,7 @@ class OrganizedView(ListView):
     model = Tournament
     template_name = "tournament/list.html"
     context_object_name = "tournaments"
-    paginate_by = 3
+    paginate_by = 16
 
     def get_queryset(self):
         return Tournament.objects.filter(organizer=self.request.user).order_by(
@@ -64,7 +64,7 @@ class ParticipantView(ListView):
     model = Tournament
     template_name = "tournament/list.html"
     context_object_name = "tournaments"
-    paginate_by = 9
+    paginate_by = 16
 
     def get_queryset(self):
         tmp_participant = TournamentParticipant.objects.filter(
@@ -114,11 +114,6 @@ class RegisterApi(CreateView):
             print(f"{e=}")
             return HttpResponseServerError()
         return HttpResponse()
-
-    # def form_invalid(self, form):
-    # return HttpResponseBadRequest()
-
-    pass
 
 
 def get_participants(request):
@@ -232,3 +227,42 @@ class TournamentView(LoginRequiredMixin, CreateView):
             current_players=current_players,
         )
         return HttpResponse()
+
+
+def updateTournamentStatus(pk, status, number=0):
+    tournament = Tournament.objects.get(pk=pk)
+    tournament["status"] = status
+    if number != 0:
+        tournament["current_players"] = number
+    tournament.save()
+
+
+class DetailView(DetailView):
+    model = Tournament
+    template_name = "tournament/detail.html"
+    context_object_name = "tournament"
+    # context_object_name = 'tournament'
+    # paginate_by = 1
+
+    # def get_queryset(self):
+    #   id = self.request.GET.get("id")
+    #   print(f"Tournamnet id={id}")
+    #   return Tournament.objects.get(id=id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = context[self.context_object_name].id
+        print(f"{id=}")
+        participants = TournamentParticipant.objects.filter(tournament_id=id)
+        print(f"{participants=}")
+        print(f"{len(participants)=}")
+        context["len_participants"] = len(participants)
+        if len(participants) > 0:
+            # context["participants"] = " ".join(participants)
+            context["participants"] = participants
+            # context["participants"] = 'Test'
+        else:
+            context["participants"] = _("参加者はいません")
+
+        # context["title"] = _("登録可能トーナメント")
+        return context

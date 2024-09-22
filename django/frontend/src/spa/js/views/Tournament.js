@@ -20,6 +20,14 @@ export default class extends AbstractView {
     console.log('tournament rest=' + rest);
     const split = rest.split('/');
     console.log('split[0]=' + split[0]);
+
+    const detail_values = rest.match(/^\/detail\/(\d*)$/);
+    let detail_value = 0;
+    if (detail_values) {
+      detail_value = detail_values[1];
+    }
+    console.log('tournamnet No.1 detail_value' + detail_value);
+
     if (split[0] === '/organized' || rest === '/organized') {
       console.log('tournament No.2');
       const uri = getUrlWithLang('tournament/organized/');
@@ -36,6 +44,15 @@ export default class extends AbstractView {
     } else if (split[0] === '/recruiting' || rest === '/recruiting') {
       const uri = getUrlWithLang('tournament/recruiting/');
       const data = fetchData(uri + params);
+      return data;
+      //} else if (split[0] === '/detail' || rest === '/detail') {
+    } else if (detail_value > 0) {
+      console.log('tournamnet No.2 detail_value' + detail_value);
+      const uri = getUrlWithLang('tournament/details/' + detail_value);
+      console.log('tournamnet No.3 uri' + uri);
+      //console.log('detail ? uri=' + uri);
+      //console.log('detail ? params=' + params);
+      const data = fetchData(uri);
       return data;
     } else if (rest === '') {
       console.log('tournament No.3');

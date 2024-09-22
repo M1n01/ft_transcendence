@@ -58,6 +58,12 @@ export const getDisplayedURI = (pathname) => {
   if (rest_path === '/') {
     rest_path = '';
   }
+  if (params.length > 0 && rest_path.length > 0) {
+    if (rest_path[rest_path.length - 1] == '/') {
+      rest_path = rest_path.substring(0, rest_path.length - 1);
+    }
+  }
+  console.log('rest_path=' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
   //return getUrl(path);
 };

@@ -4,9 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TournamentStatusChoices(models.TextChoices):
-    RECRUITING = "RECRUITING", _("recruiting")
-    ONGOING = "ONGOING", _("ongoing")
-    ENDED = "ENDED", _("ended")
+    RECRUITING = "RECRUITING", _("参加者募集中")
+    ONGOING = "ONGOING", _("トーナメント進行中")
+    ENDED = "ENDED", _("終了")
+    CANCEL = "CANCEL", _("キャンセル")
 
 
 class Tournament(models.Model):
@@ -21,7 +22,7 @@ class Tournament(models.Model):
     status = models.CharField(
         max_length=10,
         choices=TournamentStatusChoices,
-        default=TournamentStatusChoices.RECRUITING,
+        default=TournamentStatusChoices.RECRUITING.label,
     )
 
     def save(self, *args, **kwargs):

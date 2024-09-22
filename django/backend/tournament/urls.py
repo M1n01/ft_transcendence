@@ -26,6 +26,11 @@ urlpatterns = [
         views.RegisterApi.as_view(),
         name="register",
     ),
+    path(
+        "details/<int:pk>",
+        views.DetailView.as_view(),
+        name="details",
+    ),
     re_path(r"[\w\-\/]*", include(spa.urls), name="error"),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、
