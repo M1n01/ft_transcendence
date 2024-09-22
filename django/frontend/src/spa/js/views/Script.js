@@ -3,6 +3,7 @@ import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { executeScriptTab } from '../utility/script.js';
 import { ScriptEvent } from '../../../pong/js/test.js';
+import { fetchJsonData } from '../utility/fetch.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -10,6 +11,10 @@ export default class extends AbstractView {
     this.setTitle('Script');
   }
 
+  checkRedirect = async () => {
+    const json = fetchJsonData('/spa/is-login');
+    return json;
+  };
   getHtml = async () => {
     const uri = getUrlWithLang('pong/script');
     const data = await fetchData(uri);

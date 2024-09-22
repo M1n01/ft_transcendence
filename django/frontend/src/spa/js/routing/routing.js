@@ -2,6 +2,7 @@ import { Routes } from './routes.js';
 import { getUrl } from '../utility/url.js';
 import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
+import { reload } from '..//utility/user.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
@@ -18,19 +19,29 @@ window.addEventListener('popstate', async (event) => {
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
+export const moveTo = async (url) => {
+  navigateTo(url);
+  await reload();
+};
+
 export const navigateTo = async (url) => {
-  const setState = async () => {
-    if (view !== undefined) {
-      const state = await view.getState();
-      history.pushState(state, null, url);
-    } else {
-      history.pushState(null, null, url);
-    }
-    view = router();
-    return await view;
-  };
-  view = await setState();
-  return view;
+  try {
+    const setState = async () => {
+      if (view !== undefined && view !== null) {
+        const state = await view.getState();
+        history.pushState(state, null, url);
+      } else {
+        history.pushState(null, null, url);
+      }
+      view = await router();
+      return view;
+    };
+    view = await setState();
+    return view;
+  } catch (error) {
+    console.error('ignore:' + error);
+  }
+  return null;
 };
 
 export const router = async () => {
@@ -59,6 +70,12 @@ export const router = async () => {
   //const view = new match.route.view(getParams(match));
   const view = new match.route.view();
   try {
+    const json = await view.checkRedirect();
+    if (json['is_redirect']) {
+      navigateTo(json['uri']);
+      router();
+      return;
+    }
     const html = await view.getHtml();
     document.querySelector('#app').innerHTML = html;
     view.executeScript();
@@ -67,14 +84,6 @@ export const router = async () => {
   }
   return view;
 };
-
-/*
-function dispatch(event) {
-  if (event == 'TwoFaEvent') {
-    document.dispatchEvent(TwoFaEvent);
-  }
-}
-  */
 
 export async function updatePage(res) {
   try {

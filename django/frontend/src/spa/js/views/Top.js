@@ -6,21 +6,21 @@ import { fetchJsonData } from '../utility/fetch.js';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Log in Success');
+    this.setTitle('Top Page');
   }
-
   checkRedirect = async () => {
     const json = fetchJsonData('/spa/is-login');
     return json;
   };
+
   getHtml = async () => {
-    const uri = getUrlWithLang('accounts/signup-two-fa/');
+    const uri = getUrlWithLang('spa/top');
     const data = fetchData(uri);
     return data;
   };
-  executeScript = () => {
-    //executeScriptTab('');
-  };
+
+  executeScript = () => {};
+
   getState = () => {
     return null;
   };

@@ -6,7 +6,7 @@ import { fetchJsonData } from '../utility/fetch.js';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Log in Success');
+    this.setTitle('Games');
   }
 
   checkRedirect = async () => {
@@ -14,12 +14,12 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async () => {
-    const uri = getUrlWithLang('accounts/signup-two-fa/');
+    const uri = getUrlWithLang('pong/games');
     const data = fetchData(uri);
     return data;
   };
   executeScript = () => {
-    //executeScriptTab('');
+    //document.dispatchEvent(SignupEvent);
   };
   getState = () => {
     return null;

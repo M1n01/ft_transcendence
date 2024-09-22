@@ -4,6 +4,8 @@ from django.views.generic import CreateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView
 
+# from django.views.decorators.csrf import csrf_exempt
+
 # from django.contrib.auth.forms import AuthenticationForm
 # from django.template.exceptions import TemplateDoesNotExist
 from django.utils.decorators import method_decorator
@@ -193,14 +195,7 @@ def signup_two_fa_verify(request):
                 return HttpResponseBadRequest("Failure to verify")
             copy_tmpuser_to_ftuser(user)
 
-            # new_user = authenticate(
-            # request, username=user.email, password=test_user.password
-            # )
-            # if new_user is None:
-            # else:
-            # print("New User Exist")
             new_user = FtUser.objects.get(email=user.email)
-            # src_user = FtTmpUser.objects.get(email=user.email)
             login(
                 request,
                 new_user,
@@ -381,11 +376,12 @@ class UserLogin(LoginView):
 class UserLogout(LogoutView):
     redirect_field_name = "redirect"
     # success_url = reverse_lazy("accounts:success-logout")
-    success_url = reverse_lazy("spa:index")
+    # success_url = reverse_lazy("spa:top")
+    success_url = reverse_lazy("spa:top")
 
-    def post(self, request, *args, **kwargs):
-        # request.session["is_2fa"] = False
-        return super().post(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    # request.session["is_2fa"] = False
+    # return super().post(request, *args, **kwargs)
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -394,7 +390,7 @@ class SignupView(CreateView):
     form_class = SignUpForm
     template_name = "accounts/signup.html"
     # success_url = reverse_lazy("accounts:success-signup")
-    success_url = reverse_lazy("spa:index")
+    success_url = reverse_lazy("spa:top")
     usable_password = None
 
     # cnt = "0-"
@@ -405,19 +401,10 @@ class SignupView(CreateView):
     # extra_context = {"dummy_email": cnt + randomStr(64) + "@" + randomStr(16) + ".com"}
 
     def form_invalid(self, form):
-        print("form_invalid No.1")
         # ここでエラーメッセージを追加したり、カスタマイズしたりできる
         # form.add_error(None, "全体に関するエラーメッセージを追加することができます。")
         res = super().form_invalid(form)
         res.status_code = 400
-        # print("form_invalid No.2")
-        # print(f"{res.content=}")
-        # body_bytes = res.content  # バイト形式のボディ
-        # body_str = body_bytes.decode("utf-8")  # UTF-8としてデコードして文字列に変換
-
-        # デバッグまたは他の処理に使用する
-        # print(f"{body_str=}")  # 例: レスポンスボディを出力
-        # print("form_invalid No.3")
         return res
 
     def form_valid(self, form):

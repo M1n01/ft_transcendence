@@ -7,6 +7,9 @@ export default class {
     document.title = title;
   }
 
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
   getHtml = async () => {
     return '';
   };

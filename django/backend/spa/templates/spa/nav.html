@@ -1,0 +1,131 @@
+{% load static %} {% load i18n %}
+<body>
+  <nav class="navbar navbar-expand navbar-dark sticky-top bg-dark border-bottom pb-2 pb-md-0">
+    <div class="container-fluid d-flex d-flex justify-content-around">
+      <a class="navbar-brand ms-3 fw-bold fs-3 pb-0 mb-2" href="/top" data-link
+        >42 FtTranscendence</a
+      >
+
+      <div class="collapse navbar-collapse" id="navbar-content">
+        <ul class="navbar-nav me-auto d-flex align-items-end d-none d-md-flex  {{hidden}}">
+          <li class="nav-item">
+            <a class="nav-link bg-dark text-white pb-0" href="/games" data-link>
+              {% trans "ゲーム" %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link bg-dark text-white pb-0" href="/tournament" data-link>
+              {% trans "トーナメント" %}
+            </a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
+          <li class="nav-item dropdown">
+            <div class="position-relative z-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                fill="white"
+                class="bi-bell"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"
+                />
+              </svg>
+              <span
+                id="alerm-number"
+                class="top-0 start-100 z-2 translate-middle badge rounded-pill bg-secondary text-red"
+                >1 <span class="visually-hidden">unread messages</span></span
+              >
+            </div>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
+          <li class="nav-item dropdown">
+            <div
+              class="d-flex nav-link dropdown-toggle bg-dark"
+              id="navbarDropdown"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <div class="d-flex align-items-center mx-2 fw-bold fs-6 text-white">
+                {{user.username}}
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                fill="white"
+                class="bi bi-person-circle"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                <path
+                  fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
+                />
+              </svg>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/pong" data-link> {% trans "マイページ" %} </a>
+                <div>
+                  <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <a id="nav-logout-button" type="submit" class="dropdown-item" data-link
+                      >{% trans "ログアウト" %}</a
+                    >
+                  </form>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="pe-3  {{hidden}}">
+        <div
+          class="collapse navbar-collapse d-md-none bg-dark justify-content-end bg-primary"
+          id="nav-dropdown-menu"
+        >
+          <ul class="navbar-nav ml-auto d-md-none">
+            <li class="nav-item dropstart">
+              <button
+                id="small-menu-dropdown"
+                class="btn btn-secondary dropdown-toggle bg-dark"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <ul class="navbar-nav ml-auto d-md-none">
+                <li class="nav-item dropdown"></li>
+              </ul>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/games" data-link>{% trans "ゲーム" %}</a>
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/tournament" data-link
+                    >{% trans "トーナメント" %}</a
+                  >
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/pong" data-link
+                    >{% trans "マイページ" %}</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- /サブコンポーネント -->
+    </div>
+  </nav>
+</body>

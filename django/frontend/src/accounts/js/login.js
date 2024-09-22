@@ -1,8 +1,9 @@
 import '../scss/login.scss';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
+import { handlePostLogin } from '../../spa/js/utility/user.js';
 
-import { Modal } from 'bootstrap';
+import { navModal } from './two_fa.js';
 export const LoginEvent = new Event('LoginEvent');
 
 function displayInstruction(id) {
@@ -43,9 +44,7 @@ document.addEventListener('LoginEvent', function () {
             if (json['is_auth_app']) {
               document.getElementById('resend-button').hidden = true;
             }
-            const modal_2fa = document.getElementById('TwoFa-Modal');
-            const modal = new Modal(modal_2fa);
-            modal.show();
+            navModal(true);
             document.dispatchEvent(TwoFaEvent);
           } catch (error) {
             console.error(error);
@@ -78,6 +77,7 @@ document.addEventListener('LoginEvent', function () {
           return '';
         }
         document.getElementById('close-modal').click();
+        handlePostLogin();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);

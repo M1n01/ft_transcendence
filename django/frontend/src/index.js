@@ -1,17 +1,17 @@
 import { Routes } from './spa/js/routing/routes.js';
-//import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
 import { navigateTo, updatePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
-//import { Pills } from 'bootstrap.bundle.min.js';
-//import Cookies from 'js-cookie';
-//import { Tooltip, Toast, Popover } from 'bootstrap';
-import 'bootstrap';
+
 import './accounts/js/two_fa.js';
+import './accounts/js/login.js';
+import './accounts/js/signup.js';
 
 import './spa/scss/spa.scss';
+import './custom_bootstrap.scss';
 import './main.scss';
+import { loadNav } from './spa/js/utility/user.js';
 
 // パス名を取得する関数
 const getDisplayedURI = (pathname) => {
@@ -23,7 +23,9 @@ const getDisplayedURI = (pathname) => {
   return getUrl(path);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  loadNav();
+
   let tmp_path = window.location.pathname;
   document.body.addEventListener('click', (e) => {
     // ページ切替
@@ -49,14 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
         const response = await fetchAsForm(form, formData);
-        //if (response && response !== '') {
-        //const res = await response;
-        //console.log('htmp:' + text);
-        //response.then((data) => {
         updatePage(response);
         form.disabled = false;
-        //});
-        //}
       });
     }
 
