@@ -294,3 +294,22 @@ PONG_DOMAIN = "https://localhost/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"
+
+# SEND_GRID
+SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"
+SENDGRID_EMAIL_PORT = 587
+SENDGRID_EMAIL_USERNAME = "your_sendgrid_username"
+SENDGRID_EMAIL_PASSWORD = "your_sendgrid_password"
+
+# TWILIO(SMS)
+TWILIO_SERVICE_SID = os.environ["TWILIO_SERVICE_SID"]
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+
+# Brevo(Email)
+BREVO_API_KEY = os.environ["BREVO_API_KEY"]
+BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400

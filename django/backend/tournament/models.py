@@ -22,7 +22,7 @@ class Tournament(models.Model):
     status = models.CharField(
         max_length=10,
         choices=TournamentStatusChoices,
-        default=TournamentStatusChoices.RECRUITING.label,
+        default=TournamentStatusChoices.RECRUITING,
     )
 
     def save(self, *args, **kwargs):
