@@ -4,9 +4,6 @@ import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
 import { moveTo } from '../routing/routing.js';
-//import 'bootstrap';
-//import { Dropdown } from 'bootstrap';
-//import ft_logo from '../../assets/42.svg';
 
 export function isLogined() {
   //todo

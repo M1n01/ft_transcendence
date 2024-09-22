@@ -3,7 +3,6 @@ import { getUrlWithLang } from '../../spa/js/utility/url.js';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
 import { handlePostLogin } from '../../spa/js/utility/user.js';
-//import { getUrlWithLang } from '../../spa/js/utility/url.js';
 import ft_logo from '../assets/42.svg';
 
 import { navModal } from './two_fa.js';
