@@ -1,0 +1,16 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Friend</title>
+  </head>
+  <body>
+    <div id="friend-search">{% include 'friend/search.html' with form=search_form %}</div>
+    <div id="friend-request">
+      {% include 'friend/request.html' with friend_requests=friend_requests %}
+    </div>
+    <div id="friend-list">{% include 'friend/list.html' with friends=friends%}</div>
+  </body>
+</html>

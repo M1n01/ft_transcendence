@@ -96,8 +96,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
     "pong.score_keeper.apps.ScoreKeeperConfig",
+    "tournament",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
@@ -280,11 +283,11 @@ CSRF_COOKIE_SECURE = True
 
 
 # 認証
-LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:top"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "spa:top"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
-LOGIN_URL = "accounts:login"
+LOGIN_URL = "spa:to-login"
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
@@ -297,8 +300,26 @@ PONG_DOMAIN = "https://localhost/"
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"
 
+# SEND_GRID
+SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"
+SENDGRID_EMAIL_PORT = 587
+SENDGRID_EMAIL_USERNAME = "your_sendgrid_username"
+SENDGRID_EMAIL_PASSWORD = "your_sendgrid_password"
+
+# TWILIO(SMS)
+TWILIO_SERVICE_SID = os.environ["TWILIO_SERVICE_SID"]
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+
+# Brevo(Email)
+BREVO_API_KEY = os.environ["BREVO_API_KEY"]
+BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400
+
 # WEB3
 PRIVATE_KEY = os.environ["PRIVATE_KEY"]
 PROVIDER_URL = os.environ["PROVIDER_URL"]
 PONG_SCORE_CONTRACT_ADDRESS = None
-

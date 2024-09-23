@@ -7,7 +7,11 @@ export default class {
     document.title = title;
   }
 
-  getHtml = async () => {
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return '';
   };
   executeScript = () => {

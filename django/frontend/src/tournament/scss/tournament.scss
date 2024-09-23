@@ -1,0 +1,83 @@
+//@import 'bootstrap/scss/bootstrap';
+.gameCircle {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  border-color: red;
+  background-color: red;
+  border-radius: 100%;
+  z-index: 5;
+}
+
+.tournamentTopLeftBranch {
+  border: 5px solid;
+  border-color: blue;
+  border-left: none;
+  border-bottom: none;
+  position: absolute;
+}
+.tournamentBottomBranch {
+  border: 5px solid;
+  border-color: blue;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  position: absolute;
+}
+
+.tournamentTopRightBranch {
+  border: 5px solid;
+  border-color: blue;
+  border-right: none;
+  border-bottom: none;
+  position: absolute;
+}
+
+.winner {
+  border: 5px solid;
+  border-color: red;
+  position: absolute;
+  z-index: 2;
+}
+
+.validRight {
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+}
+.validLeft {
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+}
+.validTop {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+.validBottom {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.tournamentLine {
+  border: 5px solid;
+  border-color: blue;
+  border-right: none;
+  border-bottom: none;
+  position: absolute;
+}
+
+.userTextArea {
+  position: absolute;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card {
+  max-width: 20rem;
+  min-width: 20rem;
+  //margin: 0 auto;
+}

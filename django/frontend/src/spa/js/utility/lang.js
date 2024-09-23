@@ -1,4 +1,4 @@
-import { navigateTo, router } from '../routing/routing.js';
+import { navigateTo } from '../routing/routing.js';
 
 export async function changingLanguage(url, form, current_uri) {
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -15,7 +15,7 @@ export async function changingLanguage(url, form, current_uri) {
       navigateTo(current_uri);
 
       // 画面更新したいだけ
-      router();
+      //router();
     } else {
       console.error('Failure');
     }

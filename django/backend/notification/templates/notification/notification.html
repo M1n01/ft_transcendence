@@ -1,0 +1,29 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification</title>
+  </head>
+  <body>
+    Notifications {% if notifications %}
+
+    <ul>
+      {% for data in notifications %}
+      <li>
+        <div>
+          {% if data.message.link %}
+          <a class="nav-link bg-dark text-primary pb-0" href="{{data.message.link}}" data-link>
+            {% if lang == "ja" %} {{data.message.jp}} {% elif lang == "en" %} {{data.message.en}} {%
+            elif lang == "fr" %} {{data.message.fr}} {% endif %}
+          </a>
+          {% endif %}
+        </div>
+      </li>
+
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </body>
+</html>

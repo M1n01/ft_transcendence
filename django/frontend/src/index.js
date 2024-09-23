@@ -1,36 +1,69 @@
 import { Routes } from './spa/js/routing/routes.js';
-//import { navigateTo, router, updatePage } from './spa/js/routing/routing.js';
-import { navigateTo, updatePage } from './spa/js/routing/routing.js';
+//import { router } from './spa/js/routing/routing.js';
+import { navigateTo, updatePage, savePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
 import { fetchAsForm } from './spa/js/utility/fetch.js';
-//import { Pills } from 'bootstrap.bundle.min.js';
-//import Cookies from 'js-cookie';
-//import { Tooltip, Toast, Popover } from 'bootstrap';
-import 'bootstrap';
+
 import './accounts/js/two_fa.js';
+import './accounts/js/login.js';
+import './accounts/js/signup.js';
 
 import './spa/scss/spa.scss';
+import './custom_bootstrap.scss';
 import './main.scss';
+import { loadNav } from './spa/js/utility/user.js';
+//import 'login.js'
 
 // パス名を取得する関数
-const getDisplayedURI = (pathname) => {
+export const getDisplayedURI = (pathname) => {
+  let query_index = pathname.lastIndexOf('?');
+  if (pathname.lastIndexOf('/') > query_index) {
+    query_index = 0;
+  }
+
+  const params = query_index == 0 ? '' : pathname.substring(query_index);
+  pathname.replace(params, '');
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
     (str) => Routes.findIndex((path) => path.path.replace('/', '') === str) >= 0
   );
   path = path === undefined ? '' : path;
-  return getUrl(path);
+
+  let rest_path = '';
+  if (path !== '') {
+    // http://localhost/abc/def/ghi
+    // 上記URLなら、/def/ghiがrest_pathとなる
+    const test = splits.findIndex((tmp_path) => tmp_path == path);
+    const slice_splits = splits.slice(test + 1);
+    rest_path = '/' + slice_splits.join('/');
+  }
+  rest_path = rest_path.replace(params, '');
+  if (rest_path === '/') {
+    rest_path = '';
+  }
+  if (params.length > 0 && rest_path.length > 0) {
+    if (rest_path[rest_path.length - 1] == '/') {
+      rest_path = rest_path.substring(0, rest_path.length - 1);
+    }
+  }
+  return { path: getUrl(path), rest: rest_path, params: params };
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  loadNav();
+
   let tmp_path = window.location.pathname;
+
   document.body.addEventListener('click', (e) => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
+      savePage(window.location.href);
+
       e.preventDefault();
       tmp_path = e.target.href;
-      navigateTo(tmp_path);
+      const uri = getDisplayedURI(tmp_path);
+      navigateTo(uri.path, uri.rest, uri.params);
     }
 
     // Form送信
@@ -49,29 +82,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
         const response = await fetchAsForm(form, formData);
-        //if (response && response !== '') {
-        //const res = await response;
-        //console.log('htmp:' + text);
-        //response.then((data) => {
         updatePage(response);
         form.disabled = false;
-        //});
-        //}
       });
-    }
 
-    //多言語切替
-    if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
-      e.preventDefault();
+      //多言語切替
+      if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
+        e.preventDefault();
 
-      const lang_url = '/i18n/setlang/';
-      const form = document.getElementById('lang_form');
-      let formData = new FormData(form);
-      const current_uri = getDisplayedURI(tmp_path);
-      changingLanguage(lang_url, formData, current_uri);
+        const lang_url = '/i18n/setlang/';
+        const form = document.getElementById('lang_form');
+        let formData = new FormData(form);
+        const current_uri = getDisplayedURI(tmp_path).path;
+        changingLanguage(lang_url, formData, current_uri);
+      }
     }
   });
 
   const uri = getDisplayedURI(tmp_path);
-  navigateTo(uri);
+  navigateTo(uri.path, uri.rest, uri.params);
 });

@@ -1,39 +1,15 @@
 from django.shortcuts import render
-
-# from django.http import HttpResponse
-# from django.template import loader
 from django.db import models
-
-# from django.views.decorators.csrf import ensure_csrf_cookie
-# from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
-
-# from urllib.parse import urlparse
-# from django.template import RequestContext, Template
 from django.views.decorators.http import condition
-
-# import django.views.decorators.http
-# import asyncio
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 import hashlib
 
-# from django.conf import settings
-
-# from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# from django.contrib.auth.decorators import login_not_required
-
-
-# loginしない限り見れない
-# class Pong(LoginRequiredMixin, ListView):
-# model = "test"
+# from django.utils.translation import gettext_lazy as _
 
 
 def checkSPA(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
     spa = request.META.get("HTTP_SPA")
     spas = request.META.get("HTTPS_SPA")
     if spa is None and spas is None:
@@ -65,10 +41,6 @@ def lang(request):
 
 
 def script_view(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
     checkSPA(request)
     return render(request, "pong/script.html")
 
@@ -95,3 +67,7 @@ def index(request):
         "latest_question_list": "abcdefg",
     }
     return render(request, "pong/index.html", context)
+
+
+class GamesView(TemplateView):
+    template_name = "pong/games.html"

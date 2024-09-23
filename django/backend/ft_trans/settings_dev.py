@@ -97,8 +97,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
     "pong.score_keeper.apps.ScoreKeeperConfig",
+    "tournament",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
@@ -115,7 +118,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -286,10 +289,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # 認証
-LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:top"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "accounts:login-signup"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
+LOGIN_URL = "spa:to-login"
 # AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH
@@ -317,6 +321,9 @@ TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 # Brevo(Email)
 BREVO_API_KEY = os.environ["BREVO_API_KEY"]
 BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400
 
 # WEB3
 PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"

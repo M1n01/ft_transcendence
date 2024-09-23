@@ -40,12 +40,14 @@ class CustomSessionMiddleware(SessionMiddleware):
                     exp = jwt_decode["exp"]
                 if "sub" in jwt_decode:
                     user_id = jwt_decode["sub"]
-        except jwt.ExpiredSignatureError:
-            is_provisional_login = False
+        except jwt.ExpiredSignatureError as e:
             # leeway+expで設定した時間を超過したらここに入る
-            pass
-        except jwt.exceptions.DecodeError:
+            print(f"JWT Expire Error {e=}")
             is_provisional_login = False
+            pass
+        except jwt.exceptions.DecodeError as e:
+            is_provisional_login = False
+            print(f"JWT Decode Error {e=}")
             # tmp_session_keyが編集されていたらここに入る
             pass
         request.session = self.SessionStore(session_key)
@@ -95,13 +97,17 @@ class CustomSessionMiddleware(SessionMiddleware):
                     id = ""
                     email = ""
                     is_provisional_login = False
-                    exp = datetime.now(tz=timezone.utc) + timedelta(seconds=14400)
+                    exp = datetime.now(tz=timezone.utc) + timedelta(
+                        seconds=getattr(settings, "JWT_VALID_TIME", None)
+                    )
                     if "is_provisional_login" in request.session:
                         is_provisional_login = request.session["is_provisional_login"]
                         if (is_provisional_login is True) and (
                             "exp" in request.session
                         ):
-                            exp = datetime.fromtimestamp(float(request.session["exp"]))
+                            exp = datetime.fromtimestamp(
+                                float(request.session["exp"]), tz=timezone.utc
+                            )
                             id = request.session["user_id"]
                         # email = user.email
 

@@ -33,5 +33,33 @@
     <section id="login-area">{% include 'accounts/login.html' with form=login_form%}</section>
   </div>
   {% include 'accounts/two-fa-modal.html' %}
-  <script></script>
+  <script>
+    //import { LoginEvent } from '../../../accounts/js/login.js';
+    //import { SignupEvent } from '../../../accounts/js/signup.js';
+    try {
+      //const LoginEvent = new Event('LoginEvent');
+      //const SignupEvent = new Event('SignupEvent');
+      //document.dispatchEvent(LoginEvent);
+      //document.dispatchEvent(SignupEvent);
+
+      const login_link = document.getElementById('tab-login');
+      const signup_link = document.getElementById('tab-signup');
+      const login_area = document.getElementById('login-area');
+      const signup_area = document.getElementById('signup-area');
+      login_link.addEventListener('click', () => {
+        login_link.classList.add('active');
+        signup_link.classList.remove('active');
+        signup_area.hidden = true;
+        login_area.hidden = false;
+      });
+      signup_link.addEventListener('click', () => {
+        signup_link.classList.add('active');
+        login_link.classList.remove('active');
+        login_area.hidden = true;
+        signup_area.hidden = false;
+      });
+    } catch (error) {
+      console.log('ignore' + error);
+    }
+  </script>
 </body>

@@ -17,5 +17,6 @@ export function getUrlWithLang(path) {
   if (!lang) {
     lang = '';
   }
-  return http + '//' + domain + '/' + path;
+  return http + '//' + domain + '/' + lang + '/' + path;
+  //return http + '//' + domain + '/' + path;
 }

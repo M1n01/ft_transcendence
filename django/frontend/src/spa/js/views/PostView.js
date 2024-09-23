@@ -7,7 +7,11 @@ export default class extends AbstractView {
     this.setTitle('Viewing Post');
   }
 
-  getHtml = async () => {
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Post</h1>
             <p>You are viewing post #${this.postId}.</p>

@@ -8,9 +8,12 @@ export default class extends AbstractView {
     this.setTitle('Lang');
   }
 
-  getHtml = async () => {
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
+  getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('pong/lang');
-    const data = await fetchData(uri);
+    const data = fetchData(uri + rest + params);
     return data;
   };
   executeScript = () => {

@@ -1,0 +1,124 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournment</title>
+  </head>
+  <body>
+    <h1 class="py-2">Tournment</h1>
+    <div class="d-flex justify-content-center">
+      <button
+        class="mb-5 btn btn-primary"
+        id="new-tournament"
+        data-bs-toggle="modal"
+        data-bs-target="#MakeTournamentModal"
+      >
+        {% trans 'トーナメント作成'%}
+      </button>
+    </div>
+    <div
+      class="modal fade"
+      id="MakeTournamentModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex justify-content-center w-100">
+              <h2 class="modal-title fs-5 text-dark" id="exampleModalLabel">
+                {% trans 'トーナメント作成' %}
+              </h2>
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body px-4">
+            <form id="make-tournment" action="{% url 'tournament:tournament' %}">
+              {% csrf_token %}
+
+              <div class="mt-3">
+                <label for="id_name" class="form-label text-dark"
+                  >{% trans 'トーナメント名'%}</label
+                >
+                <div class="input-group">{{form.name}}</div>
+              </div>
+
+              <div class="d-flex justify-content-between w-100">
+                <div class="mt-3">
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon3"
+                      >{% trans '最大参加人数'%}</span
+                    >
+                    {{form.current_players}}
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <div class="input-group">
+                    <span class="input-group-text mr-3 pr-3" id="basic-addon3"
+                      >{% trans 'フレンドのみ'%} {{form.is_only_friend}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex flex-column flex-sm-row">
+              <div class="mt-3 w-50 me-4">
+                <label for="id_name" class="form-label text-dark">{% trans '開始日'%}</label>
+                <div class="input-group">{{form.start_at}}</div>
+              </div>
+              <div class="d-flex ">
+              <div class="mt-3 me-4">
+                <label for="id_name" class="form-label text-dark bg-light">{% trans '時'%}</label>
+                <div class="input-group dropdown">{{form.start_hour}}</div>
+              </div>
+              <div class="mt-3">
+                <label for="id_name" class="form-label text-dark">{% trans '分'%}</label>
+                <div class="input-group  dropdown">{{form.start_minute}}</div>
+              </div>
+              </div>
+            </div>
+            </form>
+            <div hidden id="chart-div">{% include 'tournament/chart.html' %}</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              {% trans "キャンセル" %}
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              form="make-tournment"
+              data-bs-dismiss="modal"
+            >
+              {% trans "作成" %}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div >
+      {% include 'tournament/cards.html' with tournaments=recruiting attr=recruit_status %}
+    </div>
+
+    <div >
+      {% include 'tournament/cards.html' with tournaments=as_organizer attr=organizer_status %}
+    </div>
+
+    <div >
+      {% include 'tournament/cards.html' with tournaments=as_participant attr=participant_status %}
+    </div>
+
+    <div >
+      {% include 'tournament/cards.html' with tournaments=old attr=old_status %}
+    </div>
+</html>

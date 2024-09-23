@@ -5,13 +5,23 @@ body {
 }
 
 .spa_area {
-  border: solid black 1px;
+  border: solid transparent;
 }
 
 #app {
   margin: 2em;
   line-height: 1.5;
   font-weight: 500;
+}
+
+h1::after {
+  display: block;
+  background-color: #00babc;
+  width: 84px;
+  height: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  content: '';
 }
 
 a {

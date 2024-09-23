@@ -1,5 +1,6 @@
 import AbstractView from './AbstractView.js';
 import { executeScriptTab } from '../utility/script.js';
+import { fetchJsonData } from '../utility/fetch.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -7,7 +8,12 @@ export default class extends AbstractView {
     this.setTitle('Posts');
   }
 
-  getHtml = async () => {
+  checkRedirect = async () => {
+    const json = fetchJsonData('/spa/is-login');
+    return json;
+  };
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Posts2</h1>
             <p>You are viewing the posts!!!1234A</p>

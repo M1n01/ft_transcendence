@@ -1,8 +1,11 @@
 import '../scss/login.scss';
+import { getUrlWithLang } from '../../spa/js/utility/url.js';
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { TwoFaEvent } from './two_fa.js';
+import { handlePostLogin } from '../../spa/js/utility/user.js';
+import ft_logo from '../assets/42.svg';
 
-import { Modal } from 'bootstrap';
+import { navModal } from './two_fa.js';
 export const LoginEvent = new Event('LoginEvent');
 
 function displayInstruction(id) {
@@ -11,8 +14,15 @@ function displayInstruction(id) {
   document.getElementById('instruction-error').hidden = true;
   document.getElementById(id).hidden = false;
 }
+//const two_fa_form = document.getElementById('two-fa-verify-form');
 
 document.addEventListener('LoginEvent', function () {
+  const logo = document.querySelector('#ft-logo');
+  if (logo == null) {
+    return;
+  }
+  logo.src = ft_logo;
+
   try {
     // 入力があったらエラーメッセージを消去
     const input_elements = document
@@ -37,15 +47,13 @@ document.addEventListener('LoginEvent', function () {
             const json = await response.json();
             const two_fa_form = document.getElementById('two-fa-verify-form');
             const resend_two_fa_form = document.getElementById('resend-two-fa');
-            two_fa_form.action = 'accounts/two-fa-verify/';
+            two_fa_form.action = getUrlWithLang('accounts/two-fa-verify/');
             resend_two_fa_form.action = 'accounts/two-fa/';
             document.getElementById('app_url_qr').hidden = true;
             if (json['is_auth_app']) {
               document.getElementById('resend-button').hidden = true;
             }
-            const modal_2fa = document.getElementById('TwoFa-Modal');
-            const modal = new Modal(modal_2fa);
-            modal.show();
+            navModal(true);
             document.dispatchEvent(TwoFaEvent);
           } catch (error) {
             console.error(error);
@@ -62,8 +70,9 @@ document.addEventListener('LoginEvent', function () {
       displayInstruction('instruction-processing');
 
       try {
-        const url =
-          window.location.protocol + '//' + window.location.host + '/accounts/oauth-login/';
+        //const url =
+        //window.location.protocol + '//' + window.location.host + '/accounts/oauth-login';
+        const url = getUrlWithLang('accounts/oauth-login');
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const res = await fetch(url, {
           method: 'POST',
@@ -78,6 +87,7 @@ document.addEventListener('LoginEvent', function () {
           return '';
         }
         document.getElementById('close-modal').click();
+        handlePostLogin();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);

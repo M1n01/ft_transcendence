@@ -39,6 +39,10 @@ class TournamentParticipant(models.Model):
 試合不成立の場合はplayer1,2のスコアが共にblank
 """
 
+# from accounts.models import FtUser
+# from django.utils.translation import gettext_lazy as _
+from tournament.models import Tournament
+
 
 class Match:
 
