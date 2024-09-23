@@ -11,6 +11,12 @@ networks:
     ipam:
       config:
         - subnet: 172.38.20.0/24
+  redis_net:
+    name: redis_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.30.0/24
 
 services:
   nginx:
@@ -59,10 +65,11 @@ services:
     #restart: always
     tty: true
     networks:
-      django_net:
-        ipv4_address: 172.38.10.30
+      redis_net:
+        ipv4_address: 172.38.30.30
     ports:
       - 6379:6379
+      - 6380:6380
     environment:
       - REDIS_PASSOWRD=$REDIS_PASSOWRD
     volumes:
@@ -91,6 +98,7 @@ services:
     networks:
       - django_net
       - db_net
+      - redis_net
     tty: true
     volumes:
       - ./django/:/workspace

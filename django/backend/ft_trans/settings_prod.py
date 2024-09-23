@@ -211,14 +211,16 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379",
+        "LOCATION": f"redis://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6380",
     }
 }
 
 # Celery configurations
-CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZZER = "json"
+# CELERY_TIMEZONE = TIME_ZONE
+
 
 # 'amqp://guest:guest@localhost//'
 # celeryを動かすための設定ファイル
@@ -229,18 +231,21 @@ CELERY_CACHE_BACKEND = "django-cache"
 
 # Celery設定
 # CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
-CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"
+CELERY_BROKER_URL = f"redis://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6380"
 CELERY_RESULT_BACKEND = "django-db"
+# CELERY_RESULT_BACKEND = (
+# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"
+# )
 
 CELERY_RESULT_EXTENDED = True
 
-CELERYD_CONCURRENCY = 1
-
-CELERYD_LOG_FILE = "../log/celeryd.log"
-
+# CELERYD_CONCURRENCY = 1
+#
+# CELERYD_LOG_FILE = "../log/celeryd.log"
+#
 # CELERYD_LOG_LEVELをINFOにしておくと、
 # タスクの標準出力もログ(celeryd.log)に書かれる
-CELERYD_LOG_LEVEL = "INFO"
+# CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
