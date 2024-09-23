@@ -215,15 +215,7 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://172.38.10.30:6379",
-        # "OPTIONS": {
-        #    "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        #    "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
-        # },
-        # "OPTIONS": {
-        # "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        # "PASSWORD": "foobared",
-        # },
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379",
     }
 }
 
@@ -241,7 +233,7 @@ CELERY_CACHE_BACKEND = "django-cache"
 
 # Celery設定
 # CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
-CELERY_BROKER_URL = "redis://172.38.10.30:6379"
+CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"
 CELERY_RESULT_BACKEND = "django-db"
 
 CELERY_RESULT_EXTENDED = True

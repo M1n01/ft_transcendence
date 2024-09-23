@@ -63,9 +63,14 @@ services:
         ipv4_address: 172.38.10.30
     ports:
       - 6379:6379
+    environment:
+      - REDIS_PASSOWRD=$REDIS_PASSOWRD
     volumes:
       - ./docker/redis/tools:/etc/redis/
-    command: /bin/sh -c 'redis-server  /etc/redis/redis.conf'
+    command: /bin/sh -c '
+      cp /etc/redis/redis.conf0 /etc/redis/redis.conf &&
+      echo requirepass $REDIS_PASSOWRD >> /etc/redis/redis.conf &&
+      redis-server /etc/redis/redis.conf'
 
   #redis:
   #  container_name: redis
@@ -108,6 +113,7 @@ services:
       - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
+      - REDIS_PASSOWRD=$REDIS_PASSOWRD
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
