@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.conf import settings
 import urllib.parse
 import random
@@ -43,10 +44,6 @@ def query_to_dict(url):
     return query_dict
 
 
-# 42認可サーバーから受け取る、state,codeの組み合わせをdictで管理
-state_code_dict = {}
-
-
 class FtOAuth(ModelBackend):
     """
     FtUser用の認証バックエンドクラス
@@ -78,7 +75,7 @@ class FtOAuth(ModelBackend):
         return user
 
     def append_state_code_dict(self, state, code):
-        state_code_dict[state] = code
+        cache.set(state, code, timeout=600)  # 5minutes
 
     def get_ft_authorization_url(self):
         """
@@ -92,7 +89,6 @@ class FtOAuth(ModelBackend):
             "scope": "public",
             "state": randomStr(64),
         }
-        # self.state_code_dict[query_list["state"]] = ""
         query = urllib.parse.urlencode(query_list)
         url = self.BASE_URL + "?" + query
         return url
@@ -158,9 +154,8 @@ class FtOAuth(ModelBackend):
             logger.error("not find state in query")
             raise ValueError("Requestされたデータは無効です")
         state = query["state"][0]
-        if state not in state_code_dict:
-            logger.error("not find state in state_code_dict")
+        code = cache.get(state)  # 5minutes
+        if code is None:
+            logger.error("not find state in Redis")
             raise ValueError("Requestされたデータは無効です")
-
-        code = state_code_dict[state]
         return self.fetch_access_token(state, code)

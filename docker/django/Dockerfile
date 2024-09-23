@@ -40,6 +40,7 @@ pyotp \
 celery \
 django-celery-results \
 django-redis
+#redis
 #django-twilio
 
 RUN chmod 744 /tmp/make_ca.sh
