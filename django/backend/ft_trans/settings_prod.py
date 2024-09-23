@@ -298,7 +298,7 @@ PONG_DOMAIN = "https://localhost/"
 ERROR_PAGE = PONG_DOMAIN + "error.html"
 
 # WEB3
-PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-PROVIDER_URL = "http://eth:8545"
+PRIVATE_KEY = os.environ["PRIVATE_KEY"]
+PROVIDER_URL = os.environ["PROVIDER_URL"]
 PONG_SCORE_CONTRACT_ADDRESS = None
 

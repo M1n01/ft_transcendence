@@ -39,6 +39,8 @@ def deploy_contract():
             {
                 "from": account.address,
                 "nonce": w3.eth.get_transaction_count(account.address),
+                "gas": 2000000,
+                "gasPrice": w3.to_wei("10", "gwei"),
             }
         )
 

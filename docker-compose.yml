@@ -94,6 +94,9 @@ services:
       - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
+      - PRIVATE_KEY=$PRIVATE_KEY
+      - PROVIDER_URL=$PROVIDER_URL
+      - ALCHEMY_API_KEY=$ALCHEMY_API_KEY
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
@@ -122,3 +125,7 @@ services:
       interval: 3s
       timeout: 1s
       retries: 5
+    environment:
+      - PRIVATE_KEY=$PRIVATE_KEY
+      - PROVIDER_URL=$PROVIDER_URL
+      - ALCHEMY_API_KEY=$ALCHEMY_API_KEY
