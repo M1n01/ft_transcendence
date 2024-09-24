@@ -213,7 +213,6 @@ class TournamentView(LoginRequiredMixin, CreateView):
             return HttpResponseBadRequest()
         if len(name) > 32:
             return HttpResponseBadRequest()
-        print(f"{name=}")
         if re.search(r"[\'\"\;\*\#\=\%\<\>\/\(\)].", name):
             return HttpResponseBadRequest()
 
