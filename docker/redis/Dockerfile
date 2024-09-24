@@ -8,7 +8,7 @@ RUN apt install -y vim openssl
 COPY ./make_ca.sh /tmp/make_ca.sh
 RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
-#COPY tools/redis.conf /etc/redis/redis.conf
+COPY tools/redis.conf0 /etc/redis/redis.conf0
 
 #CMD ["redis-server", "/etc/redis/redis.conf"]
 CMD ["redis-server"]

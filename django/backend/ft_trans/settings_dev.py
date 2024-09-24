@@ -55,14 +55,7 @@ LOGGING = {
     },
 }
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -84,8 +77,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://nginx:443",
 ]
 
-
-# Application definition
 
 INSTALLED_APPS = [
     "daphne",  # ASGI設定
@@ -142,8 +133,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # alloauth
-                # "django.template.context_processors.request",
             ],
         },
     },
@@ -215,9 +204,16 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"redis://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6380",
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SSL_CERT_REQS": None,  # SSL証明書の検証をスキップ
+        },
     }
 }
+REDIS_SERVER = "redis"
+REDIS_PORT = 6379
+REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
 
 # Celery configurations
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -354,3 +350,7 @@ BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
 # JWT有効期限
 JWT_TMP_VALID_TIME = 300
 JWT_VALID_TIME = 14400
+
+# timezon #時間にはJTC固定とする
+# ただし、内部的にはUTCで保存する
+TIME_HOURS = 9

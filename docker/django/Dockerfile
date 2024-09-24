@@ -39,8 +39,8 @@ sib_api_v3_sdk \
 pyotp \
 celery \
 django-celery-results \
-redis \
-django-redis
+redis
+#django-redis #djang-redis is old
 #django-twilio
 
 RUN chmod 744 /tmp/make_ca.sh

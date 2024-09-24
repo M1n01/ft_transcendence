@@ -72,8 +72,8 @@ services:
       - 6380:6380
     environment:
       - REDIS_PASSOWRD=$REDIS_PASSOWRD
-    volumes:
-      - ./docker/redis/tools:/etc/redis/
+    #volumes:
+    #- ./docker/redis/tools:/etc/redis/
     command: /bin/sh -c '
       cp /etc/redis/redis.conf0 /etc/redis/redis.conf &&
       echo requirepass $REDIS_PASSOWRD >> /etc/redis/redis.conf &&
@@ -129,7 +129,7 @@ services:
       python manage.py makemigrations &&
       python manage.py migrate &&
       python manage.py loaddata ./**/fixtures/initial_data.json &&
-      (celery -A ft_trans  worker -l info )&
+      (celery -A ft_trans  worker -B -l info )&
       (cd frontend && npm install && npm run build) &&
       cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '

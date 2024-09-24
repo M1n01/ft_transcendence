@@ -217,8 +217,8 @@ tls-port 6379
 # success?
 tls-cert-file /etc/tls/server.crt
 tls-key-file /etc/tls/server.key
-#tls-ca-cert-file /etc/tls/ca/ca.crt
-tls-ca-cert-dir /etc/tls/ca
+tls-ca-cert-file /etc/tls/ca/ca.crt
+#tls-ca-cert-dir /etc/tls/ca
 
 
 #

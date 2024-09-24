@@ -1,4 +1,5 @@
-from django.core.cache import cache
+from ft_trans import redis
+
 from django.conf import settings
 import urllib.parse
 import random
@@ -75,7 +76,8 @@ class FtOAuth(ModelBackend):
         return user
 
     def append_state_code_dict(self, state, code):
-        cache.set(state, code, timeout=600)  # 5minutes
+        redis.set(state, code)
+        redis.expire(state, 300)
 
     def get_ft_authorization_url(self):
         """
@@ -154,7 +156,8 @@ class FtOAuth(ModelBackend):
             logger.error("not find state in query")
             raise ValueError("Requestされたデータは無効です")
         state = query["state"][0]
-        code = cache.get(state)  # 5minutes
+        code = redis.get(state)
+
         if code is None:
             logger.error("not find state in Redis")
             raise ValueError("Requestされたデータは無効です")
