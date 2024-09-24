@@ -14,37 +14,7 @@ openssl rsa -in server.key -pubout -out server-public.key
 openssl req -new -key server.key -subj "/CN=servername" > server.csr
 openssl req -text -noout -in server.csr
 
-#openssl req -new -key server.key  -out server.csr -config - << __EOF__
-#[ req ]
-#default_bits = 2048
-#prompt = no
-#default_md = sha256
-#req_extensions = req_ext
-#distinguished_name = dn
-#
-#[ dn ]
-#CN = servername
-#
-#[ req_ext ]
-#subjectAltName = @alt_names
-#
-#[ alt_names ]
-#DNS.1 = othername1
-#DNS.2 = othername2
-#
-#[ v3_ext ]
-#authorityKeyIdentifier=keyid,issuer:always
-#basicConstraints=CA:FALSE
-#keyUsage=keyEncipherment,dataEncipherment
-#extendedKeyUsage=serverAuth,clientAuth
-#subjectAltName=@alt_names
-#__EOF__
-
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 10000 -out server.crt
-#openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 10000 \
-  #-extensions v3_ext -extfile csr.conf \
-  #-out server.crt
-  #
 openssl x509 -text -noout -in server.crt
 
 

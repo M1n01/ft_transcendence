@@ -10,7 +10,4 @@ RUN chmod 744 /tmp/make_ca.sh
 RUN sh /tmp/make_ca.sh
 COPY tools/redis.conf0 /etc/redis/redis.conf0
 
-#CMD ["redis-server", "/etc/redis/redis.conf"]
 CMD ["redis-server"]
-#CMD ["bash"]
-#CMD ["/usr/sbin/php-fpm7.4", "-F"]

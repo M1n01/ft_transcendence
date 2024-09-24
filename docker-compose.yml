@@ -72,23 +72,10 @@ services:
       - 6380:6380
     environment:
       - REDIS_PASSOWRD=$REDIS_PASSOWRD
-    #volumes:
-    #- ./docker/redis/tools:/etc/redis/
     command: /bin/sh -c '
       cp /etc/redis/redis.conf0 /etc/redis/redis.conf &&
       echo requirepass $REDIS_PASSOWRD >> /etc/redis/redis.conf &&
       redis-server /etc/redis/redis.conf'
-
-  #redis:
-  #  container_name: redis
-  #  build:
-  #    context: ./docker/redis
-  #    dockerfile: Dockerfile
-  #  networks:
-  #    django_net:
-  #  init: true
-  #  ports:
-  #    - 6379:6379
 
   django:
     container_name: 'django'
