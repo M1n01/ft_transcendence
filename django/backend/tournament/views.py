@@ -1,6 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
+from django.conf import settings
+
+from .tasks import my_task
 
 from .models import Tournament, TournamentParticipant, TournamentStatusChoices
 from .forms import TournamentForm, TournamentParticipantForm
@@ -13,6 +16,7 @@ from django.http import (
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 import re
+from datetime import datetime, timedelta, timezone
 
 
 class RecruitingView(ListView):
@@ -31,7 +35,14 @@ class RecruitingView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = _("登録可能トーナメント")
+        context["attr"] = {
+            "title": _("参加可能トーナメント"),
+            "link": "/tournament/recruiting/",
+            "button": _("登録"),
+            "display_register": True,
+            "username": self.request.user.username,
+        }
+
         return context
 
 
@@ -87,6 +98,8 @@ class RegisterApi(CreateView):
 
     def form_valid(self, form):
         try:
+            my_task.delay(3, 5)
+
             data = self.request.POST.copy()
             data["participant"] = self.request.user
             data["participant_id"] = self.request.user.id
@@ -149,26 +162,26 @@ class TournamentView(LoginRequiredMixin, CreateView):
 
         context["recruit_status"] = {
             "title": _("参加可能トーナメント"),
-            "link": _("/tournament/recruiting/"),
+            "link": "/tournament/recruiting/",
             "button": _("登録"),
             "display_register": True,
             "username": self.request.user.username,
         }
         context["organizer_status"] = {
             "title": _("主催したトーナメント"),
-            "link": _("/tournament/organized/"),
+            "link": "/tournament/organized/",
             "button": _("詳細"),
             "display_register": False,
         }
         context["participant_status"] = {
             "title": _("参加予定のトーナメント"),
-            "link": _("/tournament/participant/"),
+            "link": "/tournament/participant/",
             "button": _("詳細"),
             "display_register": False,
         }
         context["old_status"] = {
             "title": _("終了したトーナメント"),
-            "link": _("/tournament/old/"),
+            "link": "/tournament/old/",
             "button": _("詳細"),
             "display_register": False,
         }
@@ -202,13 +215,26 @@ class TournamentView(LoginRequiredMixin, CreateView):
             return HttpResponseBadRequest()
         print(f"{name=}")
         if re.search(r"[\'\"\;\*\#\=\%\<\>\/\(\)].", name):
-            # if re.search(r"s", name):
             return HttpResponseBadRequest()
+
+        now = datetime.now(tz=timezone.utc) + timedelta(minutes=10)
+        fmt = "%Y-%m-%d %H:%M"
+        fmt2 = "%Y-%m-%dT%H:%M"
+        datetime_str = start_at + " " + hour + ":" + minute
+        hour = getattr(settings, "TIME_HOURS", None)
+
+        dt = datetime.strptime(datetime_str, fmt) - timedelta(hours=hour)
+        dt = dt.replace(tzinfo=timezone.utc)
+        dt.replace(second=0)
+        if now > dt:
+            return HttpResponseBadRequest()
+
+        dt_str = datetime.strftime(dt, fmt2)
 
         Tournament.objects.create(
             name=name,
             organizer=organizer,
-            start_at=start_at + "T" + hour + ":" + minute,
+            start_at=dt_str,
             is_only_friend=is_only_friend,
             current_players=current_players,
         )

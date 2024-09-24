@@ -104,6 +104,8 @@ INSTALLED_APPS = [
     "accounts",
     # "accounts.models.ft_user",
     "api",
+    "sendgrid",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -200,12 +202,53 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # キャッシュ用
+# CACHES = {
+#    "default": {
+#        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#        "LOCATION": "unique-snowflake",
+#    }
+# }
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
     }
 }
+REDIS_SERVER = "redis"
+REDIS_PORT = 6379
+REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
+
+# Celery configurations
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZZER = "json"
+# CELERY_TIMEZONE = TIME_ZONE
+
+
+# 'amqp://guest:guest@localhost//'
+# celeryを動かすための設定ファイル
+# CELERY_BROKER_URL = "http://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://redis:6379"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_CACHE_BACKEND = "django-cache"
+
+# Celery設定
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
+CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+CELERY_RESULT_BACKEND = "django-db"
+# CELERY_RESULT_BACKEND = (
+# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"
+# )
+
+CELERY_RESULT_EXTENDED = True
+
+# CELERYD_CONCURRENCY = 1
+#
+# CELERYD_LOG_FILE = "../log/celeryd.log"
+#
+# CELERYD_LOG_LEVELをINFOにしておくと、
+# タスクの標準出力もログ(celeryd.log)に書かれる
+# CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
@@ -269,12 +312,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-
-# SECURE_HSTS_SECONDS = 31536000
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'DENY'
 
 
 # 認証
