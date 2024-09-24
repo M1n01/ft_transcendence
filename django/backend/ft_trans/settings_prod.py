@@ -111,7 +111,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # "corsheaders.middleware.CorsMiddleware", #CORS設定
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    # "django.contrib.sessions.middleware.SessionMiddleware",
+    "accounts.middleware.CustomSessionMiddleware",  # SessionMiddlewareの改造品
     "django.middleware.locale.LocaleMiddleware",  # 多言語設定
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -350,3 +351,7 @@ BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
 # JWT有効期限
 JWT_TMP_VALID_TIME = 300
 JWT_VALID_TIME = 14400
+
+# timezon #時間にはJTC固定とする
+# ただし、内部的にはUTCで保存する
+TIME_HOURS = 9

@@ -104,7 +104,7 @@ MIDDLEWARE = [
     # "corsheaders.middleware.CorsMiddleware", #CORS設定
     "django.middleware.security.SecurityMiddleware",
     # "django.contrib.sessions.middleware.SessionMiddleware",
-    "accounts.middleware.CustomSessionMiddleware",
+    "accounts.middleware.CustomSessionMiddleware",  # SessionMiddlewareの改造品
     "django.middleware.locale.LocaleMiddleware",  # 多言語設定
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
