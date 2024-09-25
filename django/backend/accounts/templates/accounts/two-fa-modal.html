@@ -83,11 +83,7 @@
             </div>
 
             <form hidden>Dummy Form</form>
-            <form
-              action="{% url 'accounts:signup-two-fa-verify' %}"
-              method="post"
-              id="two-fa-verify-form"
-            >
+            <form action="{% url 'accounts:signup-two-fa' %}" method="post" id="two-fa-verify-form">
               {% csrf_token %}
               <div
                 id="verify-code-block"

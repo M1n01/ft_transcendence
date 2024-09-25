@@ -1,7 +1,7 @@
 {% load static %} {% load i18n %}
 <body>
   <form hidden>dummy form</form>
-  <form method="POST" id="signup-form" action="{% url 'accounts:signup-valid' %}">
+  <form method="POST" id="signup-form" action="{% url 'accounts:signup-tmp' %}">
     {% csrf_token %}
 
     <div class="form-floating w-100 text-pale">

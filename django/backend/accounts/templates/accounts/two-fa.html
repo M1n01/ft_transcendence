@@ -9,10 +9,9 @@
     <div>{% trans "2段階認証を行います" %}</div>
     <form hidden>dummy form</form>
 
-      <div>{% trans "認証コードが届いていない場合、下記ボタンからやり直してください"%}<div>
-        <button id="resend">{% trans "再送信"%}</button>
-      </div>
-      <!--
+    <div>{% trans "認証コードが届いていない場合、下記ボタンからやり直してください"%}</div>
+    <button id="resend">{% trans "再送信"%}</button>
+    <!--
     <form action="{% url 'accounts:two-fa' %}" method="post" id="two_fa_form">
       {% csrf_token %}
       <div for="phone">{% trans "認証方法を選択してください" %}:</div>
@@ -37,27 +36,25 @@
 -->
 
     <div id="verify-input">
-    <form action="{% url 'accounts:two-fa-verify' %}" method="post" id="two-fa-form">
-      {% csrf_token %}
-      <!--
+      <form action="{% url 'accounts:two-fa' %}" method="post" id="two-fa-form">
+        {% csrf_token %}
+        <!--
       <input type="text" id="common-mode" name="mode" hidden />
       <input type="text" id="common-input" name="id" hidden />
       <input type="text" id="app-url" name="app_secret" hidden />
 -->
-      <div id="verify-code-block">
-        {% trans "認証コードを入力してください" %}
-        <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
-      </div>
-      <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
-    </form>
-      <div class ="failure-word" id="failure-verify" hidden>{%trans "認証に失敗しました"%}
+        <div id="verify-code-block">
+          {% trans "認証コードを入力してください" %}
+          <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
+        </div>
+        <button type="submit" id="2fa-button" class="form-button">{% trans "2要素認証"%}</button>
+      </form>
+      <div class="failure-word" id="failure-verify" hidden>
+        {%trans "認証に失敗しました"%}
         <div>{% trans "認証コードを見直して再度実行してください"%}</div>
-
       </div>
-      <br/>
-      <br/>
-
-    <script>
-    </script>
+      <br />
+      <br />
+    </div>
   </body>
 </html>
