@@ -3,28 +3,12 @@ from django.shortcuts import render
 from django.views.generic import CreateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView
-
-# from django.views.decorators.csrf import csrf_exempt
-
-# from django.contrib.auth.forms import AuthenticationForm
-# from django.template.exceptions import TemplateDoesNotExist
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_not_required
 from django.db import IntegrityError
 from .models import FtTmpUser
 from datetime import datetime, timezone, timedelta
-
-# from .forms import FtLoginForm
-
-# from django import forms
 from django.views.generic import TemplateView
-
-# from django.utils.translation import gettext_lazy as _
-
-# from django.contrib.auth.models import User
-
-# from django.contrib.auth.backends import BaseBackend
-# from django.contrib.auth import logout
 from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
@@ -33,15 +17,9 @@ from django.http import (
     HttpResponse,
 )
 from django.urls import reverse_lazy
-
-# from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
-
 from accounts.models import FtUser
-
-# from accounts.models import FtTmpUser
 from accounts.two_fa import TwoFA
 
-# from .forms import SignUpForm, SignUpTmpForm, LoginForm
 from .forms import SignUpForm, LoginForm
 from .oauth import FtOAuth
 
@@ -52,8 +30,6 @@ import base64
 import json
 import logging
 
-# from django.contrib.auth import login as auth_login
-# from django.template.loader import render_to_string
 import secrets
 from accounts.models import AuthChoices
 from .backend import TmpUserBackend
@@ -112,7 +88,6 @@ def send_two_fa(user, request):
 
 def copy_tmpuser_to_ftuser(user):
     try:
-        # new_user = FtUser()
         src_user = FtTmpUser.objects.get(email=user.email)
         FtUser.objects.create(
             username=src_user.username,
@@ -143,8 +118,6 @@ def copy_tmpuser_to_ftuser(user):
 @method_decorator(login_not_required, name="dispatch")
 class SignupTwoFaView(CreateView):
     def post(self, request):
-
-        # if request.method == "POST":
         is_provisional_signup = False
         if "is_provisional_signup" in request.session:
             is_provisional_signup = request.session["is_provisional_signup"]
@@ -178,9 +151,6 @@ class SignupTwoFaView(CreateView):
 
         except json.JSONDecodeError:
             return HttpResponseServerError("Server Error")
-
-    # else:
-    # return HttpResponseBadRequest("Bad Request")
 
 
 @login_not_required
@@ -224,8 +194,6 @@ def two_fa_verify(request):
 class LoginSignupView(TemplateView):
     ft_oauth = FtOAuth()
     url = ft_oauth.get_ft_authorization_url()
-    # template_name = "login-signup.html"
-    # template_name = "login.html"
     template_name = "accounts/login-signup.html"
     signup_form = SignUpForm
     login_form = LoginForm

@@ -11,38 +11,9 @@
 
     <div>{% trans "認証コードが届いていない場合、下記ボタンからやり直してください"%}</div>
     <button id="resend">{% trans "再送信"%}</button>
-    <!--
-    <form action="{% url 'accounts:two-fa' %}" method="post" id="two_fa_form">
-      {% csrf_token %}
-      <div for="phone">{% trans "認証方法を選択してください" %}:</div>
-
-      <input type="radio" id="option_email" name="mode" value="EMAIL" checked />
-      <label for="option1">{% trans "メール認証" %}</label><br />
-
-      <input type="radio" id="option_sms" name="mode" value="SMS" />
-      <label for="option2">{% trans "SMS認証" %}</label><br />
-
-      <input type="radio" id="option_app" name="mode" value="APP" />
-      <label for="option3">{% trans "App認証" %}</label><br /><br />
-
-      <input id="two-fa-verify" , type="submit" value={% trans "送信" %} />
-    </form>
-
-    <div id="failure-send-2fa" class ="failure-word" hidden>
-      {% trans "認証コードの送信に失敗しました" %}
-      <br/>
-      {% trans "入力した内容を見直して再度実行してください" %}
-    </div>
--->
-
     <div id="verify-input">
       <form action="{% url 'accounts:login-two-fa' %}" method="post" id="two-fa-form">
         {% csrf_token %}
-        <!--
-      <input type="text" id="common-mode" name="mode" hidden />
-      <input type="text" id="common-input" name="id" hidden />
-      <input type="text" id="app-url" name="app_secret" hidden />
--->
         <div id="verify-code-block">
           {% trans "認証コードを入力してください" %}
           <input type="text" id="verify-code" name="code" pattern="[0-9]{6}" />
