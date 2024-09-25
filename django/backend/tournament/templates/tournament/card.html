@@ -31,6 +31,7 @@
           data-bs-toggle="modal"
           data-bs-target="#registerModal"
           value="{{tournament.id}}"
+          name="{{tournament.name}}"
         >
           {% trans '参加' %}
         </button>
@@ -47,7 +48,12 @@
           <div class="modal-content">
             <div class="modal-header">
               <div class="d-flex justify-content-center w-100">
-                <h5 class="modal-title">{% trans "参加申し込み" %}</h5>
+                <h5 class="modal-title">
+                  <div id="register-tournament-name" class="d-flex justify-content-center">
+                    トーナメント名
+                  </div>
+                  <div class="d-flex justify-content-center">{% trans "参加申し込み" %}</div>
+                </h5>
               </div>
               <button
                 type="button"
@@ -57,6 +63,9 @@
               ></button>
             </div>
             <div class="modal-body">
+              <div id ="register-limit-error" class="text-danger" hidden>
+                {% trans "参加人数が上限に達したため、登録することができません。" %}
+              </div>
               <form
                 id="register-tournament"
                 method="post"

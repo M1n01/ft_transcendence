@@ -2,14 +2,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
 from django.conf import settings
+from django.db import IntegrityError, transaction
 
 from .models import Tournament, TournamentParticipant, TournamentStatusChoices
 from .forms import TournamentForm, TournamentParticipantForm
 
 from django.http import (
     HttpResponseBadRequest,
-    HttpResponseServerError,
     HttpResponse,
+    JsonResponse,
 )
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -102,17 +103,40 @@ class RegisterApi(CreateView):
             data["is_accept"] = True
             form = TournamentParticipantForm(data)
             if form.is_valid():
-                # form.save() がうまくいかないので仕方なく
 
-                TournamentParticipant.objects.create(
-                    tournament_id=form.cleaned_data["tournament_id"],
-                    alias_name=form.cleaned_data["alias_name"],
-                    participant=self.request.user,
-                    is_accept=True,
+                tournament = form.cleaned_data["tournament_id"]
+                try:
+                    with transaction.atomic():
+                        participants = (
+                            TournamentParticipant.objects.select_for_update().filter(
+                                tournament_id=tournament
+                            )
+                        )
+                        if len(participants) >= tournament.current_players:
+                            data = {"is_full": True}
+                            return JsonResponse(data, status=500)
+
+                        # form.save() がうまくいかないので仕方なく
+                        TournamentParticipant.objects.create(
+                            tournament_id=tournament,
+                            alias_name=form.cleaned_data["alias_name"],
+                            participant=self.request.user,
+                            is_accept=True,
+                        )
+                except IntegrityError:
+                    data = {"is_full": False}
+                    return JsonResponse(data, status=500)
+
+                participants = TournamentParticipant.objects.select_for_update().filter(
+                    tournament_id=tournament
                 )
+                if len(participants) == tournament.current_players:
+                    tournament.status = TournamentStatusChoices.ONGOING
+                    tournament.save()
         except Exception as e:
             print(f"{e=}")
-            return HttpResponseServerError()
+            data = {"is_full": False}
+            return JsonResponse(data, status=500)
         return HttpResponse()
 
 
