@@ -1,0 +1,61 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% trans "Profile" %}</title>
+</head>
+<body>
+    <h1>{% trans "Edit Profile" %}</h1>
+    <form id="edit-profile" method="POST">
+        {% csrf_token %}
+        <table>
+            <tbody>
+              <tr>
+                <td>{{ form.username.label }}</td>
+                <td>{{ form.username }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.email.label }}</td>
+                <td>{{ form.email }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.first_name.label }}</td>
+                <td>{{ form.first_name }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.last_name.label }}</td>
+                <td>{{ form.last_name }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.birth_date.label }}</td>
+                <td>{{ form.birth_date }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.country_code.label }}</td>
+                <td>{{ form.country_code }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.phone.label }}</td>
+                <td>{{ form.phone }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>{{ form.language.label }}</td>
+                <td>{{ form.language }}</td>
+                <td></td>
+              </tr>
+              <!-- 他に表示したい情報があればここに追加 -->
+            </tbody>
+        </table>
+        <button type="submit">{% trans "Save" %}</button>
+    </form>
+</body>
+</html>
+
+

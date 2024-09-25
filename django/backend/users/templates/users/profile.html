@@ -1,0 +1,63 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% trans "Profile" %}</title>
+</head>
+<body>
+    <h1>{% trans "Profile" %}</h1>
+        <table>
+        <!-- <thead>
+          <tr>
+            <th>data</th>
+            <th>value</th>
+            <th>button</th>
+          </tr>
+        </thead> -->
+        <tbody>
+          <tr>
+            <td>{% trans "ユーザー名" %}</td>
+            <td>{{ user.username }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "Email address" %}</td>
+            <td>{{ user.email }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "氏" %}</td>
+            <td>{{ user.last_name }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "名" %}</td>
+            <td>{{ user.first_name }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "生年月日" %}</td>
+            <td>{{ user.birth_date }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "国コード" %}</td>
+            <td>{{ user.country_code }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "電話番号" %}</td>
+            <td>{{ user.phone }}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{% trans "言語" %}</td>
+            <td>{{ user.language }}</td>
+            <td></td> 
+          </tr>
+    </tbody>
+    </table>
+    <!-- 他に表示したい情報があればここに追加 -->
+    <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
+</body>
+</html>

@@ -22,7 +22,7 @@ import pong.urls
 
 import spa.urls
 import accounts.urls
-
+import users.urls
 
 # API
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
     # path("login/", include(login.urls)),
     path("accounts/", include(accounts.urls), name="accounts"),
     path("i18n/", include("django.conf.urls.i18n")),
+    path("users/", include(users.urls), name="users"),
 ]
 
 urlpatterns += i18n_patterns(

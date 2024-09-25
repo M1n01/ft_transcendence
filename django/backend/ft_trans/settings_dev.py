@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     # "accounts.models.ft_user",
     "api",
     "sendgrid",
+    "users",
 ]
 
 MIDDLEWARE = [

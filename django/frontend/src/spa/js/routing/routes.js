@@ -15,6 +15,8 @@ import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
 import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
+import Profile from '../views/Profile.js';
+import EditProfile from '../views/EditProfile.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -36,4 +38,6 @@ export const Routes = [
   //{ path: '/signup-two-fa', view: SignupTwoFA },
   { path: '/2fa', view: TwoFA },
   { path: '/login-signup', view: LoginSignup },
+  { path: '/profile', view: Profile },
+  { path: '/edit-profile', view: EditProfile },
 ];
