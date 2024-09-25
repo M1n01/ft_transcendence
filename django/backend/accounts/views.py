@@ -322,44 +322,22 @@ class SignupView(CreateView):
 
     def form_valid(self, form):
         try:
-            print("signup No.1")
             form = SignUpForm(self.request.POST)
-            print("signup No.2")
             tmp_res = super().form_valid(form)
-            print("signup No.3")
             if tmp_res.status_code >= 300 and tmp_res.status_code < 400:
-                print("signup No.4")
                 email = form.cleaned_data["email"]
                 password = form.cleaned_data["password1"]
                 backend = TmpUserBackend()
                 user = backend.authenticate(
                     self.request, email=email, password=password
                 )
-                print("signup No.5")
                 if user is None:
-                    print("signup No.6")
                     return HttpResponseServerError("Server Error")
-                print("signup No.1")
                 expire_time = getattr(settings, "JWT_TMP_VALID_TIME", None)
-                print("signup No.2")
                 tmp_time = datetime.now(tz=timezone.utc) + timedelta(
                     seconds=expire_time
                 )
-                print(f"signup No.3:f{expire_time=}")
-                print(f"signup No.3:f{type(expire_time)}")
-
-                # count = int(expire_time) - 250
-
-                # from celery.execute import Signature
-                # from celery.execute import send_task
-
-                # 20という数値に特に意味はない
-                print("signup No.4")
-                delete_tmp_user.delay(user.id)
-                print("signup No.5")
-                # send_task.delay("delete_tmp_user", args=[user.id])
-                print("signup No.6")
-                # delete_tmp_user.apply_async((user.id), countdown=count)
+                delete_tmp_user.apply_async([user.id], countdown=expire_time + 10)
                 self.request.session["exp"] = str(tmp_time.timestamp())
                 self.request.session["is_provisional_signup"] = True
                 self.request.session["user_id"] = user.id
