@@ -47,8 +47,8 @@ document.addEventListener('LoginEvent', function () {
             const json = await response.json();
             const two_fa_form = document.getElementById('two-fa-verify-form');
             const resend_two_fa_form = document.getElementById('resend-two-fa');
-            two_fa_form.action = getUrlWithLang('accounts/two-fa/');
-            resend_two_fa_form.action = 'accounts/two-fa/';
+            two_fa_form.action = getUrlWithLang('accounts/login-two-fa/');
+            resend_two_fa_form.action = 'accounts/login-two-fa/';
             document.getElementById('app_url_qr').hidden = true;
             if (json['is_auth_app']) {
               document.getElementById('resend-button').hidden = true;

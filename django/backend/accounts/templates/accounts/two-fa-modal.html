@@ -112,7 +112,7 @@
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <div>
-            <form action="{% url 'accounts:two-fa' %}" method="post" id="resend-two-fa">
+            <form action="{% url 'accounts:login-two-fa' %}" method="post" id="resend-two-fa">
               {% csrf_token %}
               <button type="submit" class="btn btn-info" id="resend-button">
                 {% trans "再送" %}

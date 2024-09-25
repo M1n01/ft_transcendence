@@ -140,16 +140,16 @@ def copy_tmpuser_to_ftuser(user):
         print(f"Copy Error:{e}")
 
 
-@login_not_required
-def signup_two_fa_verify(request):
+@method_decorator(login_not_required, name="dispatch")
+class SignupTwoFaView(CreateView):
+    def post(self, request):
 
-    is_provisional_signup = False
-    if "is_provisional_signup" in request.session:
-        is_provisional_signup = request.session["is_provisional_signup"]
-    if is_provisional_signup is False:
-        return HttpResponseForbidden()
-
-    if request.method == "POST":
+        # if request.method == "POST":
+        is_provisional_signup = False
+        if "is_provisional_signup" in request.session:
+            is_provisional_signup = request.session["is_provisional_signup"]
+        if is_provisional_signup is False:
+            return HttpResponseForbidden()
         try:
             id = request.session["user_id"]
             user = FtTmpUser.objects.get(id=id)
@@ -178,8 +178,9 @@ def signup_two_fa_verify(request):
 
         except json.JSONDecodeError:
             return HttpResponseServerError("Server Error")
-    else:
-        return HttpResponseBadRequest("Bad Request")
+
+    # else:
+    # return HttpResponseBadRequest("Bad Request")
 
 
 @login_not_required
@@ -258,7 +259,7 @@ class LoginSignupView(TemplateView):
 
 
 @method_decorator(login_not_required, name="dispatch")
-class UserLogin(LoginView):
+class UserLoginView(LoginView):
     ft_oauth = FtOAuth()
     url = ft_oauth.get_ft_authorization_url()
     form_class = LoginForm
@@ -463,10 +464,8 @@ def redirect_oauth(request):
         return HttpResponseBadRequest(f"Bad Request:{e}")
 
 
-# @login_not_required
-# def two_fa(request):
 @method_decorator(login_not_required, name="dispatch")
-class TwoFAView(TemplateView):
+class LoginTwoFaView(TemplateView):
     """
     2認証のモードとその値を元に、認証サービスにデータを送信する
     引数:
@@ -475,15 +474,9 @@ class TwoFAView(TemplateView):
         Response:   クライアントに返すレスポンスデータ
     """
 
-    def get(self, request):
-        print("TwoFaVIew No.1")
-        return render(request, "accounts/two-fa.html")
-
     def post(self, request):
-        print("TwoFaVIew No.2")
         try:
 
-            print("test TwoFAView Post No.2")
             is_provisional_login = False
             user_id = ""
             if "is_provisional_login" in request.session:
@@ -492,29 +485,21 @@ class TwoFAView(TemplateView):
                 user_id = request.session["user_id"]
             if is_provisional_login is False or user_id == "":
                 return HttpResponseForbidden()
-            print("test TwoFAView Post No.3")
             user = FtUser.objects.get(id=user_id)
             code = request.POST.get("code")
             rval = verify_two_fa(user, code, request)
-            print(f"test TwoFAView Post No.4:{code=}")
             if rval is True:
-                print("test TwoFAView Post No.5")
                 new_user = FtUser.objects.get(email=user.email)
                 login(
                     request,
                     new_user,
                     backend="django.contrib.auth.backends.ModelBackend",
                 )
-                print("test TwoFAView Post No.6")
                 tmp_time = datetime.now(tz=timezone.utc) + timedelta(
                     seconds=getattr(settings, "JWT_VALID_TIME", None)
                 )
-                print("test TwoFAView Post No.7")
                 request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
-                print("test TwoFAView Post No.8")
-
                 return HttpResponse()
-            print("test TwoFAView Post No.9")
             return HttpResponseBadRequest("Failure to verify")
 
         except json.JSONDecodeError:

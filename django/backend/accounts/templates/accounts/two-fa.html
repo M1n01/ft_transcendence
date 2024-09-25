@@ -36,7 +36,7 @@
 -->
 
     <div id="verify-input">
-      <form action="{% url 'accounts:two-fa' %}" method="post" id="two-fa-form">
+      <form action="{% url 'accounts:login-two-fa' %}" method="post" id="two-fa-form">
         {% csrf_token %}
         <!--
       <input type="text" id="common-mode" name="mode" hidden />
