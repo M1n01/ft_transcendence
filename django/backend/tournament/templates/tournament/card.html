@@ -27,9 +27,10 @@
       <div class="card-footer w-100">
         <button
           type="button"
-          class="btn btn-primary text-nowrap"
+          class="btn btn-primary text-nowrap pre-register-tournament"
           data-bs-toggle="modal"
           data-bs-target="#registerModal"
+          value="{{tournament.id}}"
         >
           {% trans '参加' %}
         </button>
@@ -63,7 +64,12 @@
                 class="w-100 register-tournament"
               >
                 {% csrf_token %}
-                <input name="tournament_id" type="hidden" value="{{tournament.id}}" />
+                <input
+                  name="tournament_id"
+                  id="retister-modal-id"
+                  type="hidden"
+                  value="{{tournament.id}}"
+                />
 
                 <label for="id_name" class="form-label text-dark">{% trans 'プレイヤー名'%}</label>
                 <br />

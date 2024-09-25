@@ -4,6 +4,7 @@ import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
 import { moveTo } from '../routing/routing.js';
+import { getDisplayedURI } from '../../../../src/index.js';
 
 export function isLogined() {
   //todo
@@ -14,7 +15,8 @@ export function isLogined() {
 }
 
 export const reload = async () => {
-  await router();
+  const uri = getDisplayedURI(window.location.href);
+  router(uri.rest, uri.params);
   await loadNav();
 };
 

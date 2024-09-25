@@ -13,12 +13,24 @@ document.addEventListener('TournmentEvent', () => {
   };
 
   const top = () => {
+    const pre_register_tournaments = document.querySelectorAll('.pre-register-tournament');
     const register_tournaments = document.querySelectorAll('.register-tournament');
     const close_register_modal = document.getElementById('close-register-modal');
 
     if (register_tournaments == null) {
       return;
     }
+
+    pre_register_tournaments.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const target = e.target;
+        const id_element = document.getElementById('retister-modal-id');
+        id_element.value = target.value;
+        console.log('button id=' + target.value);
+        console.log('button id=' + target.type);
+        //console.log('button id=' + e.class);
+      });
+    });
 
     register_tournaments.forEach((element) => {
       element.addEventListener('submit', async (event) => {

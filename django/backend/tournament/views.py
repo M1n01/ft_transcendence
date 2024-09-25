@@ -3,8 +3,6 @@ from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
 from django.conf import settings
 
-from .tasks import my_task
-
 from .models import Tournament, TournamentParticipant, TournamentStatusChoices
 from .forms import TournamentForm, TournamentParticipantForm
 
@@ -98,8 +96,6 @@ class RegisterApi(CreateView):
 
     def form_valid(self, form):
         try:
-            my_task.delay(3, 5)
-
             data = self.request.POST.copy()
             data["participant"] = self.request.user
             data["participant_id"] = self.request.user.id
