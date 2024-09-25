@@ -34,6 +34,10 @@ import secrets
 from accounts.models import AuthChoices
 from .backend import TmpUserBackend
 
+# from celery.execute import Signature
+# from celery.execute import send_task
+from .tasks import delete_tmp_user
+
 
 def generate_secure_random_number():
     return secrets.randbelow(900000) + 100000  # 100000から999999の範囲の数値を生成
@@ -261,10 +265,10 @@ class UserLoginView(LoginView):
             password = self.request.POST.get("password")
             user = authenticate(self.request, username=username, password=password)
             if user is None:
-                print("User is None")
                 return HttpResponseServerError("Bad Request")
 
-            tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=300)
+            expire_time = getattr(settings, "JWT_TMP_VALID_TIME", None)
+            tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=expire_time)
             self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
             self.request.session["is_provisional_login"] = True
             self.request.session["user_id"] = user.id
@@ -318,21 +322,45 @@ class SignupView(CreateView):
 
     def form_valid(self, form):
         try:
+            print("signup No.1")
             form = SignUpForm(self.request.POST)
+            print("signup No.2")
             tmp_res = super().form_valid(form)
+            print("signup No.3")
             if tmp_res.status_code >= 300 and tmp_res.status_code < 400:
+                print("signup No.4")
                 email = form.cleaned_data["email"]
                 password = form.cleaned_data["password1"]
                 backend = TmpUserBackend()
                 user = backend.authenticate(
                     self.request, email=email, password=password
                 )
+                print("signup No.5")
                 if user is None:
+                    print("signup No.6")
                     return HttpResponseServerError("Server Error")
+                print("signup No.1")
+                expire_time = getattr(settings, "JWT_TMP_VALID_TIME", None)
+                print("signup No.2")
                 tmp_time = datetime.now(tz=timezone.utc) + timedelta(
-                    seconds=getattr(settings, "JWT_TMP_VALID_TIME", None)
+                    seconds=expire_time
                 )
-                self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+                print(f"signup No.3:f{expire_time=}")
+                print(f"signup No.3:f{type(expire_time)}")
+
+                # count = int(expire_time) - 250
+
+                # from celery.execute import Signature
+                # from celery.execute import send_task
+
+                # 20という数値に特に意味はない
+                print("signup No.4")
+                delete_tmp_user.delay(user.id)
+                print("signup No.5")
+                # send_task.delay("delete_tmp_user", args=[user.id])
+                print("signup No.6")
+                # delete_tmp_user.apply_async((user.id), countdown=count)
+                self.request.session["exp"] = str(tmp_time.timestamp())
                 self.request.session["is_provisional_signup"] = True
                 self.request.session["user_id"] = user.id
 

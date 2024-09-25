@@ -1,4 +1,6 @@
 # from django.backend.ft_trans.celery import shared_task  # type: ignore
+
+# from ft_trans.celery import app
 from celery import shared_task
 from datetime import datetime, timezone, timedelta
 from .models import TournamentStatusChoices, Tournament, TournamentParticipant
