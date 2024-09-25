@@ -259,9 +259,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         max_length=2,
         default=LanguageChoice.JP,
     )
-    # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
-    # is_2fa = models.BooleanField(verbose_name=_("is_2fa"), default=False)
     is_ft = models.BooleanField(verbose_name=_("is_ft"), default=False, null=True)
     is_staff = models.BooleanField(
         verbose_name=_("staff status"),

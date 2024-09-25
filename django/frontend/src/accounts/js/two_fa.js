@@ -15,6 +15,10 @@ export function navModal(open) {
     modal.show();
   } else {
     modal.hide();
+
+    // nullを入れずに再利用しようとすると、
+    // なぜか認証コードが空白で送られてしまうのnullを入れて新規に作り直す。
+    modal = null;
   }
 }
 
