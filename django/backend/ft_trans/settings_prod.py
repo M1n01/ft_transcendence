@@ -98,7 +98,6 @@ INSTALLED_APPS = [
     "spa",
     "notification",
     "pong",
-    "pong.score_keeper.apps.ScoreKeeperConfig",
     "tournament",
     "friend",
     # "login",
@@ -322,4 +321,4 @@ JWT_VALID_TIME = 14400
 # WEB3
 PRIVATE_KEY = os.environ["PRIVATE_KEY"]
 PROVIDER_URL = os.environ["PROVIDER_URL"]
-PONG_SCORE_CONTRACT_ADDRESS = None
+CONTRACT_ADDRESS = os.environ["CONTRACT_ADDRESS"]

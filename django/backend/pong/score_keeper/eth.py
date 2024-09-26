@@ -21,42 +21,9 @@ def get_hardhat_compiled_contract():
     return {"abi": contract_json["abi"], "bin": contract_json["bytecode"]}
 
 
-def deploy_contract():
-    w3 = get_contract()
-
-    # コントラクトのインスタンス化
-    contract_interface = get_hardhat_compiled_contract()
-    contract = w3.eth.contract(
-        abi=contract_interface["abi"], bytecode=contract_interface["bin"]
-    )
-
-    # アカウントの取得
-    account = w3.eth.account.from_key(settings.PRIVATE_KEY)
-
-    try:
-        # コントラクトのデプロイ
-        transaction = contract.constructor(account.address).build_transaction(
-            {
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-                "gas": 2000000,
-                "gasPrice": w3.to_wei("10", "gwei"),
-            }
-        )
-
-        # トランザクションの署名と送信
-        signed_txn = w3.eth.account.sign_transaction(transaction, settings.PRIVATE_KEY)
-        tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
-
-        # トランザクションの確認
-        tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-
-        return tx_receipt.contractAddress
-
-    except Exception as e:
-        print(f"Error deploying contract: {e}")
-        return None
-
+def get_contract_address():
+    with open(os.path.join(settings.BLOCKCHAIN_DIR, "contract_address.txt")) as file:
+        return file.read()
 
 
 def save_match_to_blockchain(
@@ -65,7 +32,7 @@ def save_match_to_blockchain(
 
     w3 = get_contract()
     contract = w3.eth.contract(
-        address=settings.PONG_SCORE_CONTRACT_ADDRESS,
+        address=settings.CONTRACT_ADDRESS,
         abi=get_hardhat_compiled_contract()["abi"],
     )
 
@@ -107,21 +74,21 @@ def get_matches_from_blockchain(
 ):
     w3 = get_contract()
     contract = w3.eth.contract(
-        address=settings.PONG_SCORE_CONTRACT_ADDRESS,
+        address=settings.CONTRACT_ADDRESS,
         abi=get_hardhat_compiled_contract()["abi"],
     )
 
     def match_to_dict(match):
         return {
-            'id': match[0],
-            'tournament_id': match[1],
-            'created_at': match[2],
-            'player1': match[3],
-            'player1_score': match[4],
-            'player2': match[5],
-            'player2_score': match[6],
-            'is_active': match[7],
-            'round': match[8]
+            "id": match[0],
+            "tournament_id": match[1],
+            "created_at": match[2],
+            "player1": match[3],
+            "player1_score": match[4],
+            "player2": match[5],
+            "player2_score": match[6],
+            "is_active": match[7],
+            "round": match[8],
         }
 
     if match_id:
@@ -146,7 +113,7 @@ def get_matches_from_blockchain(
 def delete_match_from_blockchain(match_id):
     w3 = get_contract()
     contract = w3.eth.contract(
-        address=settings.PONG_SCORE_CONTRACT_ADDRESS,
+        address=settings.CONTRACT_ADDRESS,
         abi=get_hardhat_compiled_contract()["abi"],
     )
 

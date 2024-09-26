@@ -1,0 +1,20 @@
+services:
+  django:
+    environment:
+      - PRIVATE_KEY=$PRIVATE_KEY
+      - PROVIDER_URL=$PROVIDER_URL
+      - CONTRACT_ADDRESS=$CONTRACT_ADDRESS
+  command: /bin/sh -c '
+      cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
+      sh ./backend/make_db_setting.sh &&
+      cd backend &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      (cd ../frontend && npm install && npm run build) &&
+      daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
+      '
+
+  eth:
+    environment:
+      - PRIVATE_KEY=$PRIVATE_KEY
+      - PROVIDER_URL=$PROVIDER_URL

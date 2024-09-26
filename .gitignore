@@ -45,3 +45,6 @@ django/backend/make_db_setting.sh
 #vim
 *.swp
 tag*
+
+# Ethereum
+contract_address.txt

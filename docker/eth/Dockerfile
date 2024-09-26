@@ -1,16 +1,11 @@
 FROM node:18.16.0
 
-# 作業ディレクトリを作成
+# ソースコードをコピー
+COPY ./eth /workspace/eth
 WORKDIR /workspace/eth
 
-# package.jsonとpackage-lock.jsonを先にコピー
-COPY ./eth/package*.json /workspace/eth/
+# package.jsonとpackage-lock.jsonをコピー
+COPY eth/package*.json ./
+RUN npm ci
 
-# 依存関係をインストール
-RUN npm install
-
-COPY ./docker/eth/entrypoint.sh /usr/local/bin/eth-entrypoint.sh
-
-RUN chmod +x /usr/local/bin/eth-entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/eth-entrypoint.sh"]
+CMD ["/bin/bash", "-c", "npx hardhat compile && npx hardhat node"]

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+from pong.score_keeper.eth import get_contract_address
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -99,7 +100,6 @@ INSTALLED_APPS = [
     "spa",
     "notification",
     "pong",
-    "pong.score_keeper.apps.ScoreKeeperConfig",
     "tournament",
     "friend",
     # "login",
@@ -328,4 +328,4 @@ JWT_VALID_TIME = 14400
 # WEB3
 PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 PROVIDER_URL = "http://eth:8545"
-PONG_SCORE_CONTRACT_ADDRESS = None
+CONTRACT_ADDRESS = get_contract_address()

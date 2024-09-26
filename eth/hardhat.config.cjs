@@ -9,8 +9,8 @@ module.exports = {
       chainId: 1337,
     },
     sepolia: {
-      url: process.env.PROVIDER_URL,
-      accounts: [process.env.PRIVATE_KEY],
+      url: process.env.PROVIDER_URL || "",
+      accounts: process.env.SEPOLIA_ACCOUNTS ? [process.env.SEPOLIA_ACCOUNTS] : [] // 環境変数からアカウントを取得
     },
   },
 };

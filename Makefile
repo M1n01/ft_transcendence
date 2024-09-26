@@ -55,13 +55,13 @@ up:
 
 dev:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.dev.yml up -d
 	docker exec -it django bash -c '(cd frontend && npm start &) && python ./backend/manage.py runserver 0.0.0.0:8001'
 
 $(NAME):
 	-mkdir -p $(addprefix $(DJANGO_STATIC_DIR), media static)
 	ln -f $(DJANGO_PROD_SETTING) $(DJANGO_SETTING)
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.prod.yml up -d
 
 
 .PHONY: all clean fclean re stop up update dev
