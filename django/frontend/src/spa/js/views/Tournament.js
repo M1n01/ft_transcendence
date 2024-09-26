@@ -3,6 +3,7 @@ import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
 import { TournmentEvent } from '../../../tournament/js/tournament.js';
+import { RebuildTournmentEvent } from '../../../tournament/js/rebuild_tournament.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -51,6 +52,7 @@ export default class extends AbstractView {
   };
   executeScript = () => {
     document.dispatchEvent(TournmentEvent);
+    document.dispatchEvent(RebuildTournmentEvent);
   };
   getState = () => {
     return null;

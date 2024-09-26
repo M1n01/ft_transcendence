@@ -1,16 +1,37 @@
 //import TournmentChart from './tournament/TournamentChart.js';
 import TournmentChart from './tournament/TournamentChart.js';
 import '../scss/tournament.scss';
+//import { fetchJsonData } from '../../spa/utility/fetch.js';
+import { fetchJsonData } from '../../spa/js/utility/fetch.js';
 
 export const RebuildTournmentEvent = new Event('RebuildTournmentEvent');
-document.addEventListener('RebuildTournmentEvent', () => {
+
+document.addEventListener('RebuildTournmentEvent', async () => {
+  const chart_element = document.getElementById('tournament-chart');
+  if (!chart_element) {
+    console.log('not tournament chart');
+    return;
+  }
+  const id = document.getElementById('id-hidden');
+  const url = '/tournament/info/' + id.value;
+  console.log('url=' + url);
+  const json = await fetchJsonData(url);
+  console.log('json:' + json);
+
   const tournment = document.getElementById('tournment-div'); // 既存の要素を取得
 
-  const totalParticipants = 6;
+  //const totalParticipants = 5;
+  const totalParticipants = json['max_user_cnt'];
+  console.log('totalParticipants=' + totalParticipants);
 
   const chart = new TournmentChart(tournment, totalParticipants);
   chart.init();
 
+  const matches = json['matches'];
+  for (let i = 0; i < matches.length; i++) {
+    console.log(matches[i]);
+  }
+  /*
   const games = [
     {
       id: 12,
@@ -62,9 +83,11 @@ document.addEventListener('RebuildTournmentEvent', () => {
       loser_score: '4',
     },
   ];
+  */
 
-  if (chart.setGames(games) == false) {
-    console.log('user set error');
+  if (chart.setGames(matches) == false) {
+    //if (chart.setGames(games) == false) {
+    //console.log('user set error');
     return false;
   }
   chart.draw();

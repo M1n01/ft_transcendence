@@ -36,6 +36,11 @@ urlpatterns = [
         views.DetailView.as_view(),
         name="details",
     ),
+    path(
+        "info/<int:pk>",
+        views.InfoApi.as_view(),
+        name="info",
+    ),
     re_path(r"[\w\-\/]*", include(spa.urls), name="error"),
 ]
 # エンドユーザーによるファイルアップロードなどがある場合、

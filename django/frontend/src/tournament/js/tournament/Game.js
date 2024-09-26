@@ -34,7 +34,7 @@ export default class Game {
     this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
 
-    if (this.winner != null) {
+    if (this.winner != '') {
       const circle = document.createElement('div');
       circle.style.top = `${this.point.y - 7}px`;
       circle.style.left = `${this.point.x - 9}px`;
@@ -62,7 +62,7 @@ export default class Game {
 
       if (this.winner == this.user1) {
         winner.style.left = `${x - 2}px`;
-      } else {
+      } else if (this.winner == this.user2) {
         winner.style.left = `${x + width - 2}px`;
       }
       parent.appendChild(winner);
@@ -83,11 +83,13 @@ export default class Game {
     this.div.style.height = '0px';
 
     // 次の試合で勝った時だけ赤くする
-    if (this.winner != null && next_game.winner == this.winner) {
-      this.div.classList.add('winner');
-      this.div.classList.add('validTop');
-    } else {
-      this.div.classList.add('tournamentLine');
+    if (this.winner != '') {
+      if (next_game.winner == this.winner) {
+        this.div.classList.add('winner');
+        this.div.classList.add('validTop');
+      } else {
+        this.div.classList.add('tournamentLine');
+      }
     }
     parent.appendChild(this.div);
   }
@@ -128,7 +130,7 @@ export default class Game {
       if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
         parent.appendChild(winnerBottom);
       }
-    } else {
+    } else if (this.winner == this.user2) {
       winnerTop.style.left = `${x + width / 2}px`;
       winnerTop.style.width = `${width / 2}px`;
       winnerLeft.style.top = `${y + height}px`;
@@ -175,7 +177,7 @@ export default class Game {
       if (this.edge_flag == false && next_game && next_game.seed_flag == false) {
         parent.appendChild(winnerBottom);
       }
-    } else {
+    } else if (this.winner == this.user2) {
       winnerTop.style.width = `${width / 2}px`;
       winnerRight.style.top = `${y + height}px`;
       winnerBottom.style.width = `${width}px`;
@@ -207,7 +209,7 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
-      if (this.winner != null) {
+      if (this.winner != '') {
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 9}px`;
@@ -234,7 +236,7 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
-      if (this.winner != null) {
+      if (this.winner != '') {
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 5}px`;

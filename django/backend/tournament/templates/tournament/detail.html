@@ -1,6 +1,6 @@
 {% load i18n %}
 <ul>
-  <h2 class="mt-5">トーナメント詳細</h2>
+  <h2 class="mt-5">{% trans 'トーナメント詳細' %}</h2>
   <div class="d-flex">
     <ul class="list-group rounded-end-0">
       <li class="list-group-item">{% trans 'トーナメント名' %}</li>
@@ -22,7 +22,7 @@
     </ul>
   </div>
 
-  <h3 class="mt-5">参加者一覧</h3>
+  <h3 class="mt-5">{% trans '参加者一覧' %}</h3>
   {% if len_participants > 0 %}
   <ul class="list-group">
     {% for participant in participants %}
@@ -34,4 +34,10 @@
   {% else %}
   <div>{% trans '参加者はいません' %}</div>
   {% endif %}
+
+  <h3 class="mt-5">{% trans 'トーナメント表' %}</h3>
+  <input id="id-hidden" value={{tournament.id}} hidden></input>
+  <div id="tournament-chart">
+    <div class="position-absolute" id="tournment-div" style="width: 400px; height: 200px"></div>
+  </div>
 </ul>

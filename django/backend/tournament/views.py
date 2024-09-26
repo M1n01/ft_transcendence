@@ -16,6 +16,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 import re
 from datetime import datetime, timedelta, timezone
+from pong.models import MatchTmp
 
 
 class RecruitingView(ListView):
@@ -312,3 +313,30 @@ class DetailView(DetailView):
             context["participants"] = _("参加者はいません")
 
         return context
+
+
+class InfoApi(DetailView):
+    model = Tournament
+    template_name = "tournament/detail.html"
+    context_object_name = "tournament"
+
+    def get(self, request, pk, **kwargs):
+        tournament = Tournament.objects.get(pk=pk)
+        participants = TournamentParticipant.objects.filter(tournament_id=tournament)
+        matches = MatchTmp.objects.filter(tournament_id=tournament)
+        match_data = [
+            {
+                "id": match.round,
+                "player1": match.player1.username if match.player1 is not None else "",
+                "player2": match.player2.username if match.player2 is not None else "",
+                "player1_score": match.player1_score,
+                "player2_score": match.player2_score,
+            }
+            for match in matches
+        ]
+        data = {
+            "max_user_cnt": len(participants),
+            "name": tournament.name,
+            "matches": match_data,
+        }
+        return JsonResponse(data)
