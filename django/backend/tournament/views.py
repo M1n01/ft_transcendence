@@ -86,6 +86,21 @@ class ParticipantView(ListView):
         return context
 
 
+class AllView(ListView):
+    model = Tournament
+    template_name = "tournament/list.html"
+    context_object_name = "tournaments"
+    paginate_by = 16
+
+    def get_queryset(self):
+        return Tournament.objects.all().order_by("-start_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("すべてのトーナメント")
+        return context
+
+
 class RegisterApi(CreateView):
     model = TournamentParticipant
     form_class = TournamentParticipantForm
@@ -173,12 +188,16 @@ class TournamentView(LoginRequiredMixin, CreateView):
             "-start_at"
         )[:4]
 
+    def get_all_data(self):
+        return Tournament.objects.all().order_by("-start_at")[:4]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["recruiting"] = self.get_recruiting_data()
         context["as_participant"] = self.get_participant_data()
         context["as_organizer"] = self.get_organizer_data()
         context["old"] = self.get_old_data()
+        context["all"] = self.get_all_data()
 
         context["recruit_status"] = {
             "title": _("参加可能トーナメント"),
@@ -202,6 +221,12 @@ class TournamentView(LoginRequiredMixin, CreateView):
         context["old_status"] = {
             "title": _("終了したトーナメント"),
             "link": "/tournament/old/",
+            "button": _("詳細"),
+            "display_register": False,
+        }
+        context["all_status"] = {
+            "title": _("すべてのーナメント"),
+            "link": "/tournament/all/",
             "button": _("詳細"),
             "display_register": False,
         }

@@ -22,6 +22,11 @@ urlpatterns = [
         name="participant",
     ),
     path(
+        "all/",
+        views.AllView.as_view(),
+        name="all",
+    ),
+    path(
         "register/",
         views.RegisterApi.as_view(),
         name="register",
