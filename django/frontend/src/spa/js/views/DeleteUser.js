@@ -6,11 +6,11 @@ import { getUrlWithLang } from '../utility/url.js';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Edit Profile');
+    this.setTitle('Delete User');
   }
 
   getHtml = async () => {
-    const uri = getUrlWithLang('users/edit-profile');
+    const uri = getUrlWithLang('users/delete-user');
     const data = await fetchData(uri);
     return data;
   };

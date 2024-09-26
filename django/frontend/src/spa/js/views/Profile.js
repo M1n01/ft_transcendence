@@ -1,7 +1,8 @@
 import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
-//import { executeScriptTab } from '../utility/script.js';
+// import { executeScriptTab } from '../utility/script.js';
+// import { LoginEvent } from '../../../accounts/js/login.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -15,7 +16,8 @@ export default class extends AbstractView {
     return data;
   };
   executeScript = () => {
-    //executeScriptTab("");
+    // executeScriptTab("");
+    // document.dispatchEvent(LoginEvent);
   };
   getState = () => {
     return null;

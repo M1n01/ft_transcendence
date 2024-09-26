@@ -6,49 +6,105 @@
 </head>
 <body>
     <h1>{% trans "Edit Profile" %}</h1>
-    <form id="edit-profile" method="POST">
+    <form id="edit-profile" method="POST" action="{% url 'users:edit-profile' %}">
         {% csrf_token %}
         <table>
             <tbody>
               <tr>
-                <td>{{ form.username.label }}</td>
-                <td>{{ form.username }}</td>
-                <td></td>
+                <td>{% trans "ユーザー名" %}</td>
+                <td>{% if user.is_ft == False %}
+                      {{ user.username }}
+                    {% else %}
+                      {{ form.username }}
+                    {% endif %}</td>
+                <td>{% if form.username.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.username.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.email.label }}</td>
-                <td>{{ form.email }}</td>
-                <td></td>
+                <td>{% trans "Email address" %}</td>
+                <td>{% if user.is_ft == False %}
+                      {{ user.email }}
+                    {% else %}
+                      {{ form.email }}
+                    {% endif %}</td>
+                <td>{% if form.email.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.email.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.first_name.label }}</td>
+                <td>{% trans "氏" %}</td>
                 <td>{{ form.first_name }}</td>
-                <td></td>
+                <td>{% if form.first_name.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.first_name.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.last_name.label }}</td>
+                <td>{% trans "名" %}</td>
                 <td>{{ form.last_name }}</td>
-                <td></td>
+                <td>{% if form.last_name.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.last_name.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.birth_date.label }}</td>
+                <td>{% trans "生年月日" %}</td>
                 <td>{{ form.birth_date }}</td>
-                <td></td>
+                <td>{% if form.birth_date.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.birth_date.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.country_code.label }}</td>
+                <td>{% trans "国コード" %}</td>
                 <td>{{ form.country_code }}</td>
-                <td></td>
+                <td>{% if form.country_code.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.country_code.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.phone.label }}</td>
+                <td>{% trans "電話番号" %}</td>
                 <td>{{ form.phone }}</td>
-                <td></td>
+                <td>{% if form.phone.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.phone.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <tr>
-                <td>{{ form.language.label }}</td>
+                <td>{% trans "言語" %}</td>
                 <td>{{ form.language }}</td>
-                <td></td>
+                <td>{% if form.language.errors %}
+                  <ul class="errorlist">
+                      {% for error in form.language.errors %}
+                          <li>{{ error }}</li>
+                      {% endfor %}
+                  </ul>
+                {% endif %}</td>
               </tr>
               <!-- 他に表示したい情報があればここに追加 -->
             </tbody>

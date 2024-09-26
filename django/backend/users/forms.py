@@ -53,6 +53,7 @@ class UserEditForm(forms.ModelForm):
                 "id": "birth_date_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("birth_date"),
+                "type": "date"
             }
         ),
     )

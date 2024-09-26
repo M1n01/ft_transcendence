@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
 from django.views.decorators.http import condition
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required  # 認証が必要なページにする
+from django.utils.translation import gettext as _
 
-from django.shortcuts import render, redirect
 from accounts.models import FtUser  # FtUserモデルをインポート
 from .forms import UserEditForm
 
@@ -62,9 +62,11 @@ def profile(request):
     # profile_view(request)
     return render(request, "users/profile.html")
 
+# ユーザ情報の編集を保存する
 @login_required  # ログイン必須にするデコレーター
 def edit_profile(request):
     user = request.user  # ログインユーザーを取得
+    # print(f"is_ft: {user.is_ft}")  # is_ftの値を出力
     if request.method == 'POST':
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
@@ -73,3 +75,13 @@ def edit_profile(request):
     else:
         form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
     return render(request, 'users/edit-profile.html', {'form': form})
+
+# ユーザ情報を削除する
+@login_required
+def delete_user(request):
+    if request.method == 'POST':
+        print(f"Delete user: {request.user}")  # 削除するユーザ情報
+        request.user.delete()  # ユーザーを削除
+        return redirect('/')  # 適切なリダイレクト先を指定
+
+    return render(request, 'users/delete-user.html')

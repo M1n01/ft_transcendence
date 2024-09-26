@@ -17,6 +17,7 @@ import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
 import Profile from '../views/Profile.js';
 import EditProfile from '../views/EditProfile.js';
+import DeleteUser from '../views/DeleteUser.js';
 
 export const Routes = [
   { path: '/', view: Dashboard },
@@ -40,4 +41,5 @@ export const Routes = [
   { path: '/login-signup', view: LoginSignup },
   { path: '/profile', view: Profile },
   { path: '/edit-profile', view: EditProfile },
+  { path: '/delete-user', view: DeleteUser },
 ];

@@ -1,0 +1,14 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% trans "Delete user" %}</title>
+</head>
+<body>
+    <h1>{% trans "Delete" %}</h1>
+    <form id="delete-user" method="POST" action="{% url 'users:delete-user' %}">
+      {% csrf_token %}
+      <button type="submit">{% trans "Delete" %}</button>
+    </form>
+</body>
+</html>

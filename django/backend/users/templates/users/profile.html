@@ -3,61 +3,110 @@
 <html>
 <head>
     <title>{% trans "Profile" %}</title>
+    <style>
+      /* ポップアップ用の基本スタイル */
+      #popup-modal {
+          display: none; /* 初期状態では非表示 */
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          padding: 20px;
+          background-color: white;
+          border: 1px solid #ccc;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+      }
+
+      #popup-overlay {
+          display: none; /* 初期状態では非表示 */
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 999;
+      }
+  </style>
 </head>
 <body>
     <h1>{% trans "Profile" %}</h1>
         <table>
-        <!-- <thead>
-          <tr>
-            <th>data</th>
-            <th>value</th>
-            <th>button</th>
-          </tr>
-        </thead> -->
-        <tbody>
-          <tr>
-            <td>{% trans "ユーザー名" %}</td>
-            <td>{{ user.username }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "Email address" %}</td>
-            <td>{{ user.email }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "氏" %}</td>
-            <td>{{ user.last_name }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "名" %}</td>
-            <td>{{ user.first_name }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "生年月日" %}</td>
-            <td>{{ user.birth_date }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "国コード" %}</td>
-            <td>{{ user.country_code }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "電話番号" %}</td>
-            <td>{{ user.phone }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>{% trans "言語" %}</td>
-            <td>{{ user.language }}</td>
-            <td></td> 
-          </tr>
-    </tbody>
+          <tbody>
+            <tr>
+              <td>{% trans "ユーザー名" %}</td>
+              <td>{{ user.username }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "Email address" %}</td>
+              <td>{{ user.email }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "氏" %}</td>
+              <td>{{ user.last_name }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "名" %}</td>
+              <td>{{ user.first_name }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "生年月日" %}</td>
+              <td>{{ user.birth_date }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "国コード" %}</td>
+              <td>{{ user.country_code }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "電話番号" %}</td>
+              <td>{{ user.phone }}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>{% trans "言語" %}</td>
+              <td>{{ user.language }}</td>
+              <td></td> 
+            </tr>
+      </tbody>
     </table>
     <!-- 他に表示したい情報があればここに追加 -->
     <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
+    <a href="/delete-user" class="nav__link" data-link>{% trans "Delete" %}</a>
+    <a href="/delete-user" id="popup-trigger" class="nav__link" data-link>{% trans "Popup" %}</a>
+
+    <!-- ポップアップの内容 -->
+    <div id="popup-overlay"></div>
+    <div id="popup-modal">
+        <h2>{% trans "Popup Title" %}</h2>
+        <p>{% trans "This is a popup message." %}</p>
+        <button id="close-popup">{% trans "Close" %}</button>
+    </div>
+
+    <script>
+        // ポップアップ関連のJavaScript
+        document.getElementById('popup-trigger').addEventListener('click', function(event) {
+            event.preventDefault(); // 通常のリンクの動作を防ぐ
+            document.getElementById('popup-overlay').style.display = 'block'; // 背景のオーバーレイを表示
+            document.getElementById('popup-modal').style.display = 'block'; // ポップアップを表示
+        });
+
+        document.getElementById('close-popup').addEventListener('click', function() {
+            document.getElementById('popup-overlay').style.display = 'none'; // 背景のオーバーレイを非表示
+            document.getElementById('popup-modal').style.display = 'none'; // ポップアップを非表示
+        });
+
+        // 背景をクリックした場合もポップアップを閉じる処理
+        document.getElementById('popup-overlay').addEventListener('click', function() {
+            document.getElementById('popup-overlay').style.display = 'none';
+            document.getElementById('popup-modal').style.display = 'none';
+        });
+    </script>
 </body>
 </html>
