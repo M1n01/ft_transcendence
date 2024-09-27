@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     "api",
     "sendgrid",
     "django_celery_results",
+    "channels",
 ]
 
 MIDDLEWARE = [

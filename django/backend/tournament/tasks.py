@@ -44,6 +44,9 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
 
 
 def create_matches(tournament):
+    """
+    トーナメント表を描画するために、pongゲーム用のMatchを作成する
+    """
     if tournament.status != TournamentStatusChoices.RECRUITING:
         return
 
@@ -110,6 +113,11 @@ def my_task(arg1, arg2):
 
 @shared_task
 def close_application():
+    """
+    トーナメントの応募締切タイミグで実行される
+    参加者の人数が4人未満なら中止となり、4人以上ならトーナメントが開始される
+
+    """
     start = datetime.now(timezone.utc)
     end = start + timedelta(minutes=15)
     list = Tournament.objects.filter(start_at__gte=start, start_at__lte=end)

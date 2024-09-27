@@ -4,6 +4,7 @@ import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
 import { reload } from '..//utility/user.js';
 import { getDisplayedURI } from '../../../../src/index.js';
+import { WebsocketInit } from '../ws/socket.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
@@ -57,6 +58,8 @@ export const navigateTo = async (url, rest = '', params = '') => {
 };
 
 export const router = async (rest = '', params = '') => {
+  WebsocketInit();
+
   let url;
   if (rest !== '') {
     url = location.pathname.substring(0, location.pathname.indexOf(rest));

@@ -17,6 +17,7 @@ from django.utils.translation import gettext_lazy as _
 import re
 from datetime import datetime, timedelta, timezone
 from pong.models import MatchTmp
+from .tasks import create_matches
 
 
 class RecruitingView(ListView):
@@ -147,6 +148,7 @@ class RegisterApi(CreateView):
                     tournament_id=tournament
                 )
                 if len(participants) == tournament.current_players:
+                    create_matches(tournament)
                     tournament.status = TournamentStatusChoices.ONGOING
                     tournament.save()
         except Exception as e:

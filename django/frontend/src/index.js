@@ -12,6 +12,7 @@ import './accounts/js/signup.js';
 import './spa/scss/spa.scss';
 import './custom_bootstrap.scss';
 import './main.scss';
+import { WebsocketInit } from './spa/js/ws/socket.js';
 import { loadNav } from './spa/js/utility/user.js';
 //import 'login.js'
 
@@ -52,6 +53,7 @@ export const getDisplayedURI = (pathname) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadNav();
+  WebsocketInit();
 
   let tmp_path = window.location.pathname;
 
