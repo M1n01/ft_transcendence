@@ -12,33 +12,35 @@
             <tbody>
               <tr>
                 <td>{% trans "ユーザー名" %}</td>
-                <td>{% if user.is_ft == False %}
-                      {{ user.username }}
-                    {% else %}
-                      {{ form.username }}
-                    {% endif %}</td>
-                <td>{% if form.username.errors %}
-                  <ul class="errorlist">
+                {% if user.is_ft == True %}
+                  <td>{{ user.username }}</td>
+                  <!-- <td></td> -->
+                {% else %}
+                  <td>{{ form.username }}</td>
+                  <td>{% if form.username.errors %}
+                    <ul class="errorlist">
                       {% for error in form.username.errors %}
-                          <li>{{ error }}</li>
+                        <li>{{ error }}</li>
                       {% endfor %}
-                  </ul>
-                {% endif %}</td>
+                    </ul>
+                  {% endif %}</td>
+                {% endif %}
               </tr>
               <tr>
                 <td>{% trans "Email address" %}</td>
-                <td>{% if user.is_ft == False %}
-                      {{ user.email }}
-                    {% else %}
-                      {{ form.email }}
-                    {% endif %}</td>
-                <td>{% if form.email.errors %}
-                  <ul class="errorlist">
+                {% if user.is_ft == True %}
+                  <td>{{ user.email }}</td>
+                  <!-- <td></td> -->
+                {% else %}
+                  <td>{{ form.email }}</td>
+                  <td>{% if form.email.errors %}
+                    <ul class="errorlist">
                       {% for error in form.email.errors %}
-                          <li>{{ error }}</li>
+                        <li>{{ error }}</li>
                       {% endfor %}
-                  </ul>
-                {% endif %}</td>
+                    </ul>
+                  {% endif %}</td>
+                {% endif %}
               </tr>
               <tr>
                 <td>{% trans "氏" %}</td>

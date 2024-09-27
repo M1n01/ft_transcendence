@@ -85,3 +85,6 @@ def delete_user(request):
         return redirect('/')  # 適切なリダイレクト先を指定
 
     return render(request, 'users/delete-user.html')
+
+def cookie_banner(request):
+    return render(request, "users/cookie-banner.html")
