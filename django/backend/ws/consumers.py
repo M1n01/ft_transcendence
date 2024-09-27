@@ -5,7 +5,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 # from channels.generic.websocket import JsonWebsocketConsumer
 # from channels.auth import login
-from accounts.models import FtUser
 from channels.db import database_sync_to_async
 
 
@@ -28,10 +27,13 @@ def decode(session_id):
 
 @database_sync_to_async
 def get_user(session_id):
+    from accounts.models import FtUser
+
     json = decode(session_id)
     id = json["sub"]
     print(f"{id=}")
     return FtUser.objects.get(id=id)
+    # return ""
 
 
 class FtWebsocket(AsyncWebsocketConsumer):
@@ -42,6 +44,8 @@ class FtWebsocket(AsyncWebsocketConsumer):
         session_id = self.scope["cookies"]["sessionid"]
         user = await get_user(session_id)
 
+        # self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        # await self.accept()  # WebSocket接続を受け入れる
         if user.is_authenticated:
             print("accept No.1")
             self.channel_layer.group_add(self.room_group_name, self.channel_name)
