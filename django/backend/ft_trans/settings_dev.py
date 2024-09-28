@@ -326,6 +326,8 @@ JWT_TMP_VALID_TIME = 300
 JWT_VALID_TIME = 14400
 
 # WEB3
-PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+PRIVATE_ACCOUNT_KEY = (
+    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+)
 PROVIDER_URL = "http://eth:8545"
 CONTRACT_ADDRESS = get_contract_address()

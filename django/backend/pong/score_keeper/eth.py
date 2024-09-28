@@ -36,7 +36,7 @@ def save_match_to_blockchain(
         abi=get_hardhat_compiled_contract()["abi"],
     )
 
-    account = w3.eth.account.from_key(settings.PRIVATE_KEY)
+    account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
         transaction = contract.functions.createMatch(
@@ -53,7 +53,9 @@ def save_match_to_blockchain(
             }
         )
 
-        signed_txn = w3.eth.account.sign_transaction(transaction, settings.PRIVATE_KEY)
+        signed_txn = w3.eth.account.sign_transaction(
+            transaction, settings.PRIVATE_ACCOUNT_KEY
+        )
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
 
         # イベントをキャッチしてタイムスタンプを取得
@@ -117,7 +119,7 @@ def delete_match_from_blockchain(match_id):
         abi=get_hardhat_compiled_contract()["abi"],
     )
 
-    account = w3.eth.account.from_key(settings.PRIVATE_KEY)
+    account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
         transaction = contract.functions.deleteMatch(match_id).build_transaction(
@@ -127,7 +129,9 @@ def delete_match_from_blockchain(match_id):
             }
         )
 
-        signed_txn = w3.eth.account.sign_transaction(transaction, settings.PRIVATE_KEY)
+        signed_txn = w3.eth.account.sign_transaction(
+            transaction, settings.PRIVATE_ACCOUNT_KEY
+        )
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
         return tx_hash
 

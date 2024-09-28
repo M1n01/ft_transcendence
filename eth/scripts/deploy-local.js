@@ -14,13 +14,12 @@ async function main() {
   console.log('Deploying contracts with the account:', deployer.address);
 
   // ScoreKeeperコントラクトをデプロイ
-  const ScoreKeeper = await ethers.getContractFactory('PongScoreKeeper');
-  const scoreKeeper = await ScoreKeeper.deploy(deployer.address);
-  await scoreKeeper.waitForDeployment();
+  const pongScoreKeeper = await ethers.deployContract('PongScoreKeeper', [deployer.address]);
+  await pongScoreKeeper.waitForDeployment();
 
   const addressPath = path.resolve(__dirname, '../contract_address.txt');
-  fs.writeFileSync(addressPath, scoreKeeper.target);
-  console.log('PongScoreKeeper deployed to:', scoreKeeper.target);
+  fs.writeFileSync(addressPath, pongScoreKeeper.target);
+  console.log('PongScoreKeeper deployed to:', pongScoreKeeper.target);
 }
 
 main().catch((error) => {

@@ -1,5 +1,8 @@
 services:
   django:
+    depends_on:
+      eth:
+        condition: service_healthy
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
@@ -13,7 +16,7 @@ services:
 
   eth:
     environment:
-      - PRIVATE_KEY=$PRIVATE_KEY
+      - PRIVATE_ACCOUNT_KEY=$PRIVATE_ACCOUNT_KEY
       - PROVIDER_URL=$PROVIDER_URL
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:8545']
