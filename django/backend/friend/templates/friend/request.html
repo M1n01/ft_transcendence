@@ -9,20 +9,43 @@
   <body>
     --------------------------------------------------------------
     <br />
-    {% trans 'フレンドリクエスト' %} {% for request in friend_requests %} {{request.user.username}}
-    status={{request.status}}
-    <form id="accept-request" method="post" action="{% url 'friend:respond'  %}">
-      {% csrf_token %}
-      <input name="id" type="hidden" value="{{request.id}}" />
-      <input name="status" type="hidden" value="ACCEPTED" />
-      <button type="submit">{% trans "許可" %}</button>
-    </form>
-    <form id="reject-request" method="post" action="{% url 'friend:respond'  %}">
-      {% csrf_token %}
-      <input name="id" type="hidden" value="{{request.id}}" />
-      <input name="status" type="hidden" value="BLOCKED" />
-      <button type="submit">{% trans "ブロック" %}</button>
-    </form>
+    <div class="d-flex align-items-end">
+      <h3>{% trans "フレンドリクエスト" %}</h3>
+      <span class="h6 ps-2">
+        <a href="/requests" class="">{% trans 'すべてのリクエストを表示' %}</a>
+      </span>
+    </div>
+
+    {% for request in friend_requests %}
+    <div class="d-flex border-top border-bottom h-auto w-100">
+      <img src="" height="40" weight="40" alt="アイコン" class="col-1" />
+      <div class="col-1 mx-2">{{request.user.username}}</div>
+      <div class="d-flex col-4 text-break text-wrap">{{request.message}}</div>
+      <div class="d-flex col-3">
+        <form
+          id="accept-request"
+          method="post"
+          action="{% url 'friend:respond'  %}"
+          class="me-1 p-2"
+        >
+          {% csrf_token %}
+          <input name="id" type="hidden" value="{{request.id}}" />
+          <input name="status" type="hidden" value="ACCEPTED" />
+          <button type="submit" class="btn btn-primary">{% trans "許可" %}</button>
+        </form>
+        <form
+          id="reject-request"
+          method="post"
+          action="{% url 'friend:respond'  %}"
+          class="ms-1 p-2"
+        >
+          {% csrf_token %}
+          <input name="id" type="hidden" value="{{request.id}}" />
+          <input name="status" type="hidden" value="BLOCKED" />
+          <button type="submit" class="btn btn-danger">{% trans "ブロック" %}</button>
+        </form>
+      </div>
+    </div>
 
     {% endfor %}
   </body>

@@ -16,6 +16,7 @@ window.addEventListener('popstate', async (event) => {
       }
     } else {
       const uri = getDisplayedURI(window.location.href);
+      console.log('pre router() No.1');
       router(uri.rest, uri.params);
     }
   } catch (error) {
@@ -26,8 +27,10 @@ window.addEventListener('popstate', async (event) => {
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
-export const moveTo = async (url) => {
-  navigateTo(url);
+export const moveTo = async (url, rest = '', params = '') => {
+  console.log('moveTo No.1');
+  await navigateTo(url, rest, params);
+  console.log('moveTo No.2');
   await reload();
 };
 
@@ -42,7 +45,9 @@ export const savePage = async (url, rest = '', params = '') => {
 };
 
 export const navigateTo = async (url, rest = '', params = '') => {
+  console.log('navigateTo No.1');
   const history_url = url + rest + params;
+  console.log('navigateTo No.2 url=' + history_url);
 
   if (view !== undefined && view !== null) {
     const state = await view.getState();
@@ -51,6 +56,7 @@ export const navigateTo = async (url, rest = '', params = '') => {
     history.replaceState(null, null, history_url);
   }
 
+  console.log('pre router() No.2 pathname:' + window.location.pathname);
   const tmp_view = await router(rest, params);
   if (tmp_view !== null) {
     view = tmp_view;
@@ -58,14 +64,21 @@ export const navigateTo = async (url, rest = '', params = '') => {
 };
 
 export const router = async (rest = '', params = '') => {
+  console.log('router No.0');
   WebsocketInit();
+  console.log('router No.1');
 
   let url;
   if (rest !== '') {
+    console.log('router No.2 pathname:' + location.pathname);
     url = location.pathname.substring(0, location.pathname.indexOf(rest));
+    console.log('No.3 router:' + url);
   } else {
+    console.log('router No.4');
     url = location.pathname;
+    console.log('No.5 router:' + url);
   }
+  console.log('router No.6 uri:' + url);
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
@@ -81,16 +94,20 @@ export const router = async (rest = '', params = '') => {
     };
   }
 
+  console.log('router No.7 uri:' + url);
   if (isLogined() == false) {
     match = {
       route: Routes[0],
       result: [getUrl(Routes[0].path)],
     };
   }
+  console.log('router No.8 uri:' + url);
   const view = new match.route.view();
   try {
+    console.log('router No.9 uri:' + url);
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
+      console.log('router No.10 uri:' + url);
       navigateTo(json['uri']);
       return;
     }
@@ -102,15 +119,20 @@ export const router = async (rest = '', params = '') => {
       moveTo('/');
       return;
     }
+    console.log('router No.11 uri:' + url);
     document.querySelector('#app').innerHTML = html;
+    console.log('router No.12 uri:' + url);
     view.executeScript();
+    console.log('router No.13 uri:' + url);
   } catch (error) {
     console.error('executeScript Error:' + error);
   }
+  console.log('router No.14 uri:' + url);
   return view;
 };
 
 export async function updatePage(res) {
+  console.log('updatePage No.1');
   try {
     const status = await res.status;
     if (status >= 400) {
@@ -118,10 +140,13 @@ export async function updatePage(res) {
     }
     const contentType = await res.headers.get('content-type');
     if (contentType && contentType.indexOf('application/json') !== -1) {
+      console.log('updatePage No.2');
       // 他にどうしようもなかったので特別対応
       // Jsonで遷移するurlを取得する。
       const data = await res.json();
+      console.log('updatePage No.3');
       if ('html' in data) {
+        console.log('updatePage No.4');
         navigateTo(data['html']);
       }
     } else if (contentType && contentType.indexOf('text/html') !== -1) {

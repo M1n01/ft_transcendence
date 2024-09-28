@@ -7,38 +7,82 @@
     <title>Make Friend</title>
   </head>
   <body>
-    <form method="GET" action="friend/" id="search-friend">
-      {{ form.as_p }}
-      <button type="submit">Search</button>
+    <!-- ページネーションのリンクを表示 -->
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page=1">Top</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+
+      {% if page_obj.previous_page_number > 0 %}
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page={{ page_obj.previous_page_number }}"
+          >{{ page_obj.previous_page_number }}</a
+        >
+      </li>
+      {% endif%} {% endif %} {% if page_obj.has_next or page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link disabled" href="#"
+          ><span class="fw-bold text-dark">{{ page_obj.number }}</span></a
+        >
+      </li>
+      {% endif%} {% if page_obj.has_next %} {% if page_obj.next_page_number < paginator.num_pages %}
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page={{ page_obj.next_page_number }}"
+          >{{ page_obj.next_page_number }}</a
+        >
+      </li>
+      {% endif %}
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{{query}}&page={{ paginator.num_pages }}">Last</a>
+      </li>
+      {% endif%}
+    </ul>
+
+    {% include 'friend/request-modal.html' %}
+    <form method="GET" action="/friend/search" id="search-friend">
+      {{ search_form.as_p }}
+      <button type="submit ">{% trans '検索' %}</button>
     </form>
 
-    {% if results %}
-    <h2>Search Results:</h2>
-    <ul>
-      <div id="searched-user">
-        {% for friend in results %}
-        <li>
-          <div>{{ friend.username }}</div>
-
-          <form
-            method="post"
-            action="{% url 'friend:request' %}"
-            id="friend-request"
-            class="friend-request"
-          >
-            {% csrf_token %}
-            <button type="submit">{% trans 'フレンド申請' %}</button>
-          </form>
-          <form method="post" action="friend/message" id="friend-message">
-            {% csrf_token %}
-            <button type="submit">{% trans 'メッセージ' %}</button>
-          </form>
-        </li>
-        {% endfor %}
-      </div>
-    </ul>
-    {% else %}
-    <p>No results found.</p>
-    {% endif %}
+    <h2>検索結果</h2>
+    <div id="searched-user">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">{% trans 'アイコン' %}</th>
+            <th scope="col">{% trans 'ユーザー名' %}</th>
+            <th scope="col">{% trans '申請' %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for friend in results %}
+          <tr>
+            <th><img class="img-fluid ft-logo" id="ft-logo" alt="42-logo" /></th>
+            <th>{{ friend.username }}</th>
+            <th>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#friendRequestModal"
+              >
+                {% trans 'フレンド申請' %}
+                <div class="request-button-name" hidden>{{ friend.username }}</div>
+                <div hidden></div>
+              </button>
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

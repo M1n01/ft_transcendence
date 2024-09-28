@@ -16,8 +16,13 @@ export function isLogined() {
 
 export const reload = async () => {
   const uri = getDisplayedURI(window.location.href);
-  router(uri.rest, uri.params);
+  console.log('reload()No.1 url.path:' + uri.path);
+  console.log('reload()No.2 url.rest:' + uri.rest);
+  console.log('pre router() No.3');
+  await router(uri.rest, uri.params);
+  console.log('reload()No.3 url.rest:' + uri.rest);
   await loadNav();
+  console.log('reload()No.4 url.rest:' + uri.rest);
 };
 
 export const loadNav = async () => {
@@ -52,7 +57,7 @@ export const loadNav = async () => {
 };
 
 export const handlePostLogin = async () => {
-  moveTo('games');
+  moveTo('/games');
   document.getElementById('nav').hidden = false;
 };
 
@@ -62,6 +67,7 @@ export const logout = async () => {
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
     navigateTo('login-signup');
+    console.log('pre reload No.3');
     await reload();
   }
 };

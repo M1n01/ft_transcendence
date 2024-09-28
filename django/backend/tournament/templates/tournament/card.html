@@ -50,7 +50,7 @@
               <div class="d-flex justify-content-center w-100">
                 <h5 class="modal-title">
                   <div id="register-tournament-name" class="d-flex justify-content-center">
-                    トーナメント名
+                    {% trans 'トーナメント名' %}
                   </div>
                   <div class="d-flex justify-content-center">{% trans "参加申し込み" %}</div>
                 </h5>
@@ -63,7 +63,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <div id ="register-limit-error" class="text-danger" hidden>
+              <div id="register-limit-error" class="text-danger" hidden>
                 {% trans "参加人数が上限に達したため、登録することができません。" %}
               </div>
               <form

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView, ListView
+from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
 from .forms import FriendRequestForm, SearchFriendForm
 from .models import Friendships, FriendshipsStatusChoices
@@ -19,7 +19,7 @@ class FriendView(ListView):
     request_model = Friendships
     template_name = "friend/friend.html"
     context_object_name = "users"
-    paginate_by = 10
+    paginate_by = 2
 
     def get_queryset(self):
         username = self.request.GET.get("username", "")
@@ -40,24 +40,24 @@ class FriendView(ListView):
         friend_request = self.request_model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )
-        not_search1 = friend_request.values_list("friend", flat=True)
+        # not_search1 = friend_request.values_list("friend", flat=True)
 
-        results = []
+        # results = []
         friends = self.get_friendlist()
-        not_search2 = friends.values_list("friend", flat=True)
-        not_search = not_search1 | not_search2
-        username = request.GET.get("username", "")
-        if username:
-            results = FtUser.objects.exclude(id__in=not_search).filter(
-                username__icontains=username
-            )
+        # not_search2 = friends.values_list("friend", flat=True)
+        # not_search = not_search1 | not_search2
+        # username = request.GET.get("username", "")
+        # if username:
+        #    results = FtUser.objects.exclude(id__in=not_search).filter(
+        #        username__icontains=username
+        #    )
         return render(
             request,
             "friend/friend.html",
             {
                 "search_form": search_form,
                 "make_form": make_form,
-                "results": results,
+                # "results": results,
                 "friends": friends,
                 "friend_requests": friend_request,
             },
@@ -67,17 +67,47 @@ class FriendView(ListView):
         pass
 
 
-class FindFriendView(TemplateView):
+def get_searched_user(user):
+    pass
+
+
+class FindFriendView(ListView):
+    model = Friendships
+    context_object_name = "results"
     template_name = "friend/search.html"
+    search_form = SearchFriendForm
+    paginate_by = 2
 
-    def get(request):
-        form = SearchFriendForm()
-        results = []
-        query = request.GET.get("query", "")
-        if query:
-            results = FtUser.objects.filter(username__icontains=query)
+    def get_queryset(self):
+        friendships = Friendships.objects.filter(user=self.request.user)
+        frendshipd_id = [friendship.friend.id for friendship in friendships]
+        frendshipd_id.append(self.request.user.id)
+        username = self.request.GET.get("username", "")
+        queryset = []
+        if username:
+            queryset = FtUser.objects.exclude(id__in=frendshipd_id).filter(
+                username__icontains=username
+            )
+        return queryset
 
-        return render(request, "friend/search.html", {"form": form, "results": results})
+    def get_context_data(self, **kwargs):
+        print("context No.1")
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["query"] = "?username=" + username
+        context["search_form"] = self.search_form
+        print("context No.2")
+        return context
+
+
+# def get(request):
+#   form = SearchFriendForm()
+#   results = []
+#   query = request.GET.get("query", "")
+#   if query:
+#       results = FtUser.objects.filter(username__icontains=query)
+#
+#   return render(request, "friend/search.html", {"form": form, "results": results})
 
 
 class RespondFriendRequest(UpdateView):
@@ -133,12 +163,22 @@ class FriendRequest(CreateView):
     # success_url = reverse_lazy("friend:friend")
     def post(self, request):
         try:
+            print("friend request No.1")
             username = request.POST.get("username")
+            message = request.POST.get("request-message")
+            print(f"friend request No.2:{username=}")
+            print(f"friend request No.2:{message=}")
             tmp_friend = FtUser.objects.get(username=username)
+            print("friend request No.3")
             if tmp_friend is None:
+                print("friend request No.4")
                 return HttpResponseBadRequest()
+            print("friend request No.5")
 
-            Friendships.objects.create(user=request.user, friend=tmp_friend)
+            Friendships.objects.create(
+                user=request.user, friend=tmp_friend, message=message
+            )
+            print("friend request No.6")
             return HttpResponse()
 
         except IntegrityError as e:
@@ -150,3 +190,24 @@ class FriendRequest(CreateView):
 
 def make(request):
     return render(request, "friend/request.html")
+
+
+class RequestsView(ListView):
+    model = Friendships
+    context_object_name = "requests"
+    search_form = SearchFriendForm
+    template_name = "friend/requests.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
+        )
+
+    # def get_context_data(self, **kwargs):
+    #    print("context No.1")
+    #    context = super().get_context_data(**kwargs)
+    #    username = self.request.GET.get("username", "")
+    #    context["query"] = "?username=" + username
+    #    print("context No.2")
+    #    return context

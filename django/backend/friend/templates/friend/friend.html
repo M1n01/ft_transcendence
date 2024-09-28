@@ -7,7 +7,10 @@
     <title>Make Friend</title>
   </head>
   <body>
-    <div id="friend-search">{% include 'friend/search.html' with form=search_form %}</div>
+    <form method="GET" action="/friend/search" id="search-friend">
+      {{ search_form.as_p }}
+      <button type="submit ">{% trans '検索' %}</button>
+    </form>
     <div id="friend-request">
       {% include 'friend/request.html' with friend_requests=friend_requests %}
     </div>

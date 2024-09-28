@@ -16,9 +16,26 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    const uri = getUrlWithLang('friend/');
-    const data = fetchData(uri + rest + params);
-    return data;
+    console.log('rest:' + rest);
+    console.log('location:' + window.location.pathname);
+    //const uri = getUrlWithLang('friend/');
+    //const data = fetchData(uri + rest + params);
+
+    if (rest === '') {
+      console.log('normal');
+      const uri = getUrlWithLang('friend/');
+      const data = fetchData(uri + rest + params);
+      return data;
+    } else if (rest === '/searched') {
+      console.log('searched');
+      console.log('params:' + params);
+      const uri = getUrlWithLang('friend/search');
+      console.log('uri:' + uri + params);
+      const data = fetchData(uri + params);
+      return data;
+    }
+    return '';
+    //return data;
   };
   executeScript = () => {
     document.dispatchEvent(FriendEvent);

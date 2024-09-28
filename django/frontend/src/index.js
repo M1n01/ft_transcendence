@@ -19,11 +19,14 @@ import { loadNav } from './spa/js/utility/user.js';
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
   let query_index = pathname.lastIndexOf('?');
+  console.log('No.1 query_index:' + query_index);
   if (pathname.lastIndexOf('/') > query_index) {
+    console.log('No.2 query_index:' + query_index);
     query_index = 0;
   }
 
   const params = query_index == 0 ? '' : pathname.substring(query_index);
+  console.log('No.3 params:' + params);
   pathname.replace(params, '');
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
@@ -39,15 +42,20 @@ export const getDisplayedURI = (pathname) => {
     const slice_splits = splits.slice(test + 1);
     rest_path = '/' + slice_splits.join('/');
   }
+
+  console.log('getDisplayedURI No.0 rest:' + rest_path);
   rest_path = rest_path.replace(params, '');
+  console.log('getDisplayedURI No.1 rest:' + rest_path);
   if (rest_path === '/') {
     rest_path = '';
   }
+  console.log('getDisplayedURI No.2 rest:' + rest_path);
   if (params.length > 0 && rest_path.length > 0) {
     if (rest_path[rest_path.length - 1] == '/') {
       rest_path = rest_path.substring(0, rest_path.length - 1);
     }
   }
+  console.log('getDisplayedURI No.3 rest:' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
 };
 

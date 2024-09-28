@@ -46,12 +46,14 @@ document.addEventListener('TournmentEvent', () => {
           if (json['is_full']) {
             error_text.hidden = false;
             close_register_modal.addEventListener('click', async () => {
+              console.log('pre reload No.2');
               await reload();
             });
           }
           return;
         }
         close_register_modal.click();
+        console.log('pre reload No.4');
         await reload();
       });
     });
@@ -65,6 +67,7 @@ document.addEventListener('TournmentEvent', () => {
         console.error('filure to post form. Status:' + response.status);
         return;
       }
+      console.log('pre reload No.5');
       await reload();
     });
   };

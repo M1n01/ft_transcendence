@@ -25,6 +25,12 @@ class Friendships(models.Model):
         verbose_name=_("フレンド"),
         related_name="friend",
     )
+    message = models.CharField(
+        verbose_name=_("メッセージ"),
+        max_length=200,
+        null=True,
+        blank=True,
+    )
     status = models.CharField(
         verbose_name=_("状態"),
         max_length=10,
