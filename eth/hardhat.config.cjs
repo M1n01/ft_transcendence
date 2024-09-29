@@ -1,5 +1,5 @@
 require('@nomicfoundation/hardhat-toolbox');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const process = require('process');
 
 module.exports = {

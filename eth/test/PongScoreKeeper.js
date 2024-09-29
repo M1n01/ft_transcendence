@@ -16,7 +16,7 @@ describe('PongScoreKeeper contract', function () {
   beforeEach(async function () {
     [owner, addr1, addr2, addr3] = await ethers.getSigners();
     PongScoreKeeper = await ethers.getContractFactory('PongScoreKeeper');
-    pongScoreKeeper = await PongScoreKeeper.deploy(owner.address);
+    pongScoreKeeper = await PongScoreKeeper.deploy();
     await pongScoreKeeper.waitForDeployment();
   });
 
@@ -33,7 +33,7 @@ describe('PongScoreKeeper contract', function () {
   describe('Match Creation', function () {
     it('Should create a match correctly', async function () {
       await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
-      const match = await pongScoreKeeper.getMatch(0);
+      const match = await pongScoreKeeper.getMatch(0, true);
       expect(match.tournamentId).to.equal(1);
       expect(match.player1).to.equal(addr1.address);
       expect(match.player2).to.equal(addr2.address);
@@ -52,7 +52,7 @@ describe('PongScoreKeeper contract', function () {
     it('Should emit MatchCreated event', async function () {
       await expect(pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1))
         .to.emit(pongScoreKeeper, 'MatchCreated')
-        .withArgs(1, 1, await time.latest(), addr1.address, addr2.address, 1);
+        .withArgs(0, 1, await time.latest(), addr1.address, addr2.address, 1);
     });
 
     it('Should fail if caller is not the owner', async function () {
@@ -80,34 +80,17 @@ describe('PongScoreKeeper contract', function () {
     });
 
     it('Should retrieve a single match correctly', async function () {
-      const match = await pongScoreKeeper.getMatch(0);
+      const match = await pongScoreKeeper.getMatch(0, true);
       expect(match.player1).to.equal(addr1.address);
     });
 
     it('Should fail to retrieve a non-existent match', async function () {
-      await expect(pongScoreKeeper.getMatch(3)).to.be.revertedWith('Match not found');
+      await expect(pongScoreKeeper.getMatch(3, true)).to.be.revertedWith('Match not found');
     });
 
     it('Should retrieve all matches correctly', async function () {
-      const matches = await pongScoreKeeper.getAllMatches(false, 0, 10);
+      const matches = await pongScoreKeeper.getAllMatches(false);
       expect(matches.length).to.equal(2);
-    });
-
-    it('Should retrieve matches by user ID correctly', async function () {
-      const matches = await pongScoreKeeper.getMatchesByUserId(addr1.address, false, 0, 10);
-      expect(matches.length).to.equal(2);
-    });
-
-    // ページネーションテスト
-    it('Should paginate results correctly', async function () {
-      for (let i = 0; i < 10; i++) {
-        await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
-      }
-      const matches1 = await pongScoreKeeper.getAllMatches(false, 0, 5);
-      const matches2 = await pongScoreKeeper.getAllMatches(false, 1, 5);
-      expect(matches1.length).to.equal(5);
-      expect(matches2.length).to.equal(5);
-      expect(matches1[0].matchId).to.not.equal(matches2[0].matchId);
     });
   });
 
@@ -117,35 +100,18 @@ describe('PongScoreKeeper contract', function () {
     });
 
     it('Should toggle match status correctly', async function () {
-      await pongScoreKeeper.toggleMatchStatus(0);
-      const match = await pongScoreKeeper.getMatch(0);
-      expect(match.isActive).to.be.false;
+      await pongScoreKeeper.deleteMatch(0);
+      await expect(pongScoreKeeper.getMatch(0, true)).to.be.revertedWith('Match not found');
     });
 
     it('Should fail to toggle status of a non-existent match', async function () {
-      await expect(pongScoreKeeper.toggleMatchStatus(3)).to.be.revertedWith('Match not found');
+      await expect(pongScoreKeeper.deleteMatch(3)).to.be.revertedWith('Match not found');
     });
 
     it('Should emit MatchStatusChanged event', async function () {
-      await expect(pongScoreKeeper.toggleMatchStatus(0))
+      await expect(pongScoreKeeper.deleteMatch(0))
         .to.emit(pongScoreKeeper, 'MatchStatusChanged')
         .withArgs(0, false);
-    });
-  });
-
-  describe('Pause and Unpause', function () {
-    it('Should pause and unpause the contract', async function () {
-      await pongScoreKeeper.pause();
-      await expect(pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1)).to.be
-        .reverted;
-      await pongScoreKeeper.unpause();
-      await expect(pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1)).to.not.be
-        .reverted;
-    });
-
-    it('Should only allow owner to pause and unpause', async function () {
-      await expect(pongScoreKeeper.connect(addr1).pause()).to.be.reverted;
-      await expect(pongScoreKeeper.connect(addr1).unpause()).to.be.reverted;
     });
   });
 

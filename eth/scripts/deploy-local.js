@@ -14,7 +14,7 @@ async function main() {
   console.log('Deploying contracts with the account:', deployer.address);
 
   // ScoreKeeperコントラクトをデプロイ
-  const pongScoreKeeper = await ethers.deployContract('PongScoreKeeper', [deployer.address]);
+  const pongScoreKeeper = await ethers.deployContract('PongScoreKeeper');
   await pongScoreKeeper.waitForDeployment();
 
   const addressPath = path.resolve(__dirname, '../contract_address.txt');

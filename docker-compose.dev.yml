@@ -23,4 +23,4 @@ services:
       interval: 3s
       timeout: 1s
       retries: 5
-    command: /bin/sh -c "npx hardhat compile && npx hardhat node & sleep 10 && npx hardhat run scripts/deploy.js --network localhost && tail -f /dev/null"
+    command: /bin/sh -c "npx hardhat compile && npx hardhat node & sleep 10 && npx hardhat run scripts/deploy-local.js --network localhost && tail -f /dev/null"

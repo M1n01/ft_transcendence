@@ -72,7 +72,7 @@ def save_match_to_blockchain(
 
 
 def get_matches_from_blockchain(
-    match_id=None, tournament_id=None, user_id=None, round=None
+    match_id=None, tournament_id=None, user_id=None, round=None, only_active=True
 ):
     w3 = get_contract()
     contract = w3.eth.contract(
@@ -86,28 +86,29 @@ def get_matches_from_blockchain(
             "tournament_id": match[1],
             "created_at": match[2],
             "player1": match[3],
-            "player1_score": match[4],
-            "player2": match[5],
+            "player2": match[4],
+            "player1_score": match[5],
             "player2_score": match[6],
-            "is_active": match[7],
-            "round": match[8],
+            "round": match[7],
+            "is_active": match[8],
         }
 
     if match_id:
-        match = contract.functions.getMatch(int(match_id)).call()
+        match = contract.functions.getMatch(int(match_id), only_active).call()
         matches = match_to_dict(match)
-    elif tournament_id:
-        matches = contract.functions.getMatchesByTournament(int(tournament_id)).call()
-        matches = [match_to_dict(match) for match in matches]
-    elif user_id:
-        matches = contract.functions.getMatchesByUserId(user_id, True, 0, 100).call()
-        matches = [match_to_dict(match) for match in matches]
-    # elif round and tournament_id:
-    #     matches = contract.functions.getMatchesByRound(
-    #         int(round), int(tournament_id), True, 0, 100
-    #     ).call()
     else:
-        matches = contract.functions.getAllMatches(True, 0, 100).call()
+        all_matches = contract.functions.getAllMatches(only_active).call()
+        if user_id:
+            # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
+            matches = [
+                match
+                for match in all_matches
+                if match[3] == user_id or match[4] == user_id
+            ]
+        elif tournament_id:
+            matches = [match for match in all_matches if match[1] == tournament_id]
+        else:
+            matches = all_matches
         matches = [match_to_dict(match) for match in matches]
     return matches
 
