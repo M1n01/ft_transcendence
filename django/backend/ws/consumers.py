@@ -3,9 +3,21 @@ import jwt
 from django.conf import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+# from accounts.tasks import change_login_state
+
 # from channels.generic.websocket import JsonWebsocketConsumer
 # from channels.auth import login
 from channels.db import database_sync_to_async
+
+
+@database_sync_to_async
+def update_user_login_state(user, flag):
+    print("update No.1")
+    user.is_login = flag
+    print("update No.2")
+    user.save()
+    print("update No.3")
+    # モデルの状態を変更するロジック
 
 
 def decode(session_id):
@@ -37,35 +49,46 @@ def get_user(session_id):
 
 
 class FtWebsocket(AsyncWebsocketConsumer):
-    room_group_name = "websocket"
+    room_group_name = "ws-"
 
     async def connect(self):
+        try:
+            print("connect No.1")
 
-        session_id = self.scope["cookies"]["sessionid"]
-        user = await get_user(session_id)
+            session_id = self.scope["cookies"]["sessionid"]
+            user = await get_user(session_id)
+            print("connect No.2")
 
-        # self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        # await self.accept()  # WebSocket接続を受け入れる
-        if user.is_authenticated:
-            print("accept No.1")
-            self.channel_layer.group_add(self.room_group_name, self.channel_name)
-            await self.accept()  # WebSocket接続を受け入れる
-            # user.is_login = True
-            print("accept No.2")
-            # await user.save()
-            print("accept No.3")
-        else:
-            self.close()
+            if user.is_authenticated:
+                print("connect No.3")
+
+                group_name = self.room_group_name + user.email
+                self.channel_layer.group_add(group_name, self.channel_name)
+                print("connect No.4")
+                await self.accept()  # WebSocket接続を受け入れる
+                print("connect No.5")
+                await update_user_login_state(user, True)
+                print("connect No.6")
+            else:
+                self.close()
+        except Exception:
+            print("Connect Exception Error")
 
     async def disconnect(self, close_code):
-        print("Websocket Disconnect")
-        # user.is_login = False
-        # user.save()
-        # WebSocket切断時に呼ばれる
-        pass
+        try:
+            print("disconect No.1")
+            session_id = self.scope["cookies"]["sessionid"]
+            print("disconect No.2")
+            user = await get_user(session_id)
+            print("disconect No.3")
+            await update_user_login_state(user, False)
+            print("disconect No.4")
+        except Exception:
+            print("disconnect Exception Error")
 
     async def receive(self, text_data):
-        # print(f"ws user:{self.user.username}")
+        # Test
+
         # WebSocketでメッセージを受信したときに呼ばれる
         text_data_json = json.loads(text_data)
         # message = text_data_json["message"]
@@ -83,6 +106,8 @@ class FtWebsocket(AsyncWebsocketConsumer):
         )
 
     async def send_personal_message(self, event):
+        # Test
+
         message = event["message"]
 
         # WebSocketにメッセージを送信

@@ -19,6 +19,7 @@ import { loadNav } from './spa/js/utility/user.js';
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
   let query_index = pathname.lastIndexOf('?');
+  console.log('No.1 pathname:' + pathname);
   console.log('No.1 query_index:' + query_index);
   if (pathname.lastIndexOf('/') > query_index) {
     console.log('No.2 query_index:' + query_index);
@@ -63,7 +64,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadNav();
   WebsocketInit();
 
-  let tmp_path = window.location.pathname;
+  let tmp_path = window.location.href;
+  console.log('No.0 tmp_path:' + tmp_path);
 
   document.body.addEventListener('click', (e) => {
     // ページ切替
@@ -72,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       e.preventDefault();
       tmp_path = e.target.href;
+      console.log('getDisplayedURI No.2:' + tmp_path);
       const uri = getDisplayedURI(tmp_path);
       navigateTo(uri.path, uri.rest, uri.params);
     }
@@ -103,12 +106,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lang_url = '/i18n/setlang/';
         const form = document.getElementById('lang_form');
         let formData = new FormData(form);
+        console.log('getDisplayedURI No.3:' + tmp_path);
         const current_uri = getDisplayedURI(tmp_path).path;
         changingLanguage(lang_url, formData, current_uri);
       }
     }
   });
 
+  console.log('getDisplayedURI No.1:' + tmp_path);
   const uri = getDisplayedURI(tmp_path);
   navigateTo(uri.path, uri.rest, uri.params);
 });

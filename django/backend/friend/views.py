@@ -200,6 +200,28 @@ class RequestsView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
+        print("searched No.1")
+        return self.model.objects.filter(
+            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
+        )
+
+    # def get_context_data(self, **kwargs):
+    #    print("context No.1")
+    #    context = super().get_context_data(**kwargs)
+    #    username = self.request.GET.get("username", "")
+    #    context["query"] = "?username=" + username
+    #    print("context No.2")
+    #    return context
+
+
+class FriendsView(ListView):
+    model = FtUser
+    context_object_name = "friends"
+    # search_form = SearchFriendForm
+    template_name = "friend/friends.html"
+    paginate_by = 2
+
+    def get_queryset(self):
         return self.model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )

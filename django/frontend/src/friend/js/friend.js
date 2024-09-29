@@ -1,6 +1,7 @@
 import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { reload } from '../../spa/js/utility/user.js';
+import '../scss/friend.scss';
 
 export const FriendEvent = new Event('FriendEvent');
 
@@ -12,7 +13,6 @@ const links = () => {
 };
 
 const friend_request_click = () => {
-  console.log('click No.1');
   const searched_user = document.getElementById('searched-user');
   if (searched_user == null) {
     return;
@@ -29,10 +29,7 @@ const friend_request_click = () => {
         return;
       }
 
-      //const name_element = button.querySelector('div');
-      console.log('click No.6:' + name_elements[0]);
       const username = name_elements[0].textContent;
-      console.log('click No.7 usernmane:' + username);
       document.getElementById('modal-username').value = username;
       console.log('click No.8');
       const test_modal = document.getElementById('modal-username');
@@ -86,7 +83,6 @@ document.addEventListener('FriendEvent', () => {
         return;
       }
       document.getElementById('close-register-modal').click();
-      console.log('pre reload No.1');
       await reload();
     });
   };

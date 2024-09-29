@@ -53,19 +53,19 @@
     <div class="d-flex align-items-end">
       <h3>{% trans "フレンドリスト" %}</h3>
       <span class="h6 ps-2">
-        <a href="/friends" class="">{% trans 'すべてのフレンドを表示' %}</a>
+        {% if friends %}
+        <a href="/friend/friends/" class="">{% trans 'すべてのフレンドを表示' %}</a>
+        {% endif %}
       </span>
     </div>
-    <ul>
-      {% for friend in friends %}
-      <li>
-        <div class="d-flex">
-          <div class="col-2"><img src="" height="40" weight="40" /></div>
-          <div class="col-4">{{friend.friend.username}}</div>
-          <div class="col-6">{{friend.friend.username}}</div>
-        </div>
-      </li>
+    {% if not friends %}
+    <div>{% trans 'フレンドはいません' %}</div>
+    {% endif %} {% if friends %}
+    <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
+      {% for friend in friends %} {% include 'friend/friend-card.html' with friend=friend %}
+      <span style="display: none"></span>
       {% endfor %}
-    </ul>
+    </div>
+    {% endif %}
   </body>
 </html>

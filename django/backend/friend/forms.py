@@ -11,7 +11,18 @@ class FriendRequestForm(forms.ModelForm):
 
 
 class SearchFriendForm(forms.Form):
-    query = forms.CharField(label=_("フレンドを探す"), max_length=100)
+    # query = forms.CharField(label=_(""), max_length=100, placeholder=_("ユーザー名"))
+    query = forms.CharField(
+        max_length=32,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control  rounded-0 ",
+                "type": "search",
+                "placeholder": _("ユーザー名"),
+            }
+        ),
+    )
 
     # class Meta:
     # model = Friendships

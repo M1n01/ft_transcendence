@@ -47,12 +47,16 @@
     </ul>
 
     {% include 'friend/request-modal.html' %}
+    <!--
     <form method="GET" action="/friend/search" id="search-friend">
       {{ search_form.as_p }}
       <button type="submit ">{% trans '検索' %}</button>
     </form>
+-->
 
-    <h2>検索結果</h2>
+    {% include 'friend/search-form.html' %}
+
+    <h2 class="mt-5">検索結果</h2>
     <div id="searched-user">
       <table class="table">
         <thead>

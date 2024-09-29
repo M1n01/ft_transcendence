@@ -7,15 +7,21 @@
     <title>Make Friend</title>
   </head>
   <body>
-    --------------------------------------------------------------
     <br />
     <div class="d-flex align-items-end">
       <h3>{% trans "フレンドリクエスト" %}</h3>
+      {% if friend_requests%}
       <span class="h6 ps-2">
-        <a href="/requests" class="">{% trans 'すべてのリクエストを表示' %}</a>
+        <a href="/friend/requests/" class="">{% trans 'すべてのリクエストを表示' %}</a>
       </span>
+      {% endif %}
     </div>
+    {% if not friend_requests%}
+    <div>{% trans 'フレンドリクエストはありません' %}</div>
+    {% endif %}
 
+    {% if friend_requests %}
+      <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
     {% for request in friend_requests %}
     <div class="d-flex border-top border-bottom h-auto w-100">
       <img src="" height="40" weight="40" alt="アイコン" class="col-1" />
@@ -48,5 +54,6 @@
     </div>
 
     {% endfor %}
+    {% endif %}
   </body>
 </html>

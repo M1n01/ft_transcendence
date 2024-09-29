@@ -18,13 +18,23 @@ export default class extends AbstractView {
   getHtml = async (rest = '', params = '') => {
     console.log('rest:' + rest);
     console.log('location:' + window.location.pathname);
-    //const uri = getUrlWithLang('friend/');
-    //const data = fetchData(uri + rest + params);
-
     if (rest === '') {
       console.log('normal');
       const uri = getUrlWithLang('friend/');
       const data = fetchData(uri + rest + params);
+      return data;
+    } else if (rest === '/requests') {
+      console.log('requests');
+      const uri = getUrlWithLang('friend/requests/');
+      console.log('searched uri:' + uri);
+      const data = fetchData(uri + params);
+      return data;
+    } else if (rest === '/friends') {
+      console.log('friends');
+      console.log('params:' + params);
+      const uri = getUrlWithLang('friend/friends/');
+      console.log('uri:' + uri + params);
+      const data = fetchData(uri + params);
       return data;
     } else if (rest === '/searched') {
       console.log('searched');
@@ -34,6 +44,7 @@ export default class extends AbstractView {
       const data = fetchData(uri + params);
       return data;
     }
+
     return '';
     //return data;
   };

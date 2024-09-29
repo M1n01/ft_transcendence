@@ -1,10 +1,13 @@
 const socket = new WebSocket('ws://localhost:8001/ws');
 
 export const WebsocketInit = () => {
+  console.log('ws init() No.1');
   if (socket.readyState === WebSocket.OPEN) {
+    console.log('ws init() No.2');
     // 接続済みなので何もしない
     return;
   }
+  console.log('ws init() No.3');
   // WebSocket接続が開かれたときの処理
   socket.onopen = function () {
     console.log('WebSocket connection opened.');

@@ -1,8 +1,12 @@
 {% load i18n %} {% load tz %}
-<div class="col-md-4 mb-4 w-auto">
+<div class="col-md-4 mb-4 w-auto card-div">
   <div class="card mx-0 mx-sm-0">
-    <div class="card-header">
-      <h5 class="card-title text-center">{{tournament.name}}</h5>
+    <div class="card-header w-100 d-flex flex-text justify-content-center align-items-center">
+      <div
+        class="h5 card-title w-100 text-center d-flex justify-content-center text-break text-wrap"
+      >
+        {{tournament.name}}
+      </div>
     </div>
     <div class="card-body text-truncate">
       <div class="text-center">
