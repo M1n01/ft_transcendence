@@ -28,9 +28,8 @@ const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
 export const moveTo = async (url, rest = '', params = '') => {
-  console.log('moveTo No.1');
+  savePage(url, rest, params);
   await navigateTo(url, rest, params);
-  console.log('moveTo No.2');
   await reload();
 };
 
@@ -45,9 +44,7 @@ export const savePage = async (url, rest = '', params = '') => {
 };
 
 export const navigateTo = async (url, rest = '', params = '') => {
-  console.log('navigateTo No.1');
   const history_url = url + rest + params;
-  console.log('navigateTo No.2 url=' + history_url);
 
   if (view !== undefined && view !== null) {
     const state = await view.getState();
