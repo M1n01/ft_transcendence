@@ -1,56 +1,5 @@
 {% load static %} {% load i18n %}
 <body>
-  <!--
-  <section class="d-flex justify-content-center w-100 text-light">
-    <div class="row w-100 text-center">
-      <div class="mb-1">or login with</div>
-      <button id="open-two-fa" data-bs-toggle="modal" data-bs-target="#TwoFa-Modal">
-        <img src="static/asset/login/42.svg" class="img-fluid ft-logo" id="ft-logo" alt="42-logo" />
-      </button>
-    </div>
-  </section>
-  <button id="open-two-fa" data-bs-toggle="modal" data-bs-target="#TwoFa-Modal">
-    <img src="static/asset/login/42.svg" class="img-fluid ft-logo" id="ft-logo" alt="42-logo" />
-  </button>
--->
-  <!--
-  <button id="close-two-fa-modal" data-bs-toggle="modal" data-bs-target="#Close-Modal">
-    <img src="static/asset/login/42.svg" class="img-fluid ft-logo" id="ft-logo" alt="42-logo" />
-  </button>
-
-  <div
-    id="Close-Modal"
-    class="modal fade"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content custom-modal-bg">
-        <div class="modal-header d-flex justify-content-center">{% trans "処理の中断"%}</div>
-        <div class="modal-body">
-          <div id="close-text1">サインアップを中断します。よろしいですか？</div>
-          <div id="close-text2">
-            処理を中断した場合、今回登録したメールアドレス、電話番号は削除されるまで使えなくなります。
-          </div>
-          <div id="close-text3">削除は仮登録から5分後に自動で行われます</div>
-        </div>
-        <div class="modal-footer">
-          <div>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              {% trans "キャンセル" %}
-            </button>
-            <button class="btn btn-primary" id="interrupt-two-fa" data-bs-dismiss="modal">
-              {% trans "中断" %}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
--->
   <div
     id="TwoFa-Modal"
     class="modal fade"
@@ -83,11 +32,7 @@
             </div>
 
             <form hidden>Dummy Form</form>
-            <form
-              action="{% url 'accounts:signup-two-fa-verify' %}"
-              method="post"
-              id="two-fa-verify-form"
-            >
+            <form action="{% url 'accounts:signup-two-fa' %}" method="post" id="two-fa-verify-form">
               {% csrf_token %}
               <div
                 id="verify-code-block"
@@ -116,7 +61,7 @@
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <div>
-            <form action="{% url 'accounts:two-fa' %}" method="post" id="resend-two-fa">
+            <form action="{% url 'accounts:login-two-fa' %}" method="post" id="resend-two-fa">
               {% csrf_token %}
               <button type="submit" class="btn btn-info" id="resend-button">
                 {% trans "再送" %}

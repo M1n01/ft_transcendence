@@ -19,6 +19,26 @@ services:
     depends_on:
       - django
 
+  redis:
+    container_name: 'redis'
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
+    #restart: always
+    tty: true
+    networks:
+      redis_net:
+        ipv4_address: 172.38.30.30
+    ports:
+      - 6379:6379
+      - 6380:6380
+    environment:
+      - REDIS_PASSOWRD=$REDIS_PASSOWRD
+    command: /bin/sh -c '
+      cp /etc/redis/redis.conf0 /etc/redis/redis.conf &&
+      echo requirepass $REDIS_PASSOWRD >> /etc/redis/redis.conf &&
+      redis-server /etc/redis/redis.conf'
+
   django:
     container_name: 'django'
     build:
@@ -28,6 +48,7 @@ services:
       - django_net
       - db_net
       - eth_net
+      - redis_net
     tty: true
     volumes:
       - ./django/:/workspace
@@ -48,6 +69,18 @@ services:
       - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
+      - REDIS_PASSOWRD=$REDIS_PASSOWRD
+    command: /bin/sh -c '
+      cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
+      sh ./backend/make_db_setting.sh &&
+      cd backend &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py loaddata ./**/fixtures/initial_data.json &&
+      (celery -A ft_trans  worker -B -l info )&
+      (cd frontend && npm install && npm run build) &&
+      cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
+      '
 
   eth:
     container_name: 'eth'
@@ -75,6 +108,12 @@ networks:
     ipam:
       config:
         - subnet: 172.38.20.0/24
+  redis_net:
+    name: redis_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.30.0/24
   eth_net:
     name: eth_net
     driver: bridge

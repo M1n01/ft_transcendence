@@ -48,3 +48,6 @@ tag*
 
 # Ethereum
 contract_address.txt
+
+#redis
+redis.conf

@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %} {% load tz %}
 <div class="col-md-4 mb-4 w-auto">
   <div class="card mx-0 mx-sm-0">
     <div class="card-header">
@@ -16,7 +16,9 @@
       </div>
       <div class="text-center mt-3">
         <strong class="card-label d-flex justify-content-center">{% trans '開始日時'%}<br /></strong
-        ><span class="d-flex justify-content-center">{{tournament.start_at}}</span>
+        ><span class="d-flex justify-content-center"
+          >{{tournament.start_at|timezone:"Asia/Tokyo"}}</span
+        >
       </div>
     </div>
 
