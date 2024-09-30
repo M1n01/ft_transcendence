@@ -8,4 +8,6 @@ WORKDIR /workspace/eth
 COPY eth/package*.json ./
 RUN npm ci
 
+RUN npm install --save-dev hardhat
+
 CMD ["/bin/bash", "-c", "npx hardhat compile && npx hardhat node"]
