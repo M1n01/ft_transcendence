@@ -1,66 +1,80 @@
-import unittest
+from django.test import TestCase
 from unittest.mock import patch
-from django.utils import timezone
 from .models import Match
 
 
-class TestMatch(unittest.TestCase):
-
-    def setUp(self):
-        self.tournament_id = 1
-        self.player1_id = 1
-        self.player2_id = 2
-        self.player1_score = 4
-        self.player2_score = 2
-        self.round = 1
-
-    @patch('django.backend.pong.models.Match.save')
+class MatchTestCase(TestCase):
+    @patch("pong.models.save_match_to_blockchain")
     def test_save_match(self, mock_save):
-        mock_save.return_value = (1, 'tx_hash', timezone.now())
+        mock_save.return_value = ("match_id_1", "tx_hash_1", "2023-01-01 00:00:00")
+
         match_id, tx_hash, created_at = Match.save(
-            self.tournament_id,
-            self.round,
-            self.player1_id,
-            self.player2_id,
-            self.player1_score,
-            self.player2_score,
+            tournament_id="tournament_1",
+            round=1,
+            player1_id="player_1",
+            player2_id="player_2",
+            player1_score=11,
+            player2_score=8,
         )
-        self.assertEqual(match_id, 1)
-        self.assertEqual(tx_hash, 'tx_hash')
-        self.assertIsNotNone(created_at)
 
-    @patch('django.backend.pong.models.Match.get_matches')
-    def test_get_match_from_blockchain(self, mock_get_matches):
-        mock_get_matches.return_value = [{'id': 0, 'tournament_id': 1, 'player1': 1, 'player2': 2, 'player1_score': 4, 'player2_score': 2, 'is_active': True, 'round': 1}]
-        matches = Match.get_matches(user_id=2)
-        self.assertEqual(len(matches), 1)
+        self.assertEqual(match_id, "match_id_1")
+        self.assertEqual(tx_hash, "tx_hash_1")
+        self.assertEqual(created_at, "2023-01-01 00:00:00")
+        mock_save.assert_called_once_with(
+            "tournament_1", "player_1", 11, "player_2", 8, 1
+        )
 
-        match = Match.get_match(matches[0]["id"])
-        self.assertEqual(match["id"], 0)
-        self.assertEqual(match["tournament_id"], 1)
-        self.assertEqual(match["player1"], 1)
-        self.assertEqual(match["player2"], 2)
-        self.assertEqual(match["player1_score"], 4)
-        self.assertEqual(match["player2_score"], 2)
-        self.assertEqual(match["is_active"], True)
-        self.assertEqual(match["round"], 1)
+    @patch("pong.models.get_matches_from_blockchain")
+    def test_get_match_existing(self, mock_get):
+        mock_get.return_value = [{"match_id": "match_1", "data": "some_data"}]
 
-    @patch('django.backend.pong.models.Match.get_match')
-    def test_get_match(self, mock_get_match):
-        mock_get_match.return_value = {'id': 0, 'tournament_id': 1, 'player1': 1, 'player2': 2, 'player1_score': 4, 'player2_score': 2, 'is_active': True, 'round': 1}
-        match = Match.get_match(0)
+        match = Match.get_match("match_1")
+
         self.assertIsNotNone(match)
-        self.assertIsInstance(match, dict)
+        self.assertEqual(match["match_id"], "match_1")
+        mock_get.assert_called_once_with(match_id="match_1")
 
-    @patch('django.backend.pong.models.Match.get_matches')
-    def test_get_matches(self, mock_get_matches):
-        mock_get_matches.return_value = [{'id': 0, 'tournament_id': 1, 'player1': 1, 'player2': 2, 'player1_score': 4, 'player2_score': 2, 'is_active': True, 'round': 1}]
-        matches = Match.get_matches()
-        self.assertIsNotNone(matches)
-        self.assertIsInstance(matches, list)
+    @patch("pong.models.get_matches_from_blockchain")
+    def test_get_match_non_existing(self, mock_get):
+        mock_get.return_value = []
 
-    @patch('django.backend.pong.models.Match.delete_match')
-    def test_delete_match(self, mock_delete_match):
-        mock_delete_match.return_value = True
-        result = Match.delete_match(0)
+        match = Match.get_match("non_existing_match")
+
+        self.assertIsNone(match)
+        mock_get.assert_called_once_with(match_id="non_existing_match")
+
+    @patch("pong.models.get_matches_from_blockchain")
+    def test_get_matches(self, mock_get):
+        mock_get.return_value = [
+            {"match_id": "match_1", "data": "data_1"},
+            {"match_id": "match_2", "data": "data_2"},
+        ]
+
+        matches = Match.get_matches(
+            tournament_id="tournament_1", user_id="user_1", round=1
+        )
+
+        self.assertEqual(len(matches), 2)
+        self.assertEqual(matches[0]["match_id"], "match_1")
+        self.assertEqual(matches[1]["match_id"], "match_2")
+        mock_get.assert_called_once_with(
+            tournament_id="tournament_1", user_id="user_1", round=1
+        )
+
+    @patch("pong.models.delete_match_from_blockchain")
+    def test_delete_match_success(self, mock_delete):
+        mock_delete.return_value = "tx_hash_1"
+
+        result = Match.delete_match("match_1")
+
         self.assertTrue(result)
+        mock_delete.assert_called_once_with("match_1")
+
+    @patch("pong.models.delete_match_from_blockchain")
+    def test_delete_match_failure(self, mock_delete):
+        mock_delete.return_value = None
+
+        result = Match.delete_match("non_existing_match")
+
+        self.assertFalse(result)
+        mock_delete.assert_called_once_with("non_existing_match")
