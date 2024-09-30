@@ -12,6 +12,9 @@
     <div id="friend-request" class="mt-5">
       {% include 'friend/request.html' with friend_requests=friend_requests %}
     </div>
-    <div id="friend-list" class="mt-5">{% include 'friend/list.html' with friends=friends%}</div>
+    <div id="friend-list" class="mt-5">{% include 'friend/friends.html' with friends=friends%}</div>
+    <div id="block-list" class="mt-5">
+      {% include 'friend/block-users.html' with friends=block_users%}
+    </div>
   </body>
 </html>

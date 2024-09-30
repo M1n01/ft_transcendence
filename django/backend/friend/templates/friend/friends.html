@@ -1,1 +1,71 @@
-/friend/friends.html
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Friend List</title>
+  </head>
+  <body>
+    <!--
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    <br />
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">Top</a>
+      </li>
+
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+
+      {% if page_obj.previous_page_number > 0 %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+          >{{ page_obj.previous_page_number }}</a
+        >
+      </li>
+      {% endif%} {% endif %} {% if page_obj.has_next or page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link disabled" href="#"
+          ><span class="fw-bold text-dark">{{ page_obj.number }}</span></a
+        >
+      </li>
+      {% endif%} {% if page_obj.has_next %} {% if page_obj.next_page_number < paginator.num_pages %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}"
+          >{{ page_obj.next_page_number }}</a
+        >
+      </li>
+      {% endif %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ paginator.num_pages }}">Last</a>
+      </li>
+      {% endif%}
+    </ul>
+-->
+
+    <br />
+    <div class="d-flex align-items-end">
+      <h3>{% trans "フレンドリスト" %}</h3>
+      <span class="h6 ps-2">
+        {% if friends %}
+        <a href="/friend/friends/" class="">{% trans 'すべてのフレンドを表示' %}</a>
+        {% endif %}
+      </span>
+    </div>
+    {% if not friends %}
+    <div>{% trans 'フレンドはいません' %}</div>
+    {% endif %} {% if friends %}
+    <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
+      {% for friend in friends %} {% include 'friend/friend-card.html' with friend=friend %}
+      <span style="display: none"></span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </body>
+</html>

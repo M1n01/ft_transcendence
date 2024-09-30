@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 class FriendshipsStatusChoices(models.TextChoices):
     PENDING = "PENDING", _("pending")
     ACCEPTED = "ACCEPTED", _("accepted")
-    BLOCKED = "BLOCKED", _("blocked")
+    BLOCK = "BLOCK", _("block")  # ブロックする時
+    BLOCKED = "BLOCKED", _("blocked")  # ブロックされた時
     REMOVED = "REMOVED", _("removed")
 
 

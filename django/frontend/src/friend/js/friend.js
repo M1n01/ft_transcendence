@@ -1,9 +1,103 @@
-import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+//import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { submitForm } from '../../spa/js/utility/form.js';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { reload } from '../../spa/js/utility/user.js';
 import '../scss/friend.scss';
 
 export const FriendEvent = new Event('FriendEvent');
+
+const accept_friend_request = () => {
+  const accepts = document.querySelector('#app').querySelectorAll('.pre-accept-friend');
+  if (accepts.length == 0) {
+    return;
+  }
+  console.log('accept:' + accepts);
+
+  accepts.forEach((button) => {
+    button.addEventListener('click', () => {
+      const error = document.getElementById('request-accept-error');
+      error.hidden = true;
+
+      const id = button.value;
+      const name = button.name;
+
+      const username = document.getElementById('request-accept-user-name');
+      username.textContent = name;
+      const input_id = document.getElementById('request-accept-input-user-id');
+      input_id.value = id;
+
+      const form = document.getElementById('accept-friend-request-form');
+      form.addEventListener('submit', async (event) => {
+        const response = await submitForm(event);
+        /*
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const response = await fetchAsForm(form, formData);
+        */
+        if (response.error) {
+          error.hidden = false;
+          return;
+        }
+        document.getElementById('close-accept-request-modal').click();
+        reload();
+      });
+    });
+  });
+};
+
+const block_friend_request = () => {
+  const blocks = document.querySelector('#app').querySelectorAll('.pre-block-friend');
+  if (blocks.length == 0) {
+    return;
+  }
+  console.log('blocks:' + blocks);
+
+  blocks.forEach((button) => {
+    button.addEventListener('click', () => {
+      const error = document.getElementById('request-block-error');
+      error.hidden = true;
+
+      console.log('click');
+      //const target = event.target;
+      const id = button.value;
+      const name = button.name;
+
+      //const modal = document.getElementById('request-block-modal');
+      console.log('click No.2 id=' + id);
+      const username = document.getElementById('request-block-user-name');
+      username.textContent = name;
+      console.log('click No.3 name=' + name);
+      const input_id = document.getElementById('request-block-input-user-id');
+      input_id.value = id;
+
+      const form = document.getElementById('reject-friend-request-form');
+      form.addEventListener('submit', async (event) => {
+        const response = await submitForm(event);
+        /*
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const response = await fetchAsForm(form, formData);
+        */
+        if (response.error) {
+          error.hidden = false;
+          return;
+        }
+        document.getElementById('close-block-request-modal').click();
+        reload();
+        //updatePage(response);
+      });
+
+      /*
+
+      console.log('model=' + id);
+      console.log('username=' + name);
+      */
+    });
+    //event.dataset.link = '';
+  });
+};
 
 const links = () => {
   const links = document.querySelector('#app').querySelectorAll('a');
@@ -74,10 +168,13 @@ document.addEventListener('FriendEvent', () => {
       return;
     }
     requests_form.addEventListener('submit', async (event) => {
+      const response = await submitForm(event);
+      /*
       event.preventDefault();
       const form = event.target;
       const formData = new FormData(form);
       const response = await fetchAsForm(form, formData);
+      */
       if (response.status != 200) {
         console.error('Error');
         return;
@@ -89,4 +186,6 @@ document.addEventListener('FriendEvent', () => {
 
   friend_request();
   friend_top();
+  block_friend_request();
+  accept_friend_request();
 });

@@ -36,6 +36,13 @@ export default class extends AbstractView {
       console.log('uri:' + uri + params);
       const data = fetchData(uri + params);
       return data;
+    } else if (rest === '/blocks') {
+      console.log('friends');
+      console.log('params:' + params);
+      const uri = getUrlWithLang('friend/blocks/');
+      console.log('uri:' + uri + params);
+      const data = fetchData(uri + params);
+      return data;
     } else if (rest === '/searched') {
       console.log('searched');
       console.log('params:' + params);

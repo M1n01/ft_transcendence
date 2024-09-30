@@ -14,6 +14,20 @@ from django.db import IntegrityError
 from django.views.generic.edit import UpdateView
 
 
+def get_friendlist(request):
+    return Friendships.objects.filter(
+        user=request.user,
+        status=FriendshipsStatusChoices.ACCEPTED,
+    )
+
+
+def get_blocklist(request):
+    return Friendships.objects.filter(
+        user=request.user,
+        status=FriendshipsStatusChoices.BLOCK,
+    )
+
+
 class FriendView(ListView):
     model = FtUser
     request_model = Friendships
@@ -27,23 +41,18 @@ class FriendView(ListView):
             queryset = FtUser.objects.filter(username__icontains=username)
         return queryset
 
-    def get_friendlist(self):
-        return Friendships.objects.filter(
-            user=self.request.user,
-            status=FriendshipsStatusChoices.ACCEPTED,
-        )
-
     def get(self, request):
         # print("friend get")
         search_form = SearchFriendForm
         make_form = FriendRequestForm
         friend_request = self.request_model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
-        )
+        )[:4]
         # not_search1 = friend_request.values_list("friend", flat=True)
 
         # results = []
-        friends = self.get_friendlist()
+        friends = get_friendlist(self.request)[:4]
+        blocks = get_blocklist(self.request)[:4]
         # not_search2 = friends.values_list("friend", flat=True)
         # not_search = not_search1 | not_search2
         # username = request.GET.get("username", "")
@@ -59,6 +68,7 @@ class FriendView(ListView):
                 "make_form": make_form,
                 # "results": results,
                 "friends": friends,
+                "blocks": blocks,
                 "friend_requests": friend_request,
             },
         )
@@ -126,9 +136,18 @@ class RespondFriendRequest(UpdateView):
         friendship.status = status
         friendship.save()
 
+        print(f"{status=}")
+        print("Friend Status No.0")
+        if status == FriendshipsStatusChoices.BLOCK:
+            print("Friend Status No.1")
+            status = FriendshipsStatusChoices.BLOCKED
+        print("Friend Status No.2")
+        print(f"{status=}")
+
         Friendships.objects.create(
             user=self.request.user, friend=friendship.user, status=status
         )
+        print("Friend Status No.3")
 
         return HttpResponse()
 
@@ -148,7 +167,7 @@ class RespondFriendRequest(UpdateView):
 # class FriendRequest(TemplateView):
 class FriendRequest(CreateView):
     form_class = FriendRequestForm
-    template_name = "friend/request.html"
+    # template_name = "friend/request.html"
     usable_password = None
 
     def form_invalid(self, form):
@@ -188,15 +207,15 @@ class FriendRequest(CreateView):
         return HttpResponseBadRequest()
 
 
-def make(request):
-    return render(request, "friend/request.html")
+# jdef make(request):
+# return render(request, "friend/request.html")
 
 
 class RequestsView(ListView):
     model = Friendships
     context_object_name = "requests"
-    search_form = SearchFriendForm
-    template_name = "friend/requests.html"
+    # search_form = SearchFriendForm
+    template_name = "friend/request-list.html"
     paginate_by = 2
 
     def get_queryset(self):
@@ -215,21 +234,56 @@ class RequestsView(ListView):
 
 
 class FriendsView(ListView):
-    model = FtUser
+    model = Friendships
     context_object_name = "friends"
     # search_form = SearchFriendForm
-    template_name = "friend/friends.html"
+    template_name = "friend/friend-list.html"
     paginate_by = 2
 
     def get_queryset(self):
+        return get_friendlist(self.request)
         return self.model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )
 
-    # def get_context_data(self, **kwargs):
-    #    print("context No.1")
-    #    context = super().get_context_data(**kwargs)
-    #    username = self.request.GET.get("username", "")
-    #    context["query"] = "?username=" + username
-    #    print("context No.2")
-    #    return context
+
+class BlocksView(ListView):
+    model = Friendships
+    context_object_name = "blocks"
+    # search_form = SearchFriendForm
+    template_name = "friend/block-list.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        return get_blocklist(self.request)
+        return self.model.objects.filter(
+            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
+        )
+
+
+# class FriendsView(ListView):
+#    model = FtUser
+#    context_object_name = "contexts"
+#    template_name = "friend/list.html"
+#    paginate_by = 2
+#
+#    def get_queryset(self):
+#        return get_friendlist(self.request)
+#        return self.model.objects.filter(
+#            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
+#        )
+#
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        context["title"] = _("フレンド")
+#        context["card"] = "friend/d-card.html"
+#        return context
+
+
+# def get_context_data(self, **kwargs):
+#    print("context No.1")
+#    context = super().get_context_data(**kwargs)
+#    username = self.request.GET.get("username", "")
+#    context["query"] = "?username=" + username
+#    print("context No.2")
+#    return context

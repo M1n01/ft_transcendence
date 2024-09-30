@@ -38,7 +38,16 @@ export default class extends AbstractView {
       const data = fetchData(uri + params);
       return data;
     } else if (rest === '/all') {
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
       const uri = getUrlWithLang('tournament/all/');
+      console.log('url:' + uri);
+      console.log('allllllllllllllllllllllllllllllllllllll');
+      console.log('allllllllllllllllllllllllllllllllllllll');
       const data = fetchData(uri + params);
       return data;
     } else if (detail_value > 0) {

@@ -3,7 +3,7 @@ import { Routes } from './spa/js/routing/routes.js';
 import { navigateTo, updatePage, savePage } from './spa/js/routing/routing.js';
 import { changingLanguage } from './spa/js/utility/lang.js';
 import { getUrl } from './spa/js/utility/url.js';
-import { fetchAsForm } from './spa/js/utility/fetch.js';
+//import { fetchAsForm } from './spa/js/utility/fetch.js';
 
 import './accounts/js/two_fa.js';
 import './accounts/js/login.js';
@@ -14,6 +14,7 @@ import './custom_bootstrap.scss';
 import './main.scss';
 import { WebsocketInit } from './spa/js/ws/socket.js';
 import { loadNav } from './spa/js/utility/user.js';
+import { submitForm } from './spa/js/utility/form.js';
 //import 'login.js'
 
 // パス名を取得する関数
@@ -83,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const document_form = document.getElementsByTagName('FORM');
     if (document_form && document_form.length > 0) {
       document.getElementsByTagName('FORM')[0].addEventListener('submit', async function (event) {
+        const response = await submitForm(event);
+        /*
+
         event.preventDefault(); // フォームのデフォルトの送信を防止
         const form = event.target;
         if (form.disabled == true) {
@@ -95,8 +99,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const formData = new FormData(form);
         const response = await fetchAsForm(form, formData);
-        updatePage(response);
         form.disabled = false;
+        */
+        updatePage(response);
       });
 
       //多言語切替

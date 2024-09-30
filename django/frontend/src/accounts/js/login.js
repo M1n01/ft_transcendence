@@ -1,6 +1,7 @@
 import '../scss/login.scss';
 import { getUrlWithLang } from '../../spa/js/utility/url.js';
-import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+//import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { submitForm } from '../../spa/js/utility/form.js';
 import { TwoFaEvent } from './two_fa.js';
 import { handlePostLogin } from '../../spa/js/utility/user.js';
 import ft_logo from '../assets/42.svg';
@@ -35,10 +36,13 @@ document.addEventListener('LoginEvent', function () {
     });
 
     document.getElementById('login-form').addEventListener('submit', async function (event) {
+      const response = await submitForm(event);
+      /*
       event.preventDefault();
       const form = event.target;
       const formData = new FormData(form);
       const response = await fetchAsForm(form, formData);
+      */
 
       if (response.status == 200) {
         const len = response.headers.get('Content-Length');
