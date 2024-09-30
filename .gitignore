@@ -51,3 +51,6 @@ contract_address.txt
 
 #redis
 redis.conf
+
+# celery
+celerybeat-schedule
