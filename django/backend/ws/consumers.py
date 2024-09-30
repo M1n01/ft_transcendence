@@ -12,12 +12,8 @@ from channels.db import database_sync_to_async
 
 @database_sync_to_async
 def update_user_login_state(user, flag):
-    print("update No.1")
     user.is_login = flag
-    print("update No.2")
     user.save()
-    print("update No.3")
-    # モデルの状態を変更するロジック
 
 
 def decode(session_id):

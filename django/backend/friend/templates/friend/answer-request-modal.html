@@ -1,0 +1,120 @@
+{% load i18n %}
+<body>
+  <div
+    class="modal fade text-dark"
+    id="blockModal"
+    tabindex="-1"
+    aria-labelledby="registerModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex justify-content-center w-100">
+            <h5 class="modal-title">{% trans 'ブロック' %}</h5>
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" id="request-block-modal">
+          <div class="">
+            <img src="" class="d-flex justify-content-center" height="60" weight="60" />
+            <div id="request-block-user-name" class="d-flex justify-content-center">username</div>
+          </div>
+          <div class="mt-3">{% trans 'このユーザーをブロックします' %}</div>
+          <div id="request-block-error" class="mt-3 text-wrap text-danger">
+            {% trans 'エラーが発生しました。'%}
+            <br />
+            {% trans 'このダイアログを削除し、もう一度実行してください' %}
+          </div>
+          <form
+            id="reject-friend-request-form"
+            method="post"
+            action="{% url 'friend:respond'  %}"
+            class="w-100"
+          >
+            {% csrf_token %}
+            <input name="id" type="hidden" value="" id="request-block-input-user-id" />
+            <input name="status" type="hidden" value="BLOCKED" />
+            <div class="d-flex justify-content-end mt-3">
+              <button
+                id="close-block-request-modal"
+                type="button"
+                class="btn btn-secondary me-4"
+                data-bs-dismiss="modal"
+              >
+                {% trans 'キャンセル' %}
+              </button>
+              <button type="submit" class="btn btn-danger text-nowrap me-4">
+                {% trans 'ブロック' %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade text-dark"
+    id="acceptModal"
+    tabindex="-1"
+    aria-labelledby="registerModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex justify-content-center w-100">
+            <h5 class="modal-title">{% trans 'リクエスト許可' %}</h5>
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <img src="" class="d-flex justify-content-center" height="60" weight="60" />
+            <div id="request-accept-user-name" class="d-flex justify-content-center">username</div>
+          </div>
+          <div class="mt-3">{% trans 'このユーザーをフレンドに追加します' %}</div>
+          <div id="request-accept-error" class="mt-3 text-wrap text-danger">
+            {% trans 'エラーが発生しました。'%}
+            <br />
+            {% trans 'このダイアログを削除し、もう一度実行してください' %}
+          </div>
+          <form
+            id="accept-friend-request-form"
+            method="post"
+            action="{% url 'friend:respond'  %}"
+            class="w-100"
+          >
+            {% csrf_token %}
+            <input name="id" type="hidden" value="" id="request-accept-input-user-id" />
+            <input name="status" type="hidden" value="ACCEPTED" />
+            <div class="d-flex justify-content-end mt-3">
+              <button
+                id="close-accept-request-modal"
+                type="button"
+                class="btn btn-secondary me-4"
+                data-bs-dismiss="modal"
+              >
+                {% trans 'キャンセル' %}
+              </button>
+              <button type="submit" class="btn btn-primary text-nowrap me-4">
+                {% trans '登録' %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

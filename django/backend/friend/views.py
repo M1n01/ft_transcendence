@@ -53,6 +53,7 @@ class FriendView(ListView):
         # results = []
         friends = get_friendlist(self.request)[:4]
         blocks = get_blocklist(self.request)[:4]
+        print(f"{len(blocks)=}")
         # not_search2 = friends.values_list("friend", flat=True)
         # not_search = not_search1 | not_search2
         # username = request.GET.get("username", "")
@@ -138,9 +139,9 @@ class RespondFriendRequest(UpdateView):
 
         print(f"{status=}")
         print("Friend Status No.0")
-        if status == FriendshipsStatusChoices.BLOCK:
+        if status == FriendshipsStatusChoices.BLOCKED:
             print("Friend Status No.1")
-            status = FriendshipsStatusChoices.BLOCKED
+            status = FriendshipsStatusChoices.BLOCK
         print("Friend Status No.2")
         print(f"{status=}")
 
