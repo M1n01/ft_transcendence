@@ -2,9 +2,36 @@
 import { submitForm } from '../../spa/js/utility/form.js';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { reload } from '../../spa/js/utility/user.js';
+import { sendWebSocket } from '../../spa/js/ws/socket.js';
 import '../scss/friend.scss';
+//import { executeScriptTab } from '@/utility/script.js';
 
 export const FriendEvent = new Event('FriendEvent');
+
+function intervalFunc() {
+  console.log('Interval type3');
+  const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
+  let id_list = '';
+  if (user_id_list.length == 0) {
+    console.log('friend =0 return');
+    return;
+  }
+  user_id_list.forEach((element) => {
+    const id = element.textContent;
+    id_list += id + '-';
+    //console.log('id:' + id);
+  });
+  //console.log('concat:' + id_list);
+  if (id_list !== '') {
+    id_list = id_list.substring(0, id_list.length - 1);
+    const message = {
+      type: 'connect',
+      content: id_list,
+    };
+    sendWebSocket(message);
+  }
+}
+export let check_friend_interval = setInterval(intervalFunc, 5000);
 
 const accept_friend_request = () => {
   const accepts = document.querySelector('#app').querySelectorAll('.pre-accept-friend');
@@ -29,12 +56,6 @@ const accept_friend_request = () => {
       const form = document.getElementById('accept-friend-request-form');
       form.addEventListener('submit', async (event) => {
         const response = await submitForm(event);
-        /*
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const response = await fetchAsForm(form, formData);
-        */
         if (response.error) {
           error.hidden = false;
           return;
@@ -136,6 +157,8 @@ const friend_request_click = () => {
 };
 
 document.addEventListener('FriendEvent', () => {
+  //let check_friend = setInterval(() => {
+
   console.log('friend top load');
   const friend_top = () => {
     const input_user = document.getElementById('search-friend');
@@ -188,4 +211,8 @@ document.addEventListener('FriendEvent', () => {
   friend_top();
   block_friend_request();
   accept_friend_request();
+
+  //check_friend();
+  //clearInterval(b);
+  check_friend_interval = setInterval(intervalFunc, 5000);
 });

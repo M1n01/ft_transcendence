@@ -5,6 +5,7 @@ import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
 import { moveTo } from '../routing/routing.js';
 import { getDisplayedURI } from '../../../../src/index.js';
+import { closetWebSocket } from '../ws/socket.js';
 
 export function isLogined() {
   //todo
@@ -66,8 +67,8 @@ export const logout = async () => {
   const formData = new FormData(form);
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
+    closetWebSocket();
     navigateTo('login-signup');
-    console.log('pre reload No.3');
     await reload();
   }
 };

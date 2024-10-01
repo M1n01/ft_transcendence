@@ -5,6 +5,7 @@ import { executeScriptTab } from '../utility/script.js';
 import { reload } from '..//utility/user.js';
 import { getDisplayedURI } from '../../../../src/index.js';
 import { WebsocketInit } from '../ws/socket.js';
+import { check_friend_interval } from '../../../friend/js/friend.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
@@ -61,21 +62,15 @@ export const navigateTo = async (url, rest = '', params = '') => {
 };
 
 export const router = async (rest = '', params = '') => {
-  console.log('router No.0');
   WebsocketInit();
-  console.log('router No.1');
+  clearInterval(check_friend_interval);
 
   let url;
   if (rest !== '') {
-    console.log('router No.2 pathname:' + location.pathname);
     url = location.pathname.substring(0, location.pathname.indexOf(rest));
-    console.log('No.3 router:' + url);
   } else {
-    console.log('router No.4');
     url = location.pathname;
-    console.log('No.5 router:' + url);
   }
-  console.log('router No.6 uri:' + url);
   const potentialMatches = Routes.map((route) => {
     return {
       route: route,
@@ -91,20 +86,16 @@ export const router = async (rest = '', params = '') => {
     };
   }
 
-  console.log('router No.7 uri:' + url);
   if (isLogined() == false) {
     match = {
       route: Routes[0],
       result: [getUrl(Routes[0].path)],
     };
   }
-  console.log('router No.8 uri:' + url);
   const view = new match.route.view();
   try {
-    console.log('router No.9 uri:' + url);
     const json = await view.checkRedirect();
     if (json['is_redirect']) {
-      console.log('router No.10 uri:' + url);
       navigateTo(json['uri']);
       return;
     }
@@ -116,20 +107,15 @@ export const router = async (rest = '', params = '') => {
       moveTo('/');
       return;
     }
-    console.log('router No.11 uri:' + url);
     document.querySelector('#app').innerHTML = html;
-    console.log('router No.12 uri:' + url);
     view.executeScript();
-    console.log('router No.13 uri:' + url);
   } catch (error) {
     console.error('executeScript Error:' + error);
   }
-  console.log('router No.14 uri:' + url);
   return view;
 };
 
 export async function updatePage(res) {
-  console.log('updatePage No.1');
   try {
     const status = await res.status;
     if (status >= 400) {
@@ -137,13 +123,10 @@ export async function updatePage(res) {
     }
     const contentType = await res.headers.get('content-type');
     if (contentType && contentType.indexOf('application/json') !== -1) {
-      console.log('updatePage No.2');
       // 他にどうしようもなかったので特別対応
       // Jsonで遷移するurlを取得する。
       const data = await res.json();
-      console.log('updatePage No.3');
       if ('html' in data) {
-        console.log('updatePage No.4');
         navigateTo(data['html']);
       }
     } else if (contentType && contentType.indexOf('text/html') !== -1) {

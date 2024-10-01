@@ -20,15 +20,11 @@ import { submitForm } from './spa/js/utility/form.js';
 // パス名を取得する関数
 export const getDisplayedURI = (pathname) => {
   let query_index = pathname.lastIndexOf('?');
-  console.log('No.1 pathname:' + pathname);
-  console.log('No.1 query_index:' + query_index);
   if (pathname.lastIndexOf('/') > query_index) {
-    console.log('No.2 query_index:' + query_index);
     query_index = 0;
   }
 
   const params = query_index == 0 ? '' : pathname.substring(query_index);
-  console.log('No.3 params:' + params);
   pathname.replace(params, '');
   const splits = pathname.split('/').filter((uri) => uri !== '');
   let path = splits.find(
@@ -45,19 +41,15 @@ export const getDisplayedURI = (pathname) => {
     rest_path = '/' + slice_splits.join('/');
   }
 
-  console.log('getDisplayedURI No.0 rest:' + rest_path);
   rest_path = rest_path.replace(params, '');
-  console.log('getDisplayedURI No.1 rest:' + rest_path);
   if (rest_path === '/') {
     rest_path = '';
   }
-  console.log('getDisplayedURI No.2 rest:' + rest_path);
   if (params.length > 0 && rest_path.length > 0) {
     if (rest_path[rest_path.length - 1] == '/') {
       rest_path = rest_path.substring(0, rest_path.length - 1);
     }
   }
-  console.log('getDisplayedURI No.3 rest:' + rest_path);
   return { path: getUrl(path), rest: rest_path, params: params };
 };
 
@@ -66,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   WebsocketInit();
 
   let tmp_path = window.location.href;
-  console.log('No.0 tmp_path:' + tmp_path);
 
   document.body.addEventListener('click', (e) => {
     // ページ切替
@@ -75,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       e.preventDefault();
       tmp_path = e.target.href;
-      console.log('getDisplayedURI No.2:' + tmp_path);
       const uri = getDisplayedURI(tmp_path);
       navigateTo(uri.path, uri.rest, uri.params);
     }
@@ -111,14 +101,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lang_url = '/i18n/setlang/';
         const form = document.getElementById('lang_form');
         let formData = new FormData(form);
-        console.log('getDisplayedURI No.3:' + tmp_path);
         const current_uri = getDisplayedURI(tmp_path).path;
         changingLanguage(lang_url, formData, current_uri);
       }
     }
   });
 
-  console.log('getDisplayedURI No.1:' + tmp_path);
   const uri = getDisplayedURI(tmp_path);
   navigateTo(uri.path, uri.rest, uri.params);
 });
