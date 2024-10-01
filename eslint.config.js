@@ -4,7 +4,7 @@ import globals from 'globals';
 export default [
   eslint.configs.recommended,
   {
-    files: ['django/frontend/**/*.{js,jsx}'],
+    files: ['django/frontend/**/*.{js,jsx}', 'eth/**/*.{js,jsx}'],
     ignores: ['node_modules', 'django/public/', 'db_volume'],
     languageOptions: {
       globals: {
@@ -13,7 +13,7 @@ export default [
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^sendRequestAsForm$' }],
+      'no-unused-vars': ['error'],
     },
   },
 ];

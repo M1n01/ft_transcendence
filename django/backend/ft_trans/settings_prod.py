@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     "api",
     "sendgrid",
     "django_celery_results",
+    "web3",
 ]
 
 MIDDLEWARE = [
@@ -125,10 +126,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+PROJECT_ROOT = os.path.join(BASE_DIR, "..")
+
 # 出力ディレクトリ(nginxと共有)
-PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+# ブロックチェーン用ディレクトリ
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
 TEMPLATES = [
     {
@@ -355,3 +360,8 @@ JWT_VALID_TIME = 14400
 # timezon #時間にはJTC固定とする
 # ただし、内部的にはUTCで保存する
 TIME_HOURS = 9
+
+# WEB3
+PRIVATE_ACCOUNT_KEY = os.environ["PRIVATE_ACCOUNT_KEY"]
+PROVIDER_URL = os.environ["PROVIDER_URL"]
+CONTRACT_ADDRESS = os.environ["CONTRACT_ADDRESS"]

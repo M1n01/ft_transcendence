@@ -1,4 +1,4 @@
 export const DataType = Object.freeze({
-  json: "json",
-  text: "text",
+  json: 'json',
+  text: 'text',
 });
