@@ -1,6 +1,8 @@
 let socket = null;
 
-const ws_url = 'ws://localhost:8001/ws';
+//const ws_url = 'ws://localhost:8001/ws';
+const ws_url = 'ws://' + window.location.host + '/ws/websocket/';
+console.log('ws_url=' + ws_url);
 
 export const closetWebSocket = () => {
   socket.close();
@@ -9,40 +11,81 @@ export const closetWebSocket = () => {
 export const sendWebSocket = async (json_message) => {
   console.log('sendWebSocket No.1 state:' + socket.readyState);
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
-    WebsocketInit();
-    //reconnect();
-    //console.log('sendWebSocket No.2:');
-    console.log('sendWebSocket No.2:' + socket.readyState);
-    // 接続されていないので何もしない
-    return;
+    socket = new WebSocket(ws_url);
   }
-  console.log('sendWebSocket No.3:');
-  /*
-    const chatMessage = {
-      type: 'chat',
-      content: 'Hello, this is a chat message.',
-      sender: 'User1',
-    };
-    */
+  console.log('sendWebSocket No.2 state:' + socket.readyState);
 
-  console.log('sendWebSocket No.2');
   socket.send(JSON.stringify(json_message));
-  console.log('sendWebSocket No.3');
+  console.log('sendWebSocket No.3 state:' + socket.readyState);
 };
 
 export const WebsocketInit = () => {
+  console.log('test No.1');
+
+  if (socket == null || socket.readyState >= WebSocket.CLOSING) {
+    socket = new WebSocket(ws_url);
+  }
+
+  // 接続が開かれた時の処理
+  socket.onopen = function (event) {
+    console.log('WebSocket connection opened.' + event);
+    // サーバーにメッセージを送信
+    //socket.send('Hello Server!');
+
+    const chatMessage = {
+      type: 'chat',
+      message: 'Hello, this is a chat message.',
+      arg: 'User1',
+    };
+    socket.send(JSON.stringify(chatMessage));
+  };
+
+  // サーバーからメッセージを受信した時の処理
+  socket.onmessage = function (event) {
+    console.log('Message from server:', event.data);
+
+    var json = JSON.parse(event.data);
+    //const json = JSON.stringify(event.data);
+    const type = json['type'];
+    const message = json['message'];
+    console.log('Message from server type:', type);
+    console.log('Message from server message:', message);
+
+    if (type == 'get') {
+      console.log('get No.1');
+      if (message === 'Let me know your alive') {
+        console.log('Let me know your alive');
+        const resonse_json = { type: 'response', message: 'active' };
+        sendWebSocket(resonse_json);
+      } else if (message === 'chat') {
+        console.log('chat');
+      } else if (message === 'game') {
+        console.log('game');
+      } else {
+        console.log('Unknown message type');
+      }
+    } else if (type == 'post') {
+      console.log('post No.2');
+    } else {
+      console.log('other No.3');
+    }
+  };
+
+  socket.onclose = function (event) {
+    console.error('WebSocket closed unexpectedly:', event);
+  };
+
+  // エラーが発生した時の処理
+  socket.onerror = function (event) {
+    console.error('WebSocket error observed:', event);
+  };
+};
+export const WebsocketInit0 = () => {
   if (socket == null) {
     socket = new WebSocket(ws_url);
   }
   //socket = new WebSocket('wss://example.com/ws/chat/');
   console.log('WebsocketInit No.1');
-
-  if (socket.readyState < WebSocket.CLOSING) {
-    console.log('WebsocketInit No.2 open ok end');
-    return;
-    //reconnect();
-  }
-  console.log('WebsocketInit No.3');
   //if (socket.readyState === WebSocket.OPEN) {
 
   //reconnect();

@@ -39,6 +39,7 @@ def CustomAuthMiddlewareStack(inner):
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
+        # "websocket": CustomAuthMiddlewareStack(
         "websocket": CookieMiddleware(
             # "websocket": AuthMiddlewareStack(
             URLRouter(websocket_urlpatterns)  # WebSocketのルーティング

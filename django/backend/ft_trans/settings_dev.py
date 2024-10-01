@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "sendgrid",
     "django_celery_results",
     "channels",
+    "ws",
 ]
 
 MIDDLEWARE = [
@@ -166,7 +167,7 @@ DATABASES = {
 #    "default": {
 #        "BACKEND": "channels_redis.core.RedisChannelLayer",
 #        "CONFIG": {
-#            "hosts": [("127.0.0.1", 6379)],
+#            "hosts": [(f"default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30", 6379)],
 #        },
 #    },
 # }
@@ -175,6 +176,7 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
+# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
 
 
 # """#DEVLOPMENT ENVIRONMENT

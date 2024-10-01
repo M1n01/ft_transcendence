@@ -3,6 +3,7 @@ import { submitForm } from '../../spa/js/utility/form.js';
 import '../scss/two_fa.scss';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { Modal } from 'bootstrap';
+import { WebsocketInit } from '../../spa/js/ws/socket.js';
 export const TwoFaEvent = new Event('TwoFaEvent');
 
 let modal = null;
@@ -44,7 +45,9 @@ document.addEventListener('TwoFaEvent', function () {
       return;
     }
     navModal(false);
-    moveTo('games');
+    await moveTo('games');
+    console.log('Login Two fa OK');
+    WebsocketInit();
   });
   input_code.addEventListener('input', () => {
     error_message.hidden = true;

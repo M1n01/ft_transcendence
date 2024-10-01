@@ -7,6 +7,7 @@ import { handlePostLogin } from '../../spa/js/utility/user.js';
 import ft_logo from '../assets/42.svg';
 
 import { navModal } from './two_fa.js';
+import { WebsocketInit } from '../../spa/js/ws/socket.js';
 export const LoginEvent = new Event('LoginEvent');
 
 function displayInstruction(id) {
@@ -92,6 +93,7 @@ document.addEventListener('LoginEvent', function () {
         }
         document.getElementById('close-modal').click();
         handlePostLogin();
+        WebsocketInit();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);
