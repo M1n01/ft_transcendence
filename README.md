@@ -81,9 +81,9 @@ $ make      # 本番環境
 
 ### アクセス方法
 ```
-https://localhost:3000/ # ローカル環境
+https://localhost:8000/ # ローカル環境
 https://localhost:8001/ # dev環境
-https://localhost:8000/ # 本番環境
+https://localhost/ # 本番環境
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
@@ -91,7 +91,92 @@ https://localhost:8000/ # 本番環境
 ## ディレクトリ構造
 
 ```
+$ tree . -L 3 -I "node_modules|doc|eth/node_modules"
+.
+├── Makefile
+├── README.md
+├── django
+│   ├── backend
+│   │   ├── accounts
+│   │   ├── celerybeat-schedule
+│   │   ├── db.sqlite3
+│   │   ├── friend
+│   │   ├── ft_trans
+│   │   ├── lang.sh
+│   │   ├── localization
+│   │   ├── log
+│   │   ├── make_db_setting.sh
+│   │   ├── manage.py
+│   │   ├── notification
+│   │   ├── pong
+│   │   ├── spa
+│   │   └── tournament
+│   ├── eth
+│   ├── frontend
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── src
+│   │   ├── webpack.common.js
+│   │   ├── webpack.dev.js
+│   │   └── webpack.prod.js
+│   └── public
+│       ├── media
+│       ├── static
+│       └── webpack-stats.json
+├── docker
+│   ├── db
+│   │   ├── Dockerfile
+│   │   ├── exe_sql.sh
+│   │   ├── make_ca.sh
+│   │   ├── postgresql.conf
+│   │   └── sql_data
+│   ├── django
+│   │   ├── Dockerfile
+│   │   ├── make_ca.sh
+│   │   ├── make_db_setting.sh
+│   │   └── package.json
+│   ├── eth
+│   │   └── Dockerfile
+│   ├── nginx
+│   │   ├── Dockerfile
+│   │   ├── django.conf
+│   │   └── make_ca.sh
+│   └── redis
+│       ├── Dockerfile
+│       ├── make_ca.sh
+│       └── tools
+├── docker-compose.dev.yml
+├── docker-compose.prod.yml
+├── docker-compose.yml
+├── document
+│   ├── 42OAuth.drawio
+│   ├── ft_trans_network.drawio
+│   └── モジュール優先度.drawio
+├── eslint.config.js
+├── eth
+│   ├── README.md
+│   ├── artifacts
+│   │   ├── @openzeppelin
+│   │   ├── build-info
+│   │   └── contracts
+│   ├── cache
+│   │   └── solidity-files-cache.json
+│   ├── contract_address.txt
+│   ├── contracts
+│   │   └── PongScoreKeeper.sol
+│   ├── hardhat.config.cjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── scripts
+│   │   ├── deploy-local.js
+│   │   └── deploy-sepolia.js
+│   └── test
+│       └── PongScoreKeeper.js
+├── jsconfig.json
+├── package-lock.json
+└── package.json
 
+35 directories, 48 files
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
