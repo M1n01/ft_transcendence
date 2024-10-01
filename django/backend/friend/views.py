@@ -252,7 +252,7 @@ class BlocksView(ListView):
     model = Friendships
     context_object_name = "blocks"
     # search_form = SearchFriendForm
-    template_name = "friend/block-list.html"
+    template_name = "friend/block-users-list.html"
     paginate_by = 2
 
     def get_queryset(self):

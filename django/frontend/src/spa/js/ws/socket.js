@@ -1,13 +1,38 @@
 const socket = new WebSocket('ws://localhost:8001/ws');
 
+export const sendWebSocket = async (json_message) => {
+  if (socket == null || socket.readyState !== WebSocket.OPEN) {
+    // 接続されていないので何もしない
+    return;
+  }
+  /*
+    const chatMessage = {
+      type: 'chat',
+      content: 'Hello, this is a chat message.',
+      sender: 'User1',
+    };
+    */
+  socket.send(JSON.stringify(json_message));
+};
+
 export const WebsocketInit = () => {
-  console.log('ws init() No.1');
   if (socket.readyState === WebSocket.OPEN) {
-    console.log('ws init() No.2');
     // 接続済みなので何もしない
     return;
   }
-  console.log('ws init() No.3');
+  socket.addEventListener('message', function (event) {
+    console.log('メッセージを受信:', event.data);
+  });
+  socket.addEventListener('error', function (event) {
+    console.error('WebSocketエラーが発生しました', event);
+  });
+  socket.addEventListener('close', function (event) {
+    console.log('WebSocketは切断されました' + event);
+  });
+  socket.addEventListener('open', function (event) {
+    console.log('WebSocketは接続されています' + event);
+  });
+
   // WebSocket接続が開かれたときの処理
   socket.onopen = function () {
     console.log('WebSocket connection opened.');

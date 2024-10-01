@@ -39,9 +39,7 @@ def get_user(session_id):
 
     json = decode(session_id)
     id = json["sub"]
-    print(f"{id=}")
     return FtUser.objects.get(id=id)
-    # return ""
 
 
 class FtWebsocket(AsyncWebsocketConsumer):
@@ -49,22 +47,14 @@ class FtWebsocket(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            print("connect No.1")
-
             session_id = self.scope["cookies"]["sessionid"]
             user = await get_user(session_id)
-            print("connect No.2")
 
             if user.is_authenticated:
-                print("connect No.3")
-
-                group_name = self.room_group_name + user.email
+                group_name = self.room_group_name + user.id
                 self.channel_layer.group_add(group_name, self.channel_name)
-                print("connect No.4")
                 await self.accept()  # WebSocket接続を受け入れる
-                print("connect No.5")
                 await update_user_login_state(user, True)
-                print("connect No.6")
             else:
                 self.close()
         except Exception:
@@ -72,13 +62,9 @@ class FtWebsocket(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         try:
-            print("disconect No.1")
             session_id = self.scope["cookies"]["sessionid"]
-            print("disconect No.2")
             user = await get_user(session_id)
-            print("disconect No.3")
             await update_user_login_state(user, False)
-            print("disconect No.4")
         except Exception:
             print("disconnect Exception Error")
 
@@ -107,4 +93,21 @@ class FtWebsocket(AsyncWebsocketConsumer):
         message = event["message"]
 
         # WebSocketにメッセージを送信
+        await self.send(text_data=message)
+
+    async def send(self, type, message):
+        session_id = self.scope["cookies"]["sessionid"]
+        user = await get_user(session_id)
+
+        if user.is_authenticated:
+            await self.channel_layer.group_send(
+                self.user_group_name,
+                {
+                    "type": type,
+                    "message": message,
+                },
+            )
+
+    async def is_online(self, event):
+        message = event["message"]
         await self.send(text_data=message)

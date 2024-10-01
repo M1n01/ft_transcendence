@@ -20,7 +20,7 @@
     <div>{% trans 'ブロックしたユーザーはいません' %}</div>
     {% endif %} {% if blocks %}
     <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
-      {% for user in blocks %} {% include 'friend/friend-card.html' with friend=user %}
+      {% for user in blocks %} {% include 'friend/block-user-card.html' with friend=user %}
       <span style="display: none"></span>
       {% endfor %}
     </div>
