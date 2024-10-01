@@ -76,13 +76,34 @@ def edit_profile(request):
         form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
     return render(request, 'users/edit-profile.html', {'form': form})
 
-# ユーザ情報を削除する
+# ユーザ情報を論理削除する
 @login_required
 def delete_user(request):
     if request.method == 'POST':
-        print(f"Delete user: {request.user}")  # 削除するユーザ情報
-        request.user.delete()  # ユーザーを削除
-        return redirect('/')  # 適切なリダイレクト先を指定
+        # ユーザー情報を取得
+        print(f"Delete user (logical): {request.user}")
+        
+        # ユーザーの論理削除 (is_activeをFalseに設定)
+        # request.user.username = ""
+        # request.user.email = ""
+        request.user.email42 = None
+        request.user.first_name = None
+        request.user.last_name = None
+        request.user.country_code = None
+        request.user.phone = None
+        request.user.language = ""
+        request.user.is_active = False
+        # request.user.is_temporary = False
+        request.user.birth_date = None
+        request.user.auth = ""
+        request.user.app_secret = None
+        request.user.created_at = None
+        request.user.updated_at = None
+
+        request.user.save()
+        
+        # 適切なリダイレクト先に遷移
+        return redirect('/')
 
     return render(request, 'users/delete-user.html')
 
