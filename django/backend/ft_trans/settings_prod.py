@@ -96,17 +96,23 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
+    "tournament",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
     "api",
+    "sendgrid",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
     # "corsheaders.middleware.CorsMiddleware", #CORS設定
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    # "django.contrib.sessions.middleware.SessionMiddleware",
+    "accounts.middleware.CustomSessionMiddleware",  # SessionMiddlewareの改造品
     "django.middleware.locale.LocaleMiddleware",  # 多言語設定
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -197,12 +203,53 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # キャッシュ用
+# CACHES = {
+#    "default": {
+#        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#        "LOCATION": "unique-snowflake",
+#    }
+# }
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
     }
 }
+REDIS_SERVER = "redis"
+REDIS_PORT = 6379
+REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
+
+# Celery configurations
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZZER = "json"
+# CELERY_TIMEZONE = TIME_ZONE
+
+
+# 'amqp://guest:guest@localhost//'
+# celeryを動かすための設定ファイル
+# CELERY_BROKER_URL = "http://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://redis:6379"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_CACHE_BACKEND = "django-cache"
+
+# Celery設定
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
+CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+CELERY_RESULT_BACKEND = "django-db"
+# CELERY_RESULT_BACKEND = (
+# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"
+# )
+
+CELERY_RESULT_EXTENDED = True
+
+# CELERYD_CONCURRENCY = 1
+#
+# CELERYD_LOG_FILE = "../log/celeryd.log"
+#
+# CELERYD_LOG_LEVELをINFOにしておくと、
+# タスクの標準出力もログ(celeryd.log)に書かれる
+# CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
@@ -267,19 +314,13 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-# SECURE_HSTS_SECONDS = 31536000
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'DENY'
-
 
 # 認証
-LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:top"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "spa:top"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
-LOGIN_URL = "accounts:login"
+LOGIN_URL = "spa:to-login"
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
@@ -291,3 +332,26 @@ PONG_DOMAIN = "https://localhost/"
 
 # エラーページ
 ERROR_PAGE = PONG_DOMAIN + "error.html"
+
+# SEND_GRID
+SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"
+SENDGRID_EMAIL_PORT = 587
+SENDGRID_EMAIL_USERNAME = "your_sendgrid_username"
+SENDGRID_EMAIL_PASSWORD = "your_sendgrid_password"
+
+# TWILIO(SMS)
+TWILIO_SERVICE_SID = os.environ["TWILIO_SERVICE_SID"]
+TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+
+# Brevo(Email)
+BREVO_API_KEY = os.environ["BREVO_API_KEY"]
+BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400
+
+# timezon #時間にはJTC固定とする
+# ただし、内部的にはUTCで保存する
+TIME_HOURS = 9

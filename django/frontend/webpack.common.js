@@ -27,7 +27,7 @@ export default {
     rules: [
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        type: '../public/asset/',
+        type: 'asset/resource',
       },
       {
         test: /\.js$/,

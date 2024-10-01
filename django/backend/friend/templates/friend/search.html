@@ -1,0 +1,44 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Friend</title>
+  </head>
+  <body>
+    <form method="GET" action="friend/" id="search-friend">
+      {{ form.as_p }}
+      <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+    <h2>Search Results:</h2>
+    <ul>
+      <div id="searched-user">
+        {% for friend in results %}
+        <li>
+          <div>{{ friend.username }}</div>
+
+          <form
+            method="post"
+            action="{% url 'friend:request' %}"
+            id="friend-request"
+            class="friend-request"
+          >
+            {% csrf_token %}
+            <button type="submit">{% trans 'フレンド申請' %}</button>
+          </form>
+          <form method="post" action="friend/message" id="friend-message">
+            {% csrf_token %}
+            <button type="submit">{% trans 'メッセージ' %}</button>
+          </form>
+        </li>
+        {% endfor %}
+      </div>
+    </ul>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+  </body>
+</html>

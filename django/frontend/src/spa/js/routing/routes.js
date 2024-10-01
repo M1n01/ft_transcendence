@@ -1,3 +1,4 @@
+import Top from '../views/Top.js';
 import Dashboard from '../views/Dashboard.js';
 import Posts from '../views/Posts.js';
 import PostView from '../views/PostView.js';
@@ -15,15 +16,24 @@ import Admin from '../views/Admin.js';
 import LoginSuccess from '../views/LoginSuccess.js';
 import TwoFA from '../views/TwoFA.js';
 import LoginSignup from '../views/LoginSignup.js';
+import Games from '../views/Games.js';
+import Tournament from '../views/Tournament.js';
+import Friend from '../views/Friend.js';
+import Notification from '../views/Notification.js';
 import Profile from '../views/Profile.js';
 import EditProfile from '../views/EditProfile.js';
 import DeleteUser from '../views/DeleteUser.js';
 import CookieBanner from '../views/CookieBanner.js';
 
 export const Routes = [
-  { path: '/', view: Dashboard },
+  { path: '/', view: Top },
+  { path: '/dashboard', view: Dashboard },
   { path: '/home', view: Index },
   { path: '/pong', view: Pong },
+  { path: '/games', view: Games },
+  { path: '/tournament', view: Tournament },
+  { path: '/friend', view: Friend },
+  { path: '/notification', view: Notification },
   { path: '/sign', view: Index },
   { path: '/signup', view: Signup },
   { path: '/login', view: Login },

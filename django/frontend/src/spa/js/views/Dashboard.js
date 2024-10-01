@@ -1,5 +1,4 @@
 import AbstractView from './AbstractView.js';
-//import { executeScriptTab } from '../utility/script.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -7,7 +6,12 @@ export default class extends AbstractView {
     this.setTitle('Dashboard');
   }
 
-  getHtml = async () => {
+  checkRedirect = async () => {
+    return { is_redirect: false };
+  };
+
+  getHtml = async (rest = '', params = '') => {
+    console.log(rest + params);
     return `
             <h1>Welcome back, Dom</h1>
             <p>

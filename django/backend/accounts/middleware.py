@@ -22,6 +22,7 @@ class CustomSessionMiddleware(SessionMiddleware):
         tmp_session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
         session_key = tmp_session_key
         is_provisional_login = False
+        is_provisional_signup = False
         jwt_decode = ""
         exp = ""
         user_id = "-1"
@@ -34,22 +35,31 @@ class CustomSessionMiddleware(SessionMiddleware):
                     algorithms=["HS256"],
                 )
                 session_key = jwt_decode["session_key"]
-                if "is_tmp" in jwt_decode:
-                    is_provisional_login = jwt_decode["is_tmp"]
+                if "is_login" in jwt_decode:
+                    is_provisional_login = jwt_decode["is_login"]
+                if "is_signup" in jwt_decode:
+                    is_provisional_signup = jwt_decode["is_signup"]
+                # if "is_tmp" in jwt_decode:
+                # is_provisional_login = jwt_decode["is_tmp"]
                 if "exp" in jwt_decode:
                     exp = jwt_decode["exp"]
                 if "sub" in jwt_decode:
                     user_id = jwt_decode["sub"]
-        except jwt.ExpiredSignatureError:
-            is_provisional_login = False
+        except jwt.ExpiredSignatureError as e:
             # leeway+expで設定した時間を超過したらここに入る
-            pass
-        except jwt.exceptions.DecodeError:
+            print(f"JWT Expire Error {e=}")
             is_provisional_login = False
+            is_provisional_signup = False
+            pass
+        except jwt.exceptions.DecodeError as e:
             # tmp_session_keyが編集されていたらここに入る
+            is_provisional_login = False
+            is_provisional_signup = False
+            print(f"JWT Decode Error {e=}")
             pass
         request.session = self.SessionStore(session_key)
         request.session["is_provisional_login"] = is_provisional_login
+        request.session["is_provisional_signup"] = is_provisional_signup
         request.session["exp"] = exp
         request.session["user_id"] = user_id
         # request.session["jwt_decode"] = jwt_decode
@@ -95,15 +105,26 @@ class CustomSessionMiddleware(SessionMiddleware):
                     id = ""
                     email = ""
                     is_provisional_login = False
-                    exp = datetime.now(tz=timezone.utc) + timedelta(seconds=14400)
+                    is_provisional_signup = False
+                    exp = datetime.now(tz=timezone.utc) + timedelta(
+                        seconds=getattr(settings, "JWT_VALID_TIME", None)
+                    )
+
                     if "is_provisional_login" in request.session:
                         is_provisional_login = request.session["is_provisional_login"]
-                        if (is_provisional_login is True) and (
-                            "exp" in request.session
-                        ):
-                            exp = datetime.fromtimestamp(float(request.session["exp"]))
+                    if "is_provisional_signup" in request.session:
+                        is_provisional_signup = request.session["is_provisional_signup"]
+
+                    if "is_provisional_login" in request.session:
+                        is_provisional_login = request.session["is_provisional_login"]
+                    if (is_provisional_login is True) or (
+                        is_provisional_signup is True
+                    ):
+                        if "exp" in request.session:
+                            exp = datetime.fromtimestamp(
+                                float(request.session["exp"]), tz=timezone.utc
+                            )
                             id = request.session["user_id"]
-                        # email = user.email
 
                     jwt_session_key = jwt.encode(
                         {
@@ -111,7 +132,9 @@ class CustomSessionMiddleware(SessionMiddleware):
                             "iss": "https://localhost",
                             "sub": id,
                             "email": email,
-                            "is_tmp": is_provisional_login,
+                            # "is_tmp": is_provisional_login,
+                            "is_login": is_provisional_login,
+                            "is_signup": is_provisional_signup,
                             "exp": exp,
                             "nbf": datetime.now(tz=timezone.utc)
                             + timedelta(seconds=3),  # この時間より前に処理されたらエラーにする

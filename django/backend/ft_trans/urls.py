@@ -18,25 +18,34 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
-import pong.urls
+
 
 import spa.urls
 import accounts.urls
 import users.urls
+import friend.urls
+import notification.urls
+import pong.urls
+import tournament.urls
+
 
 # API
 urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
     # path('api/', include(api.urls)),
     # path("login/", include(login.urls)),
-    path("accounts/", include(accounts.urls), name="accounts"),
     path("i18n/", include("django.conf.urls.i18n")),
     path("users/", include(users.urls), name="users"),
 ]
 
 urlpatterns += i18n_patterns(
+    path("notification/", include(notification.urls), name="notification"),
+    path("accounts/", include(accounts.urls), name="accounts"),
     path("pong/", include(pong.urls), name="pong"),
+    path("tournament/", include(tournament.urls), name="tournament"),
+    path("friend/", include(friend.urls), name="friend"),
     path("spa/", include(spa.urls), name="spa2"),
+    path("", include(spa.urls), name="blank"),
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,
 )

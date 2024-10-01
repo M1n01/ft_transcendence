@@ -1,0 +1,37 @@
+{% load i18n %}
+<ul>
+  <h2 class="mt-5">トーナメント詳細</h2>
+  <div class="d-flex">
+    <ul class="list-group rounded-end-0">
+      <li class="list-group-item">{% trans 'トーナメント名' %}</li>
+      <li class="list-group-item">{% trans '主催者' %}</li>
+      <li class="list-group-item">{% trans '状態' %}</li>
+      <li class="list-group-item">{% trans '最大参加人数' %}</li>
+      <li class="list-group-item">{% trans '登録者数' %}</li>
+      <li class="list-group-item">{% trans '開始時間' %}</li>
+      <li class="list-group-item">{% trans 'フレンドのみ' %}</li>
+    </ul>
+    <ul class="list-group rounded-start-0">
+      <li class="list-group-item">{{ tournament.name }}</li>
+      <li class="list-group-item">{{ tournament.organizer.username }}</li>
+      <li class="list-group-item">{{ tournament.status}}</li>
+      <li class="list-group-item">{{ tournament.current_players}}</li>
+      <li class="list-group-item">{{ len_participants}}</li>
+      <li class="list-group-item">{{ tournament.start_at}}</li>
+      <li class="list-group-item">{{ tournament.is_only_friend}}</li>
+    </ul>
+  </div>
+
+  <h3 class="mt-5">参加者一覧</h3>
+  {% if len_participants > 0 %}
+  <ul class="list-group">
+    {% for participant in participants %}
+    <li class="list-group-item">{{ participant.participant.username }}</li>
+
+    {% endfor %}
+  </ul>
+
+  {% else %}
+  <div>{% trans '参加者はいません' %}</div>
+  {% endif %}
+</ul>

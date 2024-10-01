@@ -1,0 +1,18 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Error</title>
+  </head>
+  <body>
+    <div>
+      {% trans "指定するページにアクセスするにはログインする必要があります" %}
+      <br />
+      <a id="to-login" class="" href="{% url 'accounts:login-signup' %}" data-link
+        >{% trans "ログインページ" %}</a
+      >
+    </div>
+  </body>
+</html>

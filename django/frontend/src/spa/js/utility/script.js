@@ -1,4 +1,6 @@
 //import { TwoFaEvent } from '../../../accounts/js/two_fa.js';
+//import { LoginEvent } from '../../../accounts/js/login.js';
+//import { SignupEvent } from '../../../accounts/js/signup.js';
 
 export function executeScriptTab(path) {
   const app = document.querySelector('#app');

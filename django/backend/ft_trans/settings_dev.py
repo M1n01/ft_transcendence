@@ -55,14 +55,7 @@ LOGGING = {
     },
 }
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -85,8 +78,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-# Application definition
-
 INSTALLED_APPS = [
     "daphne",  # ASGI設定
     "django.contrib.admin",
@@ -97,12 +88,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "webpack_loader",
     "spa",
+    "notification",
     "pong",
+    "tournament",
+    "friend",
     # "login",
     "accounts",
     # "accounts.models.ft_user",
     "api",
     "sendgrid",
+    "django_celery_results",
     "users",
 ]
 
@@ -110,12 +105,12 @@ MIDDLEWARE = [
     # "corsheaders.middleware.CorsMiddleware", #CORS設定
     "django.middleware.security.SecurityMiddleware",
     # "django.contrib.sessions.middleware.SessionMiddleware",
-    "accounts.middleware.CustomSessionMiddleware",
+    "accounts.middleware.CustomSessionMiddleware",  # SessionMiddlewareの改造品
     "django.middleware.locale.LocaleMiddleware",  # 多言語設定
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -139,8 +134,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # alloauth
-                # "django.template.context_processors.request",
             ],
         },
     },
@@ -203,12 +196,52 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # キャッシュ用
+# CACHES = {
+#    "default": {
+#        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#        "LOCATION": "unique-snowflake",
+#    }
+# }
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SSL_CERT_REQS": None,  # SSL証明書の検証をスキップ
+        },
     }
 }
+REDIS_SERVER = "redis"
+REDIS_PORT = 6379
+REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
+
+# Celery configurations
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZZER = "json"
+
+# 'amqp://guest:guest@localhost//'
+# celeryを動かすための設定ファイル
+# CELERY_BROKER_URL = "http://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://redis:6379"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_CACHE_BACKEND = "django-cache"
+
+# Celery設定
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
+CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+CELERY_RESULT_BACKEND = "django-db"
+
+CELERY_RESULT_EXTENDED = True
+
+CELERYD_CONCURRENCY = 1
+
+CELERYD_LOG_FILE = "../log/celeryd.log"
+
+# CELERYD_LOG_LEVELをINFOにしておくと、
+# タスクの標準出力もログ(celeryd.log)に書かれる
+CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
@@ -282,10 +315,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # 認証
-LOGIN_REDIRECT_URL = "spa:index"  # Login後にリダイレクトされるページ
-LOGOUT_REDIRECT_URL = "spa:index"  # Logout後にリダイレクトされるページ
+LOGIN_REDIRECT_URL = "spa:top"  # Login後にリダイレクトされるページ
+LOGOUT_REDIRECT_URL = "accounts:login-signup"  # Logout後にリダイレクトされるページ
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
+LOGIN_URL = "spa:to-login"
 # AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 
 # OAUTH
@@ -313,3 +347,11 @@ TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 # Brevo(Email)
 BREVO_API_KEY = os.environ["BREVO_API_KEY"]
 BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
+
+# JWT有効期限
+JWT_TMP_VALID_TIME = 300
+JWT_VALID_TIME = 14400
+
+# timezon #時間にはJTC固定とする
+# ただし、内部的にはUTCで保存する
+TIME_HOURS = 9
