@@ -3,10 +3,12 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% trans "Profile" %}</title>
   </head>
   <body>
     <h1>{% trans "Profile" %}</h1>
+      <!-- <div style="width: 500px; height: 230px" class="border"> -->
         <table>
           <tbody>
             <tr>
@@ -44,15 +46,23 @@
               <td>{{ user.phone }}</td>
               <td></td>
             </tr>
+            <!-- <tr>
+              <td>{% trans "is_ft" %}</td>
+              <td>{{ user.is_ft }}</td>
+              <td></td> 
+            </tr> -->
             <tr>
               <td>{% trans "言語" %}</td>
               <td>{{ user.language }}</td>
               <td></td> 
             </tr>
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      <!-- </div> -->
     <!-- 他に表示したい情報があればここに追加 -->
-    <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
-    <a href="/delete-user" class="nav__link" data-link>{% trans "Delete" %}</a>
+    <div id="edit-profile">
+      <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
+      <a href="/delete-user" class="nav__link" data-link>{% trans "Delete" %}</a>
+    </div>
   </body>
 </html>

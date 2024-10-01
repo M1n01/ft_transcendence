@@ -63,15 +63,14 @@ def profile(request):
     return render(request, "users/profile.html")
 
 # ユーザ情報の編集を保存する
-@login_required  # ログイン必須にするデコレーター
+@login_required
 def edit_profile(request):
     user = request.user  # ログインユーザーを取得
-    # print(f"is_ft: {user.is_ft}")  # is_ftの値を出力
     if request.method == 'POST':
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('users:profile')  # 編集後、プロファイルページにリダイレクト
+            return redirect('/profile')  # 編集後、プロファイルページにリダイレクト
     else:
         form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
     return render(request, 'users/edit-profile.html', {'form': form})
@@ -85,8 +84,8 @@ def delete_user(request):
         
         # ユーザーの論理削除 (is_activeをFalseに設定)
         # request.user.username = ""
-        # request.user.email = ""
-        request.user.email42 = None
+        request.user.email = str(request.user.id) + '_user@tmp.email.com'
+        # request.user.email42 = None
         request.user.first_name = None
         request.user.last_name = None
         request.user.country_code = None
@@ -102,6 +101,7 @@ def delete_user(request):
 
         request.user.save()
         
+        print(request.user)
         # 適切なリダイレクト先に遷移
         return redirect('/')
 

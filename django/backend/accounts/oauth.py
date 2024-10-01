@@ -70,6 +70,7 @@ class FtOAuth(ModelBackend):
             user.email = str(cnt) + email  # dummy email
             user.email42 = email
             user.password = randomStr(32)
+            user.is_ft = True
             user.created_at = datetime.datetime.now()
             user.save()
             user = FtUser.objects.get(email42=email)

@@ -82,6 +82,7 @@
               </svg>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/pong" data-link> {% trans "マイページ" %} </a>
+                <a class="dropdown-item" href="/profile" data-link> {% trans "プロフィール" %} </a>
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}

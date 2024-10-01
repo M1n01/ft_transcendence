@@ -1,19 +1,21 @@
 {% load static %} {% load i18n %}
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% trans "Profile" %}</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>{% trans "Edit Profile" %}</h1>
-    <form id="edit-profile" method="POST" action="{% url 'users:edit-profile' %}">
+    <form id="edit-profile-form" method="POST" action="{% url 'users:edit-profile' %}">
         {% csrf_token %}
         <table>
             <tbody>
               <tr>
                 <td>{% trans "ユーザー名" %}</td>
                 {% if user.is_ft == True %}
-                  <td>{{ user.username }}</td>
+                  <td><input type="text" name="username" value="{{ form.username.value }}" readonly></td>
                   <!-- <td></td> -->
                 {% else %}
                   <td>{{ form.username }}</td>
@@ -29,7 +31,7 @@
               <tr>
                 <td>{% trans "Email address" %}</td>
                 {% if user.is_ft == True %}
-                  <td>{{ user.email }}</td>
+                  <td><input type="text" name="email" value="{{ form.email.value }}" readonly></td>
                   <!-- <td></td> -->
                 {% else %}
                   <td>{{ form.email }}</td>
@@ -111,9 +113,12 @@
               <!-- 他に表示したい情報があればここに追加 -->
             </tbody>
         </table>
-        <button type="submit">{% trans "Save" %}</button>
+        <div>
+          <!-- <a id="edit-profile-button" class="nav__link" type="submit" data-link>{% trans "Save" %}</a> -->
+          <button type="submit">{% trans "Save" %}</button>
+        </div>
     </form>
-</body>
+  </body>
 </html>
 
 
