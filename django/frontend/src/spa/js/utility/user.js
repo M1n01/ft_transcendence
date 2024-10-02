@@ -17,13 +17,8 @@ export function isLogined() {
 
 export const reload = async () => {
   const uri = getDisplayedURI(window.location.href);
-  console.log('reload()No.1 url.path:' + uri.path);
-  console.log('reload()No.2 url.rest:' + uri.rest);
-  console.log('pre router() No.3');
   await router(uri.rest, uri.params);
-  console.log('reload()No.3 url.rest:' + uri.rest);
   await loadNav();
-  console.log('reload()No.4 url.rest:' + uri.rest);
 };
 
 export const loadNav = async () => {
@@ -36,22 +31,6 @@ export const loadNav = async () => {
     logout_button.addEventListener('click', async () => {
       await logout();
     });
-
-    /*
-    const small_menu_icon = document.getElementById('small_menu_icon');
-    //var navbarToggler = document.querySelector('.navbar-toggler');
-    const dropdown = document.getElementById('small-menu-dropdown');
-
-    const isExpanded = small_menu_icon.getAttribute('aria-expanded') === 'true';
-
-    small_menu_icon.addEventListener('click', async () => {
-      if (!isExpanded) {
-        // Bootstrapのdropdownメソッドに相当するコードを実装
-        var dropdownMenu = new Dropdown(dropdown);
-        dropdownMenu.toggle();
-      }
-    });
-    */
   } catch (error) {
     console.log('ignore error:' + error);
   }

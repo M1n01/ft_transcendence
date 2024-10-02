@@ -70,7 +70,6 @@ export default class Branch {
   setUser(user1, user2) {
     this.user1 = user1;
     if (this.seed_flag == false) {
-      console.log('add user2:' + user2);
       this.user2 = user2;
     }
   }

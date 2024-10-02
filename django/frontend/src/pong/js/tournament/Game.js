@@ -357,9 +357,6 @@ export default class Game {
   }
 
   setUser(user1, user2) {
-    console.log('SetUser No.1');
-    console.log('user1=' + user1);
-    console.log('user2=' + user2);
     this.user1 = user1;
     if (this.seed_flag == false) {
       this.user2 = user2;

@@ -11,7 +11,6 @@ class FriendRequestForm(forms.ModelForm):
 
 
 class SearchFriendForm(forms.Form):
-    # query = forms.CharField(label=_(""), max_length=100, placeholder=_("ユーザー名"))
     query = forms.CharField(
         max_length=32,
         label="",

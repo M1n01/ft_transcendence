@@ -35,13 +35,9 @@ def get_users_active(list):
 
 
 async def active(json):
-    print("get_active No.1")
     list = json["content"].split("-")
-    print("get_active No.2")
     if len(list) == 0:
         return ("", "", "", "", "")
-    print("get_active No.3")
     param1 = await get_users_active(list)
-    print("get_active No.4")
     message = "active_list"
     return (message, param1, "", "", "")

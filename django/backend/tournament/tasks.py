@@ -62,7 +62,6 @@ def create_matches(tournament):
     seed_array = []
     while len(seed_array) <= seed_match_size - 1:
         i = random.randint(0, first_match_size - 1)
-        print(f"{i=}")
         if i not in seed_array:
             seed_array.append(i)
 

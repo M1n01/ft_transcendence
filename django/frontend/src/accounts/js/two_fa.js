@@ -46,7 +46,6 @@ document.addEventListener('TwoFaEvent', function () {
     }
     navModal(false);
     await moveTo('games');
-    console.log('Login Two fa OK');
     WebsocketInit();
   });
   input_code.addEventListener('input', () => {

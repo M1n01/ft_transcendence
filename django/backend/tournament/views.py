@@ -304,10 +304,7 @@ class DetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id = context[self.context_object_name].id
-        print(f"{id=}")
         participants = TournamentParticipant.objects.filter(tournament_id=id)
-        print(f"{participants=}")
-        print(f"{len(participants)=}")
         context["len_participants"] = len(participants)
         if len(participants) > 0:
             context["participants"] = participants

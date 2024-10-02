@@ -17,7 +17,6 @@ window.addEventListener('popstate', async (event) => {
       }
     } else {
       const uri = getDisplayedURI(window.location.href);
-      console.log('pre router() No.1');
       router(uri.rest, uri.params);
     }
   } catch (error) {
@@ -54,7 +53,6 @@ export const navigateTo = async (url, rest = '', params = '') => {
     history.replaceState(null, null, history_url);
   }
 
-  console.log('pre router() No.2 pathname:' + window.location.pathname);
   const tmp_view = await router(rest, params);
   if (tmp_view !== null) {
     view = tmp_view;

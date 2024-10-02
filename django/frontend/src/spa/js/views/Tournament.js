@@ -32,22 +32,10 @@ export default class extends AbstractView {
       return data;
     } else if (rest === '/recruiting') {
       let uri = getUrlWithLang('tournament/recruiting/');
-      //if (params === '') {
-      //uri = uri + '/';
-      //}
       const data = fetchData(uri + params);
       return data;
     } else if (rest === '/all') {
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
       const uri = getUrlWithLang('tournament/all/');
-      console.log('url:' + uri);
-      console.log('allllllllllllllllllllllllllllllllllllll');
-      console.log('allllllllllllllllllllllllllllllllllllll');
       const data = fetchData(uri + params);
       return data;
     } else if (detail_value > 0) {

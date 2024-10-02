@@ -42,32 +42,19 @@ class FriendView(ListView):
         return queryset
 
     def get(self, request):
-        # print("friend get")
         search_form = SearchFriendForm
         make_form = FriendRequestForm
         friend_request = self.request_model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )[:4]
-        # not_search1 = friend_request.values_list("friend", flat=True)
-
-        # results = []
         friends = get_friendlist(self.request)[:4]
         blocks = get_blocklist(self.request)[:4]
-        print(f"{len(blocks)=}")
-        # not_search2 = friends.values_list("friend", flat=True)
-        # not_search = not_search1 | not_search2
-        # username = request.GET.get("username", "")
-        # if username:
-        #    results = FtUser.objects.exclude(id__in=not_search).filter(
-        #        username__icontains=username
-        #    )
         return render(
             request,
             "friend/friend.html",
             {
                 "search_form": search_form,
                 "make_form": make_form,
-                # "results": results,
                 "friends": friends,
                 "blocks": blocks,
                 "friend_requests": friend_request,
@@ -102,23 +89,11 @@ class FindFriendView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        print("context No.1")
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["query"] = "?username=" + username
         context["search_form"] = self.search_form
-        print("context No.2")
         return context
-
-
-# def get(request):
-#   form = SearchFriendForm()
-#   results = []
-#   query = request.GET.get("query", "")
-#   if query:
-#       results = FtUser.objects.filter(username__icontains=query)
-#
-#   return render(request, "friend/search.html", {"form": form, "results": results})
 
 
 class RespondFriendRequest(UpdateView):
@@ -137,19 +112,13 @@ class RespondFriendRequest(UpdateView):
         friendship.status = status
         friendship.save()
 
-        print(f"{status=}")
-        print("Friend Status No.0")
         if status == FriendshipsStatusChoices.BLOCKED:
             print("Friend Status No.1")
             status = FriendshipsStatusChoices.BLOCK
-        print("Friend Status No.2")
-        print(f"{status=}")
 
         Friendships.objects.create(
             user=self.request.user, friend=friendship.user, status=status
         )
-        print("Friend Status No.3")
-
         return HttpResponse()
 
     def form_valid(self, form):
@@ -165,10 +134,8 @@ class RespondFriendRequest(UpdateView):
     pass
 
 
-# class FriendRequest(TemplateView):
 class FriendRequest(CreateView):
     form_class = FriendRequestForm
-    # template_name = "friend/request.html"
     usable_password = None
 
     def form_invalid(self, form):
@@ -180,25 +147,17 @@ class FriendRequest(CreateView):
     def get(self, request):
         return render(request, "friend/search.html")
 
-    # success_url = reverse_lazy("friend:friend")
     def post(self, request):
         try:
-            print("friend request No.1")
             username = request.POST.get("username")
             message = request.POST.get("request-message")
-            print(f"friend request No.2:{username=}")
-            print(f"friend request No.2:{message=}")
             tmp_friend = FtUser.objects.get(username=username)
-            print("friend request No.3")
             if tmp_friend is None:
-                print("friend request No.4")
                 return HttpResponseBadRequest()
-            print("friend request No.5")
 
             Friendships.objects.create(
                 user=request.user, friend=tmp_friend, message=message
             )
-            print("friend request No.6")
             return HttpResponse()
 
         except IntegrityError as e:
@@ -206,10 +165,6 @@ class FriendRequest(CreateView):
         except Exception as e:
             print(f"Copy Error:{e}")
         return HttpResponseBadRequest()
-
-
-# jdef make(request):
-# return render(request, "friend/request.html")
 
 
 class RequestsView(ListView):
@@ -220,71 +175,26 @@ class RequestsView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
-        print("searched No.1")
         return self.model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
         )
-
-    # def get_context_data(self, **kwargs):
-    #    print("context No.1")
-    #    context = super().get_context_data(**kwargs)
-    #    username = self.request.GET.get("username", "")
-    #    context["query"] = "?username=" + username
-    #    print("context No.2")
-    #    return context
 
 
 class FriendsView(ListView):
     model = Friendships
     context_object_name = "friends"
-    # search_form = SearchFriendForm
     template_name = "friend/friend-list.html"
     paginate_by = 2
 
     def get_queryset(self):
         return get_friendlist(self.request)
-        return self.model.objects.filter(
-            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
-        )
 
 
 class BlocksView(ListView):
     model = Friendships
     context_object_name = "blocks"
-    # search_form = SearchFriendForm
     template_name = "friend/block-users-list.html"
     paginate_by = 2
 
     def get_queryset(self):
         return get_blocklist(self.request)
-        return self.model.objects.filter(
-            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
-        )
-
-
-# class FriendsView(ListView):
-#    model = FtUser
-#    context_object_name = "contexts"
-#    template_name = "friend/list.html"
-#    paginate_by = 2
-#
-#    def get_queryset(self):
-#        return get_friendlist(self.request)
-#        return self.model.objects.filter(
-#            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
-#        )
-#
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        context["title"] = _("フレンド")
-#        context["card"] = "friend/d-card.html"
-#        return context
-
-
-# def get_context_data(self, **kwargs):
-#    print("context No.1")
-#    context = super().get_context_data(**kwargs)
-#    username = self.request.GET.get("username", "")
-#    context["query"] = "?username=" + username
-#    print("context No.2")
-#    return context
