@@ -14,6 +14,7 @@ DJANGO_PROD_SETTING	:= $(SRCDIR)/settings_prod.py
 NGINX_IMAGE		:= ft_transcendence-nginx
 DB_IMAGE			:= ft_transcendence-db
 DJANGO_IMAGE	:= ft_transcendence-django
+ETH_IMAGE	:= ft_transcendence-eth
 
 DB_NET				:= db_net
 DJANGO_NET		:= django_net
@@ -27,14 +28,16 @@ all: $(NAME)
 clean: stop
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/*.pyc"  -delete
-	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE)
+	find . -type d -name __pycache__ -exec rm -r {} \+
+	docker image rm $(DB_IMAGE) $(NGINX_IMAGE) $(DJANGO_IMAGE) $(ETH_IMAGE)
 
 fclean:
 	-$(MAKE) clean
 	docker system prune -f
 	docker volume prune -f
 	docker network prune -f
-	-rm -rf $(DB_VOLUME)/* $(DJANGODIR)/.my_pgpass
+	-rm django/backend/db.sqlite3
+	-rm -rf $(DB_VOLUME) $(DJANGODIR)/.my_pgpass
 
 re: fclean all
 
@@ -52,13 +55,13 @@ up:
 
 dev:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.dev.yml up -d
 	docker exec -it django bash -c '(cd frontend && npm start &) && python ./backend/manage.py runserver 0.0.0.0:8001'
 
 $(NAME):
 	-mkdir -p $(addprefix $(DJANGO_STATIC_DIR), media static)
 	ln -f $(DJANGO_PROD_SETTING) $(DJANGO_SETTING)
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d
+	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.prod.yml up -d
 
 
 .PHONY: all clean fclean re stop up update dev

@@ -18,13 +18,13 @@ class Friendships(models.Model):
         FtUser,
         on_delete=models.CASCADE,
         verbose_name=_("ユーザー"),
-        related_name="user",
+        related_name="Friendships_user",
     )
     friend = models.ForeignKey(
         FtUser,
         on_delete=models.CASCADE,
         verbose_name=_("フレンド"),
-        related_name="friend",
+        related_name="Friendships_friend",
     )
     message = models.CharField(
         verbose_name=_("メッセージ"),

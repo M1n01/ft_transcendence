@@ -1,2 +1,2 @@
-console.log("test.js Replace Test ");
-document.getElementById("replace").textContent = "AAAAAAAABBBBBBDDDDDFFFFFFF2";
+console.log('test.js Replace Test ');
+document.getElementById('replace').textContent = 'AAAAAAAABBBBBBDDDDDFFFFFFF2';

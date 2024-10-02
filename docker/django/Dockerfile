@@ -31,6 +31,7 @@ djangorestframework  \
 qrcode \
 requests \
 django-webpack-loader \
+web3 \
 pyjwt \
 sendgrid \
 twilio \

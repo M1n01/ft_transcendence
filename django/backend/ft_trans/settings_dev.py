@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+from pong.score_keeper.eth import get_contract_address
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,11 +96,11 @@ INSTALLED_APPS = [
     # "login",
     "accounts",
     # "accounts.models.ft_user",
-    "api",
     "sendgrid",
     "django_celery_results",
     "channels",
     "ws",
+    "web3",
 ]
 
 MIDDLEWARE = [
@@ -119,10 +120,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+PROJECT_ROOT = os.path.join(BASE_DIR, "..")
+
 # 出力ディレクトリ(nginxと共有)
-PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+# ブロックチェーン用ディレクトリ
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
 TEMPLATES = [
     {
@@ -366,7 +371,6 @@ TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 # Brevo(Email)
 BREVO_API_KEY = os.environ["BREVO_API_KEY"]
 BREVO_SENDER_ADDRESS = os.environ["BREVO_SENDER_ADDRESS"]
-
 # JWT有効期限
 JWT_TMP_VALID_TIME = 300
 JWT_VALID_TIME = 14400
@@ -374,3 +378,10 @@ JWT_VALID_TIME = 14400
 # timezon #時間にはJTC固定とする
 # ただし、内部的にはUTCで保存する
 TIME_HOURS = 9
+
+# WEB3
+PRIVATE_ACCOUNT_KEY = (
+    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+)
+PROVIDER_URL = "http://eth:8545"
+CONTRACT_ADDRESS = get_contract_address()
