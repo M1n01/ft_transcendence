@@ -84,8 +84,10 @@ def delete_user(request):
         
         # ユーザーの論理削除 (is_activeをFalseに設定)
         # request.user.username = ""
-        request.user.email = str(request.user.id) + '_user@tmp.email.com'
+        # request.user.email = None
         # request.user.email42 = None
+        request.user.email = str(request.user.id) + 'user@tmp.email.com'
+        request.user.email42 = str(request.user.id) + 'user@tmp.email.com'
         request.user.first_name = None
         request.user.last_name = None
         request.user.country_code = None
@@ -101,7 +103,7 @@ def delete_user(request):
 
         request.user.save()
         
-        print(request.user)
+        # print(request.user)
         # 適切なリダイレクト先に遷移
         return redirect('/')
 
