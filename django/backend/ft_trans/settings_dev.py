@@ -176,6 +176,8 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
+
+WS = "ws"
 # f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
 
 

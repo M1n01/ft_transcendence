@@ -152,6 +152,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ft_trans.wsgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
+
+WS = "wss"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -215,6 +222,10 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SSL_CERT_REQS": None,  # SSL証明書の検証をスキップ
+        },
     }
 }
 REDIS_SERVER = "redis"
@@ -222,7 +233,7 @@ REDIS_PORT = 6379
 REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
 
 # Celery configurations
-CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZZER = "json"
 # CELERY_TIMEZONE = TIME_ZONE
@@ -245,13 +256,13 @@ CELERY_RESULT_BACKEND = "django-db"
 
 CELERY_RESULT_EXTENDED = True
 
-# CELERYD_CONCURRENCY = 1
-#
-# CELERYD_LOG_FILE = "../log/celeryd.log"
-#
+CELERYD_CONCURRENCY = 1
+
+CELERYD_LOG_FILE = "../log/celeryd.log"
+
 # CELERYD_LOG_LEVELをINFOにしておくと、
 # タスクの標準出力もログ(celeryd.log)に書かれる
-# CELERYD_LOG_LEVEL = "INFO"
+CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
