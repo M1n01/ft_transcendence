@@ -3,12 +3,11 @@ import jwt
 from django.conf import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-# from asgiref.sync import async_to_sync
+# from accounts.models import FtUser
+from .message import get
 
-# from accounts.tasks import change_login_state
+# from .message import get, post
 
-# from channels.generic.websocket import JsonWebsocketConsumer
-# from channels.auth import login
 from channels.db import database_sync_to_async
 
 
@@ -57,7 +56,9 @@ class FtWebsocket(AsyncWebsocketConsumer):
         message = event["message"]
         print("info No.2")
         # await self.send(text_data=message)
-        await self.send(text_data=json.dumps({"type": "info", "message": message}))
+        await self.send(
+            text_data=json.dumps({"type": "info", "method": "post", "message": message})
+        )
         print("info No.3")
 
     async def get(self, event):
@@ -124,19 +125,20 @@ class FtWebsocket(AsyncWebsocketConsumer):
                 print("connect No.6")
 
                 await self.accept()  # WebSocket接続を受け入れる
+                await update_user_login_state(user, True)
                 # await self.send(text_data="message")
-                await self.send(text_data=json.dumps({"message": "test-message"}))
-                await self.channel_layer.group_send(
-                    group_name,
-                    {
-                        "type": "post",
-                        "message": "text_data33333",
-                        "param1": "param1",
-                        "param2": "param2",
-                        "param3": "param3",
-                        "param4": "",
-                    },
-                )
+                # await self.send(text_data=json.dumps({"message": "test-message"}))
+                # await self.channel_layer.group_send(
+                #    group_name,
+                #    {
+                #        "type": "post",
+                #        "message": "text_data33333",
+                #        "param1": "param1",
+                #        "param2": "param2",
+                #        "param3": "param3",
+                #        "param4": "",
+                #    },
+                # )
                 print("connect No.7")
                 print("connect No.8")
 
@@ -184,16 +186,46 @@ class FtWebsocket(AsyncWebsocketConsumer):
         print(message)
         pass
 
-    async def disconnect(self, close_code):
-        print("disconect No.1")
-        try:
-            print("disconect No.2")
-            session_id = self.scope["cookies"]["sessionid"]
-            user = await get_user(session_id)
-            # user = self.scope["user"]
-            await update_user_login_state(user, False)
-        except Exception:
-            print("disconnect Exception Error")
+    # async def disconnect(self, close_code):
+    #    print("disconect No.1")
+    #    try:
+    #        print("disconect No.2")
+    #        session_id = self.scope["cookies"]["sessionid"]
+    #        user = await get_user(session_id)
+    #        # user = self.scope["user"]
+    #        await update_user_login_state(user, False)
+    #    except Exception:
+    #        print("disconnect Exception Error")
+
+    async def handle_post_method(self, user, json):
+        print("handle_post_method No.1")
+        if json["message"] == "active":
+            print("handle_post_method No.2")
+            await update_user_login_state(user, True)
+            # await post.active(user, json)
+
+    async def handle_get_method(self, user, json):
+        message = ""
+        print(f'{json["message"]=}')
+        if json["message"] == "active_list":
+            (message, param1, param2, param3, param4) = await get.active(json)
+
+        group_name = self.room_group_name + str(user.id)
+        if message == "":
+            return
+        print("send")
+        await self.channel_layer.group_send(
+            group_name,
+            {
+                "type": "post",
+                "message": message,
+                "param1": param1,
+                "param2": param2,
+                "param3": param3,
+                "param4": param4,
+            },
+        )
+        print("send No.2")
 
     async def receive(self, text_data):
         session_id = self.scope["cookies"]["sessionid"]
@@ -202,37 +234,44 @@ class FtWebsocket(AsyncWebsocketConsumer):
             return
 
         # WebSocketでメッセージを受信したときに呼ばれる
-        text_data_json = json.loads(text_data)
-        print(f"receie No.2:{text_data_json=}")
         # message = text_data_json["message"]
-        message_type = text_data_json["type"]
-        message = text_data_json["message"]
-        print(f"receie No.3:{message_type=}")
-        # print(f"No.1:{message_type=}")
 
-        if message_type == "chat":
-            print("receive Chat message")
-        elif message_type == "response":
-            if message == "active":
-                print("active")
-                await update_user_login_state(user, True)
-        elif message_type == "connect":
-            print("receive Connect message")
+        try:
+            text_data_json = json.loads(text_data)
+            print(f"receie No.2:{text_data_json=}")
+            message_type = text_data_json["type"]
+            if message_type == "get":
+                print("get type")
+                await self.handle_get_method(user, text_data_json)
+            elif message_type == "post":
+                print("post type")
+                await self.handle_post_method(user, text_data_json)
+        except Exception as e:
+            print(f"Websocket Error:{e}")
 
-            group_name = self.room_group_name + str(user.id)
-            await self.channel_layer.group_send(
-                # await async_to_sync(self.channel_layer.group_send)(
-                group_name,  # グループ名
-                {
-                    "type": "info",  # イベントタイプ
-                    "message": "text_data",
-                    # "user_id": user.id,
-                    # "status": "online",  # 状態
-                },
-            )
+        # if message_type == "chat":
+        #    print("receive Chat message")
+        # elif message_type == "response":
+        #    if message == "active":
+        #        print("active")
+        #        await update_user_login_state(user, True)
+        # elif message_type == "connect":
+        #    print("receive Connect message")
 
-            # content = text_data_json["content"]
-            await update_user_login_state(user, True)
+        #    group_name = self.room_group_name + str(user.id)
+        #    await self.channel_layer.group_send(
+        #        # await async_to_sync(self.channel_layer.group_send)(
+        #        group_name,  # グループ名
+        #        {
+        #            "type": "info",  # イベントタイプ
+        #            "message": "text_data",
+        #            # "user_id": user.id,
+        #            # "status": "online",  # 状態
+        #        },
+        #    )
+
+        #    # content = text_data_json["content"]
+        #    await update_user_login_state(user, True)
         print("receive end")
 
     async def send_personal_message(self, event):

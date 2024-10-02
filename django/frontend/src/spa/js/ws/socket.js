@@ -1,3 +1,5 @@
+import { setUserActive } from '../../../friend/js/friend.js';
+
 let socket = null;
 
 //const ws_url = 'ws://localhost:8001/ws';
@@ -55,16 +57,19 @@ export const WebsocketInit = () => {
       console.log('get No.1');
       if (message === 'Let me know your alive') {
         console.log('Let me know your alive');
-        const resonse_json = { type: 'response', message: 'active' };
+        const resonse_json = { type: 'post', message: 'active' };
         sendWebSocket(resonse_json);
-      } else if (message === 'chat') {
-        console.log('chat');
       } else if (message === 'game') {
         console.log('game');
       } else {
         console.log('Unknown message type');
       }
     } else if (type == 'post') {
+      if (message === 'active_list') {
+        const active_list = json['param1'];
+        console.log('active_list:' + active_list);
+        setUserActive(active_list);
+      }
       console.log('post No.2');
     } else {
       console.log('other No.3');

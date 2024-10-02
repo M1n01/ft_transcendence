@@ -8,6 +8,39 @@ import '../scss/friend.scss';
 
 export const FriendEvent = new Event('FriendEvent');
 
+export const setUserActive = async (list) => {
+  console.log('setUserActive No.1');
+  const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
+  //const response_id = 1;
+
+  console.log('list:' + list);
+  if (list == '') {
+    return;
+  }
+  const json = JSON.parse(list);
+  console.log('SetUser Active No.2');
+
+  user_id_list.forEach((element) => {
+    console.log('SetUser Active No.3');
+    const id = element.textContent;
+    const card = element.parentElement.parentElement;
+    const active_true = card.querySelector('.login-active-true');
+    const active_false = card.querySelector('.login-active-false');
+    console.log('SetUser Active No.4');
+    if (active_true && active_false && id in json) {
+      const active = json[id];
+      if (active === 'True') {
+        active_true.hidden = false;
+        active_false.hidden = true;
+        console.log('active is True');
+      } else if (active === 'False') {
+        active_true.hidden = true;
+        active_false.hidden = false;
+      }
+    }
+  });
+};
+
 function intervalFunc() {
   console.log('Interval type3');
   const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
@@ -25,7 +58,8 @@ function intervalFunc() {
   if (id_list !== '') {
     id_list = id_list.substring(0, id_list.length - 1);
     const message = {
-      type: 'connect',
+      type: 'get',
+      message: 'active_list',
       content: id_list,
     };
     sendWebSocket(message);
