@@ -1,58 +1,97 @@
 {% load static %} {% load i18n %}
-<body>
-  <div id="login-nav" class="mx-auto">
-    <ul class="nav nav-pills nav-justified mb-3 rounded-0" id="ex1" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link active rounded-0"
-          id="tab-login"
-          role="tab"
-          aria-controls="pills-login"
-          aria-selected="true"
-        >
-          Login
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link rounded-0 btn-primary"
-          id="tab-signup"
-          data-mdb-pill-init
-          role="tab"
-          aria-controls="pills-signup"
-          aria-selected="false"
-        >
-          Signup
-        </button>
-      </li>
-    </ul>
-    <form hidden>dummy form</form>
-    <section id="signup-area" hidden>
-      {% include 'accounts/signup.html' with form=signup_form %}
-    </section>
-    <section id="login-area">{% include 'accounts/login.html' with form=login_form%}</section>
-  </div>
-  {% include 'accounts/two-fa-modal.html' %}
-  <script>
-    try {
-      const login_link = document.getElementById('tab-login');
-      const signup_link = document.getElementById('tab-signup');
-      const login_area = document.getElementById('login-area');
-      const signup_area = document.getElementById('signup-area');
-      login_link.addEventListener('click', () => {
-        login_link.classList.add('active');
-        signup_link.classList.remove('active');
-        signup_area.hidden = true;
-        login_area.hidden = false;
-      });
-      signup_link.addEventListener('click', () => {
-        signup_link.classList.add('active');
-        login_link.classList.remove('active');
-        login_area.hidden = true;
-        signup_area.hidden = false;
-      });
-    } catch (error) {
-      console.log('ignore' + error);
-    }
-  </script>
-</body>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Cookie Banner" %}</title>
+    <style>
+      #cookie-banner {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        display: block;  /* 初期状態は非表示 */
+      }
+      #cookie-banner button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        margin-left: 15px;
+        border: none;
+        cursor: pointer;
+      }
+      #cookie-banner a {
+        color: #ddd;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login-nav" class="mx-auto">
+      <ul class="nav nav-pills nav-justified mb-3 rounded-0" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active rounded-0"
+            id="tab-login"
+            role="tab"
+            aria-controls="pills-login"
+            aria-selected="true"
+          >
+            Login
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link rounded-0 btn-primary"
+            id="tab-signup"
+            data-mdb-pill-init
+            role="tab"
+            aria-controls="pills-signup"
+            aria-selected="false"
+          >
+            Signup
+          </button>
+        </li>
+      </ul>
+      <form hidden>dummy form</form>
+      <section id="signup-area" hidden>
+        {% include 'accounts/signup.html' with form=signup_form %}
+      </section>
+      <section id="login-area">{% include 'accounts/login.html' with form=login_form%}</section>
+    </div>
+    {% include 'accounts/two-fa-modal.html' %}
+    <div id="cookie-banner">
+      <p>
+        <!-- このサイトではユーザー体験向上のためクッキーを使用しています。詳細はプライバシーポリシーをご覧ください。 -->
+        このサイトではユーザー体験向上のためクッキーを使用しています。詳細は <a href="/privacy-policy" class="nav__link" data-link>プライバシーポリシー</a> をご覧ください。
+        <button id="accept-cookies">同意する</button>
+      </p>
+    </div>
+    <script>
+      try {
+        const login_link = document.getElementById('tab-login');
+        const signup_link = document.getElementById('tab-signup');
+        const login_area = document.getElementById('login-area');
+        const signup_area = document.getElementById('signup-area');
+        login_link.addEventListener('click', () => {
+          login_link.classList.add('active');
+          signup_link.classList.remove('active');
+          signup_area.hidden = true;
+          login_area.hidden = false;
+        });
+        signup_link.addEventListener('click', () => {
+          signup_link.classList.add('active');
+          login_link.classList.remove('active');
+          login_area.hidden = true;
+          signup_area.hidden = false;
+        });
+      } catch (error) {
+        console.log('ignore' + error);
+      }
+    </script>
+  </body>
+</html>

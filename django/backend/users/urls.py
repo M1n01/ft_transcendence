@@ -12,5 +12,6 @@ urlpatterns = [
     path("edit-profile", views.edit_profile, name="edit-profile"),
     path("delete-user", views.delete_user, name="delete-user"),
     path("cookie-banner", views.cookie_banner, name="cookie-banner"),
+    path("privacy-policy", views.privacy_policy, name="privacy-policy"),
     # path("signup-valid/", views.SignupView.as_view(), name="signup-valid"),
 ]

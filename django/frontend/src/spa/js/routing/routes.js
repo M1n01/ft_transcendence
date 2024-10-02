@@ -24,6 +24,7 @@ import Profile from '../views/Profile.js';
 import EditProfile from '../views/EditProfile.js';
 import DeleteUser from '../views/DeleteUser.js';
 import CookieBanner from '../views/CookieBanner.js';
+import PrivacyPolicy from '../views/PrivacyPolicy.js';
 
 export const Routes = [
   { path: '/', view: Top },
@@ -54,4 +55,5 @@ export const Routes = [
   { path: '/edit-profile', view: EditProfile },
   { path: '/delete-user', view: DeleteUser },
   { path: '/cookie-banner', view: CookieBanner },
+  { path: '/privacy-policy', view: PrivacyPolicy },
 ];

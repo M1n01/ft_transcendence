@@ -5,6 +5,7 @@ from django.views.decorators.http import condition
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required  # 認証が必要なページにする
+from django.contrib.auth.decorators import login_not_required
 from django.utils.translation import gettext as _
 
 from accounts.models import FtUser  # FtUserモデルをインポート
@@ -109,5 +110,10 @@ def delete_user(request):
 
     return render(request, 'users/delete-user.html')
 
+# TODO: あとで削除
 def cookie_banner(request):
     return render(request, "users/cookie-banner.html")
+
+@login_not_required
+def privacy_policy(request):
+    return render(request, "users/privacy-policy.html")
