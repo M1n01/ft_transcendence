@@ -1,7 +1,10 @@
 import { setUserActive } from '../../../friend/js/friend.js';
 
 let socket = null;
-const ws_url = 'ws://' + window.location.host + '/ws/websocket/';
+let ws_url = 'wss://' + window.location.host + '/ws/websocket/';
+if (window.location.protocol == 'http') {
+  ws_url = 'ws://' + window.location.host + '/ws/websocket/';
+}
 
 export const closetWebSocket = () => {
   socket.close();
