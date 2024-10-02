@@ -40,7 +40,8 @@ pyotp \
 celery \
 django-celery-results \
 redis \
-channels
+channels \
+pillow
 
 #django-redis #djang-redis is old
 #django-twilio
