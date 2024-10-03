@@ -1,0 +1,29 @@
+{% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Block List</title>
+  </head>
+  <body>
+    <br />
+    <div class="d-flex align-items-end">
+      <h3>{% trans "ブロックリスト" %}</h3>
+      <span class="h6 ps-2">
+        {% if blocks %}
+        <a href="/friend/blocks/" class="">{% trans 'すべてのブロックしたユーザーを表示' %}</a>
+        {% endif %}
+      </span>
+    </div>
+    {% if not blocks %}
+    <div>{% trans 'ブロックしたユーザーはいません' %}</div>
+    {% endif %} {% if blocks %}
+    <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
+      {% for user in blocks %} {% include 'friend/block-user-card.html' with friend=user %}
+      <span style="display: none"></span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </body>
+</html>

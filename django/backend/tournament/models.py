@@ -15,7 +15,7 @@ class Tournament(models.Model):
     name = models.CharField(verbose_name=_("トーナメント名"), max_length=32)
     organizer = models.ForeignKey(
         FtUser,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name=_("主催者"),
         related_name="organizer",
     )
@@ -40,8 +40,6 @@ class Tournament(models.Model):
 class TournamentParticipant(models.Model):
     id = models.BigAutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    participant = models.ForeignKey(
-        FtUser, on_delete=models.CASCADE, related_name="participant"
-    )
+    participant = models.ForeignKey(FtUser, on_delete=models.PROTECT)
     alias_name = models.CharField(verbose_name=_("エイリアス名"), max_length=32)
     is_accept = models.BooleanField(default=False)

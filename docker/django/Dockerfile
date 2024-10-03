@@ -40,7 +40,10 @@ sib_api_v3_sdk \
 pyotp \
 celery \
 django-celery-results \
-redis
+redis \
+channels \
+pillow
+
 #django-redis #djang-redis is old
 #django-twilio
 

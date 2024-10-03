@@ -7,16 +7,18 @@
     <title>Tournment List</title>
   </head>
   <body>
-    <br />
+    <h2 class="d-flex justify-content-center justify-content-sm-start ms-5 mb-5">{{attr.title}}</h2>
     <!-- ページネーションのリンクを表示 -->
     <ul class="pagination justify-content-center">
       {% if page_obj.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page=1">Top</a>
+        <a class="page-link" href="?page=1">{% trans 'Top' %}</a>
       </li>
 
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+          >{% trans 'Previous' %}</a
+        >
       </li>
 
       {% if page_obj.previous_page_number > 0 %}
@@ -31,7 +33,11 @@
           ><span class="fw-bold text-dark">{{ page_obj.number }}</span></a
         >
       </li>
-      {% endif%} {% if page_obj.has_next %} {% if page_obj.next_page_number < paginator.num_pages %}
+      {% endif%}
+      <!-- Dont' delete me-->
+      {% if page_obj.has_next %}
+      <!-- Dont' delete me-->
+      {% if page_obj.next_page_number <= paginator.num_pages %}
       <li class="page-item">
         <a class="page-link" href="?page={{ page_obj.next_page_number }}"
           >{{ page_obj.next_page_number }}</a
@@ -39,15 +45,10 @@
       </li>
       {% endif %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}"
-          >{{ paginator.num_pages }}</a
-        >
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Next' %}</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="?page={{ paginator.num_pages }}">Last</a>
+        <a class="page-link" href="?page={{ paginator.num_pages }}">{% trans 'Last' %}</a>
       </li>
       {% endif%}
     </ul>
@@ -58,7 +59,7 @@
         <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
           {% for tournament in tournaments %}
           <span style="display: none"></span>
-          {% include 'tournament/card.html' with tournament=tournament %} {% endfor %}
+          {% include 'tournament/card.html' with tournament=tournament attr=attr %} {% endfor %}
         </div>
         {% else %}
         <div>{% trans '対象のトーナメントは存在しません' %}</div>

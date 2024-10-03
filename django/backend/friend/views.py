@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView, ListView
+from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
 from .forms import FriendRequestForm, SearchFriendForm
 from .models import Friendships, FriendshipsStatusChoices
@@ -14,12 +14,26 @@ from django.db import IntegrityError
 from django.views.generic.edit import UpdateView
 
 
+def get_friendlist(request):
+    return Friendships.objects.filter(
+        user=request.user,
+        status=FriendshipsStatusChoices.ACCEPTED,
+    )
+
+
+def get_blocklist(request):
+    return Friendships.objects.filter(
+        user=request.user,
+        status=FriendshipsStatusChoices.BLOCK,
+    )
+
+
 class FriendView(ListView):
     model = FtUser
     request_model = Friendships
     template_name = "friend/friend.html"
     context_object_name = "users"
-    paginate_by = 10
+    paginate_by = 2
 
     def get_queryset(self):
         username = self.request.GET.get("username", "")
@@ -27,38 +41,22 @@ class FriendView(ListView):
             queryset = FtUser.objects.filter(username__icontains=username)
         return queryset
 
-    def get_friendlist(self):
-        return Friendships.objects.filter(
-            user=self.request.user,
-            status=FriendshipsStatusChoices.ACCEPTED,
-        )
-
     def get(self, request):
-        # print("friend get")
         search_form = SearchFriendForm
         make_form = FriendRequestForm
         friend_request = self.request_model.objects.filter(
             friend=self.request.user, status=FriendshipsStatusChoices.PENDING
-        )
-        not_search1 = friend_request.values_list("friend", flat=True)
-
-        results = []
-        friends = self.get_friendlist()
-        not_search2 = friends.values_list("friend", flat=True)
-        not_search = not_search1 | not_search2
-        username = request.GET.get("username", "")
-        if username:
-            results = FtUser.objects.exclude(id__in=not_search).filter(
-                username__icontains=username
-            )
+        )[:4]
+        friends = get_friendlist(self.request)[:4]
+        blocks = get_blocklist(self.request)[:4]
         return render(
             request,
             "friend/friend.html",
             {
                 "search_form": search_form,
                 "make_form": make_form,
-                "results": results,
                 "friends": friends,
+                "blocks": blocks,
                 "friend_requests": friend_request,
             },
         )
@@ -67,17 +65,35 @@ class FriendView(ListView):
         pass
 
 
-class FindFriendView(TemplateView):
+def get_searched_user(user):
+    pass
+
+
+class FindFriendView(ListView):
+    model = Friendships
+    context_object_name = "results"
     template_name = "friend/search.html"
+    search_form = SearchFriendForm
+    paginate_by = 2
 
-    def get(request):
-        form = SearchFriendForm()
-        results = []
-        query = request.GET.get("query", "")
-        if query:
-            results = FtUser.objects.filter(username__icontains=query)
+    def get_queryset(self):
+        friendships = Friendships.objects.filter(user=self.request.user)
+        frendshipd_id = [friendship.friend.id for friendship in friendships]
+        frendshipd_id.append(self.request.user.id)
+        username = self.request.GET.get("username", "")
+        queryset = []
+        if username:
+            queryset = FtUser.objects.exclude(id__in=frendshipd_id).filter(
+                username__icontains=username
+            )
+        return queryset
 
-        return render(request, "friend/search.html", {"form": form, "results": results})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["query"] = "?username=" + username
+        context["search_form"] = self.search_form
+        return context
 
 
 class RespondFriendRequest(UpdateView):
@@ -96,10 +112,13 @@ class RespondFriendRequest(UpdateView):
         friendship.status = status
         friendship.save()
 
+        if status == FriendshipsStatusChoices.BLOCKED:
+            print("Friend Status No.1")
+            status = FriendshipsStatusChoices.BLOCK
+
         Friendships.objects.create(
             user=self.request.user, friend=friendship.user, status=status
         )
-
         return HttpResponse()
 
     def form_valid(self, form):
@@ -115,10 +134,8 @@ class RespondFriendRequest(UpdateView):
     pass
 
 
-# class FriendRequest(TemplateView):
 class FriendRequest(CreateView):
     form_class = FriendRequestForm
-    template_name = "friend/request.html"
     usable_password = None
 
     def form_invalid(self, form):
@@ -130,15 +147,17 @@ class FriendRequest(CreateView):
     def get(self, request):
         return render(request, "friend/search.html")
 
-    # success_url = reverse_lazy("friend:friend")
     def post(self, request):
         try:
             username = request.POST.get("username")
+            message = request.POST.get("request-message")
             tmp_friend = FtUser.objects.get(username=username)
             if tmp_friend is None:
                 return HttpResponseBadRequest()
 
-            Friendships.objects.create(user=request.user, friend=tmp_friend)
+            Friendships.objects.create(
+                user=request.user, friend=tmp_friend, message=message
+            )
             return HttpResponse()
 
         except IntegrityError as e:
@@ -148,5 +167,34 @@ class FriendRequest(CreateView):
         return HttpResponseBadRequest()
 
 
-def make(request):
-    return render(request, "friend/request.html")
+class RequestsView(ListView):
+    model = Friendships
+    context_object_name = "requests"
+    # search_form = SearchFriendForm
+    template_name = "friend/request-list.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            friend=self.request.user, status=FriendshipsStatusChoices.PENDING
+        )
+
+
+class FriendsView(ListView):
+    model = Friendships
+    context_object_name = "friends"
+    template_name = "friend/friend-list.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        return get_friendlist(self.request)
+
+
+class BlocksView(ListView):
+    model = Friendships
+    context_object_name = "blocks"
+    template_name = "friend/block-users-list.html"
+    paginate_by = 2
+
+    def get_queryset(self):
+        return get_blocklist(self.request)

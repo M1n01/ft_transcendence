@@ -4,6 +4,8 @@ import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { navigateTo } from '..//routing/routing.js';
 import { moveTo } from '../routing/routing.js';
+import { getDisplayedURI } from '../../../../src/index.js';
+import { closetWebSocket } from '../ws/socket.js';
 
 export function isLogined() {
   //todo
@@ -14,7 +16,8 @@ export function isLogined() {
 }
 
 export const reload = async () => {
-  await router();
+  const uri = getDisplayedURI(window.location.href);
+  await router(uri.rest, uri.params);
   await loadNav();
 };
 
@@ -28,29 +31,13 @@ export const loadNav = async () => {
     logout_button.addEventListener('click', async () => {
       await logout();
     });
-
-    /*
-    const small_menu_icon = document.getElementById('small_menu_icon');
-    //var navbarToggler = document.querySelector('.navbar-toggler');
-    const dropdown = document.getElementById('small-menu-dropdown');
-
-    const isExpanded = small_menu_icon.getAttribute('aria-expanded') === 'true';
-
-    small_menu_icon.addEventListener('click', async () => {
-      if (!isExpanded) {
-        // Bootstrapのdropdownメソッドに相当するコードを実装
-        var dropdownMenu = new Dropdown(dropdown);
-        dropdownMenu.toggle();
-      }
-    });
-    */
   } catch (error) {
     console.log('ignore error:' + error);
   }
 };
 
 export const handlePostLogin = async () => {
-  moveTo('games');
+  moveTo('/games');
   document.getElementById('nav').hidden = false;
 };
 
@@ -59,6 +46,7 @@ export const logout = async () => {
   const formData = new FormData(form);
   const response = await fetchAsForm(form, formData);
   if (response.status == 200) {
+    closetWebSocket();
     navigateTo('login-signup');
     await reload();
   }

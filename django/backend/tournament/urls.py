@@ -22,6 +22,11 @@ urlpatterns = [
         name="participant",
     ),
     path(
+        "all/",
+        views.AllView.as_view(),
+        name="all",
+    ),
+    path(
         "register/",
         views.RegisterApi.as_view(),
         name="register",
@@ -30,6 +35,11 @@ urlpatterns = [
         "details/<int:pk>",
         views.DetailView.as_view(),
         name="details",
+    ),
+    path(
+        "info/<int:pk>",
+        views.InfoApi.as_view(),
+        name="info",
     ),
     re_path(r"[\w\-\/]*", include(spa.urls), name="error"),
 ]

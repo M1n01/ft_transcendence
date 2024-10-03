@@ -4,6 +4,8 @@ import { isLogined } from '../utility/user.js';
 import { executeScriptTab } from '../utility/script.js';
 import { reload } from '..//utility/user.js';
 import { getDisplayedURI } from '../../../../src/index.js';
+import { WebsocketInit } from '../ws/socket.js';
+import { check_friend_interval } from '../../../friend/js/friend.js';
 
 let view = undefined;
 window.addEventListener('popstate', async (event) => {
@@ -25,8 +27,9 @@ window.addEventListener('popstate', async (event) => {
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
 
-export const moveTo = async (url) => {
-  navigateTo(url);
+export const moveTo = async (url, rest = '', params = '') => {
+  savePage(url, rest, params);
+  await navigateTo(url, rest, params);
   await reload();
 };
 
@@ -57,6 +60,9 @@ export const navigateTo = async (url, rest = '', params = '') => {
 };
 
 export const router = async (rest = '', params = '') => {
+  WebsocketInit();
+  clearInterval(check_friend_interval);
+
   let url;
   if (rest !== '') {
     url = location.pathname.substring(0, location.pathname.indexOf(rest));

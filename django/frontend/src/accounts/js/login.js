@@ -1,11 +1,13 @@
 import '../scss/login.scss';
 import { getUrlWithLang } from '../../spa/js/utility/url.js';
-import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+//import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { submitForm } from '../../spa/js/utility/form.js';
 import { TwoFaEvent } from './two_fa.js';
 import { handlePostLogin } from '../../spa/js/utility/user.js';
 import ft_logo from '../assets/42.svg';
 
 import { navModal } from './two_fa.js';
+import { WebsocketInit } from '../../spa/js/ws/socket.js';
 export const LoginEvent = new Event('LoginEvent');
 
 function displayInstruction(id) {
@@ -35,10 +37,13 @@ document.addEventListener('LoginEvent', function () {
     });
 
     document.getElementById('login-form').addEventListener('submit', async function (event) {
+      const response = await submitForm(event);
+      /*
       event.preventDefault();
       const form = event.target;
       const formData = new FormData(form);
       const response = await fetchAsForm(form, formData);
+      */
 
       if (response.status == 200) {
         const len = response.headers.get('Content-Length');
@@ -88,6 +93,7 @@ document.addEventListener('LoginEvent', function () {
         }
         document.getElementById('close-modal').click();
         handlePostLogin();
+        WebsocketInit();
       } catch (error) {
         displayInstruction('instruction-error');
         console.error('Fetch Error:' + error);

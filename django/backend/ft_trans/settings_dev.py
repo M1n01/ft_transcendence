@@ -98,6 +98,8 @@ INSTALLED_APPS = [
     # "accounts.models.ft_user",
     "sendgrid",
     "django_celery_results",
+    "channels",
+    "ws",
     "web3",
 ]
 
@@ -165,6 +167,24 @@ DATABASES = {
     }
 }
 """  # PRODUCTION ENVIRONMENT
+
+# CHANNEL_LAYERS = {
+#    "default": {
+#        "BACKEND": "channels_redis.core.RedisChannelLayer",
+#        "CONFIG": {
+#            "hosts": [(f"default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30", 6379)],
+#        },
+#    },
+# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
+
+WS = "ws"
+# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+
 
 # """#DEVLOPMENT ENVIRONMENT
 DATABASES = {
