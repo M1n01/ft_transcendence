@@ -81,6 +81,7 @@ services:
     tty: true
     volumes:
       - ./eth:/workspace/eth
+      - node_modules:/workspace/eth/node_modules
     expose:
       - '8545'
 
@@ -109,3 +110,6 @@ networks:
     ipam:
       config:
         - subnet: 172.38.40.0/24
+
+volumes:
+  node_modules:
