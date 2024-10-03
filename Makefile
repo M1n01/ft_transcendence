@@ -21,6 +21,7 @@ DJANGO_NET		:= django_net
 DB_VOLUME			:= ./db_volume
 
 ENV_FILE			:= .env
+MODE					:= $(shell grep MODE $(ENV_FILE) | cut -d '=' -f2)
 
 
 all: $(NAME)
@@ -42,10 +43,18 @@ fclean:
 re: fclean all
 
 stop:
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) down
+	@if [ "$(MODE)" = "prod" ]; then \
+		docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.prod.yml down; \
+	else \
+		docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.dev.yml down; \
+	fi
 
 update: stop
-	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) up -d --build
+	@if [ "$(MODE)" = "prod" ]; then \
+		docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.prod.yml up -d --build; \
+	else \
+		docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.dev.yml up -d --build; \
+	fi
 
 up:
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
