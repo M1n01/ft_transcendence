@@ -53,15 +53,20 @@ up:
 	python $(BACKEND_DIR)/manage.py migrate
 	cd $(FRONTEND_DIR) && (npm start &) && python ../backend/manage.py runserver
 
-dev:
+dev: reset-mode
+	@echo "MODE=dev" >> $(ENV_FILE)
 	ln -f $(DJANGO_DEV_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.dev.yml up -d
 	docker exec -it django bash -c '(cd frontend && npm start &) && python ./backend/manage.py runserver 0.0.0.0:8001'
 
-$(NAME):
+$(NAME): reset-mode
+	@echo "MODE=prod" >> $(ENV_FILE)
 	-mkdir -p $(addprefix $(DJANGO_STATIC_DIR), media static)
 	ln -f $(DJANGO_PROD_SETTING) $(DJANGO_SETTING)
 	docker-compose --env-file $(ENV_FILE) -f $(COMPOSEFILE) -f docker-compose.prod.yml up -d
 
+reset-mode:
+	@awk '!/^MODE=/' $(ENV_FILE) > $(ENV_FILE).tmp && mv $(ENV_FILE).tmp $(ENV_FILE)
 
-.PHONY: all clean fclean re stop up update dev
+
+.PHONY: all clean fclean re stop up update dev reset-mode
