@@ -13,8 +13,9 @@ services:
       cd backend &&
       python manage.py makemigrations &&
       python manage.py migrate &&
-      (cd ../frontend && npm install && npm run build) &&
-      daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
+      (celery -A ft_trans  worker -B -l info )&
+      (cd frontend && npm install && npm run build) &&
+      cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '
 
   db:
