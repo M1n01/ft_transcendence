@@ -103,7 +103,7 @@ INSTALLED_APPS = [
     # "login",
     "accounts",
     # "accounts.models.ft_user",
-    "api",
+    # "api",
     "sendgrid",
     "django_celery_results",
     "channels",
