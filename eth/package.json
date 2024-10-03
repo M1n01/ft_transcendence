@@ -18,10 +18,10 @@
   "dependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@openzeppelin/contracts": "^5.0.2",
-    "dotenv": "^16.4.5",
-    "hardhat": "^2.22.6"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.6"
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.6",
+    "hardhat": "^2.22.12"
   }
 }
