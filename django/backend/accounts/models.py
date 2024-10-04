@@ -12,6 +12,8 @@ import logging
 
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 import pyotp
+import uuid
+import random
 
 
 class AuthChoices(models.TextChoices):
@@ -65,6 +67,14 @@ class FtUserManager(BaseUserManager):
             password=password,
             **extra_fields,
         )
+
+
+def user_avatar_path(instance, filename):
+    rand = random.randint(0, 1000)
+    extension = filename.split(".")[-1]
+    filename = f"{rand}/{uuid.uuid4()}.{extension}"
+
+    return f"avatars/user_{instance.id}/{filename}"
 
 
 class FtUser(AbstractBaseUser, PermissionsMixin):
@@ -121,6 +131,12 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
     loose_count = models.IntegerField(
         default=0,
+    )
+    # avatar = models.ImageField(upload_to=user_avatar_path, blank=True, null=True)
+    avatar = models.ImageField(
+        verbose_name=_("アバター"),
+        upload_to=user_avatar_path,
+        default="avatar/default/user.png",
     )
     # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)

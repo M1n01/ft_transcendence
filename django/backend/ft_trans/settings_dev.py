@@ -129,6 +129,12 @@ FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 # ブロックチェーン用ディレクトリ
 BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
+
+# メディア
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(PUBLIC_DIR, "media/")
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -295,9 +301,13 @@ LOCALE_PATHS = [
 ]
 
 
-STATIC_URL = "static/"
-STATIC_ROOT = "./public/assets"
-STATICFILES_DIRS = (os.path.join(PUBLIC_DIR, "static"),)
+# STATIC_URL = PUBLIC_DIR + "/"
+STATIC_URL = os.path.join(BASE_DIR, "..", "public/")
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "public")
+STATICFILES_DIRS = [
+    PUBLIC_DIR + "/media",
+]
+# STATICFILES_DIRS = (os.path.join(PUBLIC_DIR, "static"),)
 
 WEBPACK_LOADER = {
     "DEFAULT": {
@@ -344,7 +354,7 @@ LOGOUT_REDIRECT_URL = "accounts:login-signup"  # Logout後にリダイレクト�
 AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # デフォルトのまま。セッションデータをDBに保存
 LOGIN_URL = "spa:to-login"
-# AUTH_USER_MODEL = "accounts.FtUser"  # ユーザー認証用のモデル
+
 
 # OAUTH
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"

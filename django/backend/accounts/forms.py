@@ -228,3 +228,9 @@ class FtLoginForm(UserCreationForm):
         # widgets = {
         # "username": forms.TextInput(attrs={"class": "form-control"}),
         # }
+
+
+class UploadAvatarForm(forms.ModelForm):
+    class Meta:
+        model = FtUser
+        fields = ("avatar",)
