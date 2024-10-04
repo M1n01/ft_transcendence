@@ -65,8 +65,8 @@ const accept_friend_request = () => {
       const error = document.getElementById('request-accept-error');
       error.hidden = true;
 
-      const id = button.getAttribute('data-name');
-      const name = button.getAttribute('data-id');
+      const name = button.getAttribute('data-name');
+      const id = button.getAttribute('data-id');
       const img_url = button.getAttribute('data-img');
 
       const username = document.getElementById('request-accept-user-name');
@@ -104,8 +104,8 @@ const block_friend_request = () => {
 
       //const id = button.value;
       //const name = button.name;
-      const id = button.getAttribute('data-name');
-      const name = button.getAttribute('data-id');
+      const id = button.getAttribute('data-id');
+      const name = button.getAttribute('data-name');
       const img_url = button.getAttribute('data-img');
 
       const username = document.getElementById('request-block-user-name');
