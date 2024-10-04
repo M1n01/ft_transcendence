@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     # "accounts.models.ft_user",
     "sendgrid",
     "django_celery_results",
+    "users",
     "channels",
     "ws",
     "web3",

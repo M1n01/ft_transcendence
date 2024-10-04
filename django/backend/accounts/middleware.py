@@ -137,7 +137,9 @@ class CustomSessionMiddleware(SessionMiddleware):
                             "is_signup": is_provisional_signup,
                             "exp": exp,
                             "nbf": datetime.now(tz=timezone.utc)
-                            + timedelta(seconds=3),  # この時間より前に処理されたらエラーにする
+                            + timedelta(
+                                seconds=3
+                            ),  # この時間より前に処理されたらエラーにする
                             "iat": datetime.now(tz=timezone.utc),
                             # "jti":"token-id" #必要なら使う
                         },

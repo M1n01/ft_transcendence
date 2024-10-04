@@ -70,6 +70,7 @@ class FtOAuth(ModelBackend):
             user.email = str(cnt) + email  # dummy email
             user.email42 = email
             user.password = randomStr(32)
+            user.is_ft = True
             user.created_at = datetime.datetime.now()
             user.save()
             user = FtUser.objects.get(email42=email)
@@ -134,7 +135,9 @@ class FtOAuth(ModelBackend):
         response = requests.post(ft_oauth_url, params=params)
         if response.status_code >= 400:
             logger.error(f"error:{response.status_code=}")
-            raise RuntimeError(f"42認可サーバーに対する通信に失敗しました：{response.status_code}")
+            raise RuntimeError(
+                f"42認可サーバーに対する通信に失敗しました：{response.status_code}"
+            )
         return response
 
     # 42認可サーバーへ送信

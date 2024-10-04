@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 
 import spa.urls
 import accounts.urls
+import users.urls
 import friend.urls
 import notification.urls
 import pong.urls
@@ -35,6 +36,7 @@ urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
     # path("login/", include(login.urls)),
     path("i18n/", include("django.conf.urls.i18n")),
+    # path("users/", include(users.urls), name="users"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
@@ -44,6 +46,7 @@ urlpatterns += i18n_patterns(
     path("tournament/", include(tournament.urls), name="tournament"),
     path("friend/", include(friend.urls), name="friend"),
     path("spa/", include(spa.urls), name="spa2"),
+    path("users/", include(users.urls), name="users"),
     path("", include(spa.urls), name="blank"),
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,

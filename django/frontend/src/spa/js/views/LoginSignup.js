@@ -5,6 +5,7 @@ import { getUrlWithLang } from '../utility/url.js';
 import { LoginEvent } from '../../../accounts/js/login.js';
 import { SignupEvent } from '../../../accounts/js/signup.js';
 import { executeScriptTab } from '../utility/script.js';
+import { CookieBannerEvent } from '../../../users/js/banner.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -25,6 +26,7 @@ export default class extends AbstractView {
     executeScriptTab();
     document.dispatchEvent(LoginEvent);
     document.dispatchEvent(SignupEvent);
+    document.dispatchEvent(CookieBannerEvent);
     /*
 
     document.getElementById('index-nav').hidden = true;

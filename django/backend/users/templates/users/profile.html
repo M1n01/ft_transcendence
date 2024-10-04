@@ -1,0 +1,68 @@
+{% load static %} {% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% trans "Profile" %}</title>
+  </head>
+  <body>
+    <h1>{% trans "Profile" %}</h1>
+    <!-- <div style="width: 500px; height: 230px" class="border"> -->
+    <table>
+      <tbody>
+        <tr>
+          <td>{% trans "ユーザー名" %}</td>
+          <td>{{ user.username }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "Email address" %}</td>
+          <td>{{ user.email }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "氏" %}</td>
+          <td>{{ user.last_name }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "名" %}</td>
+          <td>{{ user.first_name }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "生年月日" %}</td>
+          <td>{{ user.birth_date }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "国コード" %}</td>
+          <td>{{ user.country_code }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>{% trans "電話番号" %}</td>
+          <td>{{ user.phone }}</td>
+          <td></td>
+        </tr>
+        <!-- <tr>
+              <td>{% trans "is_ft" %}</td>
+              <td>{{ user.is_ft }}</td>
+              <td></td> 
+            </tr> -->
+        <tr>
+          <td>{% trans "言語" %}</td>
+          <td>{{ user.language }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- </div> -->
+    <!-- 他に表示したい情報があればここに追加 -->
+    <div id="edit-profile">
+      <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
+      <a href="/delete-user" class="nav__link" data-link>{% trans "Delete" %}</a>
+    </div>
+  </body>
+</html>
