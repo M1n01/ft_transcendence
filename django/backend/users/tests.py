@@ -32,13 +32,13 @@
 #         # ユーザーでログイン
 #         login = self.client.login(username='testA1', password='AAdfBC3DfwFi49')
 #         self.assertTrue(login)  # ログインが成功したかを確認
-        
+
 #         # edit-profileビューにアクセス
 #         response = self.client.get(reverse('users:edit-profile'))
-        
+
 #         # ステータスコードが200であることを確認
 #         self.assertEqual(response.status_code, 200)
-        
+
 #         # テンプレートが正しくレンダリングされているか確認
 #         self.assertTemplateUsed(response, 'users/edit-profile.html')
 

@@ -7,6 +7,7 @@ from accounts.models import FtTmpUser, AuthChoices, LanguageChoice, COUNTRY_CODE
 from django.utils.translation import gettext_lazy as _
 import re
 
+
 class UserEditForm(forms.ModelForm):
     username = forms.CharField(
         widget=forms.TextInput(
@@ -53,7 +54,7 @@ class UserEditForm(forms.ModelForm):
                 "id": "birth_date_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("birth_date"),
-                "type": "date"
+                "type": "date",
             }
         ),
     )
@@ -94,12 +95,12 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = FtUser
         fields = (
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'birth_date',
-            'country_code',
-            'phone',
-            'language'
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "country_code",
+            "phone",
+            "language",
         )

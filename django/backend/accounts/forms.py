@@ -186,7 +186,9 @@ class SignUpForm(UserCreationForm):
         email = self.cleaned_data.get("email")
         if FtTmpUser.objects.filter(email=email).exists():
             print(f"email Error:{email=}")
-            raise forms.ValidationError("このメールアドレスは既に使用されています。......")
+            raise forms.ValidationError(
+                "このメールアドレスは既に使用されています。......"
+            )
         return email
 
     def clean_phone(self):
