@@ -1,14 +1,21 @@
 {% load i18n %} {% load tz %}
 <div class="col-md-4 mb-4 w-auto card-div">
   <div class="card mx-0 mx-sm-0">
-    <div class="card-img-top-block">
-      <img src="{{friend.friend.avatar.url}}" class="card-img-top-block" alt="..." />
-    </div>
+      <div class="avatar-background">
+        <div
+          style="background-image: url('{{friend.friend.avatar.url}}');   "
+          class="avatar-background-img"
+        ></div>
+      </div>
+
+
+
     <div class="card-body text-truncate border-top">
       <div class="text-center">
+        <div class="friend-user-id-hidden" hidden>{{friend.friend.id}}</div>
         <strong class="card-label d-flex justify-content-center"
-          >{{friend.friend.username}}<br
-        /></strong>
+          >a{{friend.friend.username}}
+        </strong>
       </div>
     </div>
   </div>
