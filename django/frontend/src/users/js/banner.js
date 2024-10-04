@@ -23,6 +23,10 @@ function checkCookieBanner() {
   var cookieAccepted = getCookie('cookieAccepted');
   if (cookieAccepted === 'true') {
     const banner = document.getElementById('cookie-banner');
+    if (banner == null) {
+      return;
+    }
+
     banner.style.display = 'none';
   }
 }
@@ -39,6 +43,9 @@ export const CookieBannerEvent = new Event('CookieBannerEvent');
 document.addEventListener('CookieBannerEvent', function () {
   try {
     const banner = document.getElementById('cookie-banner');
+    if (banner == null) {
+      return;
+    }
 
     // クッキーをチェックしてバナーを表示するかどうかを決定
     checkCookieBanner();
@@ -46,6 +53,7 @@ document.addEventListener('CookieBannerEvent', function () {
     // 同意ボタンのクリックイベント
     document.getElementById('accept-cookies').addEventListener('click', () => {
       banner.style.display = 'none'; // バナーを非表示
+
       // 「はい」ボタンを押したらクッキーを設定
       setCookie('cookieAccepted', 'true', 1); // 1日（24時間）クッキーを保持
     });
