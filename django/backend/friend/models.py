@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 class FriendshipsStatusChoices(models.TextChoices):
     PENDING = "PENDING", _("pending")
     ACCEPTED = "ACCEPTED", _("accepted")
-    BLOCKED = "BLOCKED", _("blocked")
+    BLOCK = "BLOCK", _("block")  # ブロックする時
+    BLOCKED = "BLOCKED", _("blocked")  # ブロックされた時
     REMOVED = "REMOVED", _("removed")
 
 
@@ -17,13 +18,19 @@ class Friendships(models.Model):
         FtUser,
         on_delete=models.CASCADE,
         verbose_name=_("ユーザー"),
-        related_name="user",
+        related_name="Friendships_user",
     )
     friend = models.ForeignKey(
         FtUser,
         on_delete=models.CASCADE,
         verbose_name=_("フレンド"),
-        related_name="friend",
+        related_name="Friendships_friend",
+    )
+    message = models.CharField(
+        verbose_name=_("メッセージ"),
+        max_length=200,
+        null=True,
+        blank=True,
     )
     status = models.CharField(
         verbose_name=_("状態"),

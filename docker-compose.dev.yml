@@ -1,0 +1,27 @@
+services:
+  django:
+    depends_on:
+      eth:
+        condition: service_healthy
+    command: /bin/sh -c '
+      cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
+      sh ./backend/make_db_setting.sh &&
+      cd backend &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py loaddata ./**/fixtures/initial_data.json &&
+      (celery -A ft_trans  worker -B -l info )&
+      (cd frontend && npm install && npm run build) &&
+      cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
+      '
+
+  eth:
+    environment:
+      - PRIVATE_ACCOUNT_KEY=$PRIVATE_ACCOUNT_KEY
+      - PROVIDER_URL=$PROVIDER_URL
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8545']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    command: /bin/sh -c "npx hardhat compile && npx hardhat node & sleep 10 && npx hardhat run scripts/deploy-local.js --network localhost && tail -f /dev/null"

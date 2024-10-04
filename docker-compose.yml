@@ -1,23 +1,3 @@
-networks:
-  django_net:
-    name: django_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.38.10.0/24
-  db_net:
-    name: db_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.38.20.0/24
-  redis_net:
-    name: redis_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.38.30.0/24
-
 services:
   nginx:
     container_name: 'nginx'
@@ -35,27 +15,9 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
     volumes:
-      - ./django//public/:/public/
-  db:
-    container_name: 'db'
-    build:
-      context: ./docker/db
-      dockerfile: Dockerfile
-    networks:
-      - db_net
-    tty: true
-    volumes:
-      - ./db_volume/:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      - POSTGRES_DJANGO_USER=$POSTGRES_DJANGO_USER
-      - POSTGRES_DJANGO_PASSWORD=$POSTGRES_DJANGO_PASSWORD
-      - POSTGRES_DJANGO_DB_NAME=$POSTGRES_DJANGO_DB_NAME
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 3s
-      timeout: 1s
-      retries: 5
+      - ./django/public/:/public/
+    depends_on:
+      - django
 
   redis:
     container_name: 'redis'
@@ -85,13 +47,12 @@ services:
     networks:
       - django_net
       - db_net
+      - eth_net
       - redis_net
     tty: true
     volumes:
       - ./django/:/workspace
-    depends_on:
-      db:
-        condition: service_healthy
+      - ./eth:/workspace/eth
     ports:
       - 3000:3000
       - 8000:8000
@@ -109,14 +70,46 @@ services:
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
       - REDIS_PASSOWRD=$REDIS_PASSOWRD
-    command: /bin/sh -c '
-      cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
-      sh ./backend/make_db_setting.sh &&
-      cd backend &&
-      python manage.py makemigrations &&
-      python manage.py migrate &&
-      python manage.py loaddata ./**/fixtures/initial_data.json &&
-      (celery -A ft_trans  worker -B -l info )&
-      (cd frontend && npm install && npm run build) &&
-      cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
-      '
+
+  eth:
+    container_name: 'eth'
+    build:
+      context: .
+      dockerfile: ./docker/eth/Dockerfile
+    networks:
+      - eth_net
+    tty: true
+    volumes:
+      - ./eth:/workspace/eth
+      - node_modules:/workspace/eth/node_modules
+    expose:
+      - '8545'
+
+networks:
+  django_net:
+    name: django_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.10.0/24
+  db_net:
+    name: db_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.20.0/24
+  redis_net:
+    name: redis_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.30.0/24
+  eth_net:
+    name: eth_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.38.40.0/24
+
+volumes:
+  node_modules:

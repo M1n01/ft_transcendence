@@ -103,9 +103,13 @@ INSTALLED_APPS = [
     # "login",
     "accounts",
     # "accounts.models.ft_user",
-    "api",
+    # "api",
     "sendgrid",
     "django_celery_results",
+    "users",
+    "channels",
+    "ws",
+    "web3",
 ]
 
 MIDDLEWARE = [
@@ -125,10 +129,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ft_trans.urls"
 
+PROJECT_ROOT = os.path.join(BASE_DIR, "..")
+
 # 出力ディレクトリ(nginxと共有)
-PUBLIC_DIR = os.path.join(BASE_DIR, "..", "public")
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 # フロントエンド用ディレクトリ
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+# ブロックチェーン用ディレクトリ
+BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
 TEMPLATES = [
     {
@@ -150,6 +158,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ft_trans.wsgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
+
+WS = "wss"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -213,6 +228,10 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SSL_CERT_REQS": None,  # SSL証明書の検証をスキップ
+        },
     }
 }
 REDIS_SERVER = "redis"
@@ -220,7 +239,7 @@ REDIS_PORT = 6379
 REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
 
 # Celery configurations
-CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZZER = "json"
 # CELERY_TIMEZONE = TIME_ZONE
@@ -243,13 +262,13 @@ CELERY_RESULT_BACKEND = "django-db"
 
 CELERY_RESULT_EXTENDED = True
 
-# CELERYD_CONCURRENCY = 1
-#
-# CELERYD_LOG_FILE = "../log/celeryd.log"
-#
+CELERYD_CONCURRENCY = 1
+
+CELERYD_LOG_FILE = "../log/celeryd.log"
+
 # CELERYD_LOG_LEVELをINFOにしておくと、
 # タスクの標準出力もログ(celeryd.log)に書かれる
-# CELERYD_LOG_LEVEL = "INFO"
+CELERYD_LOG_LEVEL = "INFO"
 
 
 # Internationalization
@@ -296,15 +315,6 @@ LANGUAGES = [
     ("en", _("English")),
     ("fr", _("French")),
 ]
-
-# CORS設定（暫定)
-# CORS_ALLOWED_ORIGINS = [
-# "https://localhost",
-# "http://localhost:8000",
-# ]
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -355,3 +365,8 @@ JWT_VALID_TIME = 14400
 # timezon #時間にはJTC固定とする
 # ただし、内部的にはUTCで保存する
 TIME_HOURS = 9
+
+# WEB3
+PRIVATE_ACCOUNT_KEY = os.environ["PRIVATE_ACCOUNT_KEY"]
+PROVIDER_URL = os.environ["PROVIDER_URL"]
+CONTRACT_ADDRESS = os.environ["CONTRACT_ADDRESS"]

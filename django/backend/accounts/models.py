@@ -116,6 +116,12 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         max_length=2,
         default=LanguageChoice.JP,
     )
+    win_count = models.IntegerField(
+        default=0,
+    )
+    loose_count = models.IntegerField(
+        default=0,
+    )
     # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
     # is_2fa = models.BooleanField(verbose_name=_("is_2fa"), default=False)
@@ -130,8 +136,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         default=True,
     )
 
-    is_temporary = models.BooleanField(
-        verbose_name=_("is_temporary"),
+    is_login = models.BooleanField(
+        verbose_name=_("is_login"),
         default=False,
     )
 
@@ -259,6 +265,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         max_length=2,
         default=LanguageChoice.JP,
     )
+
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
     is_ft = models.BooleanField(verbose_name=_("is_ft"), default=False, null=True)
     is_staff = models.BooleanField(
@@ -270,9 +277,9 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("is_active"),
         default=True,
     )
-    is_temporary = models.BooleanField(
-        verbose_name=_("is_temporary"),
-        default=True,
+    is_login = models.BooleanField(
+        verbose_name=_("is_login"),
+        default=False,
     )
 
     birth_date = models.DateField(verbose_name=_("誕生日"), blank=True, null=True)

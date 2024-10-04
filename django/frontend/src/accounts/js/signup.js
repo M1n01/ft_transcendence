@@ -25,13 +25,19 @@ document.addEventListener('SignupEvent', function () {
     const phone_auth_error = document.getElementById('phone-auth-error');
     signup_form.addEventListener('submit', async function (e) {
       e.preventDefault();
+      const form = e.target;
+      if (form.disabled == true) {
+        return;
+      }
+
+      form.disabled = true;
       if (auth_select.value == 'SMS' && phone_input.value == '') {
         phone_auth_error.hidden = false;
         return;
       }
-      const form = e.target;
       const formData = new FormData(form);
       let response = await fetchAsForm(form, formData);
+      form.disabled = false;
 
       if (response.status == 200) {
         try {

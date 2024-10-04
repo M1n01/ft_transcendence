@@ -2,21 +2,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic import CreateView
 from django.conf import settings
-
-from .tasks import my_task
+from django.db import IntegrityError, transaction
 
 from .models import Tournament, TournamentParticipant, TournamentStatusChoices
 from .forms import TournamentForm, TournamentParticipantForm
 
 from django.http import (
     HttpResponseBadRequest,
-    HttpResponseServerError,
     HttpResponse,
+    JsonResponse,
 )
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 import re
 from datetime import datetime, timedelta, timezone
+from pong.models import MatchTmp
+from .tasks import create_matches
 
 
 class RecruitingView(ListView):
@@ -87,6 +88,21 @@ class ParticipantView(ListView):
         return context
 
 
+class AllView(ListView):
+    model = Tournament
+    template_name = "tournament/list.html"
+    context_object_name = "tournaments"
+    paginate_by = 16
+
+    def get_queryset(self):
+        return Tournament.objects.all().order_by("-start_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("すべてのトーナメント")
+        return context
+
+
 class RegisterApi(CreateView):
     model = TournamentParticipant
     form_class = TournamentParticipantForm
@@ -98,25 +114,47 @@ class RegisterApi(CreateView):
 
     def form_valid(self, form):
         try:
-            my_task.delay(3, 5)
-
             data = self.request.POST.copy()
             data["participant"] = self.request.user
             data["participant_id"] = self.request.user.id
             data["is_accept"] = True
             form = TournamentParticipantForm(data)
             if form.is_valid():
-                # form.save() がうまくいかないので仕方なく
 
-                TournamentParticipant.objects.create(
-                    tournament_id=form.cleaned_data["tournament_id"],
-                    alias_name=form.cleaned_data["alias_name"],
-                    participant=self.request.user,
-                    is_accept=True,
+                tournament = form.cleaned_data["tournament_id"]
+                try:
+                    with transaction.atomic():
+                        participants = (
+                            TournamentParticipant.objects.select_for_update().filter(
+                                tournament_id=tournament
+                            )
+                        )
+                        if len(participants) >= tournament.current_players:
+                            data = {"is_full": True}
+                            return JsonResponse(data, status=500)
+
+                        # form.save() がうまくいかないので仕方なく
+                        TournamentParticipant.objects.create(
+                            tournament_id=tournament,
+                            alias_name=form.cleaned_data["alias_name"],
+                            participant=self.request.user,
+                            is_accept=True,
+                        )
+                except IntegrityError:
+                    data = {"is_full": False}
+                    return JsonResponse(data, status=500)
+
+                participants = TournamentParticipant.objects.select_for_update().filter(
+                    tournament_id=tournament
                 )
+                if len(participants) == tournament.current_players:
+                    create_matches(tournament)
+                    tournament.status = TournamentStatusChoices.ONGOING
+                    tournament.save()
         except Exception as e:
             print(f"{e=}")
-            return HttpResponseServerError()
+            data = {"is_full": False}
+            return JsonResponse(data, status=500)
         return HttpResponse()
 
 
@@ -153,12 +191,16 @@ class TournamentView(LoginRequiredMixin, CreateView):
             "-start_at"
         )[:4]
 
+    def get_all_data(self):
+        return Tournament.objects.all().order_by("-start_at")[:4]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["recruiting"] = self.get_recruiting_data()
         context["as_participant"] = self.get_participant_data()
         context["as_organizer"] = self.get_organizer_data()
         context["old"] = self.get_old_data()
+        context["all"] = self.get_all_data()
 
         context["recruit_status"] = {
             "title": _("参加可能トーナメント"),
@@ -182,6 +224,12 @@ class TournamentView(LoginRequiredMixin, CreateView):
         context["old_status"] = {
             "title": _("終了したトーナメント"),
             "link": "/tournament/old/",
+            "button": _("詳細"),
+            "display_register": False,
+        }
+        context["all_status"] = {
+            "title": _("すべてのーナメント"),
+            "link": "/tournament/all/",
             "button": _("詳細"),
             "display_register": False,
         }
@@ -256,10 +304,7 @@ class DetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id = context[self.context_object_name].id
-        print(f"{id=}")
         participants = TournamentParticipant.objects.filter(tournament_id=id)
-        print(f"{participants=}")
-        print(f"{len(participants)=}")
         context["len_participants"] = len(participants)
         if len(participants) > 0:
             context["participants"] = participants
@@ -267,3 +312,30 @@ class DetailView(DetailView):
             context["participants"] = _("参加者はいません")
 
         return context
+
+
+class InfoApi(DetailView):
+    model = Tournament
+    template_name = "tournament/detail.html"
+    context_object_name = "tournament"
+
+    def get(self, request, pk, **kwargs):
+        tournament = Tournament.objects.get(pk=pk)
+        participants = TournamentParticipant.objects.filter(tournament_id=tournament)
+        matches = MatchTmp.objects.filter(tournament_id=tournament)
+        match_data = [
+            {
+                "id": match.round,
+                "player1": match.player1.username if match.player1 is not None else "",
+                "player2": match.player2.username if match.player2 is not None else "",
+                "player1_score": match.player1_score,
+                "player2_score": match.player2_score,
+            }
+            for match in matches
+        ]
+        data = {
+            "max_user_cnt": len(participants),
+            "name": tournament.name,
+            "matches": match_data,
+        }
+        return JsonResponse(data)

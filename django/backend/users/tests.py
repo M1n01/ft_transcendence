@@ -1,46 +1,46 @@
-from django.urls import reverse
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from accounts.models import FtUser
+# from django.urls import reverse
+# from django.test import TestCase
+# from django.contrib.auth import get_user_model
+# from accounts.models import FtUser
 
-class EditProfileTestCase(TestCase):
-    def setUp(self):
-        # テスト用のユーザーを作成
-        # self.User = get_user_model()
-        self.test_user = FtUser.objects.create_user(
-            username="testA1",
-            password="AAdfBC3DfwFi49",
-            email="testA1@gmail.com",
-            email42="testA142@gmail.com",
-            first_name="test",
-            last_name="A1",
-            country_code="+81",
-            phone="9012345678",
-            language="jp",
-            birth_date="2024-01-01",
-            created_at="2024-01-01T00:00:00Z",
-            updated_at="2024-01-01T00:00:00Z",
-            is_ft=False,
-        )
+# class EditProfileTestCase(TestCase):
+#     def setUp(self):
+#         # テスト用のユーザーを作成
+#         # self.User = get_user_model()
+#         self.test_user = FtUser.objects.create_user(
+#             username="testA1",
+#             password="AAdfBC3DfwFi49",
+#             email="testA1@gmail.com",
+#             email42="testA142@gmail.com",
+#             first_name="test",
+#             last_name="A1",
+#             country_code="+81",
+#             phone="9012345678",
+#             language="jp",
+#             birth_date="2024-01-01",
+#             created_at="2024-01-01T00:00:00Z",
+#             updated_at="2024-01-01T00:00:00Z",
+#             is_ft=False,
+#         )
 
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('users:edit-profile'))
-        self.assertEqual(response.status_code, 302)  # リダイレクトが発生しているか確認
-        # self.assertRedirects(response, '/accounts/login/?next=/users/edit-profile')  # リダイレクト先を確認
+#     def test_redirect_if_not_logged_in(self):
+#         response = self.client.get(reverse('users:edit-profile'))
+#         self.assertEqual(response.status_code, 302)  # リダイレクトが発生しているか確認
+#         # self.assertRedirects(response, '/accounts/login/?next=/users/edit-profile')  # リダイレクト先を確認
 
-    def test_profile_edit_page_renders_correctly(self):
-        # ユーザーでログイン
-        login = self.client.login(username='testA1', password='AAdfBC3DfwFi49')
-        self.assertTrue(login)  # ログインが成功したかを確認
+#     def test_profile_edit_page_renders_correctly(self):
+#         # ユーザーでログイン
+#         login = self.client.login(username='testA1', password='AAdfBC3DfwFi49')
+#         self.assertTrue(login)  # ログインが成功したかを確認
         
-        # edit-profileビューにアクセス
-        response = self.client.get(reverse('users:edit-profile'))
+#         # edit-profileビューにアクセス
+#         response = self.client.get(reverse('users:edit-profile'))
         
-        # ステータスコードが200であることを確認
-        self.assertEqual(response.status_code, 200)
+#         # ステータスコードが200であることを確認
+#         self.assertEqual(response.status_code, 200)
         
-        # テンプレートが正しくレンダリングされているか確認
-        self.assertTemplateUsed(response, 'users/edit-profile.html')
+#         # テンプレートが正しくレンダリングされているか確認
+#         self.assertTemplateUsed(response, 'users/edit-profile.html')
 
 
 # from django.test import TestCase

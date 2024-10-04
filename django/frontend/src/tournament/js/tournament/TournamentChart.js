@@ -18,16 +18,17 @@ export default class TournmentChart {
     if (cur_game.edge_flag == true) {
       const cur_game_data = games.find((game) => game.id == cur_game.id);
 
-      let tmp_user1;
-      let tmp_user2;
+      //let tmp_user1;
+      //let tmp_user2;
 
-      if (cur_game_data.loser === '') {
+      if (cur_game_data.player2 === '') {
         cur_game.seed_flag = true;
-        cur_game.winner = cur_game_data.winner;
-        cur_game.user1 = cur_game_data.winner;
+        cur_game.winner = cur_game_data.player1;
+        cur_game.user1 = cur_game_data.player1;
         return;
       }
 
+      /*
       if (cur_game_data.winner < cur_game_data.loser) {
         tmp_user1 = cur_game_data.winner;
         tmp_user2 = cur_game_data.loser;
@@ -35,14 +36,17 @@ export default class TournmentChart {
         tmp_user2 = cur_game_data.winner;
         tmp_user1 = cur_game_data.loser;
       }
+      */
 
-      cur_game.user1 = tmp_user1;
-      cur_game.user2 = tmp_user2;
+      cur_game.user1 = cur_game_data.player1;
+      cur_game.user2 = cur_game_data.player2;
 
-      if (cur_game.user1 == cur_game_data.winner) {
+      if (cur_game_data.player1_score > cur_game_data.player2_score) {
         cur_game.winner = cur_game.user1;
-      } else {
+      } else if (cur_game_data.player1_score < cur_game_data.player2_score) {
         cur_game.winner = cur_game.user2;
+      } else {
+        cur_game.winner = '';
       }
       return;
     }
@@ -51,17 +55,34 @@ export default class TournmentChart {
     const next_id1 = current_id * 10 + 1;
     const next_id2 = current_id * 10 + 2;
 
-    const cur_game_data = games.find((game) => game.id == current_id);
+    //const cur_game_data = games.find((game) => game.id == current_id);
     const next_game_data1 = games.find((game) => game.id == next_id1);
     const next_game_data2 = games.find((game) => game.id == next_id2);
 
-    cur_game.user1 = next_game_data1.winner;
-    cur_game.user2 = next_game_data2.winner;
-
-    if (cur_game_data.winner == next_game_data1.winner) {
-      cur_game.winner = next_game_data1.winner;
+    if (next_game_data1.player1_score > next_game_data1.player2_score) {
+      cur_game.user1 = next_game_data1.player1;
+    } else if (next_game_data1.player1_score < next_game_data1.player2_score) {
+      cur_game.user1 = next_game_data1.player2;
     } else {
-      cur_game.winner = next_game_data2.winner;
+      cur_game.user1 = '';
+    }
+    //cur_game.user1 = next_game_data1.winner;
+    //cur_game.user2 = next_game_data2.winner;
+
+    if (next_game_data2.player1_score > next_game_data2.player2_score) {
+      cur_game.user2 = next_game_data2.player1;
+    } else if (next_game_data1.player1_score < next_game_data2.player2_score) {
+      cur_game.user2 = next_game_data2.player2;
+    } else {
+      cur_game.user2 = '';
+    }
+
+    if (cur_game.winner == '') {
+      cur_game.winner = '';
+    } else if (cur_game.winner == cur_game.user1) {
+      cur_game.winner = cur_game.user1;
+    } else {
+      cur_game.winner = cur_game.user2;
     }
 
     let next_game1;

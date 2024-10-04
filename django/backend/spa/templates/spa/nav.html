@@ -86,7 +86,7 @@
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}
-                    <a id="nav-logout-button" type="submit" class="dropdown-item" data-link
+                    <a id="nav-logout-button" type="submit" class="dropdown-item"
                       >{% trans "ログアウト" %}</a
                     >
                   </form>

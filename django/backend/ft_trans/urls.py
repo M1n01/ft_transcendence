@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
+import pong.urls
 
 
 import spa.urls
@@ -32,7 +33,6 @@ import tournament.urls
 # API
 urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
-    # path('api/', include(api.urls)),
     # path("login/", include(login.urls)),
     path("i18n/", include("django.conf.urls.i18n")),
     path("users/", include(users.urls), name="users"),

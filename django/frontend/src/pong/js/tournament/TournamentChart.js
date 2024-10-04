@@ -14,7 +14,6 @@ export default class TournmentChart {
   }
 
   recursiveSetGame(games, cur_game) {
-    console.log('set final No.4 cur_game=' + cur_game);
     // 再帰終了条件
     if (cur_game.edge_flag == true) {
       const cur_game_data = games.find((game) => game.id == cur_game.id);
@@ -37,44 +36,17 @@ export default class TournmentChart {
         tmp_user1 = cur_game_data.loser;
       }
 
-      //console.log('cur_game winner=' + cur_game.winner);
-      console.log('cur_game_data tmp_user1=' + tmp_user1);
-      console.log('cur_game_data tmp_user2=' + tmp_user2);
       cur_game.user1 = tmp_user1;
       cur_game.user2 = tmp_user2;
-      // 初期位置は、ユーザー名が大きい方が上になる
-      /*
-      if (tmp_user1 > tmp_user2) {
-        console.log('user1:' + tmp_user1);
-        console.log('user2:' + tmp_user2);
-        cur_game.user1 = tmp_user1;
-        cur_game.user2 = tmp_user2;
-      } else {
-        cur_game.user1 = tmp_user2;
-        cur_game.user2 = tmp_user1;
-      }
-      */
 
       if (cur_game.user1 == cur_game_data.winner) {
         cur_game.winner = cur_game.user1;
       } else {
         cur_game.winner = cur_game.user2;
       }
-      console.log('cur_game winner=' + cur_game.winner);
-      console.log('cur_game_data winner=' + cur_game_data.winner);
-      console.log('cur_game_data loser=' + cur_game_data.loser);
-      //if (cur_game_data.loser == '') {
-      //cur_game.seed_flag = true;
-      //} else {
-      //cur_game.user2 = tmp_user2;
-      //cur_game.seed_flag = false;
-      //}
-      console.log('tmp_user1=' + tmp_user1);
-      console.log('tmp_user2=' + tmp_user2);
 
       return;
     }
-    console.log('set final No.5 cur_game=' + cur_game);
 
     const current_id = cur_game.id;
     const next_id1 = current_id * 10 + 1;
@@ -92,9 +64,6 @@ export default class TournmentChart {
     } else {
       cur_game.winner = next_game_data2.winner;
     }
-    console.log('cur_game.winner:' + cur_game.winner);
-    console.log('cur_game.user1:' + cur_game.user1);
-    console.log('cur_game.user2:' + cur_game.user2);
 
     let next_game1;
     let next_game2;
@@ -114,31 +83,7 @@ export default class TournmentChart {
   }
 
   setGames(games) {
-    console.log('set final No.3 cur_game=' + this.final);
     this.recursiveSetGame(games, this.final);
-    //if (this.size != participants.length) {
-    //return false;
-    //}
-
-    /*
-    const current_id = game.id;
-    const next_id1 = current_id * 10 + 1;
-    const next_id2 = current_id * 10 + 2;
-
-    const final = games.find((game) => game.id == '0');
-    const semi_final1 = games.find((game) => game.id == '1');
-    const semi_final2 = games.find((game) => game.id == '2');
-
-    //this.final = new Game();
-
-    this.final.user1 = semi_final1.winner;
-    this.final.user2 = semi_final2.winner;
-    if (final.winner == semi_final1.winner) {
-      this.final.winner = semi_final1.winner;
-    } else {
-      this.final.winner = semi_final2.winner;
-    }
-    */
   }
 
   setParticipants(participants) {
@@ -156,16 +101,10 @@ export default class TournmentChart {
     this.setSeedFlag(leftEdge, seed_left_cnt);
     this.setSeedFlag(rightEdge, seed_right_cnt);
 
-    //const seed_participants = this.leftBranches.filter((branch) => {})
-    //const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
-    //const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
     const edges = [...leftEdge, ...rightEdge];
-    console.log('edges=' + edges);
-    console.log('edges[0]=' + edges[0]);
     const seed_edges = edges.filter((edge) => edge.seed_flag == true);
     const not_seed_edges = edges.filter((edge) => edge.seed_flag == false);
 
-    //for(let i=0;i<seed_edges.)
     seed_edges.forEach((edge, index) => {
       edge.setUser(participants[index]);
     });
@@ -179,10 +118,6 @@ export default class TournmentChart {
         edge.setUser(tmp_user2, tmp_user1);
       }
     });
-
-    // this.leftBranches.forEach((branch) => {
-    //   branch.print();
-    // });
 
     return true;
   }
@@ -215,7 +150,6 @@ export default class TournmentChart {
       console.log('end');
       return;
     }
-    //branch.write(ctx);
     const edge_flag = maxCnt - cnt == 1;
     let new_branches = branch.getNewGames(edge_flag);
     branches.push(new_branches[0]);
@@ -235,14 +169,6 @@ export default class TournmentChart {
 
     const ctx = document.createElement('div');
 
-    // 塗りつぶされた四角形
-    //ctx.fillStyle = 'blue';
-
-    // 線の色と太さ
-    //ctx.strokeStyle = 'black';
-    //ctx.lineWidth = 3;
-
-    // キャンバスの幅と高さ
     const canvasWidth = this.parent.clientWidth - OffsetX;
     const canvasHeight = this.parent.clientHeight;
 
@@ -263,7 +189,6 @@ export default class TournmentChart {
     this.offsetPoint = RightOffsetPoint;
 
     const BaseWidthLength = parseInt(RightOffsetPoint.x / 1.5);
-    //const BaseHeightLength = RightOffsetPoint.y;
 
     const offset = new Point(-BaseWidthLength, 0);
     const LeftOffBase = new Point(-BaseWidthLength, 0);
@@ -272,58 +197,20 @@ export default class TournmentChart {
     let leftPoint = CanvasCenter.copyOffset(LeftOffBase);
     let rightPoint = CanvasCenter.copyOffset(RightOffBase);
 
-    console.log('set final No.1');
     this.final = new Game(CanvasCenter, offset, false, 0, '', CanvasCenter);
-    console.log('set final No.2 final=' + this.final);
     const leftBranch = new Game(leftPoint, LeftOffsetPoint, false, 1, 'left', this.final);
     const rightBranch = new Game(rightPoint, RightOffsetPoint, false, 2, 'right', this.final);
-    console.log('init No.5');
 
-    //const JointBaseLeft = CanvasCenter.copyOffset(LeftOffsetPoint);
-    //const JointBaseRight = CanvasCenter.copyOffset(RightOffsetPoint);
     this.leftBranches = [leftBranch];
     this.rightBranches = [rightBranch];
 
-    console.log('init No.6');
     this.recursiveMakeBranch(ctx, leftBranch, 1, BranchDepth, this.leftBranches);
-    console.log('init No.7');
     this.recursiveMakeBranch(ctx, rightBranch, 1, BranchDepth, this.rightBranches);
-    console.log('init No.8');
-
-    //const branches_cnt = leftBranches.length + rightBranches.length;
-    /*
-    const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
-    const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
-
-    const seed_cnt = (leftEdge.length + rightEdge.length) * 2 - this.size;
-    const seed_left_cnt = parseInt(seed_cnt / 2);
-    const seed_right_cnt = seed_cnt - seed_left_cnt;
-
-    this.setSeedFlag(leftEdge, seed_left_cnt);
-    this.setSeedFlag(rightEdge, seed_right_cnt);
-    */
 
     return;
   };
 
   draw = () => {
-    //const ctx = this.canvas.getContext('2d');
-    //ctx.strokeStyle = 'blue';
-
-    //const left_branch = this.leftBranches[0];
-    //const right_branch = this.rightBranches[0];
-
-    //ctx.beginPath();
-    //const BaseWidthLength = this.offsetPoint.x / 1.5;
-
-    /*
-    left_branch.line.moveTo(ctx);
-    left_branch.line.lineToX(ctx, BaseWidthLength);
-    right_branch.line.moveTo(ctx);
-    right_branch.line.lineToX(ctx, -BaseWidthLength);
-    */
-    //ctx.stroke();
-
     this.final.draw(this.parent, null);
     this.leftBranches.forEach((game) => {
       const next_id = parseInt(game.id / 10);
@@ -335,27 +222,8 @@ export default class TournmentChart {
       const next_game = this.rightBranches.find((game) => game.id == next_id);
       game.draw(this.parent, next_game);
     });
-
-    // キャンバスの幅と高さ
-    //const canvasWidth = this.canvas.width;
-    //const canvasWidth = this.canvas.width - OffsetX;
-    //const canvasHeight = this.canvas.height;
-    //const initWidth = this.parent.clientWidth;
-    //const initHeight = this.parent.clientHeight;
-
-    //const centerX = (initWidth + OffsetX) / 2;
-    //const centerY = initHeight / 2;
-
-    // 円の半径
-    //const radius = 5;
-    // Center Red Circle
-    //ctx.fillStyle = 'red';
-    //ctx.beginPath();
-    ////ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    //ctx.fill();
   };
   drawParticipants = () => {
-    //const ctx = this.canvas.getContext('2d');
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
     const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
 
@@ -366,6 +234,4 @@ export default class TournmentChart {
       edge.drawUser(this.parent);
     });
   };
-
-  //});
 }

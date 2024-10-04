@@ -1,7 +1,9 @@
-import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+//import { fetchAsForm } from '../../spa/js/utility/fetch.js';
+import { submitForm } from '../../spa/js/utility/form.js';
 import '../scss/two_fa.scss';
 import { moveTo } from '../../spa/js/routing/routing.js';
 import { Modal } from 'bootstrap';
+import { WebsocketInit } from '../../spa/js/ws/socket.js';
 export const TwoFaEvent = new Event('TwoFaEvent');
 
 let modal = null;
@@ -30,17 +32,21 @@ document.addEventListener('TwoFaEvent', function () {
   const resend_two_fa = document.getElementById('resend-two-fa');
 
   two_fa_form.addEventListener('submit', async function (event) {
+    const response = await submitForm(event);
+    /*
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
+    */
     input_code.value = '';
     if (response.status != 200) {
       error_message.hidden = false;
       return;
     }
     navModal(false);
-    moveTo('games');
+    await moveTo('games');
+    WebsocketInit();
   });
   input_code.addEventListener('input', () => {
     error_message.hidden = true;
@@ -48,10 +54,13 @@ document.addEventListener('TwoFaEvent', function () {
   });
 
   resend_two_fa.addEventListener('submit', async (event) => {
+    const response = await submitForm(event);
+    /*
     event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     const response = await fetchAsForm(form, formData);
+    */
     if (response.status == 200) {
       try {
         const json = await response.json();
