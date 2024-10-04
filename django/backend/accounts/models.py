@@ -75,7 +75,9 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.AutoField(primary_key=True)
-    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
+    username = models.CharField(
+        verbose_name=_("ユーザー名"), max_length=32, unique=False
+    )
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),
@@ -225,7 +227,9 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.AutoField(primary_key=True)
-    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
+    username = models.CharField(
+        verbose_name=_("ユーザー名"), max_length=32, unique=False
+    )
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),

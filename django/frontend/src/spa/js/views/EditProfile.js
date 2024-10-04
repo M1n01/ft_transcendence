@@ -14,8 +14,7 @@ export default class extends AbstractView {
     return data;
   };
 
-  executeScript = () => {
-  };
+  executeScript = () => {};
 
   getState = () => {
     return null;
