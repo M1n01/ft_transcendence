@@ -1,10 +1,12 @@
 {% load i18n %} {% load tz %}
 <div class="col-md-4 mb-4 w-auto card-div">
   <div class="card mx-0 mx-sm-0">
-    <img src="..." class="card-img-top" alt="..." />
+    <div>
+      <img src="{{request.user.avatar.url}}" class="card-img-top img-fluid" alt="..." />
+    </div>
     <div class="card-body text-truncate">
       <div class="text-center">
-        <strong class="card-label d-flex justify-content-center">{% trans '主催者'%}<br /></strong
+        <strong class="card-label d-flex justify-content-center"><br /></strong
         ><span><span class="text-center">{{request.user.username}}</span></span>
       </div>
     </div>
@@ -16,8 +18,9 @@
           class="btn btn-danger text-nowrap pre-block-friend"
           data-bs-toggle="modal"
           data-bs-target="#blockModal"
-          value="{{request.id}}"
-          name="{{request.user.username}}"
+          data-name="{{request.user.username}}"
+          data-id="{{request.id}}"
+          data-img="{{request.user.avatar.url}}"
         >
           {% trans 'ブロック' %}
         </button>
@@ -35,6 +38,9 @@
             data-bs-target="#acceptModal"
             value="{{request.id}}"
             name="{{request.user.username}}"
+            data-name="{{request.user.username}}"
+            data-id="{{request.id}}"
+            data-img="{{request.user.avatar.url}}"
           >
             {% trans '許可' %}
           </button>

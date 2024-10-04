@@ -71,7 +71,7 @@
                 data-bs-target="#friendRequestModal"
               >
                 {% trans 'フレンド申請' %}
-                <div class="request-button-name" hidden>{{ friend.username }}</div>
+                <div class="request-button-name" hidden data-url="{{ friend.avatar.url }}" data-name="{{ friend.username }}"></div>
                 <div hidden></div>
               </button>
             </th>
