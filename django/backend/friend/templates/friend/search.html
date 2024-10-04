@@ -53,7 +53,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">{% trans 'アイコン' %}</th>
+            <th scope="col">{% trans 'アバター' %}</th>
             <th scope="col">{% trans 'ユーザー名' %}</th>
             <th scope="col">{% trans '申請' %}</th>
           </tr>
@@ -61,7 +61,16 @@
         <tbody>
           {% for friend in results %}
           <tr>
-            <th><img class="img-fluid ft-logo" id="ft-logo" alt="42-logo" /></th>
+            <th>
+              <img
+                src="{{friend.avatar.url}}"
+                class="img-fluid ft-logo"
+                id="ft-logo"
+                alt="42-logo"
+                height="40"
+                width="40"
+              />
+            </th>
             <th>{{ friend.username }}</th>
             <th>
               <button
@@ -71,7 +80,12 @@
                 data-bs-target="#friendRequestModal"
               >
                 {% trans 'フレンド申請' %}
-                <div class="request-button-name" hidden data-url="{{ friend.avatar.url }}" data-name="{{ friend.username }}"></div>
+                <div
+                  class="request-button-name"
+                  hidden
+                  data-url="{{ friend.avatar.url }}"
+                  data-name="{{ friend.username }}"
+                ></div>
                 <div hidden></div>
               </button>
             </th>
