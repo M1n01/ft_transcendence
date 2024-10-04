@@ -303,11 +303,9 @@ LOCALE_PATHS = [
 
 
 # STATIC_URL = PUBLIC_DIR + "/"
-STATIC_URL = os.path.join(BASE_DIR, "..", "public/")
-STATIC_ROOT = os.path.join(BASE_DIR, "..", "public")
-STATICFILES_DIRS = [
-    PUBLIC_DIR + "/media",
-]
+STATIC_URL = "static/"
+STATIC_ROOT = "./public/assets"
+STATICFILES_DIRS = (os.path.join(PUBLIC_DIR, "static"),)
 # STATICFILES_DIRS = (os.path.join(PUBLIC_DIR, "static"),)
 
 WEBPACK_LOADER = {
