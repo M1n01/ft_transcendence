@@ -26,10 +26,11 @@ export default class extends AbstractView {
       const uri = getUrlWithLang('users/edit-profile/');
       const data = fetchData(uri + params);
       return data;
-    } else if (rest === '/privacy-policy') {
-      const uri = getUrlWithLang('users/privacy-policy/');
-      const data = fetchData(uri + params);
-      return data;
+      // privacy-policyはログインしなくても入れるのでここにあると入れない
+      //} else if (rest === '/privacy-policy') {
+      //const uri = getUrlWithLang('users/privacy-policy/');
+      //const data = fetchData(uri + params);
+      //return data;
     } else if (rest === '/cookie-banner') {
       const uri = getUrlWithLang('users/cookie-banner/');
       const data = fetchData(uri + params);

@@ -126,6 +126,9 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         max_length=2,
         default=LanguageChoice.JP,
     )
+    match_count = models.IntegerField(
+        default=0,
+    )
     win_count = models.IntegerField(
         default=0,
     )

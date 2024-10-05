@@ -23,10 +23,6 @@ function checkCookieBanner() {
   var cookieAccepted = getCookie('cookieAccepted');
   if (cookieAccepted === 'true') {
     const banner = document.getElementById('cookie-banner');
-    if (banner == null) {
-      return;
-    }
-
     banner.style.display = 'none';
   }
 }
@@ -43,9 +39,6 @@ export const CookieBannerEvent = new Event('CookieBannerEvent');
 document.addEventListener('CookieBannerEvent', function () {
   try {
     const banner = document.getElementById('cookie-banner');
-    if (banner == null) {
-      return;
-    }
 
     // クッキーをチェックしてバナーを表示するかどうかを決定
     checkCookieBanner();
