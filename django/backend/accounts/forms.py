@@ -177,9 +177,9 @@ class SignUpForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
-        if FtUser.objects.filter(username=username).exists():
-            print(f"username Error:{username=}")
-            raise forms.ValidationError("このユーザー名は既に使用されています。")
+        # if FtUser.objects.filter(username=username).exists():
+        # print(f"username Error:{username=}")
+        # raise forms.ValidationError("このユーザー名は既に使用されています。")
         return username
 
     def clean_email(self):
@@ -234,3 +234,6 @@ class UploadAvatarForm(forms.ModelForm):
     class Meta:
         model = FtUser
         fields = ("avatar",)
+        # avatar = forms.ImageField(
+        #    widget=forms.URLInput(attrs={"class": "form-control btn btn-primary"}),
+        # )

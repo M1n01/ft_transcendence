@@ -8,61 +8,162 @@
   </head>
   <body>
     <h1>{% trans "Profile" %}</h1>
-    <!-- <div style="width: 500px; height: 230px" class="border"> -->
-    <table>
-      <tbody>
-        <tr>
-          <td>{% trans "ユーザー名" %}</td>
-          <td>{{ user.username }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "Email address" %}</td>
-          <td>{{ user.email }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "氏" %}</td>
-          <td>{{ user.last_name }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "名" %}</td>
-          <td>{{ user.first_name }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "生年月日" %}</td>
-          <td>{{ user.birth_date }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "国コード" %}</td>
-          <td>{{ user.country_code }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>{% trans "電話番号" %}</td>
-          <td>{{ user.phone }}</td>
-          <td></td>
-        </tr>
-        <!-- <tr>
-              <td>{% trans "is_ft" %}</td>
-              <td>{{ user.is_ft }}</td>
-              <td></td> 
-            </tr> -->
-        <tr>
-          <td>{% trans "言語" %}</td>
-          <td>{{ user.language }}</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- </div> -->
-    <!-- 他に表示したい情報があればここに追加 -->
-    <div id="edit-profile">
-      <a href="/edit-profile" class="nav__link" data-link>{% trans "Edit" %}</a>
-      <a href="/delete-user" class="nav__link" data-link>{% trans "Delete" %}</a>
+    <div class="container">
+      <div class="column">
+        <div class="col-12 col-sm-4 text-center">
+          <div class="avatar-background">
+            <div
+              style="background-image: url('{{user.avatar.url}}');   "
+              class="avatar-background-img"
+            ></div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-8 text-center text-sm-start">
+          <div class="form-group row">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              {% trans "ユーザー名" %}
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value align-top">{{ user.username }}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "Email address" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.email}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "氏" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.last_name}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "名" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.first_name}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "生年月日" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.birth_date}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "国コード" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.country_code}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "電話番号" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.phone}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              {% trans "言語" %}
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.language}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-sm-start justify-content-center mt-4">
+            <a href="/users/edit" class="btn btn-primary me-4" data-link>{% trans "Edit" %}</a>
+            <button
+              id="open-delete-modal-button"
+              href="/edit-profile"
+              class="btn btn-danger ms-4"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteModal"
+            >
+              {% trans "Delete" %}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- どこにリンクを張るのかわからないので、暫定的にここにおいておく-->
+    <a href="/users/privacy-policy" class="btn btn-primary mt-4" data-link>{% trans "Privacy" %}</a>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-dark">
+            <h5 class="modal-title">{% trans "アカウント削除" %}</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-dark">
+            <p>{% trans "アカウント削除します。" %}</p>
+            <p>{% trans "復旧することはできません。" %}</p>
+            <div id="delete-user-error" class="text-danger" hidden>
+              削除に失敗しました。 <br />ログインし直して、再度実施してください。
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              id="delete-user-cancel"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              false
+            >
+              {% trans "キャンセル" %}
+            </button>
+            <form id="delete-user" method="POST" action="{% url 'users:delete-user' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger" id="delete-user-form">
+                {% trans "削除" %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
