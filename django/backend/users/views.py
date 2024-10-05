@@ -1,15 +1,21 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
-from django.views.decorators.http import condition
+from django.views.generic import UpdateView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required  # 認証が必要なページにする
 from django.contrib.auth.decorators import login_not_required
-from django.utils.translation import gettext as _
 
-from accounts.models import FtUser  # FtUserモデルをインポート
+# from django.utils.translation import gettext as _
+from django.urls import reverse_lazy
+
 from .forms import UserEditForm
+from accounts.forms import UploadAvatarForm
+
+from django.http import (
+    HttpResponseNotFound,
+)
 
 # loginしない限り見れない
 # class Pong(LoginRequiredMixin, ListView):
@@ -70,6 +76,7 @@ def profile(request):
 @login_required
 def edit_profile(request):
     user = request.user  # ログインユーザーを取得
+    avatar_class = UploadAvatarForm
     if request.method == "POST":
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
@@ -77,7 +84,9 @@ def edit_profile(request):
             return redirect("/profile")  # 編集後、プロファイルページにリダイレクト
     else:
         form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
-    return render(request, "users/edit-profile.html", {"form": form})
+    return render(
+        request, "users/edit-profile.html", {"form": form, "avatar": avatar_class}
+    )
 
 
 # ユーザ情報を論理削除する
@@ -107,6 +116,7 @@ def delete_user(request):
         request.user.updated_at = None
 
         request.user.save()
+        # request.user.logout()
 
         # print(request.user)
         # 適切なリダイレクト先に遷移
@@ -123,3 +133,18 @@ def cookie_banner(request):
 @login_not_required
 def privacy_policy(request):
     return render(request, "users/privacy-policy.html")
+
+
+class UpdateAvatar(UpdateView):
+    form_class = UploadAvatarForm
+    template_name = "user/profile.html"  # 使わない
+    success_url = reverse_lazy("friend:friend")  # 使わない
+
+    def get(self, request):
+        """
+        GETは禁止
+        """
+        return HttpResponseNotFound()
+
+    def get_object(self):
+        return self.request.user

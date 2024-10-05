@@ -10,7 +10,7 @@ export default class extends AbstractView {
   }
 
   getHtml = async () => {
-    const uri = getUrlWithLang('users/privacy-policy');
+    const uri = getUrlWithLang('users/privacy-policy/');
     const data = await fetchData(uri);
     return data;
   };

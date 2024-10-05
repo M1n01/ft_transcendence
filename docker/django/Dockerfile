@@ -42,7 +42,8 @@ celery \
 django-celery-results \
 redis \
 channels \
-pillow
+pillow \
+python-magic
 
 #django-redis #djang-redis is old
 #django-twilio

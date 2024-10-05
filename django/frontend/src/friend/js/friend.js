@@ -65,13 +65,17 @@ const accept_friend_request = () => {
       const error = document.getElementById('request-accept-error');
       error.hidden = true;
 
-      const id = button.value;
-      const name = button.name;
+      const name = button.getAttribute('data-name');
+      const id = button.getAttribute('data-id');
+      const img_url = button.getAttribute('data-img');
 
       const username = document.getElementById('request-accept-user-name');
-      username.textContent = name;
       const input_id = document.getElementById('request-accept-input-user-id');
+      const avatar = document.getElementById('request-accept-user-avatar');
+
+      username.textContent = name;
       input_id.value = id;
+      avatar.src = img_url;
 
       const form = document.getElementById('accept-friend-request-form');
       form.addEventListener('submit', async (event) => {
@@ -98,13 +102,18 @@ const block_friend_request = () => {
       const error = document.getElementById('request-block-error');
       error.hidden = true;
 
-      const id = button.value;
-      const name = button.name;
+      //const id = button.value;
+      //const name = button.name;
+      const id = button.getAttribute('data-id');
+      const name = button.getAttribute('data-name');
+      const img_url = button.getAttribute('data-img');
 
       const username = document.getElementById('request-block-user-name');
       username.textContent = name;
       const input_id = document.getElementById('request-block-input-user-id');
       input_id.value = id;
+      const avatar = document.getElementById('request-block-user-avatar');
+      avatar.src = img_url;
 
       const form = document.getElementById('reject-friend-request-form');
       form.addEventListener('submit', async (event) => {
@@ -150,10 +159,12 @@ const friend_request_click = () => {
         return;
       }
 
-      const username = name_elements[0].textContent;
+      //const username = name_elements[0].textContent;
+      const username = name_elements[0].getAttribute('data-name');
+      const img_url = name_elements[0].getAttribute('data-url');
       document.getElementById('modal-username').value = username;
       document.getElementById('friend-user-name-head').textContent = username;
-      document.getElementById('friend-user-icon-head').src = '';
+      document.getElementById('friend-user-icon-head').src = img_url;
     });
   });
 };

@@ -11,3 +11,35 @@
   max-width: 16rem;
   min-width: 16rem;
 }
+
+.card-img-top-block {
+  width: 12rem;
+  height: 12rem;
+  //margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+}
+
+.avatar-background {
+  width: 12rem;
+  height: 12rem;
+  //margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-background-img {
+  background-position: center;
+  border-radius: 50%;
+  background-size: contain;
+  //background-size: center;
+  height: 14rem;
+  width: 14rem;
+}
+//

@@ -9,12 +9,6 @@ from django.utils.decorators import method_decorator
 class Index(TemplateView):
     template_name = "index.html"
 
-    # def get(self, request):
-    #    user = request.user
-    #    if user is None:
-    #        return render(request, "spa/index.html")
-    #    return render(request, "spa/index.html")
-
 
 # Create your views here.
 @login_not_required
@@ -35,11 +29,6 @@ class Nav(TemplateView):
             context = {"hidden": ""}
 
         return render(request, "spa/nav.html", context=context)
-        # return redirect("/spa/nav")
-        # return redirect(LoginSignupView)
-        # view = LoginSignupView()
-        # return view
-        # return RedirectView.as_view(url="/accounts/login-signup/")
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -64,17 +53,5 @@ class errorPageView(TemplateView):
     template_name = "spa/error.html"
 
     def get(self, request):
-        # return HttpResponseNotFound()
         request.status = 404
         return render(request, "spa/error.html")
-
-
-# テスト用　後で消す
-# def lang(request):
-# return render(request, 'lang_test.html')
-
-# def script(request):
-# return render(request, 'script.html')
-
-# def script2(request):
-# return render(request, 'script2.html')
