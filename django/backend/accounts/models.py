@@ -44,18 +44,26 @@ class FtUserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, username, password, **extra_fields):
+    def create_user(self, email, username, password="", **extra_fields):
         logging.info("create_user()")
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        return self._create_user(
-            email=email,
-            username=username,
-            # password=password,
-            **extra_fields,
-        )
+        if password == "":
+            return self._create_user(
+                email=email,
+                username=username,
+                # password=password,
+                **extra_fields,
+            )
+        else:
+            return self._create_user(
+                email=email,
+                username=username,
+                password=password,
+                **extra_fields,
+            )
 
     def create_superuser(self, email, username, password, **extra_fields):
         extra_fields["is_active"] = True
@@ -212,17 +220,26 @@ class FtTmpUserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, username, password, **extra_fields):
+    def create_user(self, email, username, password="", **extra_fields):
         logging.info("create_user()")
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        return self._create_user(
-            email=email,
-            username=username,
-            **extra_fields,
-        )
+        if password == "":
+            return self._create_user(
+                email=email,
+                username=username,
+                # password=password,
+                **extra_fields,
+            )
+        else:
+            return self._create_user(
+                email=email,
+                username=username,
+                password=password,
+                **extra_fields,
+            )
 
     def create_superuser(self, email, username, password, **extra_fields):
         extra_fields["is_active"] = True

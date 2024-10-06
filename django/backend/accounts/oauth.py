@@ -57,9 +57,11 @@ class FtOAuth(ModelBackend):
     REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
     def authenticate(self, username, email):
+        print("ftOauth authenticate No.1")
         try:
             user = FtUser.objects.get(email42=email)
         except FtUser.DoesNotExist:
+            print("ftOauth authenticate No.2")
             user = FtUser()
             cnt = 0
             try:
@@ -135,9 +137,7 @@ class FtOAuth(ModelBackend):
         response = requests.post(ft_oauth_url, params=params)
         if response.status_code >= 400:
             logger.error(f"error:{response.status_code=}")
-            raise RuntimeError(
-                f"42認可サーバーに対する通信に失敗しました：{response.status_code}"
-            )
+            raise RuntimeError(f"42認可サーバーに対する通信に失敗しました：{response.status_code}")
         return response
 
     # 42認可サーバーへ送信
