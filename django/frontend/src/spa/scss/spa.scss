@@ -27,3 +27,20 @@ h1::after {
 a {
   color: blue;
 }
+
+.navi-avatar-background {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background: center;
+  border-radius: 50%;
+  background-position: center;
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+.navi-avatar-background-img {
+  background-position: center;
+  background-size: contain;
+  border-radius: 50%;
+  height: 2.8rem;
+}

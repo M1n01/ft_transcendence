@@ -20,7 +20,7 @@ from django.urls import reverse_lazy
 from accounts.models import FtUser
 from accounts.two_fa import TwoFA
 
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, UploadAvatarForm
 from .oauth import FtOAuth
 
 from io import BytesIO
@@ -478,3 +478,9 @@ class LoginTwoFaView(TemplateView):
 
         except json.JSONDecodeError:
             return HttpResponseServerError("Server Error")
+
+
+class MediaUploadView(CreateView):
+    template_name = "mediaupload.html"
+    form_class = UploadAvatarForm
+    success_url = reverse_lazy("accounts:signup")

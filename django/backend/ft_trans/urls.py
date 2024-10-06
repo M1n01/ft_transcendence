@@ -18,7 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.conf.urls.i18n import i18n_patterns
-import pong.urls
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 import spa.urls
@@ -35,8 +36,8 @@ urlpatterns = [
     path("admin/", admin.site.urls, name="admin"),
     # path("login/", include(login.urls)),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("users/", include(users.urls), name="users"),
-]
+    # path("users/", include(users.urls), name="users"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
     path("notification/", include(notification.urls), name="notification"),
@@ -50,3 +51,6 @@ urlpatterns += i18n_patterns(
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,
 )
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

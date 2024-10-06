@@ -138,6 +138,10 @@ FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
 # ブロックチェーン用ディレクトリ
 BLOCKCHAIN_DIR = os.path.join(PROJECT_ROOT, "eth")
 
+# メディア
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(PUBLIC_DIR, "media/")
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

@@ -177,18 +177,16 @@ class SignUpForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
-        if FtUser.objects.filter(username=username).exists():
-            print(f"username Error:{username=}")
-            raise forms.ValidationError("このユーザー名は既に使用されています。")
+        # if FtUser.objects.filter(username=username).exists():
+        # print(f"username Error:{username=}")
+        # raise forms.ValidationError("このユーザー名は既に使用されています。")
         return username
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if FtTmpUser.objects.filter(email=email).exists():
             print(f"email Error:{email=}")
-            raise forms.ValidationError(
-                "このメールアドレスは既に使用されています。......"
-            )
+            raise forms.ValidationError("このメールアドレスは既に使用されています。......")
         return email
 
     def clean_phone(self):
@@ -230,3 +228,12 @@ class FtLoginForm(UserCreationForm):
         # widgets = {
         # "username": forms.TextInput(attrs={"class": "form-control"}),
         # }
+
+
+class UploadAvatarForm(forms.ModelForm):
+    class Meta:
+        model = FtUser
+        fields = ("avatar",)
+        # avatar = forms.ImageField(
+        #    widget=forms.URLInput(attrs={"class": "form-control btn btn-primary"}),
+        # )

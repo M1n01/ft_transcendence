@@ -12,6 +12,8 @@ import logging
 
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 import pyotp
+import uuid
+import random
 
 
 class AuthChoices(models.TextChoices):
@@ -67,6 +69,14 @@ class FtUserManager(BaseUserManager):
         )
 
 
+def user_avatar_path(instance, filename):
+    rand = random.randint(0, 1000)
+    extension = filename.split(".")[-1]
+    filename = f"{rand}/{uuid.uuid4()}.{extension}"
+
+    return f"avatars/user_{instance.id}/{filename}"
+
+
 class FtUser(AbstractBaseUser, PermissionsMixin):
 
     groups = models.ManyToManyField(Group, related_name="ft_user_groups")
@@ -75,9 +85,7 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.AutoField(primary_key=True)
-    username = models.CharField(
-        verbose_name=_("ユーザー名"), max_length=32, unique=False
-    )
+    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),
@@ -118,11 +126,20 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         max_length=2,
         default=LanguageChoice.JP,
     )
+    match_count = models.IntegerField(
+        default=0,
+    )
     win_count = models.IntegerField(
         default=0,
     )
     loose_count = models.IntegerField(
         default=0,
+    )
+    # avatar = models.ImageField(upload_to=user_avatar_path, blank=True, null=True)
+    avatar = models.ImageField(
+        verbose_name=_("アバター"),
+        upload_to=user_avatar_path,
+        default="avatar/default/user.png",
     )
     # two_fa = models.CharField(null=True)
     is_superuser = models.BooleanField(verbose_name=_("is_superuer"), default=False)
@@ -227,9 +244,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.AutoField(primary_key=True)
-    username = models.CharField(
-        verbose_name=_("ユーザー名"), max_length=32, unique=False
-    )
+    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),
