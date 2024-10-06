@@ -2,9 +2,9 @@ import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import '../scss/tournament.scss';
 import { reload } from '../../spa/js/utility/user.js';
 
-export const TournmentEvent = new Event('TournmentEvent');
+export const TournamentEvent = new Event('TournamentEvent');
 
-document.addEventListener('TournmentEvent', () => {
+document.addEventListener('TournamentEvent', () => {
   const links = () => {
     const links = document.querySelector('#app').querySelectorAll('a');
     links.forEach((event) => {
@@ -53,7 +53,7 @@ document.addEventListener('TournmentEvent', () => {
       });
     });
 
-    document.getElementById('make-tournment').addEventListener('submit', async function (event) {
+    document.getElementById('make-tournament').addEventListener('submit', async function (event) {
       event.preventDefault();
       const form = event.target;
       const formData = new FormData(form);

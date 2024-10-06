@@ -1,14 +1,14 @@
-//import TournmentChart from './tournament/TournamentChart.js';
-import TournmentChart from './tournament/TournamentChart.js';
+//import TournamentChart from './tournament/TournamentChart.js';
+import TournamentChart from './tournament/TournamentChart.js';
 import '../scss/tournament.scss';
 
-export const RebuildTournmentEvent = new Event('RebuildTournmentEvent');
-document.addEventListener('RebuildTournmentEvent', () => {
-  const tournment = document.getElementById('tournment-div'); // 既存の要素を取得
+export const RebuildTournamentEvent = new Event('RebuildTournamentEvent');
+document.addEventListener('RebuildTournamentEvent', () => {
+  const tournament = document.getElementById('tournament-div'); // 既存の要素を取得
 
   const totalParticipants = 6;
 
-  const chart = new TournmentChart(tournment, totalParticipants);
+  const chart = new TournamentChart(tournament, totalParticipants);
   chart.init();
 
   const games = [

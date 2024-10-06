@@ -4,10 +4,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tournment</title>
+    <title>Tournament</title>
   </head>
   <body>
-    <h1 class="py-2">Tournment</h1>
+    <h1 class="py-2">Tournament</h1>
     <div class="d-flex justify-content-center">
       <button
         class="mb-5 btn btn-primary"
@@ -41,7 +41,7 @@
             ></button>
           </div>
           <div class="modal-body px-4">
-            <form id="make-tournment" action="{% url 'tournament:tournament' %}">
+            <form id="make-tournament" action="{% url 'tournament:tournament' %}">
               {% csrf_token %}
 
               <div class="mt-3">
@@ -98,7 +98,7 @@
             <button
               type="submit"
               class="btn btn-primary"
-              form="make-tournment"
+              form="make-tournament"
               data-bs-dismiss="modal"
             >
               {% trans "作成" %}

@@ -1,10 +1,10 @@
-//import TournmentChart from './tournament/TournamentChart.js';
-import TournmentChart from './tournament/TournamentChart.js';
+//import TournamentChart from './tournament/TournamentChart.js';
+import TournamentChart from './tournament/TournamentChart.js';
 import '../scss/tournament.scss';
 
-export const TournmentEvent = new Event('TournmentEvent');
-document.addEventListener('TournmentEvent', () => {
-  const tournment = document.getElementById('tournment-div'); // 既存の要素を取得
+export const TournamentEvent = new Event('TournamentEvent');
+document.addEventListener('TournamentEvent', () => {
+  const tournament = document.getElementById('tournament-div'); // 既存の要素を取得
 
   /*
   const newDiv = document.createElement('div');
@@ -14,13 +14,13 @@ document.addEventListener('TournmentEvent', () => {
   newDiv.style.height = '200px';
   newDiv.style.top = '30px';
   newDiv.style.left = '0px';
-  tournment.appendChild(newDiv);
+  tournament.appendChild(newDiv);
   */
 
-  //const = document.getElementById('tournment-canvas');
+  //const = document.getElementById('tournament-canvas');
   const totalParticipants = 12;
 
-  const chart = new TournmentChart(tournment, totalParticipants);
+  const chart = new TournamentChart(tournament, totalParticipants);
   chart.init();
 
   const users = [
