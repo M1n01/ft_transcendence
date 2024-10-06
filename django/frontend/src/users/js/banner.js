@@ -23,14 +23,23 @@ function checkCookieBanner() {
   var cookieAccepted = getCookie('cookieAccepted');
   if (cookieAccepted === 'true') {
     const banner = document.getElementById('cookie-banner');
-    banner.style.display = 'none';
+    if (banner) {
+      banner.style.display = 'none';
+    }
+    // else {
+    //   console.error('Cookie banner element not found.');
+    // }
   }
 }
 
 // ページロード時にバナーの表示をチェック
-window.onload = function () {
+// window.onload = function () {
+//   checkCookieBanner();
+// };
+
+document.addEventListener('DOMContentLoaded', function () {
   checkCookieBanner();
-};
+});
 
 // カスタムイベントの作成
 export const CookieBannerEvent = new Event('CookieBannerEvent');

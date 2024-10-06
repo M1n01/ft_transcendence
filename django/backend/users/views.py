@@ -4,7 +4,6 @@ from django.http import Http404
 from django.views.decorators.http import condition
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required  # 認証が必要なページにする
 from django.contrib.auth.decorators import login_not_required
 from django.utils.translation import gettext as _
 
@@ -51,6 +50,12 @@ def test(request):
     return render(request, "users/test.html")
 
 
+# class ProfileView(View):
+#     def get(self, request):
+#         CheckSPA.check(request)
+#         return render(request, "users/profile.html")
+
+
 def profile_view(request):
     headers = request.headers
     print(f"checkSPA:{headers=}")
@@ -67,7 +72,6 @@ def profile(request):
 
 
 # ユーザ情報の編集を保存する
-@login_required
 def edit_profile(request):
     user = request.user  # ログインユーザーを取得
     if request.method == "POST":
@@ -81,7 +85,6 @@ def edit_profile(request):
 
 
 # ユーザ情報を論理削除する
-@login_required
 def delete_user(request):
     if request.method == "POST":
         # ユーザー情報を取得
@@ -113,11 +116,6 @@ def delete_user(request):
         return redirect("/")
 
     return render(request, "users/delete-user.html")
-
-
-# TODO: あとで削除
-def cookie_banner(request):
-    return render(request, "users/cookie-banner.html")
 
 
 @login_not_required
