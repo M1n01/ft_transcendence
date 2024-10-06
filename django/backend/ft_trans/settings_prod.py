@@ -125,6 +125,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "users.middleware.UserActionLoggingMiddleware",  # Log保管用
 ]
 
 ROOT_URLCONF = "ft_trans.urls"
