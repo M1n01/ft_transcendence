@@ -217,6 +217,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     "accounts.oauth.FtOAuth",
+    "accounts.backend.FtUserBackend",
     "accounts.backend.TmpUserBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]

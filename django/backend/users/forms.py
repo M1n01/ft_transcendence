@@ -1,11 +1,12 @@
 from django import forms
 from accounts.models import FtUser
 
-from accounts.models import FtTmpUser, AuthChoices, LanguageChoice, COUNTRY_CODE_CHOICES
+from accounts.models import LanguageChoice, COUNTRY_CODE_CHOICES
 
 # from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 from django.utils.translation import gettext_lazy as _
-import re
+
+# import re
 
 
 class UserEditForm(forms.ModelForm):

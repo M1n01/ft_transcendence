@@ -1,5 +1,48 @@
 [
   {
+    "model": "accounts.fttmpuser",
+    "pk": 1,
+    "fields": {
+      "username": "admin",
+      "password": "QawsEd9r2fV4cxz",
+      "email": "admin@gmail.com",
+      "email42": "test42@gmail.com",
+      "first_name": "test",
+      "last_name": "A1",
+      "country_code": "+81",
+      "phone": "9012345678",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false,
+      "is_staff": true,
+      "is_superuser": true
+    }
+  },
+  {
+    "model": "accounts.ftuser",
+    "pk": 1,
+    "fields": {
+      "username": "admin",
+      "password": "QawsEd9r2fV4cxz",
+      "email": "admin@gmail.com",
+      "email42": "test42@gmail.com",
+      "first_name": "test",
+      "last_name": "A1",
+      "country_code": "+81",
+      "phone": "9012345678",
+      "language": "jp",
+      "birth_date": "2024-01-01",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z",
+      "is_ft": false,
+      "is_staff": true,
+      "is_superuser": true
+    }
+  },
+
+  {
     "model": "accounts.ftuser",
     "pk": 1,
     "fields": {
