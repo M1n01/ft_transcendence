@@ -1,8 +1,9 @@
+version: '3.0'
+
 services:
   django:
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       - PRIVATE_ACCOUNT_KEY=$PRIVATE_ACCOUNT_KEY
       - PROVIDER_URL=$PROVIDER_URL

@@ -1,8 +1,9 @@
+version: '3.0'
+
 services:
   django:
     depends_on:
-      eth:
-        condition: service_healthy
+      - eth
     command: /bin/sh -c '
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&

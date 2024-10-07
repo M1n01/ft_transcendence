@@ -180,7 +180,7 @@ DATABASES = {
 #    "default": {
 #        "BACKEND": "channels_redis.core.RedisChannelLayer",
 #        "CONFIG": {
-#            "hosts": [(f"default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30", 6379)],
+#            "hosts": [(f"default:{os.environ['REDIS_PASSWORD']}@172.38.30.30", 6379)],
 #        },
 #    },
 # }
@@ -191,7 +191,7 @@ CHANNEL_LAYERS = {
 }
 
 WS = "ws"
-# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+# f"rediss://default:{os.environ['REDIS_PASSWORD']}@172.38.30.30:6379"
 
 
 # """#DEVLOPMENT ENVIRONMENT
@@ -238,7 +238,7 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379",
+        "LOCATION": f"rediss://default:{os.environ['REDIS_PASSWORD']}@172.38.30.30:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "SSL_CERT_REQS": None,  # SSL証明書の検証をスキップ
@@ -247,7 +247,7 @@ CACHES = {
 }
 REDIS_SERVER = "redis"
 REDIS_PORT = 6379
-REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
+REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
 
 # Celery configurations
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -263,7 +263,7 @@ CELERY_CACHE_BACKEND = "django-cache"
 
 # Celery設定
 # CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
-CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSWORD']}@172.38.30.30:6379"
 CELERY_RESULT_BACKEND = "django-db"
 
 CELERY_RESULT_EXTENDED = True

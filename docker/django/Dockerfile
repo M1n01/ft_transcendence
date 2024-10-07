@@ -1,7 +1,6 @@
 FROM python:3.11.9-slim-bullseye
 MAINTAINER hsano hsano@student.42tokyo.jp
-RUN apt update && apt upgrade -y
-RUN apt install gettext procps postgresql-client iputils-ping net-tools curl redis  -y
+RUN apt-get update && apt-get upgrade -y && apt-get install gettext procps postgresql-client iputils-ping net-tools curl redis -y
 ENV NVM_VERSION v0.39.7
 ENV NVM_DIR /usr/local/nvm
 #ENV NODE_VERSION v20.15.1

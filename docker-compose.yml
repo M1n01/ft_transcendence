@@ -1,3 +1,5 @@
+version: '3.0'
+
 services:
   nginx:
     container_name: 'nginx'
@@ -33,10 +35,10 @@ services:
       - 6379:6379
       - 6380:6380
     environment:
-      - REDIS_PASSOWRD=$REDIS_PASSOWRD
+      - REDIS_PASSWORD=$REDIS_PASSWORD
     command: /bin/sh -c '
       cp /etc/redis/redis.conf0 /etc/redis/redis.conf &&
-      echo requirepass $REDIS_PASSOWRD >> /etc/redis/redis.conf &&
+      echo requirepass $REDIS_PASSWORD >> /etc/redis/redis.conf &&
       redis-server /etc/redis/redis.conf'
 
   django:
@@ -69,7 +71,7 @@ services:
       - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
-      - REDIS_PASSOWRD=$REDIS_PASSOWRD
+      - REDIS_PASSWORD=$REDIS_PASSWORD
 
   eth:
     container_name: 'eth'
