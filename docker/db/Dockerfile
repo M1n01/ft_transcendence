@@ -1,7 +1,6 @@
 FROM postgres:15.7-bullseye
 MAINTAINER hsano hsano@student.42tokyo.jp
-RUN apt update && apt upgrade -y
-RUN apt install vim -y
+RUN apt-get update && apt-get upgrade -y && apt-get install vim -y
 
 COPY ./make_ca.sh /tmp/make_ca.sh
 COPY ./sql_data /docker-entrypoint-initdb.d/
