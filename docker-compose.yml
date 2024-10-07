@@ -89,25 +89,21 @@ services:
 
 networks:
   django_net:
-    name: django_net
     driver: bridge
     ipam:
       config:
         - subnet: 172.38.10.0/24
   db_net:
-    name: db_net
     driver: bridge
     ipam:
       config:
         - subnet: 172.38.20.0/24
   redis_net:
-    name: redis_net
     driver: bridge
     ipam:
       config:
         - subnet: 172.38.30.0/24
   eth_net:
-    name: eth_net
     driver: bridge
     ipam:
       config:
