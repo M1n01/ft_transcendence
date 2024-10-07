@@ -75,7 +75,7 @@
               </div>
 
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/pong" data-link> {% trans "マイページ" %} </a>
+                <a class="dropdown-item" href="/history" data-link> {% trans "履歴" %} </a>
                 <a class="dropdown-item" href="users/profile" data-link>
                   {% trans "プロフィール" %}
                 </a>
@@ -122,8 +122,16 @@
                   >
                 </li>
                 <li>
-                  <a class="nav-link bg-white pb-0" href="/pong" data-link
-                    >{% trans "マイページ" %}</a
+                  <a class="nav-link bg-white pb-0" href="/history" data-link>{% trans "履歴" %}</a>
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="users/profile" data-link>
+                    {% trans "プロフィール" %}
+                  </a>
+                </li>
+                <li>
+                  <a id="nav-logout-button-sm" type="submit" class="nav-link bg-white pb-0"
+                    >{% trans "ログアウト" %}</a
                   >
                 </li>
               </ul>
