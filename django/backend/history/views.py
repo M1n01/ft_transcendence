@@ -145,15 +145,9 @@ class History(TemplateView):
     # template_name = "history/history.html"
 
     def get(self, request):
-        print("History No.1")
         (tournaments, _) = get_tournament(self.request)
-        print("History No.2")
         (ovo, _) = get_ovo(self.request)[:4]
-        print("History No.3")
-        print(f"{len(ovo)=}")
-        print("History No.4")
         context = {"one_v_one": ovo, "tournaments": tournaments[:4]}
-        print("History No.5")
 
         return render(request, "history/history.html", context)
 
