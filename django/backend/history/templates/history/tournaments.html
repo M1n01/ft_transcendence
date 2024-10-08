@@ -2,11 +2,15 @@
 <body>
   <div class="container mt-4">
     {% if not tournaments %}
-    <div>{% trans '対象の試合はありません' %}</div>
+
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      <h2>{% trans 'トーナメント' %}</h2>
+      <div>{% trans '対象の試合はありません' %}</div>
+    </div>
     {% endif %} {% if tournaments %}
 
     <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
-      <h2>トーナメント</h2>
+      <h2>{% trans 'トーナメント' %}</h2>
       {% if tournaments %}
 
       <span class="h6 ps-2">

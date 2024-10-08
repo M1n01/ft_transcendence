@@ -2,11 +2,16 @@
 <body>
   <div class="container mt-4">
     {% if not one_v_one %}
-    <div>{% trans '対象の試合はありません' %}</div>
+
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      <h2>{% trans '1v1' %}</h2>
+
+      <div>{% trans '対象の試合はありません' %}</div>
+    </div>
     {% endif %} {% if one_v_one %}
 
     <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
-      <h2>1v1</h2>
+      <h2>{% trans '1v1' %}</h2>
       {% if one_v_one %}
 
       <span class="h6 ps-2">

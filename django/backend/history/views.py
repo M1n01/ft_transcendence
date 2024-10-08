@@ -7,38 +7,50 @@ from django.core.paginator import Paginator
 from pong.models import MatchTmp
 import datetime
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 
 
 def edit_matches_data(request, matches):
-    for data in matches:
-        data["draw"] = False
-        data["win"] = False
-        data["lose"] = False
-        data["invalid"] = False
-        data["opponent"] = "Test"
-        if data["player1_score"] > data["player2_score"]:
-            winer = data["player1_id"]
-        elif data["player1_score"] < data["player2_score"]:
-            winer = data["player2_id"]
-        else:
-            if data["player1_score"] == 0:
-                data["invalid"] = True
+    try:
+        for data in matches:
+            data["draw"] = False
+            data["win"] = False
+            data["lose"] = False
+            data["invalid"] = False
+            data["opponent"] = "Test"
+            if data["player1_score"] > data["player2_score"]:
+                winer = data["player1_id"]
+            elif data["player1_score"] < data["player2_score"]:
+                winer = data["player2_id"]
             else:
-                data["draw"] = True
-        if winer == request.user.id:
-            data["win"] = True
-        else:
-            data["lose"] = True
+                if data["player1_score"] == 0:
+                    data["invalid"] = True
+                else:
+                    data["draw"] = True
+            if winer == request.user.id:
+                data["win"] = True
+            else:
+                data["lose"] = True
 
-        if data["player1_id"] == request.user.id:
-            data["opponent"] = FtUser.objects.get(id=data["player2_id"])
-            data["opponent_name"] = FtUser.objects.get(id=data["player2_id"]).username
-            data["result"] = f"{data['player1_score']} - {data['player2_score']}"
-        else:
-            data["opponent"] = FtUser.objects.get(id=data["player1_id"])
-            data["opponent_name"] = FtUser.objects.get(id=data["player1_id"]).username
-            data["result"] = f"{data['player2_score']} - {data['player1_score']}"
+            if data["player1_id"] == request.user.id:
+                data["opponent"] = FtUser.objects.get(id=data["player2_id"])
+                data["opponent_name"] = FtUser.objects.get(
+                    id=data["player2_id"]
+                ).username
+                data["result"] = f"{data['player1_score']} - {data['player2_score']}"
+            else:
+                data["opponent"] = FtUser.objects.get(id=data["player1_id"])
+                data["opponent_name"] = FtUser.objects.get(
+                    id=data["player1_id"]
+                ).username
+                data["result"] = f"{data['player2_score']} - {data['player1_score']}"
+    except Exception as e:
+        logger.error(f"edit_matches_data error:{e=}")
+        matches = []
 
     paginator = Paginator(matches, 16)
     page_number = request.GET.get("page")
@@ -133,10 +145,15 @@ class History(TemplateView):
     # template_name = "history/history.html"
 
     def get(self, request):
+        print("History No.1")
         (tournaments, _) = get_tournament(self.request)
+        print("History No.2")
         (ovo, _) = get_ovo(self.request)[:4]
+        print("History No.3")
         print(f"{len(ovo)=}")
+        print("History No.4")
         context = {"one_v_one": ovo, "tournaments": tournaments[:4]}
+        print("History No.5")
 
         return render(request, "history/history.html", context)
 
