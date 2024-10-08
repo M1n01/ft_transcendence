@@ -28,6 +28,13 @@
 
       <div class="text-center fw-bold">{{ match.result}}</div>
       <div class="text-center fw-bold mt-4">{{ match.updated_at}}</div>
+      <p class="text-center mt-2">
+        <a
+          class=" link-underline-opacity-100-hover link-primary "
+          href="/tournament/detail/{{match.tournament_id.id}}"
+          >{{match.tournament_id.name}}</a
+        >
+      </p>
     </div>
   </div>
 </div>
