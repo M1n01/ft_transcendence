@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
+from django.views.generic import TemplateView
 from django.views.generic import UpdateView
+from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
@@ -16,27 +19,6 @@ from django.http import (
     HttpResponseNotFound,
 )
 
-# loginしない限り見れない
-# class Pong(LoginRequiredMixin, ListView):
-# model = "test"
-
-
-def checkSPA(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
-    spa = request.META.get("HTTP_SPA")
-    spas = request.META.get("HTTPS_SPA")
-    if spa is None and spas is None:
-        Http404("not allowed")
-    if spa and spa == "spa":
-        return True
-    if spas and spas == "spa":
-        return True
-    Http404("not allowed")
-    return False
-
 
 # Create your views here.
 class Users(models.Model, LoginRequiredMixin):
@@ -50,47 +32,32 @@ def my_etag(request, *args, **kwargs):
     ).hexdigest()
 
 
-# テスト用　後で消す
-# @condition(etag_func=my_etag)
-def test(request):
-    return render(request, "users/test.html")
-
-
-# class ProfileView(View):
-#     def get(self, request):
-#         CheckSPA.check(request)
-#         return render(request, "users/profile.html")
-
-
-def profile_view(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
-    checkSPA(request)
-    return render(request, "users/profile.html")
-
-
-# @condition(etag_func=my_etag)
-def profile(request):
-    # profile_view(request)
-    return render(request, "users/profile.html")
+class ProfileView(TemplateView):
+    template_name = "users/profile.html"
 
 
 # ユーザ情報の編集を保存する
-def edit_profile(request):
-    user = request.user  # ログインユーザーを取得
-    avatar_class = UploadAvatarForm
-    if request.method == "POST":
-        form = UserEditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect("/profile")  # 編集後、プロファイルページにリダイレクト
-    else:
-        form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
-    return render(
-        request, "users/edit-profile.html", {"form": form, "avatar": avatar_class}
-    )
+class EditProfileView(LoginRequiredMixin, FormView):
+    template_name = "users/edit-profile.html"
+    form_class = UserEditForm
+    # success_url = "users/profile"  # 成功時のリダイレクト先
+    # success_url = "users/profile.html"  # 成功時のリダイレクト先
+    success_url = reverse_lazy("users:profile")  # 成功時のリダイレクト先
+
+    def get_form(self, *args, **kwargs):
+        # request.user をフォームのインスタンスとして渡す
+        return self.form_class(instance=self.request.user, **self.get_form_kwargs())
+
+    def get_context_data(self, **kwargs):
+        # コンテキストに avatar フォームを追加
+        context = super().get_context_data(**kwargs)
+        context["avatar"] = UploadAvatarForm()
+        return context
+
+    def form_valid(self, form):
+        # フォームが有効である場合にユーザー情報を保存
+        form.save()
+        return super().form_valid(form)
 
 
 # ユーザ情報を論理削除する
@@ -128,9 +95,9 @@ def delete_user(request):
     return render(request, "users/delete-user.html")
 
 
-@login_not_required
-def privacy_policy(request):
-    return render(request, "users/privacy-policy.html")
+@method_decorator(login_not_required, name="dispatch")
+class PrivacyPolicy(TemplateView):
+    template_name = "users/privacy-policy.html"
 
 
 class UpdateAvatar(UpdateView):
