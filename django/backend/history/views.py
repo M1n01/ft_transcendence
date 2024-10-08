@@ -40,7 +40,7 @@ def edit_matches_data(request, matches):
             data["opponent_name"] = FtUser.objects.get(id=data["player1_id"]).username
             data["result"] = f"{data['player2_score']} - {data['player1_score']}"
 
-    paginator = Paginator(matches, 20)
+    paginator = Paginator(matches, 16)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return (matches, page_obj)
@@ -143,15 +143,15 @@ class History(TemplateView):
 
 class TournamentMatch(TemplateView):
     def get(self, request):
-        (tournaments, result) = get_tournament(self.request)
-        context = {"tournaments": tournaments, "result": result}
+        (tournaments, page_obj) = get_tournament(self.request)
+        context = {"tournaments": tournaments, "page_obj": page_obj}
 
         return render(request, "history/tournaments-list.html", context)
 
 
 class OVOMatch(TemplateView):
     def get(self, request):
-        (ovo, result) = get_ovo(self.request)[:4]
-        context = {"ovos": ovo, "result": result}
+        (ovo, page_obj) = get_ovo(self.request)[:4]
+        context = {"ovos": ovo, "page_obj": page_obj}
 
         return render(request, "history/ovo-list.html", context)
