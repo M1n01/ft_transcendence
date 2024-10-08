@@ -3,7 +3,7 @@ import Point from './/Point.js';
 import Game from './/Game.js';
 
 const OffsetX = 200;
-export default class TournmentChart {
+export default class TournamentChart {
   constructor(parent, size) {
     this.parent = parent;
     this.size = size;

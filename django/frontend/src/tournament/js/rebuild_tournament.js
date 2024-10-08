@@ -1,12 +1,12 @@
-//import TournmentChart from './tournament/TournamentChart.js';
-import TournmentChart from './tournament/TournamentChart.js';
+//import TournamentChart from './tournament/TournamentChart.js';
+import TournamentChart from './tournament/TournamentChart.js';
 import '../scss/tournament.scss';
 //import { fetchJsonData } from '../../spa/utility/fetch.js';
 import { fetchJsonData } from '../../spa/js/utility/fetch.js';
 
-export const RebuildTournmentEvent = new Event('RebuildTournmentEvent');
+export const RebuildTournamentEvent = new Event('RebuildTournamentEvent');
 
-document.addEventListener('RebuildTournmentEvent', async () => {
+document.addEventListener('RebuildTournamentEvent', async () => {
   const chart_element = document.getElementById('tournament-chart');
   if (!chart_element) {
     return;
@@ -14,10 +14,10 @@ document.addEventListener('RebuildTournmentEvent', async () => {
   const id = document.getElementById('id-hidden');
   const url = '/tournament/info/' + id.value;
   const json = await fetchJsonData(url);
-  const tournment = document.getElementById('tournment-div'); // 既存の要素を取得
+  const tournament = document.getElementById('tournament-div'); // 既存の要素を取得
   const totalParticipants = json['max_user_cnt'];
 
-  const chart = new TournmentChart(tournment, totalParticipants);
+  const chart = new TournamentChart(tournament, totalParticipants);
   chart.init();
 
   const matches = json['matches'];

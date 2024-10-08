@@ -1,7 +1,6 @@
 FROM nginx:1.25.0-bullseye
 MAINTAINER hsano hsano@student.42tokyo.jp
-RUN apt update && apt upgrade -y
-RUN apt install -y vim
+RUN apt-get update && apt-get upgrade -y && apt-get install vim -y
 COPY ./django.conf /etc/nginx/conf.d/
 COPY ./make_ca.sh /tmp/make_ca.sh
 RUN rm /etc/nginx/conf.d/default.conf
