@@ -44,6 +44,29 @@
 
           <div class="form-group row mt-3 mt-sm-0">
             <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "勝敗" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{user.win_count}}/{{ user.match_count}}</span>
+              </p>
+            </div>
+          </div>
+          <!--
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              <td>{% trans "不戦敗" %}</td>
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{lose_by_default}}/{{ user.match_count}}</span>
+              </p>
+            </div>
+          </div>
+-->
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
               <td>{% trans "氏" %}</td>
             </label>
             <div class="col-sm-8">
@@ -107,6 +130,7 @@
               </p>
             </div>
           </div>
+
           <div class="d-flex justify-content-sm-start justify-content-center mt-4">
             <a href="/users/edit" class="btn btn-primary me-4" data-link>{% trans "Edit" %}</a>
             <button
@@ -122,8 +146,6 @@
         </div>
       </div>
     </div>
-    <!-- どこにリンクを張るのかわからないので、暫定的にここにおいておく-->
-    <a href="/privacy-policy" class="btn btn-primary mt-4" data-link>{% trans "Privacy" %}</a>
 
     <div class="modal fade" id="deleteModal" tabindex="-1">
       <div class="modal-dialog">

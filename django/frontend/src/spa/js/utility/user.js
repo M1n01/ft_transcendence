@@ -31,6 +31,11 @@ export const loadNav = async () => {
     logout_button.addEventListener('click', async () => {
       await logout();
     });
+
+    const logout_button_sm = document.getElementById('nav-logout-button-sm');
+    logout_button_sm.addEventListener('click', async () => {
+      await logout();
+    });
   } catch (error) {
     console.log('ignore error:' + error);
   }

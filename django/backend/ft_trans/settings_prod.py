@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     "pong",
     "tournament",
     "friend",
+    "history",
     # "login",
     "accounts",
     # "accounts.models.ft_user",

@@ -80,7 +80,7 @@ class TournamentForm(forms.ModelForm):
 
     organizer = forms.IntegerField(widget=forms.HiddenInput())
     is_only_friend = forms.BooleanField(
-        label=_("フレンドのみ2"),
+        label=_("フレンドに通知"),
         required=False,
         widget=forms.CheckboxInput(attrs={"class": " ms-1"}),
     )

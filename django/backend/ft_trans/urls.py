@@ -29,6 +29,7 @@ import friend.urls
 import notification.urls
 import pong.urls
 import tournament.urls
+import history.urls
 
 
 # API
@@ -47,6 +48,7 @@ urlpatterns += i18n_patterns(
     path("friend/", include(friend.urls), name="friend"),
     path("spa/", include(spa.urls), name="spa2"),
     path("users/", include(users.urls), name="users"),
+    path("history/", include(history.urls), name="history"),
     path("", include(spa.urls), name="blank"),
     re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
     prefix_default_language=True,

@@ -71,9 +71,10 @@ class MatchTmp(models.Model):
     """
 
     id = models.BigAutoField(primary_key=True)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-    round = models.SmallIntegerField()
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT, null=True)
+    round = models.SmallIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     player1 = models.ForeignKey(
         FtUser, on_delete=models.PROTECT, null=True, related_name="player1"
     )

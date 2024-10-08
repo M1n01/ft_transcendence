@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, TemplateView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
@@ -72,9 +72,15 @@ def profile_view(request):
 
 
 # @condition(etag_func=my_etag)
-def profile(request):
-    # profile_view(request)
-    return render(request, "users/profile.html")
+# def profile(request):
+class Profile(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+        user = request.user
+        lose_by_default = user.match_count - (user.win_count + user.loose_count)
+
+        context["lose_by_default"] = lose_by_default
+        return render(request, "users/profile.html", context)
 
 
 # ユーザ情報の編集を保存する
