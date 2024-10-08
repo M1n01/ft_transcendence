@@ -25,6 +25,7 @@ import Profile from '../views/Profile.js';
 //import DeleteUser from '../views/DeleteUser.js';
 import PrivacyPolicy from '../views/PrivacyPolicy.js';
 import Users from '../views/Users.js';
+import History from '../views/History.js';
 
 export const Routes = [
   { path: '/', view: Top },
@@ -35,6 +36,7 @@ export const Routes = [
   { path: '/tournament', view: Tournament },
   { path: '/friend', view: Friend },
   { path: '/notification', view: Notification },
+  { path: '/history', view: History },
   { path: '/sign', view: Index },
   { path: '/signup', view: Signup },
   { path: '/login', view: Login },

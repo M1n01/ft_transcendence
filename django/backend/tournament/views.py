@@ -228,7 +228,7 @@ class TournamentView(LoginRequiredMixin, CreateView):
             "display_register": False,
         }
         context["all_status"] = {
-            "title": _("すべてのーナメント"),
+            "title": _("すべてのトーナメント"),
             "link": "/tournament/all/",
             "button": _("詳細"),
             "display_register": False,

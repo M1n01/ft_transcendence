@@ -1,0 +1,27 @@
+{% load i18n %}
+<body>
+  <div class="container mt-4">
+    {% if not tournaments %}
+    <div>{% trans '対象の試合はありません' %}</div>
+    {% endif %} {% if tournaments %}
+
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      <h2>トーナメント</h2>
+      {% if tournaments %}
+
+      <span class="h6 ps-2">
+        <a href="/history/tournament" data-link class="">{% trans 'すべての試合を表示' %}</a>
+      </span>
+      {% else %} {% trans "対象の試合はありません" %} {% endif %}
+    </div>
+
+    <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
+      {% for tournament in tournaments %}
+      <!-- Dont' delete me-->
+      {% include 'history/tournament-card.html' with match=tournament %}
+      <!-- Dont' delete me-->
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</body>
