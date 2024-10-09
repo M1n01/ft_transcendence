@@ -2,6 +2,7 @@ from web3 import Web3
 from django.conf import settings
 import os
 import json
+from datetime import datetime, timezone, timedelta
 
 
 def get_contract():
@@ -62,9 +63,13 @@ def save_match_to_blockchain(
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
         logs = contract.events.MatchCreated().process_receipt(receipt)
         match_id = logs[0]["args"]["matchId"]
-        created_at = logs[0]["args"]["createdAt"]
+        unix_created_at = logs[0]["args"]["createdAt"]
 
-        return match_id, tx_hash.hex(), created_at
+        # タイムスタンプをJSTに変換
+        utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
+        jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
+
+        return match_id, tx_hash.hex(), jst_created_at
 
     except Exception as e:
         print(f"Error saving match to blockchain: {e}")
@@ -81,10 +86,12 @@ def get_matches_from_blockchain(
     )
 
     def match_to_dict(match):
+        utc_created_at = datetime.fromtimestamp(match[2], tz=timezone.utc)
+        jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
             "id": match[0],
             "tournament_id": match[1],
-            "created_at": match[2],
+            "created_at": jst_created_at,
             "player1": match[3],
             "player2": match[4],
             "player1_score": match[5],
@@ -93,7 +100,7 @@ def get_matches_from_blockchain(
             "is_active": match[8],
         }
 
-    if match_id:
+    if match_id is not None:
         match = contract.functions.getMatch(int(match_id), only_active).call()
         matches = match_to_dict(match)
     else:
