@@ -54,3 +54,7 @@ redis.conf
 
 # celery
 celerybeat-schedule
+
+# empty directory
+django/backend/log/*
+!django/backend/log/.gitkeep

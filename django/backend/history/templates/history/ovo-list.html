@@ -1,7 +1,7 @@
 {% load i18n %}
 <body>
   <h2 class="d-flex justify-content-center justify-content-sm-start ms-0 ms-sm-5 mb-5">
-    {% trans 'フレンド'%}
+    {% trans '1v1'%}
   </h2>
   <ul class="pagination justify-content-center">
     {% if page_obj.has_previous %}
@@ -43,14 +43,14 @@
     {% endif%}
   </ul>
 
-  {% if not friends %}
-  <div>{% trans 'フレンドはいません' %}</div>
-  {% endif %} {% if friends %}
+  {% if not ovos %}
+  <div>{% trans '該当試合はありません' %}</div>
+  {% endif %} {% if ovos %}
   <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
-    {% for friend in friends %}
+    {% for match in page_obj %}
     <!-- Dont' delete me-->
-    {% include 'friend/friend-card.html' with friend=friend %}
-    <span style="display: none"></span>
+    {% include 'history/ovo-card.html' with match=match %}
+    <!-- Dont' delete me-->
     {% endfor %}
   </div>
   {% endif %}

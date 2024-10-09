@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
-from django.views.generic import TemplateView
-from django.views.generic import UpdateView
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
+from django.views.generic import UpdateView, TemplateView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
@@ -26,14 +25,21 @@ class Users(models.Model, LoginRequiredMixin):
     pub_date = models.DateTimeField("date published")
 
 
-def my_etag(request, *args, **kwargs):
-    return hashlib.md5(
-        ":".join(request.GET.dict().values()).encode("utf-8")
-    ).hexdigest()
+# def my_etag(request, *args, **kwargs):
+#     return hashlib.md5(
+#         ":".join(request.GET.dict().values()).encode("utf-8")
+#     ).hexdigest()
 
 
-class ProfileView(TemplateView):
-    template_name = "users/profile.html"
+# class Profile(TemplateView):
+class Profile(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+        user = request.user
+        lose_by_default = user.match_count - (user.win_count + user.loose_count)
+
+        context["lose_by_default"] = lose_by_default
+        return render(request, "users/profile.html", context)
 
 
 # ユーザ情報の編集を保存する

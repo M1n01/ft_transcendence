@@ -1,0 +1,13 @@
+{% load static %} {% load i18n %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Match History</title>
+  </head>
+  <body>
+    <h1>Match History</h1>
+    {% include 'history/ovos.html' with one_v_one=one_v_one %}
+    {% include 'history/tournaments.html' with tournaments=tournaments %}
+  </body>
+</html>
