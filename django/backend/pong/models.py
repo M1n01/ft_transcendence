@@ -40,7 +40,7 @@ class Match:
     def get_match(cls, match_id):
         # ブロックチェーンから単一のマッチ情報を取得
         matches = get_matches_from_blockchain(match_id=match_id)
-        return matches[0] if matches else None
+        return matches
 
     @classmethod
     def get_matches(cls, tournament_id=None, user_id=None, round=None):
