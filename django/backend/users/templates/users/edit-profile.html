@@ -150,12 +150,14 @@
           </tbody>
         </table>
         <div>
-          <button type="submit">{% trans "Save" %}</button>
-        </div>
-        <div>
-          <a href="/users/profile" class="nav__link" data-link>{% trans "Back" %}</a>
+          <button type="submit" class="btn btn-primary me-4" form="edit-profile-form">
+            {% trans "Save" %}
+          </button>
         </div>
       </form>
+      <div>
+        <a href="/users/profile" class="nav__link" data-link>{% trans "Back" %}</a>
+      </div>
     </div>
 
     <div class="modal fade" id="updateAvatarModal" tabindex="-1">

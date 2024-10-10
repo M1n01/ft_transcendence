@@ -6,6 +6,19 @@ import { reload } from '../../spa/js//utility/user.js';
 export const UserEvent = new Event('UserEvent');
 
 document.addEventListener('UserEvent', function () {
+  // ユーザ情報の編集内容を保存
+  const edit_profile_form = document.getElementById('edit-profile-form');
+  if (edit_profile_form != null) {
+    edit_profile_form.addEventListener('submit', async (event) => {
+      const response = await submitForm(event);
+      if (response.error) {
+        // console.log('Error: edit-profile-form');
+        return;
+      }
+      moveTo('/users/profile');
+    });
+  }
+
   // アカウント削除
   const delete_user_form = document.getElementById('delete-user');
   if (delete_user_form !== null) {

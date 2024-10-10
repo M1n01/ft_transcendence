@@ -20,9 +20,6 @@ import Games from '../views/Games.js';
 import Tournament from '../views/Tournament.js';
 import Friend from '../views/Friend.js';
 import Notification from '../views/Notification.js';
-import Profile from '../views/Profile.js';
-//import EditProfile from '../views/EditProfile.js';
-//import DeleteUser from '../views/DeleteUser.js';
 import PrivacyPolicy from '../views/PrivacyPolicy.js';
 import Users from '../views/Users.js';
 import History from '../views/History.js';
@@ -53,9 +50,6 @@ export const Routes = [
   //{ path: '/signup-two-fa', view: SignupTwoFA },
   { path: '/2fa', view: TwoFA },
   { path: '/login-signup', view: LoginSignup },
-  { path: '/profile', view: Profile },
-  //{ path: '/edit-profile', view: EditProfile },
-  //{ path: '/delete-user', view: DeleteUser },
   { path: '/privacy-policy', view: PrivacyPolicy },
   { path: '/users', view: Users },
 ];

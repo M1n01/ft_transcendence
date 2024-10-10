@@ -9,7 +9,7 @@ import '../../../users/scss/users.scss';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Sign up');
+    this.setTitle('Sign Up');
   }
 
   checkRedirect = async () => {
@@ -18,7 +18,11 @@ export default class extends AbstractView {
   };
 
   getHtml = async (rest = '', params = '') => {
-    if (rest === '/profile') {
+    if (rest === '') {
+      const uri = getUrlWithLang('users/');
+      const data = fetchData(uri + rest + params);
+      return data;
+    } else if (rest === '/profile') {
       const uri = getUrlWithLang('users/profile/');
       const data = fetchData(uri + params);
       return data;
@@ -34,10 +38,6 @@ export default class extends AbstractView {
     } else if (rest === '/cookie-banner') {
       const uri = getUrlWithLang('users/cookie-banner/');
       const data = fetchData(uri + params);
-      return data;
-    } else if (rest === '') {
-      const uri = getUrlWithLang('users/');
-      const data = fetchData(uri);
       return data;
     } else {
       throw new Error(' Fetch() Error');

@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
-from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView, TemplateView
+from django.views.generic import UpdateView, TemplateView, DeleteView
+from django.views.generic.edit import FormView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
@@ -14,7 +14,10 @@ from django.urls import reverse_lazy
 from .forms import UserEditForm
 from accounts.forms import UploadAvatarForm
 
+from accounts.models import FtUser  # FtUser モデルをインポート
+
 from django.http import (
+    JsonResponse,
     HttpResponseNotFound,
 )
 
@@ -25,14 +28,7 @@ class Users(models.Model, LoginRequiredMixin):
     pub_date = models.DateTimeField("date published")
 
 
-# def my_etag(request, *args, **kwargs):
-#     return hashlib.md5(
-#         ":".join(request.GET.dict().values()).encode("utf-8")
-#     ).hexdigest()
-
-
-# class Profile(TemplateView):
-class Profile(TemplateView):
+class ProfileView(TemplateView):
     def get(self, request):
         context = self.get_context_data()
         user = request.user
@@ -44,11 +40,9 @@ class Profile(TemplateView):
 
 # ユーザ情報の編集を保存する
 class EditProfileView(LoginRequiredMixin, FormView):
-    template_name = "users/edit-profile.html"
     form_class = UserEditForm
-    # success_url = "users/profile"  # 成功時のリダイレクト先
-    # success_url = "users/profile.html"  # 成功時のリダイレクト先
-    success_url = reverse_lazy("users:profile")  # 成功時のリダイレクト先
+    template_name = "users/edit-profile.html"
+    success_url = "/users/profile"  # 使わない
 
     def get_form(self, *args, **kwargs):
         # request.user をフォームのインスタンスとして渡す
@@ -67,38 +61,50 @@ class EditProfileView(LoginRequiredMixin, FormView):
 
 
 # ユーザ情報を論理削除する
-def delete_user(request):
-    if request.method == "POST":
-        # ユーザー情報を取得
-        print(f"Delete user (logical): {request.user}")
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    model = FtUser
+    success_url = "/"  # 使わない
 
-        # ユーザーの論理削除 (is_activeをFalseに設定)
-        # request.user.username = ""
-        # request.user.email = None
-        # request.user.email42 = None
-        request.user.email = str(request.user.id) + "user@tmp.email.com"
-        request.user.email42 = str(request.user.id) + "user@tmp.email.com"
-        request.user.first_name = None
-        request.user.last_name = None
-        request.user.country_code = None
-        request.user.phone = None
-        request.user.language = ""
-        request.user.is_active = False
-        # request.user.is_temporary = False
-        request.user.birth_date = None
-        request.user.auth = ""
-        request.user.app_secret = None
-        request.user.created_at = None
-        request.user.updated_at = None
+    def post(self, request, *args, **kwargs):
+        try:
+            user = self.get_object()  # 削除対象のユーザーオブジェクトを取得
+            # user = request.user  # 削除対象のユーザーオブジェクトを取得
 
-        request.user.save()
-        # request.user.logout()
+            # ユーザーの論理削除 (is_activeをFalseに設定)
+            user.username = "delete_user_" + str(user.id)
+            # request.user.email = None
+            # request.user.email42 = None
+            temp_email = str(user.id) + "user@tmp.email.com"
+            user.email = temp_email
+            user.email42 = temp_email
+            user.first_name = None
+            user.last_name = None
+            user.country_code = None
+            user.phone = None
+            user.language = ""
+            user.is_active = False
+            user.birth_date = None
+            user.auth = ""
+            user.app_secret = None
+            user.created_at = None
+            user.updated_at = None
 
-        # print(request.user)
-        # 適切なリダイレクト先に遷移
-        return redirect("/")
+            user.save()
+            print("Execute DeleteUserView")
+            return JsonResponse({"status": "success"}, status=200)
 
-    return render(request, "users/delete-user.html")
+        except Exception as e:
+            print(f"Error deleting user: {e}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    def get(self):
+        """
+        GETは禁止
+        """
+        return HttpResponseNotFound()
+
+    def get_object(self):
+        return self.request.user
 
 
 @method_decorator(login_not_required, name="dispatch")
