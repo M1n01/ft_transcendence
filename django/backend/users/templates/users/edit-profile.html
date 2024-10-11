@@ -149,15 +149,15 @@
             <!-- 他に表示したい情報があればここに追加 -->
           </tbody>
         </table>
-        <div>
-          <button type="submit" class="btn btn-primary me-4" form="edit-profile-form">
+        <div class="d-flex justify-content-sm-end justify-content-center mt-4">
+          <div>
+            <a href="/users/profile" class="btn btn-secondary me-4" data-link>{% trans "戻る" %}</a>
+          </div>
+          <button type="submit" class="btn btn-primary" form="edit-profile-form">
             {% trans "Save" %}
           </button>
         </div>
       </form>
-      <div>
-        <a href="/users/profile" class="nav__link" data-link>{% trans "Back" %}</a>
-      </div>
     </div>
 
     <div class="modal fade" id="updateAvatarModal" tabindex="-1">

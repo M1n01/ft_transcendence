@@ -7,11 +7,12 @@ from django.views.generic.edit import FormView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
+from django.contrib.auth.views import PasswordChangeView
 
 # from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 
-from .forms import UserEditForm
+from .forms import UserEditForm, ChangePasswordForm
 from accounts.forms import UploadAvatarForm
 
 from accounts.models import FtUser  # FtUser モデルをインポート
@@ -28,6 +29,7 @@ class Users(models.Model, LoginRequiredMixin):
     pub_date = models.DateTimeField("date published")
 
 
+# プロフィール画面の表示
 class ProfileView(TemplateView):
     def get(self, request):
         context = self.get_context_data()
@@ -58,6 +60,20 @@ class EditProfileView(LoginRequiredMixin, FormView):
         # フォームが有効である場合にユーザー情報を保存
         form.save()
         return super().form_valid(form)
+
+
+# パスワードの変更
+class ChangePasswordView(PasswordChangeView):
+    form_class = ChangePasswordForm
+    template_name = "users/change-password.html"
+    success_url = reverse_lazy("users:changed-password")  # 使わない
+
+
+class ChangedPasswordView(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+
+        return render(request, "users/changed-password.html", context)
 
 
 # ユーザ情報を論理削除する

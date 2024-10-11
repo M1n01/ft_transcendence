@@ -35,6 +35,14 @@ export default class extends AbstractView {
       //const uri = getUrlWithLang('users/privacy-policy/');
       //const data = fetchData(uri + params);
       //return data;
+    } else if (rest === '/change-password') {
+      const uri = getUrlWithLang('users/change-password/');
+      const data = fetchData(uri + params);
+      return data;
+    } else if (rest == '/changed-password') {
+      const uri = getUrlWithLang('users/changed-password/');
+      const data = fetchData(uri + params);
+      return data;
     } else if (rest === '/cookie-banner') {
       const uri = getUrlWithLang('users/cookie-banner/');
       const data = fetchData(uri + params);

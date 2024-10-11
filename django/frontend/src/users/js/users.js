@@ -18,7 +18,18 @@ document.addEventListener('UserEvent', function () {
       moveTo('/users/profile');
     });
   }
-
+  // パスワードの変更
+  const change_password_form = document.getElementById('change-password-form');
+  if (change_password_form != null) {
+    change_password_form.addEventListener('submit', async (event) => {
+      const response = await submitForm(event);
+      if (response.error) {
+        // console.log('Error: change-password-form');
+        return;
+      }
+      moveTo('/users/changed-password');
+    });
+  }
   // アカウント削除
   const delete_user_form = document.getElementById('delete-user');
   if (delete_user_form !== null) {
