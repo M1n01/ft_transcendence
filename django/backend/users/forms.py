@@ -6,6 +6,8 @@ from accounts.models import LanguageChoice, COUNTRY_CODE_CHOICES
 # from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 from django.utils.translation import gettext_lazy as _
 
+from django.contrib.auth.forms import PasswordChangeForm
+
 # import re
 
 
@@ -105,3 +107,37 @@ class UserEditForm(forms.ModelForm):
             "phone",
             "language",
         )
+
+
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "id": "old_password_id",
+                "class": "form-control w-100 rounded-0 border-top-0",
+                "placeholder": _("現在のパスワード"),
+            }
+        ),
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "id": "new_password_id1",
+                "class": "form-control w-100 rounded-0 border-top-0",
+                "placeholder": _("新しいパスワード"),
+            }
+        ),
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "id": "new_password_id2",
+                "class": "form-control w-100 rounded-0 border-top-0",
+                "placeholder": _("新しいパスワード(確認用)"),
+            }
+        ),
+    )
+
+    class Meta:
+        model = FtUser
+        fields = ["old_password", "new_password1", "new_password2"]

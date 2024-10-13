@@ -1,41 +1,26 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
-from django.views.generic import UpdateView, TemplateView
+from django.utils.decorators import method_decorator
+from django.views.generic import UpdateView, TemplateView, DeleteView
+from django.views.generic.edit import FormView
 import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
+from django.contrib.auth.views import PasswordChangeView
 
 # from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 
-from .forms import UserEditForm
+from .forms import UserEditForm, ChangePasswordForm
 from accounts.forms import UploadAvatarForm
 
+from accounts.models import FtUser  # FtUser モデルをインポート
+
 from django.http import (
+    JsonResponse,
     HttpResponseNotFound,
 )
-
-# loginしない限り見れない
-# class Pong(LoginRequiredMixin, ListView):
-# model = "test"
-
-
-def checkSPA(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
-    spa = request.META.get("HTTP_SPA")
-    spas = request.META.get("HTTPS_SPA")
-    if spa is None and spas is None:
-        Http404("not allowed")
-    if spa and spa == "spa":
-        return True
-    if spas and spas == "spa":
-        return True
-    Http404("not allowed")
-    return False
 
 
 # Create your views here.
@@ -44,36 +29,8 @@ class Users(models.Model, LoginRequiredMixin):
     pub_date = models.DateTimeField("date published")
 
 
-def my_etag(request, *args, **kwargs):
-    return hashlib.md5(
-        ":".join(request.GET.dict().values()).encode("utf-8")
-    ).hexdigest()
-
-
-# テスト用　後で消す
-# @condition(etag_func=my_etag)
-def test(request):
-    return render(request, "users/test.html")
-
-
-# class ProfileView(View):
-#     def get(self, request):
-#         CheckSPA.check(request)
-#         return render(request, "users/profile.html")
-
-
-def profile_view(request):
-    headers = request.headers
-    print(f"checkSPA:{headers=}")
-    cokkie = headers.get("Cookie", "No Cookie Header Found")
-    print(f"checkSPA:{cokkie=}")
-    checkSPA(request)
-    return render(request, "users/profile.html")
-
-
-# @condition(etag_func=my_etag)
-# def profile(request):
-class Profile(TemplateView):
+# プロフィール画面の表示
+class ProfileView(TemplateView):
     def get(self, request):
         context = self.get_context_data()
         user = request.user
@@ -84,59 +41,91 @@ class Profile(TemplateView):
 
 
 # ユーザ情報の編集を保存する
-def edit_profile(request):
-    user = request.user  # ログインユーザーを取得
-    avatar_class = UploadAvatarForm
-    if request.method == "POST":
-        form = UserEditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect("/profile")  # 編集後、プロファイルページにリダイレクト
-    else:
-        form = UserEditForm(instance=user)  # フォームにユーザー情報をプリセット
-    return render(
-        request, "users/edit-profile.html", {"form": form, "avatar": avatar_class}
-    )
+class EditProfileView(LoginRequiredMixin, FormView):
+    form_class = UserEditForm
+    template_name = "users/edit-profile.html"
+    success_url = "/users/profile"  # 使わない
+
+    def get_form(self, *args, **kwargs):
+        # request.user をフォームのインスタンスとして渡す
+        return self.form_class(instance=self.request.user, **self.get_form_kwargs())
+
+    def get_context_data(self, **kwargs):
+        # コンテキストに avatar フォームを追加
+        context = super().get_context_data(**kwargs)
+        context["avatar"] = UploadAvatarForm()
+        return context
+
+    def form_valid(self, form):
+        # フォームが有効である場合にユーザー情報を保存
+        form.save()
+        return super().form_valid(form)
+
+
+# パスワードの変更
+class ChangePasswordView(PasswordChangeView):
+    form_class = ChangePasswordForm
+    template_name = "users/change-password.html"
+    success_url = reverse_lazy("users:changed-password")  # 使わない
+
+
+class ChangedPasswordView(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+
+        return render(request, "users/changed-password.html", context)
 
 
 # ユーザ情報を論理削除する
-def delete_user(request):
-    if request.method == "POST":
-        # ユーザー情報を取得
-        print(f"Delete user (logical): {request.user}")
+class DeleteUserView(LoginRequiredMixin, DeleteView):
+    model = FtUser
+    success_url = "/"  # 使わない
 
-        # ユーザーの論理削除 (is_activeをFalseに設定)
-        # request.user.username = ""
-        # request.user.email = None
-        # request.user.email42 = None
-        request.user.email = str(request.user.id) + "user@tmp.email.com"
-        request.user.email42 = str(request.user.id) + "user@tmp.email.com"
-        request.user.first_name = None
-        request.user.last_name = None
-        request.user.country_code = None
-        request.user.phone = None
-        request.user.language = ""
-        request.user.is_active = False
-        # request.user.is_temporary = False
-        request.user.birth_date = None
-        request.user.auth = ""
-        request.user.app_secret = None
-        request.user.created_at = None
-        request.user.updated_at = None
+    def post(self, request, *args, **kwargs):
+        try:
+            user = self.get_object()  # 削除対象のユーザーオブジェクトを取得
+            # user = request.user  # 削除対象のユーザーオブジェクトを取得
 
-        request.user.save()
-        # request.user.logout()
+            # ユーザーの論理削除 (is_activeをFalseに設定)
+            user.username = "delete_user_" + str(user.id)
+            # request.user.email = None
+            # request.user.email42 = None
+            temp_email = str(user.id) + "user@tmp.email.com"
+            user.email = temp_email
+            user.email42 = temp_email
+            user.first_name = None
+            user.last_name = None
+            user.country_code = None
+            user.phone = None
+            user.language = ""
+            user.is_active = False
+            user.birth_date = None
+            user.auth = ""
+            user.app_secret = None
+            user.created_at = None
+            user.updated_at = None
 
-        # print(request.user)
-        # 適切なリダイレクト先に遷移
-        return redirect("/")
+            user.save()
+            print("Execute DeleteUserView")
+            return JsonResponse({"status": "success"}, status=200)
 
-    return render(request, "users/delete-user.html")
+        except Exception as e:
+            print(f"Error deleting user: {e}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    def get(self):
+        """
+        GETは禁止
+        """
+        return HttpResponseNotFound()
+
+    def get_object(self):
+        return self.request.user
 
 
-@login_not_required
-def privacy_policy(request):
-    return render(request, "users/privacy-policy.html")
+@method_decorator(login_not_required, name="dispatch")
+class PrivacyPolicy(TemplateView):
+    template_name = "users/privacy-policy.html"
 
 
 class UpdateAvatar(UpdateView):
