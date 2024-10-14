@@ -137,9 +137,7 @@ class CustomSessionMiddleware(SessionMiddleware):
                             "is_signup": is_provisional_signup,
                             "exp": exp,
                             "nbf": datetime.now(tz=timezone.utc)
-                            + timedelta(
-                                seconds=3
-                            ),  # この時間より前に処理されたらエラーにする
+                            + timedelta(seconds=3),  # この時間より前に処理されたらエラーにする
                             "iat": datetime.now(tz=timezone.utc),
                             # "jti":"token-id" #必要なら使う
                         },
@@ -157,4 +155,20 @@ class CustomSessionMiddleware(SessionMiddleware):
                         httponly=settings.SESSION_COOKIE_HTTPONLY or None,
                         samesite=settings.SESSION_COOKIE_SAMESITE,
                     )
+                    try:
+                        lang = request.user.language
+                        response.set_cookie(
+                            "django_language",
+                            lang,
+                            max_age=max_age,
+                            expires=expires,
+                            domain=settings.SESSION_COOKIE_DOMAIN,
+                            path=settings.SESSION_COOKIE_PATH,
+                            secure=None,
+                            httponly=None,
+                            samesite=settings.SESSION_COOKIE_SAMESITE,
+                        )
+
+                    except Exception:
+                        lang = ""
         return response

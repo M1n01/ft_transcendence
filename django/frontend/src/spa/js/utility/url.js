@@ -1,8 +1,4 @@
-function getUserLanguage() {
-  return window.navigator.languages && window.navigator.languages[0]
-    ? window.navigator.language
-    : sessionStorage.getItem('userLanguage');
-}
+import Cookies from 'js-cookie';
 
 export function getUrl(path) {
   const http = window.location.protocol;
@@ -13,10 +9,9 @@ export function getUrl(path) {
 export function getUrlWithLang(path) {
   const http = window.location.protocol;
   const domain = window.location.host;
-  let lang = getUserLanguage();
+  let lang = Cookies.get('django_language');
   if (!(lang == 'ja' || lang == 'en' || lang == 'fr')) {
     lang = 'ja';
   }
   return http + '//' + domain + '/' + lang + '/' + path;
-  //return http + '//' + domain + '/' + path;
 }
