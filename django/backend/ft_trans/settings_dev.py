@@ -118,6 +118,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "LanguageFallbackMiddleware",
     "users.middleware.UserActionLoggingMiddleware",  # Log保管用
 ]
 
