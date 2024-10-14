@@ -14,8 +14,8 @@ export function getUrlWithLang(path) {
   const http = window.location.protocol;
   const domain = window.location.host;
   let lang = getUserLanguage();
-  if (!lang) {
-    lang = '';
+  if (!(lang == 'ja' || lang == 'en' || lang == 'fr')) {
+    lang = 'ja';
   }
   return http + '//' + domain + '/' + lang + '/' + path;
   //return http + '//' + domain + '/' + path;
