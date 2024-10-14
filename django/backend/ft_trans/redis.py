@@ -6,11 +6,13 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ft_trans.settings")
 
 # app: Celery = Celery("ft_trans")
 password = getattr(settings, "REDIS_PASSWORD", None)
+ssl = getattr(settings, "REDIS_SSL", None)
+port = getattr(settings, "REDIS_PORT", None)
 app = redis.Redis(
     host="redis",
     port=6379,
     password=password,
-    ssl=True,
+    ssl=ssl,
     ssl_cert_reqs="none",
 )
 

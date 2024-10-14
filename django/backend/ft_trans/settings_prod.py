@@ -243,6 +243,7 @@ CACHES = {
 }
 REDIS_SERVER = "redis"
 REDIS_PORT = 6379
+REDIS_SSL = True
 REDIS_PASSWORD = os.environ["REDIS_PASSOWRD"]
 
 # Celery configurations

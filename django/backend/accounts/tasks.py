@@ -11,7 +11,6 @@ def delete_tmp_user(user_id):
 
 @shared_task
 def change_login_state(user_id, flag):
-    print("change_login_state No.1")
     user = FtTmpUser.objects.get(id=user_id)
     if user is None:
         return
