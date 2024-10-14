@@ -28,6 +28,13 @@ class Tournament(models.Model):
         default=TournamentStatusChoices.RECRUITING,
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organizer", "start_at"], name="tournament_unique"
+            ),
+        ]
+
     def save(self, *args, **kwargs):
         if self.current_players < 4 or self.current_players > 32:
             raise ValueError("current_players must be between 4 and 32")
@@ -43,3 +50,11 @@ class TournamentParticipant(models.Model):
     participant = models.ForeignKey(FtUser, on_delete=models.PROTECT)
     alias_name = models.CharField(verbose_name=_("エイリアス名"), max_length=32)
     is_accept = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["tournament_id", "participant"],
+                name="tournament_participant_unique",
+            ),
+        ]

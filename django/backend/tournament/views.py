@@ -106,7 +106,7 @@ class AllView(ListView):
 class RegisterApi(CreateView):
     model = TournamentParticipant
     form_class = TournamentParticipantForm
-    template_name = "tournament/register.html"  # 使わない
+    # template_name = "tournament/register.html"  # 使わない
     success_url = reverse_lazy("tournament:tournament")
 
     def get(self, request):
@@ -130,27 +130,36 @@ class RegisterApi(CreateView):
                             )
                         )
                         if len(participants) >= tournament.current_players:
-                            data = {"is_full": True}
+                            data = {"is_full": True, "is_registered": False}
                             return JsonResponse(data, status=500)
 
                         # form.save() がうまくいかないので仕方なく
-                        TournamentParticipant.objects.create(
-                            tournament_id=tournament,
-                            alias_name=form.cleaned_data["alias_name"],
-                            participant=self.request.user,
-                            is_accept=True,
+                        try:
+                            TournamentParticipant.objects.create(
+                                tournament_id=tournament,
+                                alias_name=form.cleaned_data["alias_name"],
+                                participant=self.request.user,
+                                is_accept=True,
+                            )
+                        except Exception:
+                            data = {"is_full": False, "is_registered": True}
+                            return JsonResponse(data, status=500)
+
+                        participants = (
+                            TournamentParticipant.objects.select_for_update().filter(
+                                tournament_id=tournament
+                            )
                         )
+
+                        if len(participants) == tournament.current_players:
+                            create_matches(tournament)
+                            tournament.status = TournamentStatusChoices.ONGOING
+                            tournament.save()
+
                 except IntegrityError:
                     data = {"is_full": False}
                     return JsonResponse(data, status=500)
 
-                participants = TournamentParticipant.objects.select_for_update().filter(
-                    tournament_id=tournament
-                )
-                if len(participants) == tournament.current_players:
-                    create_matches(tournament)
-                    tournament.status = TournamentStatusChoices.ONGOING
-                    tournament.save()
         except Exception as e:
             print(f"{e=}")
             data = {"is_full": False}

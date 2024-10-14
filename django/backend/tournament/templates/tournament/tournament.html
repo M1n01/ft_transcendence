@@ -19,10 +19,12 @@
       </button>
     </div>
     <div
-      class="modal fade"
       id="MakeTournamentModal"
+      class="modal fade"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
       aria-hidden="true"
     >
       <div class="modal-dialog">
@@ -43,6 +45,11 @@
           <div class="modal-body px-4">
             <form id="make-tournament" action="{% url 'tournament:tournament' %}">
               {% csrf_token %}
+              <div id="make-tournament-error" class="text-danger h6" hidden>
+                トーナメントの作成に失敗しました。<br />
+                このダイアログを閉じてもう一度実行してください。<br\>
+                なお、同じ時間に重複して作成することはできません。
+              </div>
 
               <div class="mt-3">
                 <label for="id_name" class="form-label text-dark"
@@ -92,14 +99,13 @@
             <div hidden id="chart-div">{% include 'tournament/chart.html' %}</div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button type="button" id="create-tournament-cancel" class="btn btn-secondary" data-bs-dismiss="modal">
               {% trans "キャンセル" %}
             </button>
             <button
               type="submit"
               class="btn btn-primary"
               form="make-tournament"
-              data-bs-dismiss="modal"
             >
               {% trans "作成" %}
             </button>

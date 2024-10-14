@@ -31,7 +31,7 @@
       <div class="card-footer w-100">
         <button
           type="button"
-          class="btn btn-primary text-nowrap pre-register-tournament"
+          class="btn btn-primary text-nowrap open-register-tournament-modal"
           data-bs-toggle="modal"
           data-bs-target="#registerModal"
           value="{{tournament.id}}"
@@ -39,69 +39,6 @@
         >
           {% trans '参加' %}
         </button>
-      </div>
-
-      <div
-        class="modal fade"
-        id="registerModal"
-        tabindex="-1"
-        aria-labelledby="registerModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="d-flex justify-content-center w-100">
-                <h5 class="modal-title">
-                  <div id="register-tournament-name" class="d-flex justify-content-center">
-                    {% trans 'トーナメント名' %}
-                  </div>
-                  <div class="d-flex justify-content-center">{% trans "参加申し込み" %}</div>
-                </h5>
-              </div>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div id="register-limit-error" class="text-danger" hidden>
-                {% trans "参加人数が上限に達したため、登録することができません。" %}
-              </div>
-              <form
-                id="register-tournament"
-                method="post"
-                action="{% url 'tournament:register'  %}"
-                class="w-100 register-tournament"
-              >
-                {% csrf_token %}
-                <input
-                  name="tournament_id"
-                  id="retister-modal-id"
-                  type="hidden"
-                  value="{{tournament.id}}"
-                />
-
-                <label for="id_name" class="form-label text-dark">{% trans 'プレイヤー名'%}</label>
-                <br />
-                <input name="alias_name" type="text" value="{{attr.username}}" />
-                <div class="d-flex justify-content-end mt-3">
-                  <button
-                    id="close-register-modal"
-                    type="button"
-                    class="btn btn-secondary me-4"
-                    data-bs-dismiss="modal"
-                  >
-                    {% trans 'キャンセル' %}
-                  </button>
-                  <button type="submit" class="btn btn-primary me-4">{% trans '登録' %}</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
       </div>
 
       {% endif %}

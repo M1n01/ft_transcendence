@@ -12,11 +12,11 @@ document.addEventListener('TournamentEvent', () => {
     });
   };
 
-  const top = () => {
-    const pre_register_tournaments = document.querySelectorAll('.pre-register-tournament');
-    const register_tournaments = document.querySelectorAll('.register-tournament');
+  const top_list = () => {
+    const pre_register_tournaments = document.querySelectorAll('.open-register-tournament-modal');
+    const register_tournament = document.getElementById('register-tournament');
 
-    if (register_tournaments == null) {
+    if (register_tournament == null) {
       return;
     }
 
@@ -30,38 +30,52 @@ document.addEventListener('TournamentEvent', () => {
       });
     });
 
-    register_tournaments.forEach((element) => {
-      element.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const response = await fetchAsForm(form, formData);
-        const close_register_modal = document.getElementById('close-register-modal');
-        const error_text = document.getElementById('register-limit-error');
-        if (response.status != 200) {
-          const json = await response.json();
-          if (json['is_full']) {
-            error_text.hidden = false;
-            close_register_modal.addEventListener('click', async () => {
-              await reload();
-            });
-          }
-          return;
+    //register_tournaments.forEach((element) => {
+    register_tournament.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const response = await fetchAsForm(form, formData);
+      const close_register_modal = document.getElementById('close-register-modal');
+      const error_text = document.getElementById('register-limit-error');
+      const error_text2 = document.getElementById('register-registered-ierror');
+      if (response.status != 200) {
+        const json = await response.json();
+        if (json['is_full']) {
+          error_text.hidden = false;
+        } else if (json['is_registered']) {
+          error_text2.hidden = false;
         }
-        close_register_modal.click();
-        await reload();
-      });
+        return;
+      }
+      close_register_modal.click();
+      await reload();
     });
+  };
 
-    document.getElementById('make-tournament').addEventListener('submit', async function (event) {
+  const top = () => {
+    const making_tournament = document.getElementById('make-tournament');
+
+    if (making_tournament == null) {
+      return;
+    }
+    const close_modal = document.getElementById('create-tournament-cancel');
+    const error_message = document.getElementById('make-tournament-error');
+    error_message.hidden = true;
+
+    // トーナメント新規作成
+    making_tournament.addEventListener('submit', async function (event) {
+      error_message.hidden = true;
       event.preventDefault();
       const form = event.target;
       const formData = new FormData(form);
       const response = await fetchAsForm(form, formData);
       if (response.status != 200) {
+        error_message.hidden = false;
         console.error('filure to post form. Status:' + response.status);
         return;
       }
+      close_modal.click();
       await reload();
     });
   };
@@ -73,6 +87,7 @@ document.addEventListener('TournamentEvent', () => {
   }
   try {
     top();
+    top_list();
   } catch {
     return;
   }
