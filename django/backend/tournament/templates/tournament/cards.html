@@ -18,6 +18,8 @@
         {% for tournament in tournaments %}
         <span style="display: none"></span>
         {% include 'tournament/card.html' with tournament=tournament attr=attr %} {% endfor %}
+        <!-- Don't erase me-->
+        {% include 'tournament/card-modal.html' %}
       </div>
       {% else %}
       <div>{% trans '対象のトーナメントは存在しません' %}</div>

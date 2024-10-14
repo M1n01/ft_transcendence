@@ -9,6 +9,7 @@ services:
       cd backend &&
       python manage.py makemigrations &&
       python manage.py migrate &&
+      python manage.py loaddata ./**/fixtures/initial_data_prod.json &&
       python manage.py loaddata ./**/fixtures/initial_data.json &&
       (celery -A ft_trans  worker -B -l info )&
       (cd frontend && npm install && npm run build) &&
