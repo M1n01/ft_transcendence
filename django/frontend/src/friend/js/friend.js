@@ -160,10 +160,13 @@ const friend_request_click = () => {
       }
 
       //const username = name_elements[0].textContent;
+      const user_id = name_elements[0].getAttribute('data-id');
       const username = name_elements[0].getAttribute('data-name');
       const img_url = name_elements[0].getAttribute('data-url');
-      document.getElementById('modal-username').value = username;
+      //document.getElementById('modal-username').value = username;
+      document.getElementById('modal-userid').value = user_id;
       document.getElementById('friend-user-name-head').textContent = username;
+      //document.getElementById('friend-user-id-head').textContent = user_id;
       document.getElementById('friend-user-icon-head').src = img_url;
     });
   });
@@ -195,9 +198,13 @@ document.addEventListener('FriendEvent', () => {
     if (requests_form == null) {
       return;
     }
+    const error_message = document.getElementById('friend-request-send-error');
+
     requests_form.addEventListener('submit', async (event) => {
+      error_message.hidden = true;
       const response = await submitForm(event);
       if (response.status != 200) {
+        error_message.hidden = false;
         console.error('Error');
         return;
       }
@@ -206,10 +213,37 @@ document.addEventListener('FriendEvent', () => {
     });
   };
 
+  const display_friend_message = () => {
+    const messages = document.querySelector('#app').querySelectorAll('.message-friend-card');
+    if (messages.length == 0) {
+      return;
+    }
+
+    messages.forEach((button) => {
+      button.addEventListener('click', () => {
+        const name = button.getAttribute('data-name');
+        //const id = button.getAttribute('data-id');
+        const img_url = button.getAttribute('data-img');
+        const message = button.getAttribute('data-message');
+
+        const username = document.getElementById('request-message-user-name');
+        //const input_id = document.getElementById('request-accept-input-user-id');
+        const avatar = document.getElementById('request-message-user-avatar');
+        const message_div = document.getElementById('request-message-user-message');
+
+        username.textContent = name;
+        //input_id.value = id;
+        avatar.src = img_url;
+        message_div.textContent = message;
+      });
+    });
+  };
+
   friend_request();
   friend_top();
   block_friend_request();
   accept_friend_request();
+  display_friend_message();
 
   check_friend_interval = setInterval(intervalFunc, 5000);
 });

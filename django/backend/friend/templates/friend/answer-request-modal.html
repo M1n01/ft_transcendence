@@ -27,7 +27,7 @@
             </div>
             <div id="request-block-user-name" class="d-flex justify-content-center">username</div>
           </div>
-          <div class="mt-3">{% trans 'このユーザーをブロックします' %}</div>
+          <div class="mt-3 text-center">{% trans 'このユーザーをブロックします' %}</div>
           <div id="request-block-error" class="mt-3 text-wrap text-danger">
             {% trans 'エラーが発生しました。'%}
             <br />
@@ -88,7 +88,7 @@
             </div>
             <div id="request-accept-user-name" class="d-flex justify-content-center">username</div>
           </div>
-          <div class="mt-3">{% trans 'このユーザーをフレンドに追加します' %}</div>
+          <div class="mt-3 text-center">{% trans 'このユーザーをフレンドに追加します' %}</div>
           <div id="request-accept-error" class="mt-3 text-wrap text-danger">
             {% trans 'エラーが発生しました。'%}
             <br />
@@ -117,6 +117,39 @@
               </button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade text-dark"
+    id="MessageModal"
+    tabindex="-1"
+    aria-labelledby="registerModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex justify-content-center w-100">
+            <h5 class="modal-title">{% trans 'メッセージ' %}</h5>
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="d-flex justify-content-center">
+              <img id="request-message-user-avatar" src="" height="60" weight="60" />
+            </div>
+            <div id="request-message-user-name" class="d-flex justify-content-center">username</div>
+            <div id="request-message-user-message" class="alert alert-info mt-3">メッセージ</div>
+          </div>
         </div>
       </div>
     </div>

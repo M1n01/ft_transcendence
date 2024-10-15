@@ -7,9 +7,9 @@
     <title>Tournament List</title>
   </head>
   <body>
-    <h2 class="d-flex justify-content-center justify-content-sm-start ms-0 ms-sm-5 mb-5">
-      {{attr.title}}
-    </h2>
+    <div class="d-flex justify-content-center justify-content-sm-start ms-0 ms-sm-5 mb-5">
+      <h1>{{attr.title}}</h1>
+    </div>
     <!-- ページネーションのリンクを表示 -->
     <ul class="pagination justify-content-center">
       {% if page_obj.has_previous %}

@@ -196,6 +196,27 @@ def two_fa_verify(request):
 
 
 @method_decorator(login_not_required, name="dispatch")
+class CancelTwoFa(TemplateView):
+    def get():
+        return HttpResponseBadRequest("Bad Request")
+
+    def post(self, request):
+        target = request.POST.get("target")
+        if target == "signup":
+            is_provisional_signup = False
+            if "is_provisional_signup" in request.session:
+                is_provisional_signup = request.session["is_provisional_signup"]
+            if is_provisional_signup is False:
+                return HttpResponse()
+            id = request.session["user_id"]
+            user = FtTmpUser.objects.get(id=id)
+            if user is None:
+                return HttpResponse()
+            user.delete()
+        return HttpResponse()
+
+
+@method_decorator(login_not_required, name="dispatch")
 class LoginSignupView(TemplateView):
     ft_oauth = FtOAuth()
     url = ft_oauth.get_ft_authorization_url()
