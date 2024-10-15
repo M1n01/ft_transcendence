@@ -116,6 +116,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "old_password_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("現在のパスワード"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
@@ -125,6 +126,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "new_password_id1",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
@@ -134,6 +136,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "new_password_id2",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード(確認用)"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
