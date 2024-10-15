@@ -12,4 +12,5 @@ urlpatterns = [
     path("redirect-oauth", views.redirect_oauth, name="redirect-oauth"),
     path("oauth-login", views.oauth_login, name="oauth-login"),
     path("login-signup/", views.LoginSignupView.as_view(), name="login-signup"),
+    path("cancel-two-fa", views.CancelTwoFa.as_view(), name="cancel-two-fa"),
 ]

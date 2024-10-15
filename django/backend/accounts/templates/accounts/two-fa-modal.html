@@ -68,10 +68,13 @@
               </button>
             </form>
           </div>
-          <div>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              {% trans "閉じる" %}
-            </button>
+          <div class="d-flex justify-content-between">
+            <form action="{% url 'accounts:cancel-two-fa' %}" method="post" id="cancel-two-fa">
+              <input type="text" id="cancel-two-fa-target" name="target" value="login" hidden />
+              <button type="submit" class="btn btn-secondary me-3" data-bs-dismiss="modal">
+                {% trans "キャンセル" %}
+              </button>
+            </form>
             <button
               type="submit"
               class="btn btn-primary"
