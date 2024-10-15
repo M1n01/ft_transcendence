@@ -26,7 +26,7 @@
           data-bs-toggle="modal"
           data-bs-target="#blockModal"
           data-name="{{request.user.username}}"
-          data-id="{{request.user.id}}"
+          data-id="{{request.id}}"
           data-img="{{request.user.avatar.url}}"
         >
           {% trans 'ブロック' %}
@@ -46,7 +46,7 @@
             value="{{request.id}}"
             name="{{request.user.username}}"
             data-name="{{request.user.username}}"
-            data-id="{{request.user.id}}"
+            data-id="{{request.id}}"
             data-img="{{request.user.avatar.url}}"
           >
             {% trans '許可' %}

@@ -78,12 +78,9 @@ class FindFriendView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
-        print("test getqueryset No.1")
         friendships = Friendships.objects.filter(
             Q(user=self.request.user) | Q(friend=self.request.user)
         )
-        for friend_test in friendships:
-            print(f"{friend_test=}")
         # frendshipd_id = [friendship.friend.id for friendship in friendships]
         # フレンド関係にある人はすべて表示させない
         friend_id = [friendship.friend.id for friendship in friendships]
@@ -123,7 +120,6 @@ class RespondFriendRequest(UpdateView):
         friendship.save()
 
         if status == FriendshipsStatusChoices.BLOCKED:
-            print("Friend Status No.1")
             status = FriendshipsStatusChoices.BLOCK
 
         Friendships.objects.create(
@@ -160,12 +156,14 @@ class FriendRequest(CreateView):
     def post(self, request):
         try:
             user_id = request.POST.get("userid")
+            friend_user = FtUser.objects.get(id=user_id)
             message = request.POST.get("request-message")
 
-            friendship = Friendships.objects.get(
-                Q(user=user_id) & Q(friend=request.user)
+            # 相手側からすでにフレンド登録されていたらエラーとする
+            friendship = Friendships.objects.filter(
+                Q(user=friend_user) & Q(friend=request.user)
             )
-            if friendship is not None:
+            if len(friendship) > 0:
                 return HttpResponseBadRequest()
 
             tmp_friend = FtUser.objects.get(id=user_id)

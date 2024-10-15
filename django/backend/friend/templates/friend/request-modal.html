@@ -38,6 +38,15 @@
           {% csrf_token %}
 
           <input id="modal-userid" name="userid" type="text" value="userid" hidden />
+
+          <div id="friend-request-send-error" class="mb-1 text-danger" hidden>
+            {% trans "エラーが発生しました" %}
+            <br />
+            {% trans "相手がすでに登録したかもしれません" %}
+            <br />
+            {% trans "フレンドリクエストを確認してください" %}
+          </div>
+
           <div class="mb-3 text-dark">
             <label for="exampleFormControlTextarea1" class="form-label"
               >{% trans "メッセージ" %}</label

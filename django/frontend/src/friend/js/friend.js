@@ -198,9 +198,13 @@ document.addEventListener('FriendEvent', () => {
     if (requests_form == null) {
       return;
     }
+    const error_message = document.getElementById('friend-request-send-error');
+
     requests_form.addEventListener('submit', async (event) => {
+      error_message.hidden = true;
       const response = await submitForm(event);
       if (response.status != 200) {
+        error_message.hidden = false;
         console.error('Error');
         return;
       }
