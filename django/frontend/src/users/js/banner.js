@@ -26,16 +26,8 @@ function checkCookieBanner() {
     if (banner) {
       banner.style.display = 'none';
     }
-    // else {
-    //   console.error('Cookie banner element not found.');
-    // }
   }
 }
-
-// ページロード時にバナーの表示をチェック
-// window.onload = function () {
-//   checkCookieBanner();
-// };
 
 document.addEventListener('DOMContentLoaded', function () {
   checkCookieBanner();

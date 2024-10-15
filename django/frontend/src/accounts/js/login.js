@@ -1,6 +1,5 @@
 import '../scss/login.scss';
 import { getUrlWithLang } from '../../spa/js/utility/url.js';
-//import { fetchAsForm } from '../../spa/js/utility/fetch.js';
 import { submitForm } from '../../spa/js/utility/form.js';
 import { TwoFaEvent } from './two_fa.js';
 import { handlePostLogin } from '../../spa/js/utility/user.js';
@@ -38,28 +37,17 @@ document.addEventListener('LoginEvent', function () {
 
     document.getElementById('login-form').addEventListener('submit', async function (event) {
       const response = await submitForm(event);
-      /*
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      const response = await fetchAsForm(form, formData);
-      */
 
       if (response.status == 200) {
         const len = response.headers.get('Content-Length');
         if (len != undefined && len > 0) {
           try {
-            const json = await response.json();
+            //const json = await response.json();
             const two_fa_form = document.getElementById('two-fa-verify-form');
-            const resend_two_fa_form = document.getElementById('resend-two-fa');
             const cancel_two_fa_target = document.getElementById('cancel-two-fa-target');
             two_fa_form.action = getUrlWithLang('accounts/login-two-fa/');
-            resend_two_fa_form.action = 'accounts/login-two-fa/';
             cancel_two_fa_target.value = 'login';
             document.getElementById('app_url_qr').hidden = true;
-            if (json['is_auth_app']) {
-              document.getElementById('resend-button').hidden = true;
-            }
             navModal(true);
             document.dispatchEvent(TwoFaEvent);
           } catch (error) {

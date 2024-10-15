@@ -53,21 +53,10 @@
               {% trans "認証に失敗しました" %}<br />
               {% trans "認証コードを見直して再度実行してください" %}
             </div>
-
-            <div class="error-message" id="failure-resend" hidden>
-              {% trans "送信に失敗しました.もう一度やり直してください" %}<br />
-            </div>
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-between">
-          <div>
-            <form action="{% url 'accounts:login-two-fa' %}" method="post" id="resend-two-fa">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-info" id="resend-button">
-                {% trans "再送" %}
-              </button>
-            </form>
-          </div>
+          <div></div>
           <div class="d-flex justify-content-between">
             <form action="{% url 'accounts:cancel-two-fa' %}" method="post" id="cancel-two-fa">
               <input type="text" id="cancel-two-fa-target" name="target" value="login" hidden />
