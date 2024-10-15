@@ -30,6 +30,7 @@ document.addEventListener('TwoFaEvent', function () {
   const error_message = document.getElementById('failure-verify');
   const resend_error = document.getElementById('failure-resend');
   const resend_two_fa = document.getElementById('resend-two-fa');
+  const cancel_two_fa = document.getElementById('cancel-two-fa');
 
   two_fa_form.addEventListener('submit', async function (event) {
     const response = await submitForm(event);
@@ -48,6 +49,15 @@ document.addEventListener('TwoFaEvent', function () {
     await moveTo('games');
     WebsocketInit();
   });
+
+  cancel_two_fa.addEventListener('submit', async (event) => {
+    const response = await submitForm(event);
+    if (response.status != 200) {
+      console.error('Error:cancel TwoFa');
+      return;
+    }
+  });
+
   input_code.addEventListener('input', () => {
     error_message.hidden = true;
     resend_error.hidden = true;
