@@ -160,10 +160,13 @@ const friend_request_click = () => {
       }
 
       //const username = name_elements[0].textContent;
+      const user_id = name_elements[0].getAttribute('data-id');
       const username = name_elements[0].getAttribute('data-name');
       const img_url = name_elements[0].getAttribute('data-url');
-      document.getElementById('modal-username').value = username;
+      //document.getElementById('modal-username').value = username;
+      document.getElementById('modal-userid').value = user_id;
       document.getElementById('friend-user-name-head').textContent = username;
+      //document.getElementById('friend-user-id-head').textContent = user_id;
       document.getElementById('friend-user-icon-head').src = img_url;
     });
   });
@@ -195,9 +198,13 @@ document.addEventListener('FriendEvent', () => {
     if (requests_form == null) {
       return;
     }
+    const error_message = document.getElementById('friend-request-send-error');
+
     requests_form.addEventListener('submit', async (event) => {
+      error_message.hidden = true;
       const response = await submitForm(event);
       if (response.status != 200) {
+        error_message.hidden = false;
         console.error('Error');
         return;
       }

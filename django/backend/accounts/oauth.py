@@ -57,11 +57,9 @@ class FtOAuth(ModelBackend):
     REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
     def authenticate(self, username, email):
-        print("ftOauth authenticate No.1")
         try:
             user = FtUser.objects.get(email42=email)
         except FtUser.DoesNotExist:
-            print("ftOauth authenticate No.2")
             user = FtUser()
             cnt = 0
             try:

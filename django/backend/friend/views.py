@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
+from django.db.models import Q
 from .forms import FriendRequestForm, SearchFriendForm
 from .models import Friendships, FriendshipsStatusChoices
 from accounts.models import FtUser
@@ -36,7 +37,7 @@ class FriendView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
-        username = self.request.GET.get("username", "")
+        username = self.request.GET.get("username")
         if username:
             queryset = FtUser.objects.filter(username__icontains=username)
         return queryset
@@ -77,10 +78,16 @@ class FindFriendView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
-        friendships = Friendships.objects.filter(user=self.request.user)
-        frendshipd_id = [friendship.friend.id for friendship in friendships]
+        friendships = Friendships.objects.filter(
+            Q(user=self.request.user) | Q(friend=self.request.user)
+        )
+        # frendshipd_id = [friendship.friend.id for friendship in friendships]
+        # フレンド関係にある人はすべて表示させない
+        friend_id = [friendship.friend.id for friendship in friendships]
+        user_id = [friendship.user.id for friendship in friendships]
+        frendshipd_id = friend_id + user_id
         frendshipd_id.append(self.request.user.id)
-        username = self.request.GET.get("username", "")
+        username = self.request.GET.get("username")
         queryset = []
         if username:
             queryset = FtUser.objects.exclude(id__in=frendshipd_id).filter(
@@ -113,7 +120,6 @@ class RespondFriendRequest(UpdateView):
         friendship.save()
 
         if status == FriendshipsStatusChoices.BLOCKED:
-            print("Friend Status No.1")
             status = FriendshipsStatusChoices.BLOCK
 
         Friendships.objects.create(
@@ -149,9 +155,18 @@ class FriendRequest(CreateView):
 
     def post(self, request):
         try:
-            username = request.POST.get("username")
+            user_id = request.POST.get("userid")
+            friend_user = FtUser.objects.get(id=user_id)
             message = request.POST.get("request-message")
-            tmp_friend = FtUser.objects.get(username=username)
+
+            # 相手側からすでにフレンド登録されていたらエラーとする
+            friendship = Friendships.objects.filter(
+                Q(user=friend_user) & Q(friend=request.user)
+            )
+            if len(friendship) > 0:
+                return HttpResponseBadRequest()
+
+            tmp_friend = FtUser.objects.get(id=user_id)
             if tmp_friend is None:
                 return HttpResponseBadRequest()
 
