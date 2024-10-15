@@ -420,7 +420,10 @@ def oauth_login(request):
         user_response = ft_oauth.fetch_user(access_token)
         username = user_response["login"]
         email = user_response["email"]
-        user = ft_oauth.authenticate(username=username, email=email)
+        image_url = user_response["image"]["link"]
+        user = ft_oauth.authenticate(
+            username=username, email=email, image_url=image_url
+        )
 
         if user is None:
             logger.error("failure to authenticate")
