@@ -60,7 +60,10 @@ class OrganizedView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = _("主催したトーナメント")
+        context["attr"] = {
+            "title": _("主催したトーナメント"),
+        }
+        # context["title"] = _("主催したトーナメント")
         return context
 
 
@@ -84,7 +87,10 @@ class ParticipantView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = _("登録済みトーナメント")
+        context["attr"] = {
+            "title": _("登録済みトーナメント"),
+        }
+        # context["title"] = _("登録済みトーナメント")
         return context
 
 
@@ -99,7 +105,10 @@ class AllView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = _("すべてのトーナメント")
+        context["attr"] = {
+            "title": _("すべてのトーナメント"),
+        }
+        # context["title"] = _("すべてのトーナメント")
         return context
 
 
@@ -225,7 +234,7 @@ class TournamentView(LoginRequiredMixin, CreateView):
             "display_register": False,
         }
         context["participant_status"] = {
-            "title": _("参加予定のトーナメント"),
+            "title": _("登録済みトーナメント"),
             "link": "/tournament/participant/",
             "button": _("詳細"),
             "display_register": False,
