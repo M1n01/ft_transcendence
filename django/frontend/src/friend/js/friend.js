@@ -213,10 +213,37 @@ document.addEventListener('FriendEvent', () => {
     });
   };
 
+  const display_friend_message = () => {
+    const messages = document.querySelector('#app').querySelectorAll('.message-friend-card');
+    if (messages.length == 0) {
+      return;
+    }
+
+    messages.forEach((button) => {
+      button.addEventListener('click', () => {
+        const name = button.getAttribute('data-name');
+        //const id = button.getAttribute('data-id');
+        const img_url = button.getAttribute('data-img');
+        const message = button.getAttribute('data-message');
+
+        const username = document.getElementById('request-message-user-name');
+        //const input_id = document.getElementById('request-accept-input-user-id');
+        const avatar = document.getElementById('request-message-user-avatar');
+        const message_div = document.getElementById('request-message-user-message');
+
+        username.textContent = name;
+        //input_id.value = id;
+        avatar.src = img_url;
+        message_div.textContent = message;
+      });
+    });
+  };
+
   friend_request();
   friend_top();
   block_friend_request();
   accept_friend_request();
+  display_friend_message();
 
   check_friend_interval = setInterval(intervalFunc, 5000);
 });
