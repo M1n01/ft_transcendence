@@ -116,8 +116,10 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "old_password_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("現在のパスワード"),
+                "autocomplete": "old_password",
             }
         ),
+        required=True,
     )
     new_password1 = forms.CharField(
         widget=forms.PasswordInput(
@@ -125,8 +127,10 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "new_password_id1",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード"),
+                "autocomplete": "new_password1",
             }
         ),
+        required=True,
     )
     new_password2 = forms.CharField(
         widget=forms.PasswordInput(
@@ -134,10 +138,19 @@ class ChangePasswordForm(PasswordChangeForm):
                 "id": "new_password_id2",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード(確認用)"),
+                "autocomplete": "new_password2",
             }
         ),
+        required=True,
     )
 
     class Meta:
         model = FtUser
         fields = ["old_password", "new_password1", "new_password2"]
+
+    # Debug 値（ValidationError）チェック用
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     # ValidationErrorの状態を標準出力に表示
+    #     print("ValidationError:", self.errors)  # ここでエラーを出力
+    #     return cleaned_data

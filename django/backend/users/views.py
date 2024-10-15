@@ -19,6 +19,7 @@ from accounts.models import FtUser  # FtUser モデルをインポート
 
 from django.http import (
     JsonResponse,
+    HttpResponseBadRequest,
     HttpResponseNotFound,
 )
 
@@ -57,9 +58,14 @@ class EditProfileView(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
-        # フォームが有効である場合にユーザー情報を保存
-        form.save()
-        return super().form_valid(form)
+        try:
+            # フォームが有効である場合にユーザー情報を保存
+            form.save()
+            response = super().form_valid(form)
+            response.status_code = 200
+            return response
+        except Exception as e:
+            return HttpResponseBadRequest(f"Bad Request:{e}")
 
 
 # パスワードの変更
@@ -67,6 +73,12 @@ class ChangePasswordView(PasswordChangeView):
     form_class = ChangePasswordForm
     template_name = "users/change-password.html"
     success_url = reverse_lazy("users:changed-password")  # 使わない
+
+    def form_invalid(self, form):
+        # print("ValidationError:", form.errors)  # ここでエラーを出力
+        response = super().form_invalid(form)
+        response.status_code = 400
+        return response
 
 
 class ChangedPasswordView(TemplateView):

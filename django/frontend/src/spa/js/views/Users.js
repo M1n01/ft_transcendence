@@ -9,7 +9,7 @@ import '../../../users/scss/users.scss';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Sign Up');
+    this.setTitle('Users');
   }
 
   checkRedirect = async () => {

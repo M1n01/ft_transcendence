@@ -15,6 +15,10 @@ document.addEventListener('UserEvent', function () {
         // console.log('Error: edit-profile-form');
         return;
       }
+      if (response.status != 200) {
+        console.log('Error: edit-profile-form');
+        return;
+      }
       moveTo('/users/profile');
     });
   }
@@ -24,11 +28,50 @@ document.addEventListener('UserEvent', function () {
     change_password_form.addEventListener('submit', async (event) => {
       const response = await submitForm(event);
       if (response.error) {
-        // console.log('Error: change-password-form');
         return;
       }
-      moveTo('/users/changed-password');
+      if (response.status == 200) {
+        // console.log('Success: change-password-form');
+        moveTo('/users/changed-password');
+        return;
+      }
+      const html = await response.text();
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      const oldPwdErrors = tempDiv.querySelector('#old-password-errors ul.errorlist');
+      if (oldPwdErrors != null) {
+        document.getElementById('old-password-errors').innerHTML = oldPwdErrors.outerHTML;
+      }
+      const newPwd1Errors = tempDiv.querySelector('#new-password1-errors ul.errorlist');
+      if (newPwd1Errors != null) {
+        document.getElementById('new-password1-errors').innerHTML = newPwd1Errors.outerHTML;
+      }
+      const newPwd2Errors = tempDiv.querySelector('#new-password2-errors ul.errorlist');
+      if (newPwd2Errors != null) {
+        document.getElementById('new-password2-errors').innerHTML = newPwd2Errors.outerHTML;
+      }
+      return;
     });
+    // フォームの各入力フィールドにイベントリスナーを追加
+    const oldPasswordField = change_password_form.querySelector('input[name="old_password"]');
+    const newPassword1Field = change_password_form.querySelector('input[name="new_password1"]');
+    const newPassword2Field = change_password_form.querySelector('input[name="new_password2"]');
+
+    const clearErrorMessages = (errorElementId) => {
+      document.getElementById(errorElementId).innerHTML = ''; // エラーメッセージをクリア
+    };
+    const clearNewPwdErrorMessages = () => {
+      clearErrorMessages('new-password1-errors');
+      clearErrorMessages('new-password2-errors');
+    };
+
+    if (oldPasswordField) {
+      oldPasswordField.addEventListener('input', () => clearErrorMessages('old-password-errors'));
+    }
+    if (newPassword1Field || newPassword2Field) {
+      newPassword1Field.addEventListener('input', () => clearNewPwdErrorMessages());
+      newPassword2Field.addEventListener('input', () => clearNewPwdErrorMessages());
+    }
   }
   // アカウント削除
   const delete_user_form = document.getElementById('delete-user');
