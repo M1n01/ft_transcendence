@@ -113,6 +113,7 @@ def copy_tmpuser_to_ftuser(user):
             is_staff=src_user.is_staff,
             language=src_user.language,
         )
+        return src_user
     except IntegrityError as e:
         print(f"Copy Error:{e}")
     except Exception as e:
@@ -138,7 +139,7 @@ class SignupTwoFaView(CreateView):
 
             if rval is False:
                 return HttpResponseBadRequest("Failure to verify")
-            copy_tmpuser_to_ftuser(user)
+            tmp_user = copy_tmpuser_to_ftuser(user)
 
             new_user = FtUser.objects.get(email=user.email)
             login(
@@ -146,7 +147,7 @@ class SignupTwoFaView(CreateView):
                 new_user,
                 backend="django.contrib.auth.backends.ModelBackend",
             )
-
+            tmp_user.delete()
             tmp_time = datetime.now(tz=timezone.utc) + timedelta(
                 seconds=getattr(settings, "JWT_VALID_TIME", None)
             )
