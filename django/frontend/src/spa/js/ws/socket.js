@@ -2,7 +2,7 @@ import { setUserActive } from '../../../friend/js/friend.js';
 
 let socket = null;
 let ws_url = 'wss://' + window.location.host + '/ws/websocket/';
-if (window.location.protocol == 'http') {
+if (window.location.protocol == 'http:') {
   ws_url = 'ws://' + window.location.host + '/ws/websocket/';
 }
 
@@ -14,7 +14,10 @@ export const sendWebSocket = async (json_message) => {
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
     socket = new WebSocket(ws_url);
   }
-  socket.send(JSON.stringify(json_message));
+
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(json_message));
+  }
 };
 
 export const WebsocketInit = () => {

@@ -43,6 +43,7 @@ class Friendships(models.Model):
         verbose_name=_("作成日時"),
         null=True,
         blank=False,
+        auto_now_add=True,
     )
     updated_at = models.DateTimeField(verbose_name=_("変更日時"), auto_now=True)
 

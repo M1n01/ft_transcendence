@@ -12,9 +12,8 @@ class TournamentStatusChoices(models.TextChoices):
 
 
 class Tournament(models.Model):
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    id = models.BigAutoField(primary_key=True)
-    name = models.CharField(verbose_name=_("トーナメント名"), max_length=32)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(verbose_name=_("トーナメント名"), max_length=20)
     organizer = models.ForeignKey(
         FtUser,
         on_delete=models.PROTECT,
@@ -47,7 +46,6 @@ class Tournament(models.Model):
 
 
 class TournamentParticipant(models.Model):
-    # id = models.BigAutoField(primary_key=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
     participant = models.ForeignKey(FtUser, on_delete=models.PROTECT)
