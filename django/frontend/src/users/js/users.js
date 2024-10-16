@@ -36,6 +36,8 @@ document.addEventListener('UserEvent', function () {
         return;
       }
       const html = await response.text();
+      // TODO: debug用。あとで消す。
+      // console.error(html);
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
       const oldPwdErrors = tempDiv.querySelector('#old-password-errors ul.errorlist');

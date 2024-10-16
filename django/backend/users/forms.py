@@ -7,6 +7,7 @@ from accounts.models import LanguageChoice, COUNTRY_CODE_CHOICES
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.exceptions import ValidationError
 
 # import re
 
@@ -151,9 +152,20 @@ class ChangePasswordForm(PasswordChangeForm):
         model = FtUser
         fields = ["old_password", "new_password1", "new_password2"]
 
-    # Debug 値（ValidationError）チェック用
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     # ValidationErrorの状態を標準出力に表示
-    #     print("ValidationError:", self.errors)  # ここでエラーを出力
-    #     return cleaned_data
+    # バリデーション処理を追加する場合はここ。
+    def clean(self):
+        # デフォルトバリデーションを実行
+        cleaned_data = super().clean()
+
+        # old_password と new_password1 が同じかチェック
+        old_password = cleaned_data.get("old_password")
+        new_password1 = cleaned_data.get("new_password1")
+        if old_password and new_password1 and old_password == new_password1:
+            self.add_error(
+                "new_password1",
+                _("新しいパスワードは古いパスワードと同じにできません。"),
+            )
+        # TODO: debug用。あとで消す。
+        # print("ValidationError: ", self.errors)  # ここでエラーを出力
+
+        return cleaned_data
