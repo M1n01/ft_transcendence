@@ -173,8 +173,6 @@ const friend_request_click = () => {
 };
 
 document.addEventListener('FriendEvent', () => {
-  //let check_friend = setInterval(() => {
-
   const friend_top = () => {
     const input_user = document.getElementById('search-friend');
     if (input_user == null) {

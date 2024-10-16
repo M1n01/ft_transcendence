@@ -94,6 +94,7 @@ def copy_tmpuser_to_ftuser(user):
     try:
         src_user = FtTmpUser.objects.get(email=user.email)
         FtUser.objects.create(
+            id=src_user.id,
             username=src_user.username,
             password=src_user.password,
             email=src_user.email,
@@ -147,7 +148,11 @@ class SignupTwoFaView(CreateView):
                 new_user,
                 backend="django.contrib.auth.backends.ModelBackend",
             )
-            tmp_user.delete()
+            if tmp_user is not None:
+                tmp_user.delete()
+            else:
+                logger.error("FtUserの削除に失敗しました")
+
             tmp_time = datetime.now(tz=timezone.utc) + timedelta(
                 seconds=getattr(settings, "JWT_VALID_TIME", None)
             )

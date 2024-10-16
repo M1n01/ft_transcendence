@@ -59,7 +59,7 @@ class TournamentForm(forms.ModelForm):
     # )
 
     name = forms.CharField(
-        max_length=32,
+        max_length=30,
         widget=forms.TextInput(
             attrs={
                 # "placeholder": _("トーナメント名"),

@@ -2,6 +2,7 @@ import json
 import jwt
 from django.conf import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
+import uuid
 
 # from accounts.models import FtUser
 from .message import get
@@ -39,7 +40,7 @@ def get_user(session_id):
     from accounts.models import FtUser
 
     json = decode(session_id)
-    id = json["sub"]
+    id = uuid.UUID(json["sub"])
     return FtUser.objects.get(id=id)
 
 
@@ -111,8 +112,8 @@ class FtWebsocket(AsyncWebsocketConsumer):
 
             else:
                 self.close()
-        except Exception:
-            print("Connect Exception Error")
+        except Exception as e:
+            print(f"Connect Exception Error:{e=}")
 
     async def close(self, code=None, reason=None):
         print("close")
