@@ -365,6 +365,9 @@ OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
 OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
 
+# 2FA
+TWO_FA_AUTH_KEY = os.environ["TWO_FA_AUTH_KEY"]
+
 # ドメイン
 PONG_DOMAIN = "http://localhost:8001/"
 
