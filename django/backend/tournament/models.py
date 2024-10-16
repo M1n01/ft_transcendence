@@ -13,7 +13,7 @@ class TournamentStatusChoices(models.TextChoices):
 
 class Tournament(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(verbose_name=_("トーナメント名"), max_length=30)
+    name = models.CharField(verbose_name=_("トーナメント名"), max_length=20)
     organizer = models.ForeignKey(
         FtUser,
         on_delete=models.PROTECT,
