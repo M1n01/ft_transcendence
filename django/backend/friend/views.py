@@ -13,6 +13,7 @@ from django.http import (
 )
 from django.db import IntegrityError
 from django.views.generic.edit import UpdateView
+import uuid
 
 
 def get_friendlist(request):
@@ -155,7 +156,7 @@ class FriendRequest(CreateView):
 
     def post(self, request):
         try:
-            user_id = request.POST.get("userid")
+            user_id = uuid.UUID(request.POST.get("userid"))
             friend_user = FtUser.objects.get(id=user_id)
             message = request.POST.get("request-message")
 
