@@ -17,7 +17,9 @@
       </span>
     </div>
     {% if not blocks %}
-    <div>{% trans 'ブロックしたユーザーはいません' %}</div>
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      {% trans 'ブロックしたユーザーはいません.' %}
+    </div>
     {% endif %} {% if blocks %}
     <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
       {% for user in blocks %} {% include 'friend/block-user-card.html' with friend=user %}
