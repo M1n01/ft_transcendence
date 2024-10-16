@@ -5,6 +5,8 @@ from accounts.models import FtUser
 
 
 class UserActionLog(models.Model):
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(FtUser, on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=256, unique=False)

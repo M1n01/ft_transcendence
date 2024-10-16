@@ -4,12 +4,13 @@ from django.db import models
 # from datetime import datetime, timezone, timedelta
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
+import uuid
 
 # Create your models here.
 
 
 class NotificationMessage(models.Model):
-    id = models.BigAutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=64, unique=True)
     jp = models.TextField()
     en = models.TextField()
@@ -31,7 +32,7 @@ class NotificationMessage(models.Model):
 
 
 class UserNotification(models.Model):
-    id = models.BigAutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         FtUser, on_delete=models.CASCADE, related_name="user_notifications"
     )

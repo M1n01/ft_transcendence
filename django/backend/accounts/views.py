@@ -293,7 +293,7 @@ class UserLoginView(LoginView):
             tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=expire_time)
             self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
             self.request.session["is_provisional_login"] = True
-            self.request.session["user_id"] = user.id
+            self.request.session["user_id"] = str(user.id)
             rval = send_two_fa(user, self.request)
             if rval:
                 is_app = user.auth == AuthChoices.APP
@@ -301,7 +301,7 @@ class UserLoginView(LoginView):
                 return JsonResponse(data)
             else:
                 self.request.session["is_provisional_login"] = False
-                self.request.session["user_id"] = 0
+                self.request.session["user_id"] = "0"
 
         except Exception as e:
             return HttpResponseBadRequest(f"Bad Request:{e}")
@@ -362,7 +362,7 @@ class SignupView(CreateView):
                 delete_tmp_user.apply_async([user.id], countdown=expire_time + 10)
                 self.request.session["exp"] = str(tmp_time.timestamp())
                 self.request.session["is_provisional_signup"] = True
-                self.request.session["user_id"] = user.id
+                self.request.session["user_id"] = str(user.id)
 
                 rval = send_two_fa(user, self.request)
                 if rval is False:

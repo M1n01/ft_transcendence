@@ -70,6 +70,7 @@ class MatchTmp(models.Model):
     BlockChainではなく、DBに保持する一時データ
     """
 
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id = models.BigAutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT, null=True)
     round = models.SmallIntegerField(null=True)
