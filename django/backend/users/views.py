@@ -1,7 +1,9 @@
+import csv
 from django.shortcuts import render, redirect
 from django.db import models
 from django.http import Http404
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.generic import UpdateView, TemplateView, DeleteView
 from django.views.generic.edit import FormView
 import hashlib
@@ -15,10 +17,11 @@ from django.urls import reverse_lazy
 from .forms import UserEditForm, ChangePasswordForm
 from accounts.forms import UploadAvatarForm
 
-from accounts.models import FtUser  # FtUser モデルをインポート
+from accounts.models import FtUser
 
 from django.http import (
     JsonResponse,
+    HttpResponse,
     HttpResponseBadRequest,
     HttpResponseNotFound,
 )
@@ -87,6 +90,61 @@ class ChangedPasswordView(TemplateView):
         context = self.get_context_data()
 
         return render(request, "users/changed-password.html", context)
+
+
+class ExportProfileView(LoginRequiredMixin, View):
+    # 認証されていないユーザーがアクセスしようとした場合のリダイレクトURL
+    login_url = "/"
+
+    def get(self, request, *args, **kwargs):
+        # HTTPレスポンスをCSV形式で作成
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="profile_data.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Username",
+                "Email",
+                "first_name",
+                "last_name",
+                "birth_date",
+                "country_code",
+                "phone",
+                "language",
+                "created_at",
+                "updated_at",
+                "last_login",
+            ]
+        )  # ヘッダー行の作成
+
+        # ユーザーデータを取得し、CSVに書き込む
+        for user in FtUser.objects.all():
+            writer.writerow(
+                [
+                    user.username,
+                    user.email,
+                    user.first_name,
+                    user.last_name,
+                    user.birth_date,
+                    user.country_code,
+                    user.phone,
+                    user.language,
+                    user.created_at,
+                    user.updated_at,
+                    user.last_login,
+                ]
+            )
+
+        print(response)
+        return response
+
+
+class ExportedProfileView(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+
+        return render(request, "users/exported-profile.html", context)
 
 
 # ユーザ情報を論理削除する

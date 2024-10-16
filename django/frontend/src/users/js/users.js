@@ -30,29 +30,29 @@ document.addEventListener('UserEvent', function () {
       if (response.error) {
         return;
       }
-      if (response.status == 200) {
+      if (response.status != 200) {
+        const html = await response.text();
+        // TODO: debug用。あとで消す。
+        // console.error(html);
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const oldPwdErrors = tempDiv.querySelector('#old-password-errors ul.errorlist');
+        if (oldPwdErrors != null) {
+          document.getElementById('old-password-errors').innerHTML = oldPwdErrors.outerHTML;
+        }
+        const newPwd1Errors = tempDiv.querySelector('#new-password1-errors ul.errorlist');
+        if (newPwd1Errors != null) {
+          document.getElementById('new-password1-errors').innerHTML = newPwd1Errors.outerHTML;
+        }
+        const newPwd2Errors = tempDiv.querySelector('#new-password2-errors ul.errorlist');
+        if (newPwd2Errors != null) {
+          document.getElementById('new-password2-errors').innerHTML = newPwd2Errors.outerHTML;
+        }
+      } else {
         // console.log('Success: change-password-form');
         moveTo('/users/changed-password');
         return;
       }
-      const html = await response.text();
-      // TODO: debug用。あとで消す。
-      // console.error(html);
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = html;
-      const oldPwdErrors = tempDiv.querySelector('#old-password-errors ul.errorlist');
-      if (oldPwdErrors != null) {
-        document.getElementById('old-password-errors').innerHTML = oldPwdErrors.outerHTML;
-      }
-      const newPwd1Errors = tempDiv.querySelector('#new-password1-errors ul.errorlist');
-      if (newPwd1Errors != null) {
-        document.getElementById('new-password1-errors').innerHTML = newPwd1Errors.outerHTML;
-      }
-      const newPwd2Errors = tempDiv.querySelector('#new-password2-errors ul.errorlist');
-      if (newPwd2Errors != null) {
-        document.getElementById('new-password2-errors').innerHTML = newPwd2Errors.outerHTML;
-      }
-      return;
     });
     // フォームの各入力フィールドにイベントリスナーを追加
     const oldPasswordField = change_password_form.querySelector('input[name="old_password"]');
@@ -75,6 +75,37 @@ document.addEventListener('UserEvent', function () {
       newPassword2Field.addEventListener('input', () => clearNewPwdErrorMessages());
     }
   }
+
+  const export_profile = document.getElementById('export-profile');
+  if (export_profile != null) {
+    export_profile.addEventListener('click', async (event) => {
+      event.preventDefault();
+      // CSVエクスポートのリクエストを行う
+      try {
+        const response = await fetch('/users/export-profile/'); // エクスポートURLにリクエストを送信
+        if (response.ok) {
+          const blob = await response.blob(); // レスポンスをBlobとして取得
+          const url = window.URL.createObjectURL(blob); // BlobをURLに変換
+
+          const a = document.createElement('a'); // 新しいaタグを作成
+          a.style.display = 'none'; // 非表示にする
+          a.href = url; // BlobのURLを設定
+          a.download = 'user_data.csv'; // ダウンロードファイル名を設定
+          document.body.appendChild(a); // DOMに追加
+          a.click(); // クリックイベントを発火させてダウンロード
+          window.URL.revokeObjectURL(url); // メモリを解放
+          moveTo('/users/exported-profile');
+        } else {
+          console.error('エクスポートに失敗しました。');
+          moveTo('/users/profile');
+        }
+      } catch (error) {
+        console.error('エラー:', error);
+        moveTo('/users/profile');
+      }
+    });
+  }
+
   // アカウント削除
   const delete_user_form = document.getElementById('delete-user');
   if (delete_user_form !== null) {
