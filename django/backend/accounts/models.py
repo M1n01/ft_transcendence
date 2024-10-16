@@ -204,6 +204,7 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("ft_created_at"),
         null=True,
         blank=False,
+        auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(verbose_name=_("ft_updateded_at"), auto_now=True)
@@ -353,6 +354,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("ft_created_at"),
         null=True,
         blank=False,
+        auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(verbose_name=_("ft_updateded_at"), auto_now=True)
