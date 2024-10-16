@@ -1,15 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.db import models
-from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, TemplateView, DeleteView
 from django.views.generic.edit import FormView
-import hashlib
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import PasswordChangeView
-
-# from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 
 from .forms import UserEditForm, ChangePasswordForm
@@ -102,8 +98,8 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
             user.birth_date = None
             user.auth = ""
             user.app_secret = None
-            user.created_at = None
-            user.updated_at = None
+            # user.created_at = None
+            # user.updated_at = None
 
             user.save()
             print("Execute DeleteUserView")

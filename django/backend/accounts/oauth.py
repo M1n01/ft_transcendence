@@ -12,7 +12,7 @@ from urllib.parse import urlparse, parse_qs
 from django.contrib.auth.backends import ModelBackend
 
 # from django.contrib.auth.middleware import RemoteUserMiddleware
-import datetime
+# import datetime
 import logging
 
 # from .modelss import User, FtUser
@@ -72,7 +72,7 @@ class FtOAuth(ModelBackend):
             user.email42 = email
             user.password = randomStr(32)
             user.is_ft = True
-            user.created_at = datetime.datetime.now()
+            # user.created_at = datetime.datetime.now()
             user.save()
             user = FtUser.objects.get(email42=email)
 
