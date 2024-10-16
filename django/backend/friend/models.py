@@ -9,7 +9,7 @@ class FriendshipsStatusChoices(models.TextChoices):
     ACCEPTED = "ACCEPTED", _("accepted")
     BLOCK = "BLOCK", _("block")  # ブロックする時
     BLOCKED = "BLOCKED", _("blocked")  # ブロックされた時
-    REMOVED = "REMOVED", _("removed")
+    # REMOVED = "REMOVED", _("removed") # 削除で対応する
 
 
 class Friendships(models.Model):

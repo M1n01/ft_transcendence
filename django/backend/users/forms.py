@@ -117,6 +117,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("現在のパスワード"),
                 "autocomplete": "old_password",
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
         required=True,
@@ -128,6 +129,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード"),
                 "autocomplete": "new_password1",
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
         required=True,
@@ -139,6 +141,7 @@ class ChangePasswordForm(PasswordChangeForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("新しいパスワード(確認用)"),
                 "autocomplete": "new_password2",
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
         required=True,

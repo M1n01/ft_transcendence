@@ -49,9 +49,10 @@ document.addEventListener('SignupEvent', function () {
             return;
           }
           const two_fa_form = document.getElementById('two-fa-verify-form');
-          const resend_two_fa_form = document.getElementById('resend-two-fa');
+          const cancel_two_fa_target = document.getElementById('cancel-two-fa-target');
+
           two_fa_form.action = getUrlWithLang('accounts/signup-two-fa/');
-          resend_two_fa_form.action = 'accounts/signup-two-fa/';
+          cancel_two_fa_target.value = 'signup';
           if (json['is_auth_app']) {
             document.getElementById('app_url_qr').hidden = false;
             document.getElementById('app_url_qr').src = 'data:image/png;base64,' + json['qr'];

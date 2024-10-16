@@ -13,9 +13,19 @@
       </div>
 
       <div class="friend-user-id-hidden" hidden>{{request.user.id}}</div>
-      <strong class="card-label d-flex justify-content-center pb-4"
-        >{{request.user.username}}
-      </strong>
+      <strong class="card-label d-flex justify-content-center">{{request.user.username}} </strong>
+
+      <button
+        type="button"
+        class="btn btn-secondary text-nowrap mt-2 mb-3 message-friend-card"
+        data-bs-toggle="modal"
+        data-bs-target="#MessageModal"
+        data-name="{{request.user.username}}"
+        data-img="{{request.user.avatar.url}}"
+        data-message="{{request.message}}"
+      >
+        {% trans 'メッセージ' %}
+      </button>
     </div>
 
     <div class="d-flex justify-content-around w-100">

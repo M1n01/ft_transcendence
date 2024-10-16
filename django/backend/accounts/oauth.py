@@ -1,6 +1,7 @@
 from ft_trans import redis
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 import urllib.parse
 import random
 import string
@@ -56,12 +57,10 @@ class FtOAuth(ModelBackend):
     DOMAIN = getattr(settings, "PONG_DOMAIN", None)
     REDIRECTED_URL = DOMAIN + "accounts/redirect-oauth"
 
-    def authenticate(self, username, email):
-        print("ftOauth authenticate No.1")
+    def authenticate(self, username, email, image_url):
         try:
             user = FtUser.objects.get(email42=email)
         except FtUser.DoesNotExist:
-            print("ftOauth authenticate No.2")
             user = FtUser()
             cnt = 0
             try:
@@ -76,6 +75,13 @@ class FtOAuth(ModelBackend):
             user.created_at = datetime.datetime.now()
             user.save()
             user = FtUser.objects.get(email42=email)
+
+            response_img = requests.get(image_url)
+            if response_img.status_code == 200:
+                test_path = f'image_{image_url.split("/")[-1]}'
+                user.avatar.save(test_path, ContentFile(response_img.content))
+                user.save()
+
         return user
 
     def append_state_code_dict(self, state, code):
@@ -165,3 +171,6 @@ class FtOAuth(ModelBackend):
             logger.error("not find state in Redis")
             raise ValueError("Requestされたデータは無効です")
         return self.fetch_access_token(state, code)
+
+    def save_avatar(self, user, url):
+        pass

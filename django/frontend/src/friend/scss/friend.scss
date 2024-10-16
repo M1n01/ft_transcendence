@@ -8,8 +8,8 @@
 }
 
 .friend-card {
-  max-width: 16rem;
-  min-width: 16rem;
+  max-width: 14rem;
+  min-width: 14rem;
 }
 
 .card-img-top-block {
@@ -41,5 +41,11 @@
   //background-size: center;
   height: 14rem;
   width: 14rem;
+}
+
+#request-message-user-message {
+  max-width: 30rem;
+  word-wrap: break-word;
+  white-space: normal;
 }
 //

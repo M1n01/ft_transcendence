@@ -33,6 +33,7 @@ class LoginForm(AuthenticationForm):
             attrs={
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
@@ -144,6 +145,7 @@ class SignUpForm(UserCreationForm):
                 "id": "password_id1",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
@@ -153,6 +155,7 @@ class SignUpForm(UserCreationForm):
                 "id": "password_id2",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password(確認用)"),
+                "aria-labelledby": "passwordHelpBlock",
             }
         ),
     )
