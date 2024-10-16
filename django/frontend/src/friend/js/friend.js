@@ -40,7 +40,7 @@ function intervalFunc() {
   }
   user_id_list.forEach((element) => {
     const id = element.textContent;
-    id_list += id + '-';
+    id_list += id + '@';
   });
   if (id_list !== '') {
     id_list = id_list.substring(0, id_list.length - 1);

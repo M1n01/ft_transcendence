@@ -164,10 +164,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ft_trans.wsgi.application"
 
+# CHANNEL_LAYERS = {
+#    "default": {
+#        "BACKEND": "channels.layers.InMemoryChannelLayer",
+#    }
+# }
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+            ],
+        },
+    },
 }
 
 WS = "wss"

@@ -157,35 +157,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ft_trans.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-"""#PRODUCTION ENVIRONMENT
-DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    "OPTIONS": {
-            "service": "ft_trans",
-            "passfile": ".my_pgpass",
-            # requireは認証局による証明書が必要
-            #'sslmode': 'require',
-            'sslmode': 'prefer',
-            'sslcert': 'server.crt',
-            'sslkey': 'server.key',
-        },
-    }
-}
-"""  # PRODUCTION ENVIRONMENT
-
-# CHANNEL_LAYERS = {
-#    "default": {
-#        "BACKEND": "channels_redis.core.RedisChannelLayer",
-#        "CONFIG": {
-#            "hosts": [(f"default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30", 6379)],
-#        },
-#    },
-# }
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
@@ -193,8 +164,6 @@ CHANNEL_LAYERS = {
 }
 
 WS = "ws"
-# f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
-
 
 # """#DEVLOPMENT ENVIRONMENT
 DATABASES = {

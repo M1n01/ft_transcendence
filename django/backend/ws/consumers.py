@@ -104,7 +104,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
             user = await get_user(session_id)
 
             if user.is_authenticated:
-                group_name = self.room_group_name + str(user.id)
+                group_name = self.room_group_name + str(user.username)
                 await self.channel_layer.group_add(group_name, self.channel_name)
                 await self.accept()  # WebSocket接続を受け入れる
                 await update_user_login_state(user, True)
@@ -126,7 +126,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
         user = await get_user(session_id)
         await update_user_login_state(user, False)
 
-        group_name = self.room_group_name + str(user.id)
+        group_name = self.room_group_name + str(user.username)
         await self.channel_layer.group_send(
             group_name,
             {
@@ -148,7 +148,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
         if json["message"] == "active_list":
             (message, param1, param2, param3, param4) = await get.active(json)
 
-        group_name = self.room_group_name + str(user.id)
+        group_name = self.room_group_name + str(user.username)
         if message == "":
             return
         await self.channel_layer.group_send(

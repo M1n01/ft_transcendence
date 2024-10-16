@@ -2,7 +2,7 @@ import { setUserActive } from '../../../friend/js/friend.js';
 
 let socket = null;
 let ws_url = 'wss://' + window.location.host + '/ws/websocket/';
-if (window.location.protocol == 'http') {
+if (window.location.protocol == 'http:') {
   ws_url = 'ws://' + window.location.host + '/ws/websocket/';
 }
 
