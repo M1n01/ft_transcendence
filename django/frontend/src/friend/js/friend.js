@@ -245,5 +245,6 @@ document.addEventListener('FriendEvent', () => {
   accept_friend_request();
   display_friend_message();
 
+  intervalFunc();
   check_friend_interval = setInterval(intervalFunc, 5000);
 });
