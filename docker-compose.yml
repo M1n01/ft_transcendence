@@ -70,6 +70,7 @@ services:
       - BREVO_API_KEY=$BREVO_API_KEY
       - BREVO_SENDER_ADDRESS=$BREVO_SENDER_ADDRESS
       - REDIS_PASSOWRD=$REDIS_PASSOWRD
+      - TWO_FA_AUTH_KEY=$TWO_FA_AUTH_KEY
 
   eth:
     container_name: 'eth'

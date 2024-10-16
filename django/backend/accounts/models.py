@@ -8,12 +8,19 @@ from django.contrib.auth.models import (
 )
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import password_validation
+from django.conf import settings
 import logging
 
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 import pyotp
 import uuid
 import random
+
+# import cryptography
+from cryptography.fernet import Fernet
+
+SECRET_KEY = getattr(settings, "TWO_FA_AUTH_KEY", None)
+cipher_suite = Fernet(SECRET_KEY)
 
 
 class AuthChoices(models.TextChoices):
@@ -83,6 +90,18 @@ def user_avatar_path(instance, filename):
     filename = f"{rand}/{uuid.uuid4()}.{extension}"
 
     return f"avatars/user_{instance.id}/{filename}"
+
+
+class EncryptedField(models.TextField):
+    def get_prep_value(self, value):
+        if value:
+            return cipher_suite.encrypt(value.encode()).decode()
+        return value
+
+    def from_db_value(self, value, expression, connection):
+        if value:
+            return cipher_suite.decrypt(value.encode()).decode()
+        return value
 
 
 class FtUser(AbstractBaseUser, PermissionsMixin):
@@ -175,9 +194,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         choices=AuthChoices,
         default=AuthChoices.APP,
     )
-    app_secret = models.CharField(
+    app_secret = EncryptedField(
         verbose_name=_("App鍵"),
-        max_length=32,
         null=True,
         blank=True,
     )
@@ -325,9 +343,8 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         choices=AuthChoices,
         default=AuthChoices.APP,
     )
-    app_secret = models.CharField(
+    app_secret = EncryptedField(
         verbose_name=_("App鍵"),
-        max_length=32,
         null=True,
         blank=True,
     )
