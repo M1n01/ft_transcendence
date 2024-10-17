@@ -33,6 +33,7 @@ class UserEditForm(forms.ModelForm):
         ),
     )
     first_name = forms.CharField(
+        # required=False,
         max_length=64,
         widget=forms.TextInput(
             attrs={
@@ -43,6 +44,7 @@ class UserEditForm(forms.ModelForm):
         ),
     )
     last_name = forms.CharField(
+        # required=False,
         max_length=100,
         widget=forms.TextInput(
             attrs={
@@ -112,6 +114,7 @@ class UserEditForm(forms.ModelForm):
 
 class ChangePasswordForm(PasswordChangeForm):
     old_password = forms.CharField(
+        required=True,
         widget=forms.PasswordInput(
             attrs={
                 "id": "old_password_id",
@@ -121,9 +124,9 @@ class ChangePasswordForm(PasswordChangeForm):
                 "aria-labelledby": "passwordHelpBlock",
             }
         ),
-        required=True,
     )
     new_password1 = forms.CharField(
+        required=True,
         widget=forms.PasswordInput(
             attrs={
                 "id": "new_password_id1",
@@ -133,9 +136,9 @@ class ChangePasswordForm(PasswordChangeForm):
                 "aria-labelledby": "passwordHelpBlock",
             }
         ),
-        required=True,
     )
     new_password2 = forms.CharField(
+        required=True,
         widget=forms.PasswordInput(
             attrs={
                 "id": "new_password_id2",
@@ -145,7 +148,6 @@ class ChangePasswordForm(PasswordChangeForm):
                 "aria-labelledby": "passwordHelpBlock",
             }
         ),
-        required=True,
     )
 
     class Meta:
