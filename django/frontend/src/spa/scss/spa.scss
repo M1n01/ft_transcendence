@@ -44,3 +44,10 @@ a {
   border-radius: 50%;
   height: 2.8rem;
 }
+
+#navi-username {
+  max-width: 5rem;
+  .text-truncate {
+    font-size: 12px;
+  }
+}

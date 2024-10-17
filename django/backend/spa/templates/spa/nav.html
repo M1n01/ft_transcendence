@@ -32,7 +32,7 @@
 -->
         </ul>
 
-        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
+        <ul class="navbar-nav d-none d-md-flex  {{hidden}}">
           <li class="nav-item dropdown">
             <div class="position-relative z-3">
               <a class="nav-link bg-dark text-white pb-0" href="/notification" data-link>
@@ -58,7 +58,7 @@
           </li>
         </ul>
 
-        <ul class="navbar-nav me-2 d-none d-md-flex  {{hidden}}">
+        <ul class="navbar-nav d-none d-md-flex  {{hidden}}">
           <li class="nav-item dropdown">
             <div
               class="d-flex nav-link dropdown-toggle bg-dark"
@@ -67,11 +67,12 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <!-- 長い名前の場合デザインが崩れるため削除
-              <div class="d-flex align-items-center mx-2 fw-bold fs-6 text-white">
-                {{user.username}}
+              <div
+                id="navi-username"
+                class="d-flex align-items-center mx-2 fw-bold fs-6 text-white"
+              >
+                <span class="text-truncate"> {{user.username}} </span>
               </div>
--->
 
               <div class="navi-avatar-background">
                 <div

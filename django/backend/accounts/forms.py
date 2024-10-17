@@ -10,6 +10,9 @@ from .models import FtTmpUser, AuthChoices, LanguageChoice, COUNTRY_CODE_CHOICES
 from django.utils.translation import gettext_lazy as _
 import re
 
+from django.conf import settings
+
+USERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
 
 # COUNTRY_CODE_CHOICES = [
 #    (f"+{code}", f"+{code} ({region[0]})")
@@ -48,12 +51,13 @@ class LoginForm(AuthenticationForm):
 
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
+        max_length=USERNAME_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 "id": "username_id",
                 "class": "form-control w-100 rounded-0",
                 "placeholder": _("username"),
-            }
+            },
         ),
     )
     email = forms.CharField(
@@ -219,7 +223,7 @@ class FtLoginForm(UserCreationForm):
             "email42",
         )
         username = forms.CharField(
-            # max_length=100,
+            max_length=USERNAME_MAX_LEN,
             # label="ユーザー名",  # ここでラベルを指定
             widget=forms.TextInput(attrs={"class": "form-control"}),
         )
