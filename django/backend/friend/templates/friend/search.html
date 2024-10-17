@@ -48,20 +48,21 @@
 
     {% include 'friend/request-modal.html' %} {% include 'friend/search-form.html' %}
 
-    <h2 class="mt-5">検索結果</h2>
+    <h2 class="mt-5">{% trans '検索結果' %}</h2>
     <div id="searched-user">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">{% trans 'アバター' %}</th>
-            <th scope="col">{% trans 'ユーザー名' %}</th>
-            <th scope="col">{% trans '申請' %}</th>
+            <th scope="col-4" class="start-cell">{% trans 'アバター' %}</th>
+            <th scope="col-4">{% trans 'ユーザー名' %}</th>
+            <th scope="col-4">{% trans '申請' %}</th>
           </tr>
         </thead>
         <tbody>
           {% for friend in results %}
           <tr>
             <th>
+              <!--
               <img
                 src="{{friend.avatar.url}}"
                 class="img-fluid ft-logo"
@@ -70,12 +71,20 @@
                 height="40"
                 width="40"
               />
+-->
+              <div class="avatar-background-mini">
+                <div
+                  id="request-message-user-avatar"
+                  style="background-image: url('{{friend.avatar.url}}');   "
+                  class="avatar-background-img-mini"
+                ></div>
+              </div>
             </th>
-            <th>{{ friend.username }}</th>
+            <th><div class="text-break text-wrap px-2">{{ friend.username }}</div></th>
             <th>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn btn-primary text-break"
                 data-bs-toggle="modal"
                 data-bs-target="#friendRequestModal"
               >
