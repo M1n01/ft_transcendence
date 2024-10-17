@@ -29,6 +29,8 @@ class NotificationMessage(models.Model):
             return f"NotificationMessage - {self.en[:50]}"
         elif lang == "fr":
             return f"NotificationMessage - {self.fr[:50]}"
+        else:
+            return f"NotificationMessage - {self.jp[:50]}"
 
 
 class UserNotification(models.Model):
@@ -47,4 +49,4 @@ class UserNotification(models.Model):
     #    ]
 
     def __str__(self):
-        return f"Notification for {self.user.username} - {self.message.message[:20]}"
+        return f"Notification for {self.user.username} - {self.message}"
