@@ -372,3 +372,7 @@ PRIVATE_ACCOUNT_KEY = (
 )
 PROVIDER_URL = "http://eth:8545"
 CONTRACT_ADDRESS = get_contract_address()
+
+
+# const
+USERNAME_MAX_LEN = 24

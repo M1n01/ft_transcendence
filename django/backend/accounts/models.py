@@ -21,6 +21,7 @@ from cryptography.fernet import Fernet
 
 SECRET_KEY = getattr(settings, "TWO_FA_AUTH_KEY", None)
 cipher_suite = Fernet(SECRET_KEY)
+USERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
 
 
 class AuthChoices(models.TextChoices):
@@ -112,7 +113,9 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
+    username = models.CharField(
+        verbose_name=_("ユーザー名"), max_length=USERNAME_MAX_LEN, unique=False
+    )
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),
@@ -280,7 +283,9 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
+    username = models.CharField(
+        verbose_name=_("ユーザー名"), max_length=USERNAME_MAX_LEN, unique=False
+    )
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
         verbose_name=_("email42"),

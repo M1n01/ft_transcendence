@@ -2,7 +2,7 @@
 <body>
   <br />
   <ul>
-    <div class="container mt-4">
+    <div class="mt-4">
       <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
         <h3>{{attr.title}}</h3>
 
@@ -22,7 +22,9 @@
         {% include 'tournament/card-modal.html' %}
       </div>
       {% else %}
-      <div>{% trans '対象のトーナメントは存在しません' %}</div>
+      <div class="d-flex justify-content-center justify-content-sm-start overflow-hidden">
+        {% trans '対象のトーナメントは存在しません' %}
+      </div>
       {% endif %}
     </div>
   </ul>

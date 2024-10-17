@@ -1,4 +1,5 @@
 import { setUserActive } from '../../../friend/js/friend.js';
+import { UpdateMessageIcon } from '../utility/navi.js';
 
 let socket = null;
 let ws_url = 'wss://' + window.location.host + '/ws/websocket/';
@@ -49,6 +50,9 @@ export const WebsocketInit = () => {
       if (message === 'active_list') {
         const active_list = json['param1'];
         setUserActive(active_list);
+      } else if (message === 'alert_cnt') {
+        const cnt = json['param1'];
+        UpdateMessageIcon(cnt, true);
       }
     }
   };

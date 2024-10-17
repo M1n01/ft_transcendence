@@ -59,7 +59,9 @@
       </span>
     </div>
     {% if not friends %}
-    <div>{% trans 'フレンドはいません' %}</div>
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      {% trans 'フレンドはいません' %}
+    </div>
     {% endif %} {% if friends %}
     <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
       {% for friend in friends %} {% include 'friend/friend-card.html' with friend=friend %}

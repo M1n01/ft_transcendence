@@ -13,7 +13,7 @@ import './spa/scss/spa.scss';
 import './custom_bootstrap.scss';
 import './main.scss';
 import { WebsocketInit } from './spa/js/ws/socket.js';
-import { loadNav } from './spa/js/utility/user.js';
+import { loadNav } from './spa/js/utility/navi.js';
 import { submitForm } from './spa/js/utility/form.js';
 //import 'login.js'
 
@@ -63,11 +63,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ページ切替
     if (e.target.matches('[data-link]')) {
       savePage(window.location.href);
-
       e.preventDefault();
       tmp_path = e.target.href;
       const uri = getDisplayedURI(tmp_path);
       navigateTo(uri.path, uri.rest, uri.params);
+    }
+
+    // aタグ内にsvgタグを入れるとそちらにclickイベントをとられてしまうので、
+    // ここで追加実装
+    if (e.target.matches('[data-svg]')) {
+      e.preventDefault();
+
+      const linkElement = e.target.closest('[data-link]');
+      if (linkElement) {
+        tmp_path = linkElement.href;
+        const uri = getDisplayedURI(tmp_path);
+        navigateTo(uri.path, uri.rest, uri.params);
+      }
     }
 
     // Form送信

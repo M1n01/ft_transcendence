@@ -1,4 +1,5 @@
 from channels.db import database_sync_to_async
+from django.db.models import Q
 
 
 async def send_is_alive(self, event):
@@ -40,4 +41,18 @@ async def active(json):
         return ("", "", "", "", "")
     param1 = await get_users_active(list)
     message = "active_list"
+    return (message, param1, "", "", "")
+
+
+@database_sync_to_async
+def get_alert_cnt(user):
+    from notification.models import UserNotification
+
+    list = UserNotification.objects.filter(Q(user=user) & Q(is_read=False))
+    return len(list)
+
+
+async def alert_cnt(user):
+    param1 = await get_alert_cnt(user)
+    message = "alert_cnt"
     return (message, param1, "", "", "")
