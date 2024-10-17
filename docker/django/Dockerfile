@@ -42,7 +42,8 @@ django-celery-results \
 redis \
 channels \
 pillow \
-python-magic
+python-magic \
+cryptography
 
 #django-redis #djang-redis is old
 #django-twilio

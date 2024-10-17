@@ -7,6 +7,8 @@ from .score_keeper.eth import (
 )
 from tournament.models import Tournament
 
+import uuid
+
 
 """
 シード(正確には不戦勝)の場合はplayer2がnull
@@ -70,7 +72,7 @@ class MatchTmp(models.Model):
     BlockChainではなく、DBに保持する一時データ
     """
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT, null=True)
     round = models.SmallIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)

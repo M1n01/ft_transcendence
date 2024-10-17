@@ -169,6 +169,16 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
+# CHANNEL_LAYERS = {
+#    "default": {
+#        "BACKEND": "channels_redis.core.RedisChannelLayer",
+#        "CONFIG": {
+#            "hosts": [
+#                f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+#            ],
+#        },
+#    },
+# }
 
 WS = "wss"
 
@@ -344,6 +354,9 @@ LOGIN_URL = "spa:to-login"
 OAUTH_AUTHORIZE_URL = "https://api.intra.42.fr/oauth/authorize"
 OAUTH_CLIENT_ID = os.environ["OAUTH_CLIENT_ID"]
 OAUTH_SECRET_ID = os.environ["OAUTH_SECRET_ID"]
+
+# 2FA
+TWO_FA_AUTH_KEY = os.environ["TWO_FA_AUTH_KEY"]
 
 # ドメイン
 PONG_DOMAIN = "https://localhost/"

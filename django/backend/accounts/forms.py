@@ -189,7 +189,7 @@ class SignUpForm(UserCreationForm):
         email = self.cleaned_data.get("email")
         if FtTmpUser.objects.filter(email=email).exists():
             print(f"email Error:{email=}")
-            raise forms.ValidationError("このメールアドレスは既に使用されています。......")
+            raise forms.ValidationError(_("このメールアドレスは既に使用されています。......"))
         return email
 
     def clean_phone(self):
@@ -197,17 +197,17 @@ class SignUpForm(UserCreationForm):
         pattern = "\\d*"
         result = re.fullmatch(pattern, phone)
         if result is None:
-            raise forms.ValidationError("数値以外は記入しないでください")
+            raise forms.ValidationError(_("数値以外は記入しないでください"))
 
         if len(phone) > 15:
-            raise forms.ValidationError("正しい電話番号を入力してください")
+            raise forms.ValidationError(_("正しい電話番号を入力してください"))
         return phone
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get("last_name")
-        if len(last_name) > 80:
+        if len(last_name) > 64:
             print(f"phne Error:{last_name=}")
-            raise forms.ValidationError("64文字以内にしてください")
+            raise forms.ValidationError(_("64文字以内にしてください"))
         return last_name
 
 

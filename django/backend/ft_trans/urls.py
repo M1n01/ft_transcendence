@@ -22,7 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-import spa.urls
+# import spa.urls
 import accounts.urls
 import users.urls
 import friend.urls
@@ -46,11 +46,11 @@ urlpatterns += i18n_patterns(
     path("pong/", include(pong.urls), name="pong"),
     path("tournament/", include(tournament.urls), name="tournament"),
     path("friend/", include(friend.urls), name="friend"),
-    path("spa/", include(spa.urls), name="spa2"),
+    path("spa/", include(("spa.urls", "spa"), namespace="spa2")),
     path("users/", include(users.urls), name="users"),
     path("history/", include(history.urls), name="history"),
-    path("", include(spa.urls), name="blank"),
-    re_path(r"[\w\-\/]*", include(spa.urls), name="spa"),
+    path("", include(("spa.urls", "spa"), namespace="blank")),
+    re_path(r"[\w\-\/]*", include(("spa.urls", "spa"), namespace="spa")),
     prefix_default_language=True,
 )
 

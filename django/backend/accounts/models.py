@@ -8,12 +8,19 @@ from django.contrib.auth.models import (
 )
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import password_validation
+from django.conf import settings
 import logging
 
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 import pyotp
 import uuid
 import random
+
+# import cryptography
+from cryptography.fernet import Fernet
+
+SECRET_KEY = getattr(settings, "TWO_FA_AUTH_KEY", None)
+cipher_suite = Fernet(SECRET_KEY)
 
 
 class AuthChoices(models.TextChoices):
@@ -85,6 +92,18 @@ def user_avatar_path(instance, filename):
     return f"avatars/user_{instance.id}/{filename}"
 
 
+class EncryptedField(models.TextField):
+    def get_prep_value(self, value):
+        if value:
+            return cipher_suite.encrypt(value.encode()).decode()
+        return value
+
+    def from_db_value(self, value, expression, connection):
+        if value:
+            return cipher_suite.decrypt(value.encode()).decode()
+        return value
+
+
 class FtUser(AbstractBaseUser, PermissionsMixin):
 
     groups = models.ManyToManyField(Group, related_name="ft_user_groups")
@@ -92,7 +111,7 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         Permission, related_name="ft_user_permissions"
     )
 
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
@@ -175,9 +194,8 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         choices=AuthChoices,
         default=AuthChoices.APP,
     )
-    app_secret = models.CharField(
+    app_secret = EncryptedField(
         verbose_name=_("App鍵"),
-        max_length=32,
         null=True,
         blank=True,
     )
@@ -186,6 +204,7 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("ft_created_at"),
         null=True,
         blank=False,
+        auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(verbose_name=_("ft_updateded_at"), auto_now=True)
@@ -260,7 +279,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         Permission, related_name="ft_tmp_user_permissions"
     )
 
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(verbose_name=_("ユーザー名"), max_length=32, unique=False)
     email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
     email42 = models.EmailField(
@@ -325,9 +344,8 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         choices=AuthChoices,
         default=AuthChoices.APP,
     )
-    app_secret = models.CharField(
+    app_secret = EncryptedField(
         verbose_name=_("App鍵"),
-        max_length=32,
         null=True,
         blank=True,
     )
@@ -336,6 +354,7 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("ft_created_at"),
         null=True,
         blank=False,
+        auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(verbose_name=_("ft_updateded_at"), auto_now=True)

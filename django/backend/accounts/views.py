@@ -94,6 +94,7 @@ def copy_tmpuser_to_ftuser(user):
     try:
         src_user = FtTmpUser.objects.get(email=user.email)
         FtUser.objects.create(
+            id=src_user.id,
             username=src_user.username,
             password=src_user.password,
             email=src_user.email,
@@ -147,7 +148,11 @@ class SignupTwoFaView(CreateView):
                 new_user,
                 backend="django.contrib.auth.backends.ModelBackend",
             )
-            tmp_user.delete()
+            if tmp_user is not None:
+                tmp_user.delete()
+            else:
+                logger.error("FtUserの削除に失敗しました")
+
             tmp_time = datetime.now(tz=timezone.utc) + timedelta(
                 seconds=getattr(settings, "JWT_VALID_TIME", None)
             )
@@ -293,7 +298,7 @@ class UserLoginView(LoginView):
             tmp_time = datetime.now(tz=timezone.utc) + timedelta(seconds=expire_time)
             self.request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
             self.request.session["is_provisional_login"] = True
-            self.request.session["user_id"] = user.id
+            self.request.session["user_id"] = str(user.id)
             rval = send_two_fa(user, self.request)
             if rval:
                 is_app = user.auth == AuthChoices.APP
@@ -301,7 +306,7 @@ class UserLoginView(LoginView):
                 return JsonResponse(data)
             else:
                 self.request.session["is_provisional_login"] = False
-                self.request.session["user_id"] = 0
+                self.request.session["user_id"] = "0"
 
         except Exception as e:
             return HttpResponseBadRequest(f"Bad Request:{e}")
@@ -362,7 +367,7 @@ class SignupView(CreateView):
                 delete_tmp_user.apply_async([user.id], countdown=expire_time + 10)
                 self.request.session["exp"] = str(tmp_time.timestamp())
                 self.request.session["is_provisional_signup"] = True
-                self.request.session["user_id"] = user.id
+                self.request.session["user_id"] = str(user.id)
 
                 rval = send_two_fa(user, self.request)
                 if rval is False:

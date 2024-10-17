@@ -40,7 +40,7 @@ function intervalFunc() {
   }
   user_id_list.forEach((element) => {
     const id = element.textContent;
-    id_list += id + '-';
+    id_list += id + '@';
   });
   if (id_list !== '') {
     id_list = id_list.substring(0, id_list.length - 1);
@@ -173,8 +173,6 @@ const friend_request_click = () => {
 };
 
 document.addEventListener('FriendEvent', () => {
-  //let check_friend = setInterval(() => {
-
   const friend_top = () => {
     const input_user = document.getElementById('search-friend');
     if (input_user == null) {
@@ -245,5 +243,6 @@ document.addEventListener('FriendEvent', () => {
   accept_friend_request();
   display_friend_message();
 
+  intervalFunc();
   check_friend_interval = setInterval(intervalFunc, 5000);
 });
