@@ -51,3 +51,22 @@ a {
     font-size: 12px;
   }
 }
+
+#navi-notification-icon {
+  svg {
+    fill: gray;
+  }
+}
+
+#alerm-number {
+  margin-left: -0.5rem !important;
+}
+
+#nav-dropdown-menu {
+  display: none;
+  background-color: red;
+}
+
+#small-menu-dropdown::before {
+  display: none !important;
+}

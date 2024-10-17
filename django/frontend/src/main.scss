@@ -75,16 +75,3 @@ body {
     line-height: normal; // リンク内のテキストの行の高さをリセット
   }
 }
-
-#alerm-number {
-  margin-left: -0.5rem !important;
-}
-
-#nav-dropdown-menu {
-  display: none;
-  background-color: red;
-}
-
-#small-menu-dropdown::before {
-  display: none !important;
-}

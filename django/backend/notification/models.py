@@ -36,7 +36,7 @@ class NotificationMessage(models.Model):
 class UserNotification(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
-        FtUser, on_delete=models.CASCADE, related_name="user_notifications"
+        FtUser, on_delete=models.PROTECT, related_name="user_notifications"
     )
     message = models.ForeignKey(NotificationMessage, on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)

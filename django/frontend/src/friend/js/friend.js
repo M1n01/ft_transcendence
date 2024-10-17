@@ -52,7 +52,7 @@ function intervalFunc() {
     sendWebSocket(message);
   }
 }
-export let check_friend_interval = setInterval(intervalFunc, 5000);
+export let CheckFriendInterval = setInterval(intervalFunc, 5000);
 
 const accept_friend_request = () => {
   const accepts = document.querySelector('#app').querySelectorAll('.pre-accept-friend');
@@ -244,5 +244,5 @@ document.addEventListener('FriendEvent', () => {
   display_friend_message();
 
   intervalFunc();
-  check_friend_interval = setInterval(intervalFunc, 5000);
+  CheckFriendInterval;
 });
