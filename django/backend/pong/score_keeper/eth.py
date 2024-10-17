@@ -91,9 +91,9 @@ def get_matches_from_blockchain(
         return {
             "id": match[0],
             "tournament_id": match[1],
-            "created_at": jst_created_at,
             "player1": match[3],
             "player2": match[4],
+            "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
             "round": match[7],

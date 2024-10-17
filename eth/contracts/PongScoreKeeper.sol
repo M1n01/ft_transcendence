@@ -4,10 +4,10 @@ pragma solidity ^0.8.24;
 contract PongScoreKeeper {
   struct Match {
     uint256 matchId;
-    uint256 tournamentId;
+    bytes16 tournamentId;
+    bytes16 player1;
+    bytes16 player2;
     uint256 createdAt;
-    uint256 player1;
-    uint256 player2;
     uint16 player1Score;
     uint16 player2Score;
     uint16 round;
@@ -21,14 +21,14 @@ contract PongScoreKeeper {
 
   event MatchCreated(
     uint256 indexed matchId,
-    uint256 tournamentId,
+    bytes16 tournamentId,
     uint256 createdAt,
-    uint256 indexed player1,
-    uint256 indexed player2,
+    bytes16 indexed player1,
+    bytes16 indexed player2,
     uint16 round
   );
 
-  event MatchStatusChanged(uint256 indexed tournamentId, bool isActive);
+  event MatchStatusChanged(uint256 indexed matchId, bool isActive);
 
   modifier onlyOwner() {
     require(msg.sender == owner, 'Not owner');
@@ -41,10 +41,10 @@ contract PongScoreKeeper {
 
   // POST method
   function createMatch(
-    uint256 _tournamentId,
-    uint256 _player1,
+    bytes16 _tournamentId,
+    bytes16 _player1,
     uint16 _player1Score,
-    uint256 _player2,
+    bytes16 _player2,
     uint16 _player2Score,
     uint16 _round
   ) external onlyOwner {
@@ -53,9 +53,9 @@ contract PongScoreKeeper {
     matches[nextMatchId] = Match(
       nextMatchId,
       _tournamentId,
-      block.timestamp,
       _player1,
       _player2,
+      block.timestamp,
       _player1Score,
       _player2Score,
       _round,
@@ -95,12 +95,12 @@ contract PongScoreKeeper {
   }
 
   // DELETE method
-  function deleteMatch(uint256 _tournamentId) external onlyOwner {
-    require(matches[_tournamentId].createdAt != 0, 'Match not found');
+  function deleteMatch(uint256 _matchId) external onlyOwner {
+    require(matches[_matchId].createdAt != 0, 'Match not found');
 
-    Match storage matchData = matches[_tournamentId];
+    Match storage matchData = matches[_matchId];
     matchData.isActive = !matchData.isActive;
 
-    emit MatchStatusChanged(_tournamentId, matchData.isActive);
+    emit MatchStatusChanged(_matchId, matchData.isActive);
   }
 }
