@@ -17,7 +17,10 @@
       {% endif %}
     </div>
     {% if not friend_requests%}
-    <div>{% trans 'フレンドリクエストはありません' %}</div>
+
+    <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+      {% trans 'フレンドリクエストはありません' %}
+    </div>
     {% endif %} {% if friend_requests %}
     <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
       {% for request in friend_requests %}

@@ -12,8 +12,21 @@
         <div class="d-flex justify-content-center w-100">
           <h5 class="modal-title text-dark">
             <div class="d-block">
+              <!--
               <img id="friend-user-icon-head" src="" width="200" height="200" />
-              <div id="friend-user-name-head" class="d-flex justify-content-center">
+-->
+
+              <div class="avatar-background-mini">
+                <div
+                  id="friend-user-icon-head"
+                  style="background-image: url('{{request.user.avatar.url}}');   "
+                  class="avatar-background-img-mini"
+                ></div>
+              </div>
+              <div
+                id="friend-user-name-head"
+                class="d-flex justify-content-center text-break text-wrap px-2"
+              >
                 {% trans 'ユーザー名' %}
               </div>
             </div>

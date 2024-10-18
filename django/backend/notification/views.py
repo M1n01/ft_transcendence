@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.utils.translation import get_language
+from django.db.models import Q
 from .models import UserNotification
 
 
@@ -16,7 +17,10 @@ class Notification(ListView):
         return queryset
 
     def get(self, request):
-        notifications = self.model.objects.filter(user=self.request.user)
+        self.model.objects.filter(Q(user=request.user) & Q(is_read=False)).update(
+            is_read=True
+        )
+        notifications = self.model.objects.filter(user=request.user)
 
         return render(
             request,
