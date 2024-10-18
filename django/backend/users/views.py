@@ -160,15 +160,17 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         try:
             user = self.get_object()  # 削除対象のユーザーオブジェクトを取得
-            # user = request.user  # 削除対象のユーザーオブジェクトを取得
 
             # ユーザーの論理削除 (is_activeをFalseに設定)
-            user.username = "delete_user_" + str(user.id)
-            # request.user.email = None
-            # request.user.email42 = None
-            temp_email = str(user.id) + "user@tmp.email.com"
+            user.password = ""
+            user.username = "delete_user"
+            temp_email = str(user.id) + "@delete.user"
             user.email = temp_email
             user.email42 = temp_email
+            # user.id = 0
+            # user.username = ""
+            # request.user.email = None
+            # request.user.email42 = None
             user.first_name = None
             user.last_name = None
             user.country_code = None
@@ -178,11 +180,12 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
             user.birth_date = None
             user.auth = ""
             user.app_secret = None
-            # user.created_at = None
-            # user.updated_at = None
+            user.created_at = None
+            user.updated_at = None
+            user.last_login = None
 
             user.save()
-            print("Execute DeleteUserView")
+            # print("Execute DeleteUserView")
             return JsonResponse({"status": "success"}, status=200)
 
         except Exception as e:
