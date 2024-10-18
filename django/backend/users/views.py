@@ -47,8 +47,10 @@ class EditProfileView(LoginRequiredMixin, FormView):
     success_url = "/users/profile"  # 使わない
 
     def get_form(self, *args, **kwargs):
-        # request.user をフォームのインスタンスとして渡す
-        return self.form_class(instance=self.request.user, **self.get_form_kwargs())
+        kwargs = self.get_form_kwargs()  # フォームに渡す引数を取得
+        kwargs["instance"] = self.request.user  # ユーザー情報を渡す
+        kwargs["user_id"] = self.request.user.id  # user_idも渡す
+        return self.form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
         # コンテキストに avatar フォームを追加
@@ -65,6 +67,13 @@ class EditProfileView(LoginRequiredMixin, FormView):
             return response
         except Exception as e:
             return HttpResponseBadRequest(f"Bad Request:{e}")
+
+    def form_invalid(self, form):
+        # TODO: debug用。あとで消す
+        # print("ValidationError:", form.errors)  # ここでエラーを出力
+        response = super().form_invalid(form)
+        response.status_code = 400
+        return response
 
 
 # パスワードの変更

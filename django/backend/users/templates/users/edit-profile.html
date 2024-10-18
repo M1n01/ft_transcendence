@@ -40,7 +40,7 @@
                 <!-- <td></td> -->
                 {% else %}
                 <td>{{ form.username }}</td>
-                <td class="text-start">
+                <td id="username-errors" class="text-start">
                   {% if form.username.errors %}
                   <ul class="errorlist">
                     {% for error in form.username.errors %}
@@ -58,7 +58,7 @@
                 <!-- <td></td> -->
                 {% else %}
                 <td>{{ form.email }}</td>
-                <td class="text-start">
+                <td id="email-errors" class="text-start">
                   {% if form.email.errors %}
                   <ul class="errorlist">
                     {% for error in form.email.errors %}
@@ -72,7 +72,7 @@
               <tr>
                 <td>{% trans "氏" %}</td>
                 <td>{{ form.first_name }}</td>
-                <td class="text-start">
+                <td id="first-name-errors" class="text-start">
                   {% if form.first_name.errors %}
                   <ul class="errorlist">
                     {% for error in form.first_name.errors %}
@@ -85,7 +85,7 @@
               <tr>
                 <td>{% trans "名" %}</td>
                 <td>{{ form.last_name }}</td>
-                <td class="text-start">
+                <td id="last-name-errors" class="text-start">
                   {% if form.last_name.errors %}
                   <ul class="errorlist">
                     {% for error in form.last_name.errors %}
@@ -98,7 +98,7 @@
               <tr>
                 <td>{% trans "生年月日" %}</td>
                 <td>{{ form.birth_date }}</td>
-                <td class="text-start">
+                <td id="birth-date-errors" class="text-start">
                   {% if form.birth_date.errors %}
                   <ul class="errorlist">
                     {% for error in form.birth_date.errors %}
@@ -111,7 +111,7 @@
               <tr>
                 <td>{% trans "国コード" %}</td>
                 <td>{{ form.country_code }}</td>
-                <td class="text-start">
+                <td id="country-code-errors" class="text-start">
                   {% if form.country_code.errors %}
                   <ul class="errorlist">
                     {% for error in form.country_code.errors %}
@@ -124,7 +124,7 @@
               <tr>
                 <td>{% trans "電話番号" %}</td>
                 <td>{{ form.phone }}</td>
-                <td class="text-start">
+                <td id="phone-errors" class="text-start">
                   {% if form.phone.errors %}
                   <ul class="errorlist">
                     {% for error in form.phone.errors %}
@@ -137,7 +137,7 @@
               <tr>
                 <td>{% trans "言語" %}</td>
                 <td>{{ form.language }}</td>
-                <td class="text-start">
+                <td id="language-errors" class="text-start">
                   {% if form.language.errors %}
                   <ul class="errorlist">
                     {% for error in form.language.errors %}

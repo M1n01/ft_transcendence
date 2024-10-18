@@ -8,8 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
-
-# import re
+import re
 
 
 class UserEditForm(forms.ModelForm):
@@ -111,6 +110,48 @@ class UserEditForm(forms.ModelForm):
             "language",
         )
 
+    def __init__(self, *args, **kwargs):
+        self.user_id = kwargs.pop("user_id", None)  # ユーザーIDをフォームに渡す
+        super(UserEditForm, self).__init__(*args, **kwargs)
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if FtUser.objects.filter(email=email).exclude(id=self.user_id).exists():
+            # print(f"email Error:{email=}")
+            raise forms.ValidationError(
+                _("このメールアドレスは既に使用されています。......")
+            )
+        return email
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone")
+        pattern = "\\d*"
+        result = re.fullmatch(pattern, phone)
+        if result is None:
+            raise forms.ValidationError(_("数値以外は記入しないでください"))
+
+        if len(phone) > 15:
+            raise forms.ValidationError(_("正しい電話番号を入力してください"))
+        return phone
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        if len(first_name) > 64:
+            # print(f"phne Error:{first_name=}")
+            raise forms.ValidationError(_("64文字以内にしてください"))
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get("last_name")
+        if len(last_name) > 100:
+            # print(f"phne Error:{last_name=}")
+            raise forms.ValidationError(_("100文字以内にしてください"))
+        return last_name
+
 
 class ChangePasswordForm(PasswordChangeForm):
     old_password = forms.CharField(
@@ -154,7 +195,7 @@ class ChangePasswordForm(PasswordChangeForm):
         model = FtUser
         fields = ["old_password", "new_password1", "new_password2"]
 
-    # バリデーション処理を追加する場合はここ。
+    # フォーム全体へのバリデーション処理を追加する場合はここ。
     def clean(self):
         # デフォルトバリデーションを実行
         cleaned_data = super().clean()
