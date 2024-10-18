@@ -6,30 +6,150 @@ import { reload } from '../../spa/js//utility/user.js';
 export const UserEvent = new Event('UserEvent');
 
 document.addEventListener('UserEvent', function () {
-  // ユーザ情報の編集内容を保存
-  const edit_profile_form = document.getElementById('edit-profile-form');
-  if (edit_profile_form != null) {
-    edit_profile_form.addEventListener('submit', async (event) => {
-      const response = await submitForm(event);
-      if (response.error) {
-        // console.log('Error: edit-profile-form');
-        return;
+  // フォームバリデーションのエラーメッセージの更新
+  const updateErrorMessages = (tempDiv, errorFields) => {
+    errorFields.forEach(({ selector, errorId }) => {
+      const errors = tempDiv.querySelector(`${selector} ul.errorlist`);
+      if (errors != null) {
+        document.getElementById(errorId).innerHTML = errors.outerHTML;
       }
-      moveTo('/users/profile');
+    });
+  };
+
+  // フォームバリデーションのエラーメッセージをクリアするリスナーを各フィールドに追加
+  const addClearErrorListeners = (fields) => {
+    fields.forEach(({ field, errorId }) => {
+      if (field) {
+        field.addEventListener('input', () => {
+          document.getElementById(errorId).innerHTML = ''; // エラーメッセージをクリア
+        });
+      }
+    });
+  };
+
+  // フォームの送信処理
+  const handleFormSubmit = async (form, errorFields, successRedirect) => {
+    form.addEventListener('submit', async (event) => {
+      const response = await submitForm(event);
+      if (response.error) return;
+
+      if (response.status != 200) {
+        const html = await response.text();
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        updateErrorMessages(tempDiv, errorFields);
+      } else {
+        moveTo(successRedirect);
+      }
+    });
+  };
+
+  // プロフィール編集フォームの処理
+  const editProfileForm = document.getElementById('edit-profile-form');
+  if (editProfileForm != null) {
+    const profileFields = [
+      { selector: '#username-errors', errorId: 'username-errors' },
+      { selector: '#email-errors', errorId: 'email-errors' },
+      { selector: '#first-name-errors', errorId: 'first-name-errors' },
+      { selector: '#last-name-errors', errorId: 'last-name-errors' },
+      { selector: '#birth-date-errors', errorId: 'birth-date-errors' },
+      { selector: '#country-code-errors', errorId: 'country-code-errors' },
+      { selector: '#phone-errors', errorId: 'phone-errors' },
+      { selector: '#language-errors', errorId: 'language-errors' },
+    ];
+
+    const profileFieldsWithElements = [
+      {
+        field: editProfileForm.querySelector('input[name="username"]'),
+        errorId: 'username-errors',
+      },
+      { field: editProfileForm.querySelector('input[name="email"]'), errorId: 'email-errors' },
+      {
+        field: editProfileForm.querySelector('input[name="first_name"]'),
+        errorId: 'first-name-errors',
+      },
+      {
+        field: editProfileForm.querySelector('input[name="last_name"]'),
+        errorId: 'last-name-errors',
+      },
+      {
+        field: editProfileForm.querySelector('input[name="birth_date"]'),
+        errorId: 'birth-date-errors',
+      },
+      {
+        field: editProfileForm.querySelector('input[name="country_code"]'),
+        errorId: 'country-code-errors',
+      },
+      { field: editProfileForm.querySelector('input[name="phone"]'), errorId: 'phone-errors' },
+      {
+        field: editProfileForm.querySelector('input[name="language"]'),
+        errorId: 'language-errors',
+      },
+    ];
+
+    handleFormSubmit(editProfileForm, profileFields, '/users/profile');
+    addClearErrorListeners(profileFieldsWithElements);
+  }
+
+  // パスワード変更フォームの処理
+  const changePasswordForm = document.getElementById('change-password-form');
+  if (changePasswordForm != null) {
+    const passwordFields = [
+      { selector: '#old-password-errors', errorId: 'old-password-errors' },
+      { selector: '#new-password1-errors', errorId: 'new-password1-errors' },
+      { selector: '#new-password2-errors', errorId: 'new-password2-errors' },
+    ];
+
+    const passwordFieldsWithElements = [
+      {
+        field: changePasswordForm.querySelector('input[name="old_password"]'),
+        errorId: 'old-password-errors',
+      },
+      {
+        field: changePasswordForm.querySelector('input[name="new_password1"]'),
+        errorId: 'new-password1-errors',
+      },
+      {
+        field: changePasswordForm.querySelector('input[name="new_password2"]'),
+        errorId: 'new-password2-errors',
+      },
+    ];
+
+    handleFormSubmit(changePasswordForm, passwordFields, '/users/changed-password');
+    addClearErrorListeners(passwordFieldsWithElements);
+  }
+
+  // ユーザ情報のCSVエクスポート
+  const export_profile = document.getElementById('export-profile');
+  if (export_profile != null) {
+    export_profile.addEventListener('click', async (event) => {
+      event.preventDefault();
+      // CSVエクスポートのリクエストを行う
+      try {
+        const response = await fetch('/users/export-profile/'); // エクスポートURLにリクエストを送信
+        if (response.ok) {
+          const blob = await response.blob(); // レスポンスをBlobとして取得
+          const url = window.URL.createObjectURL(blob); // BlobをURLに変換
+
+          const a = document.createElement('a'); // 新しいaタグを作成
+          a.style.display = 'none'; // 非表示にする
+          a.href = url; // BlobのURLを設定
+          a.download = 'user_data.csv'; // ダウンロードファイル名を設定
+          document.body.appendChild(a); // DOMに追加
+          a.click(); // クリックイベントを発火させてダウンロード
+          window.URL.revokeObjectURL(url); // メモリを解放
+          moveTo('/users/exported-profile');
+        } else {
+          console.error('エクスポートに失敗しました。');
+          moveTo('/users/profile');
+        }
+      } catch (error) {
+        console.error('エラー:', error);
+        moveTo('/users/profile');
+      }
     });
   }
-  // パスワードの変更
-  const change_password_form = document.getElementById('change-password-form');
-  if (change_password_form != null) {
-    change_password_form.addEventListener('submit', async (event) => {
-      const response = await submitForm(event);
-      if (response.error) {
-        // console.log('Error: change-password-form');
-        return;
-      }
-      moveTo('/users/changed-password');
-    });
-  }
+
   // アカウント削除
   const delete_user_form = document.getElementById('delete-user');
   if (delete_user_form !== null) {
