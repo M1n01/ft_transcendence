@@ -3,33 +3,30 @@ pragma solidity ^0.8.24;
 
 contract PongScoreKeeper {
   struct Match {
-    uint256 matchId;
+    uint256 createdAt;
     bytes16 tournamentId;
     bytes16 player1;
     bytes16 player2;
-    uint256 createdAt;
     uint16 player1Score;
     uint16 player2Score;
     uint16 round;
     bool isActive; // Matchの削除フラグ
   }
 
-  mapping(uint256 => Match) public matches;
-  uint256 public nextMatchId;
-
-  address public immutable owner;
+  mapping(bytes32 => Match) public matches;
+  bytes32[] public matchHashes;
 
   event MatchCreated(
-    uint256 indexed matchId,
+    bytes32 indexed matchHash,
     bytes16 tournamentId,
     uint256 createdAt,
     bytes16 indexed player1,
     bytes16 indexed player2,
     uint16 round
   );
+  event MatchStatusChanged(bytes32 indexed matchHash, bool isActive);
 
-  event MatchStatusChanged(uint256 indexed matchId, bool isActive);
-
+  address public immutable owner;
   modifier onlyOwner() {
     require(msg.sender == owner, 'Not owner');
     _;
@@ -50,24 +47,34 @@ contract PongScoreKeeper {
   ) external onlyOwner {
     require(_player1 != _player2, 'player1 and player2 cannot be the same');
 
-    matches[nextMatchId] = Match(
-      nextMatchId,
-      _tournamentId,
-      _player1,
-      _player2,
-      block.timestamp,
-      _player1Score,
-      _player2Score,
-      _round,
-      true // アクティブフラグ
+    bytes32 _transactionHash = keccak256(
+      abi.encodePacked(_tournamentId, _player1, _player1Score, _player2, _player2Score, _round)
     );
-    emit MatchCreated(nextMatchId, _tournamentId, block.timestamp, _player1, _player2, _round);
-    nextMatchId++;
+
+    Match memory _newMatch = Match({
+      createdAt: block.timestamp,
+      tournamentId: _tournamentId,
+      player1: _player1,
+      player2: _player2,
+      player1Score: _player1Score,
+      player2Score: _player2Score,
+      round: _round,
+      isActive: true
+    });
+
+    matches[_transactionHash] = _newMatch;
+    matchHashes.push(_transactionHash);
+
+    emit MatchCreated(_transactionHash, _tournamentId, block.timestamp, _player1, _player2, _round);
   }
 
-  function getMatch(uint256 _matchId, bool _onlyActive) external view returns (Match memory) {
-    require(matches[_matchId].createdAt != 0, 'Match not found');
-    Match memory _match = matches[_matchId];
+  function getMatch(
+    bytes32 _transactionHash,
+    bool _onlyActive
+  ) external view returns (Match memory) {
+    require(matches[_transactionHash].createdAt != 0, 'Match not found');
+
+    Match memory _match = matches[_transactionHash];
     if (_onlyActive && !_match.isActive) {
       revert('Match not found');
     }
@@ -76,13 +83,14 @@ contract PongScoreKeeper {
 
   // GET method
   function getAllMatches(bool _onlyActive) external view returns (Match[] memory) {
-    uint256 _totalMatches = nextMatchId;
-    Match[] memory _allMatches = new Match[](_totalMatches);
-    uint256 _count = 0;
+    Match[] memory _allMatches = new Match[](matchHashes.length);
 
-    for (uint256 i = 0; i < _totalMatches; i++) {
-      if (matches[i].createdAt != 0 && (!_onlyActive || matches[i].isActive)) {
-        _allMatches[_count] = matches[i];
+    uint256 _count = 0;
+    for (uint256 i = 0; i < matchHashes.length; i++) {
+      if (
+        matches[matchHashes[i]].createdAt != 0 && (!_onlyActive || matches[matchHashes[i]].isActive)
+      ) {
+        _allMatches[_count] = matches[matchHashes[i]];
         _count++;
       }
     }
@@ -95,12 +103,12 @@ contract PongScoreKeeper {
   }
 
   // DELETE method
-  function deleteMatch(uint256 _matchId) external onlyOwner {
-    require(matches[_matchId].createdAt != 0, 'Match not found');
+  function deleteMatch(bytes32 _transactionHash) external onlyOwner {
+    require(matches[_transactionHash].createdAt != 0, 'Match not found');
 
-    Match storage matchData = matches[_matchId];
+    Match storage matchData = matches[_transactionHash];
     matchData.isActive = !matchData.isActive;
 
-    emit MatchStatusChanged(_matchId, matchData.isActive);
+    emit MatchStatusChanged(_transactionHash, matchData.isActive);
   }
 }
