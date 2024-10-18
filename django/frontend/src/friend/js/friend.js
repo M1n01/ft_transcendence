@@ -75,7 +75,8 @@ const accept_friend_request = () => {
 
       username.textContent = name;
       input_id.value = id;
-      avatar.src = img_url;
+      //avatar.src = img_url;
+      avatar.style.backgroundImage = `url("${img_url}")`;
 
       const form = document.getElementById('accept-friend-request-form');
       form.addEventListener('submit', async (event) => {
@@ -113,7 +114,8 @@ const block_friend_request = () => {
       const input_id = document.getElementById('request-block-input-user-id');
       input_id.value = id;
       const avatar = document.getElementById('request-block-user-avatar');
-      avatar.src = img_url;
+      //avatar.src = img_url;
+      avatar.style.backgroundImage = `url("${img_url}")`;
 
       const form = document.getElementById('reject-friend-request-form');
       form.addEventListener('submit', async (event) => {
@@ -167,7 +169,9 @@ const friend_request_click = () => {
       document.getElementById('modal-userid').value = user_id;
       document.getElementById('friend-user-name-head').textContent = username;
       //document.getElementById('friend-user-id-head').textContent = user_id;
-      document.getElementById('friend-user-icon-head').src = img_url;
+      //document.getElementById('friend-user-icon-head').src = img_url;
+      const avatar = document.getElementById('friend-user-icon-head');
+      avatar.style.backgroundImage = `url("${img_url}")`;
     });
   });
 };
@@ -231,7 +235,8 @@ document.addEventListener('FriendEvent', () => {
 
         username.textContent = name;
         //input_id.value = id;
-        avatar.src = img_url;
+        //avatar.src = img_url;
+        avatar.style.backgroundImage = `url("${img_url}")`;
         message_div.textContent = message;
       });
     });
