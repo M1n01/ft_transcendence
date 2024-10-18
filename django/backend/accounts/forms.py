@@ -9,10 +9,17 @@ from .models import FtTmpUser, AuthChoices, LanguageChoice, COUNTRY_CODE_CHOICES
 # from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 from django.utils.translation import gettext_lazy as _
 import re
+import logging
 
 from django.conf import settings
 
 USERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
+LASTNAME_MAX_LEN = getattr(settings, "LASTNAME_MAX_LEN", None)
+FIRSTNAME_MAX_LEN = getattr(settings, "FIRSTNAME_MAX_LEN", None)
+EMAIL_MAX_LEN = getattr(settings, "EMAIL_MAX_LEN", None)
+PHONE_MAX_LEN = getattr(settings, "PHONE_MAX_LEN", None)
+PASSWORD_MIN_LEN = getattr(settings, "PASSWORD_MIN_LEN", None)
+PASSWORD_MAX_LEN = getattr(settings, "PASSWORD_MAX_LEN", None)
 
 # COUNTRY_CODE_CHOICES = [
 #    (f"+{code}", f"+{code} ({region[0]})")
@@ -61,6 +68,7 @@ class SignUpForm(UserCreationForm):
         ),
     )
     email = forms.CharField(
+        max_length=EMAIL_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 "id": "email_id",
@@ -71,7 +79,7 @@ class SignUpForm(UserCreationForm):
         ),
     )
     first_name = forms.CharField(
-        max_length=64,
+        max_length=FIRSTNAME_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 "id": "first_name_id",
@@ -81,7 +89,7 @@ class SignUpForm(UserCreationForm):
         ),
     )
     last_name = forms.CharField(
-        max_length=100,
+        max_length=LASTNAME_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 "id": "last_name_id",
@@ -112,7 +120,7 @@ class SignUpForm(UserCreationForm):
     )
     phone = forms.CharField(
         required=False,
-        max_length=15,
+        max_length=PHONE_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 "id": "phone_id",
@@ -144,6 +152,8 @@ class SignUpForm(UserCreationForm):
         ),
     )
     password1 = forms.CharField(
+        min_length=PASSWORD_MIN_LEN,
+        max_length=PASSWORD_MAX_LEN,
         widget=forms.PasswordInput(
             attrs={
                 "id": "password_id1",
@@ -154,6 +164,8 @@ class SignUpForm(UserCreationForm):
         ),
     )
     password2 = forms.CharField(
+        min_length=PASSWORD_MIN_LEN,
+        max_length=PASSWORD_MAX_LEN,
         widget=forms.PasswordInput(
             attrs={
                 "id": "password_id2",
@@ -203,16 +215,43 @@ class SignUpForm(UserCreationForm):
         if result is None:
             raise forms.ValidationError(_("数値以外は記入しないでください"))
 
-        if len(phone) > 15:
+        if len(phone) > PHONE_MAX_LEN:
             raise forms.ValidationError(_("正しい電話番号を入力してください"))
         return phone
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get("last_name")
-        if len(last_name) > 64:
-            print(f"phne Error:{last_name=}")
+        if len(last_name) > LASTNAME_MAX_LEN:
+            logging.error(f"Last Name Error:{last_name=}")
             raise forms.ValidationError(_("64文字以内にしてください"))
         return last_name
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        if len(first_name) > LASTNAME_MAX_LEN:
+            logging.error(f"First Name Error:{first_name=}")
+            raise forms.ValidationError(_("64文字以内にしてください"))
+        return first_name
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if len(password1) > PASSWORD_MAX_LEN:
+            logging.error("Password  Error")
+            raise forms.ValidationError(_("20文字以内にしてください"))
+        if len(password1) < PASSWORD_MIN_LEN:
+            logging.error("Password  Error")
+            raise forms.ValidationError(_("8文字以上にしてください"))
+        return password1
+
+    def clean_password2(self):
+        password2 = self.cleaned_data.get("password2")
+        if len(password2) > PASSWORD_MAX_LEN:
+            logging.error("Password  Error")
+            raise forms.ValidationError(_("20文字以内にしてください"))
+        if len(password2) < PASSWORD_MIN_LEN:
+            logging.error("Password  Error")
+            raise forms.ValidationError(_("8文字以上にしてください"))
+        return password2
 
 
 class FtLoginForm(UserCreationForm):

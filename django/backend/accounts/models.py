@@ -22,6 +22,10 @@ from cryptography.fernet import Fernet
 SECRET_KEY = getattr(settings, "TWO_FA_AUTH_KEY", None)
 cipher_suite = Fernet(SECRET_KEY)
 USERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
+LASTNAME_MAX_LEN = getattr(settings, "LASTNAME_MAX_LEN", None)
+FIRSTNAME_MAX_LEN = getattr(settings, "FIRSTNAME_MAX_LEN", None)
+EMAIL_MAX_LEN = getattr(settings, "EMAIL_MAX_LEN", None)
+PHONE_MAX_LEN = getattr(settings, "PHONE_MAX_LEN", None)
 
 
 class AuthChoices(models.TextChoices):
@@ -116,23 +120,28 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         verbose_name=_("ユーザー名"), max_length=USERNAME_MAX_LEN, unique=False
     )
-    email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
+    email = models.EmailField(
+        verbose_name=_("email"), max_length=EMAIL_MAX_LEN, unique=True
+    )
+    email42 = models.EmailField(
+        verbose_name=_("email42"), max_length=EMAIL_MAX_LEN, unique=True
+    )
     email42 = models.EmailField(
         verbose_name=_("email42"),
-        max_length=256,
+        max_length=EMAIL_MAX_LEN,
         unique=True,
         null=True,
         blank=True,
     )
     first_name = models.CharField(
         verbose_name=_("姓"),
-        max_length=64,
+        max_length=FIRSTNAME_MAX_LEN,
         null=True,
         blank=False,
     )
     last_name = models.CharField(
         verbose_name=_("名"),
-        max_length=64,
+        max_length=LASTNAME_MAX_LEN,
         null=True,
         blank=False,
     )
@@ -146,7 +155,11 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
     )
 
     phone = models.CharField(
-        verbose_name=_("電話番号"), null=True, blank=True, unique=True, max_length=15
+        verbose_name=_("電話番号"),
+        null=True,
+        blank=True,
+        unique=True,
+        max_length=PHONE_MAX_LEN,
     )
 
     language = models.CharField(
@@ -248,20 +261,24 @@ class FtTmpUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        if password == "":
-            return self._create_user(
-                email=email,
-                username=username,
-                # password=password,
-                **extra_fields,
-            )
-        else:
-            return self._create_user(
-                email=email,
-                username=username,
-                password=password,
-                **extra_fields,
-            )
+        # if password == "":
+        #    return self._create_user(
+        #        email=email,
+        #        username=username,
+        #        # password=password,
+        #        **extra_fields,
+        #    )
+        # else:
+
+        print(f"create USER No.1:{password=}")
+        print("create USER No.1")
+
+        return self._create_user(
+            email=email,
+            username=username,
+            password=password,
+            **extra_fields,
+        )
 
     def create_superuser(self, email, username, password, **extra_fields):
         extra_fields["is_active"] = True
@@ -286,23 +303,25 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         verbose_name=_("ユーザー名"), max_length=USERNAME_MAX_LEN, unique=False
     )
-    email = models.EmailField(verbose_name=_("email"), max_length=256, unique=True)
+    email = models.EmailField(
+        verbose_name=_("email"), max_length=EMAIL_MAX_LEN, unique=True
+    )
     email42 = models.EmailField(
         verbose_name=_("email42"),
-        max_length=256,
+        max_length=EMAIL_MAX_LEN,
         unique=True,
         null=True,
         blank=True,
     )
     first_name = models.CharField(
         verbose_name=_("姓"),
-        max_length=64,
+        max_length=FIRSTNAME_MAX_LEN,
         null=True,
         blank=False,
     )
     last_name = models.CharField(
         verbose_name=_("名"),
-        max_length=64,
+        max_length=LASTNAME_MAX_LEN,
         null=True,
         blank=False,
     )
@@ -316,7 +335,11 @@ class FtTmpUser(AbstractBaseUser, PermissionsMixin):
     )
 
     phone = models.CharField(
-        verbose_name=_("電話番号"), null=True, blank=True, unique=True, max_length=15
+        verbose_name=_("電話番号"),
+        null=True,
+        blank=True,
+        unique=True,
+        max_length=PHONE_MAX_LEN,
     )
     language = models.CharField(
         choices=LanguageChoice,

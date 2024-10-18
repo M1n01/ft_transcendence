@@ -1,7 +1,11 @@
 from django.db import models
 from accounts.models import FtUser
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 import uuid
+
+PLAYERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
+TOURNAMENTNAME_MAX_LEN = getattr(settings, "TOURNAMENTNAME_MAX_LEN", None)
 
 
 class TournamentStatusChoices(models.TextChoices):
@@ -13,7 +17,9 @@ class TournamentStatusChoices(models.TextChoices):
 
 class Tournament(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(verbose_name=_("トーナメント名"), max_length=20)
+    name = models.CharField(
+        verbose_name=_("トーナメント名"), max_length=TOURNAMENTNAME_MAX_LEN
+    )
     organizer = models.ForeignKey(
         FtUser,
         on_delete=models.PROTECT,
@@ -49,7 +55,9 @@ class TournamentParticipant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
     participant = models.ForeignKey(FtUser, on_delete=models.PROTECT)
-    alias_name = models.CharField(verbose_name=_("エイリアス名"), max_length=32)
+    alias_name = models.CharField(
+        verbose_name=_("エイリアス名"), max_length=PLAYERNAME_MAX_LEN
+    )
     is_accept = models.BooleanField(default=False)
 
     class Meta:

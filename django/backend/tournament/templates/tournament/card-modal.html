@@ -46,7 +46,14 @@
 
           <label for="id_name" class="form-label text-dark">{% trans 'プレイヤー名'%}</label>
           <br />
-          <input name="alias_name" type="text" value="{{attr.username}}" />
+          <input
+            name="alias_name"
+            type="text"
+            value="{{attr.username}}"
+            maxlength="24"
+            minlength="1"
+            required
+          />
           <div class="d-flex justify-content-end mt-3">
             <button
               id="close-register-modal"
