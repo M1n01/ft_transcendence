@@ -124,22 +124,22 @@ class ExportProfileView(LoginRequiredMixin, View):
         )  # ヘッダー行の作成
 
         # ユーザーデータを取得し、CSVに書き込む
-        for user in FtUser.objects.all():
-            writer.writerow(
-                [
-                    user.username,
-                    user.email,
-                    user.first_name,
-                    user.last_name,
-                    user.birth_date,
-                    user.country_code,
-                    user.phone,
-                    user.language,
-                    user.created_at,
-                    user.updated_at,
-                    user.last_login,
-                ]
-            )
+        user = request.user
+        writer.writerow(
+            [
+                user.username,
+                user.email,
+                user.first_name,
+                user.last_name,
+                user.birth_date,
+                user.country_code,
+                user.phone,
+                user.language,
+                user.created_at,
+                user.updated_at,
+                user.last_login,
+            ]
+        )
 
         print(response)
         return response
