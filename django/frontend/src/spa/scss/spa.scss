@@ -44,3 +44,29 @@ a {
   border-radius: 50%;
   height: 2.8rem;
 }
+
+#navi-username {
+  max-width: 5rem;
+  .text-truncate {
+    font-size: 12px;
+  }
+}
+
+#navi-notification-icon {
+  svg {
+    fill: gray;
+  }
+}
+
+#alerm-number {
+  margin-left: -0.5rem !important;
+}
+
+#nav-dropdown-menu {
+  display: none;
+  background-color: red;
+}
+
+#small-menu-dropdown::before {
+  display: none !important;
+}

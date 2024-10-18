@@ -1,6 +1,8 @@
+import csv
 from django.shortcuts import render
 from django.db import models
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.generic import UpdateView, TemplateView, DeleteView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,10 +13,12 @@ from django.urls import reverse_lazy
 from .forms import UserEditForm, ChangePasswordForm
 from accounts.forms import UploadAvatarForm
 
-from accounts.models import FtUser  # FtUser モデルをインポート
+from accounts.models import FtUser
 
 from django.http import (
     JsonResponse,
+    HttpResponse,
+    HttpResponseBadRequest,
     HttpResponseNotFound,
 )
 
@@ -43,8 +47,10 @@ class EditProfileView(LoginRequiredMixin, FormView):
     success_url = "/users/profile"  # 使わない
 
     def get_form(self, *args, **kwargs):
-        # request.user をフォームのインスタンスとして渡す
-        return self.form_class(instance=self.request.user, **self.get_form_kwargs())
+        kwargs = self.get_form_kwargs()  # フォームに渡す引数を取得
+        kwargs["instance"] = self.request.user  # ユーザー情報を渡す
+        kwargs["user_id"] = self.request.user.id  # user_idも渡す
+        return self.form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
         # コンテキストに avatar フォームを追加
@@ -53,9 +59,21 @@ class EditProfileView(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
-        # フォームが有効である場合にユーザー情報を保存
-        form.save()
-        return super().form_valid(form)
+        try:
+            # フォームが有効である場合にユーザー情報を保存
+            form.save()
+            response = super().form_valid(form)
+            response.status_code = 200
+            return response
+        except Exception as e:
+            return HttpResponseBadRequest(f"Bad Request:{e}")
+
+    def form_invalid(self, form):
+        # TODO: debug用。あとで消す
+        # print("ValidationError:", form.errors)  # ここでエラーを出力
+        response = super().form_invalid(form)
+        response.status_code = 400
+        return response
 
 
 # パスワードの変更
@@ -64,12 +82,74 @@ class ChangePasswordView(PasswordChangeView):
     template_name = "users/change-password.html"
     success_url = reverse_lazy("users:changed-password")  # 使わない
 
+    def form_invalid(self, form):
+        # TODO: debug用。あとで消す
+        # print("ValidationError:", form.errors)  # ここでエラーを出力
+        response = super().form_invalid(form)
+        response.status_code = 400
+        return response
+
 
 class ChangedPasswordView(TemplateView):
     def get(self, request):
         context = self.get_context_data()
 
         return render(request, "users/changed-password.html", context)
+
+
+class ExportProfileView(LoginRequiredMixin, View):
+    # 認証されていないユーザーがアクセスしようとした場合のリダイレクトURL
+    login_url = "/"
+
+    def get(self, request, *args, **kwargs):
+        # HTTPレスポンスをCSV形式で作成
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="profile_data.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Username",
+                "Email",
+                "first_name",
+                "last_name",
+                "birth_date",
+                "country_code",
+                "phone",
+                "language",
+                "created_at",
+                "updated_at",
+                "last_login",
+            ]
+        )  # ヘッダー行の作成
+
+        # ユーザーデータを取得し、CSVに書き込む
+        for user in FtUser.objects.all():
+            writer.writerow(
+                [
+                    user.username,
+                    user.email,
+                    user.first_name,
+                    user.last_name,
+                    user.birth_date,
+                    user.country_code,
+                    user.phone,
+                    user.language,
+                    user.created_at,
+                    user.updated_at,
+                    user.last_login,
+                ]
+            )
+
+        print(response)
+        return response
+
+
+class ExportedProfileView(TemplateView):
+    def get(self, request):
+        context = self.get_context_data()
+
+        return render(request, "users/exported-profile.html", context)
 
 
 # ユーザ情報を論理削除する

@@ -12,7 +12,10 @@
         <div class="d-flex justify-content-center w-100">
           <h5 class="modal-title">
             <div id="register-tournament-error" class="text-danger"></div>
-            <div id="register-tournament-name" class="d-flex justify-content-center">
+            <div
+              id="register-tournament-name"
+              class="d-flex justify-content-center text-break text-wrap px-2"
+            >
               {% trans 'トーナメント名' %}
             </div>
             <div class="d-flex justify-content-center">{% trans "参加申し込み" %}</div>
@@ -43,7 +46,14 @@
 
           <label for="id_name" class="form-label text-dark">{% trans 'プレイヤー名'%}</label>
           <br />
-          <input name="alias_name" type="text" value="{{attr.username}}" />
+          <input
+            name="alias_name"
+            type="text"
+            value="{{attr.username}}"
+            maxlength="24"
+            minlength="1"
+            required
+          />
           <div class="d-flex justify-content-end mt-3">
             <button
               id="close-register-modal"

@@ -22,7 +22,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 1,
     "fields": {
       "username": "admin",
       "password": "QawsEd9r2fV4cxz",
@@ -44,7 +43,7 @@
 
   {
     "model": "accounts.ftuser",
-    "pk": 1,
+    "pk": 100,
     "fields": {
       "username": "testA1",
       "password": "AAdfBC3DfwFi49",

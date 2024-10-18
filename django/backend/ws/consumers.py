@@ -148,6 +148,8 @@ class FtWebsocket(AsyncWebsocketConsumer):
         message = ""
         if json["message"] == "active_list":
             (message, param1, param2, param3, param4) = await get.active(json)
+        elif json["message"] == "alert_cnt":
+            (message, param1, param2, param3, param4) = await get.alert_cnt(user)
 
         group_name = self.room_group_name + str(user.username)
         if message == "":
