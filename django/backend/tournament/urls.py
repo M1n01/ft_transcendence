@@ -32,12 +32,12 @@ urlpatterns = [
         name="register",
     ),
     path(
-        "details/<int:pk>",
+        "details/<uuid:pk>",
         views.DetailView.as_view(),
         name="details",
     ),
     path(
-        "info/<int:pk>",
+        "info/<uuid:pk>",
         views.InfoApi.as_view(),
         name="info",
     ),

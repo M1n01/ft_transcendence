@@ -16,7 +16,7 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    const detail_values = rest.match(/^\/detail\/(\d*)$/);
+    const detail_values = rest.match(/^\/detail\/([-\w]*)$/);
     let detail_value = 0;
     if (detail_values) {
       detail_value = detail_values[1];
@@ -38,7 +38,7 @@ export default class extends AbstractView {
       const uri = getUrlWithLang('tournament/all/');
       const data = fetchData(uri + params);
       return data;
-    } else if (detail_value > 0) {
+    } else if (detail_value != 0) {
       const uri = getUrlWithLang('tournament/details/' + detail_value);
       const data = fetchData(uri);
       return data;
