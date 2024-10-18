@@ -1,7 +1,8 @@
 from django import forms
-from .models import Tournament, TournamentParticipant
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 from datetime import datetime, timezone
+from .models import Tournament, TournamentParticipant
 
 
 TIME_HOUR_CHOICES = [((f"{hour:02d}"), f"{hour:02d}") for hour in range(0, 24)]
@@ -9,10 +10,21 @@ TIME_MINUTE_CHOICES = [
     ((f"{minute:02d}"), f"{minute:02d}") for minute in [0, 15, 30, 45]
 ]
 
+PLAYERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
+TOURNAMENTNAME_MAX_LEN = getattr(settings, "TOURNAMENTNAME_MAX_LEN", None)
+
 
 class TournamentParticipantForm(forms.ModelForm):
     # is_accept = forms.BooleanField()
     # participant = forms.CharField()
+    alias_name = forms.CharField(
+        max_length=PLAYERNAME_MAX_LEN,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control w-75",
+            }
+        ),
+    )
 
     class Meta:
         model = TournamentParticipant
@@ -59,7 +71,7 @@ class TournamentForm(forms.ModelForm):
     # )
 
     name = forms.CharField(
-        max_length=20,
+        max_length=TOURNAMENTNAME_MAX_LEN,
         widget=forms.TextInput(
             attrs={
                 # "placeholder": _("トーナメント名"),
