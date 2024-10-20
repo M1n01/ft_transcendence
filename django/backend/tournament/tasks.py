@@ -19,6 +19,7 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             round=round * 10 + 1,
             player1=participants[player_id].participant,
             player1_alias=participants[player_id].alias_name,
+            is_end=True,
         )
         player_id = player_id + 1
     else:
@@ -38,6 +39,7 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             round=round * 10 + 2,
             player1=participants[player_id].participant,
             player1_alias=participants[player_id].alias_name,
+            is_end=True,
         )
         player_id = player_id + 1
     else:
@@ -131,7 +133,7 @@ def close_application():
     logger.info("close tournament")
     try:
         start = datetime.now(timezone.utc)
-        end = start + timedelta(minutes=15)
+        end = start + timedelta(minutes=10)
         list = Tournament.objects.filter(
             # start_at__gte=start,
             start_at__lte=end,

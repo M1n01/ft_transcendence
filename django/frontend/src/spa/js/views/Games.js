@@ -17,7 +17,6 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    console.log('Games No.1');
     const pong_ids = rest.match(/^\/match\/([-\w]*)$/);
     let pong_id = 0;
     if (pong_ids) {
@@ -28,18 +27,14 @@ export default class extends AbstractView {
       const data = fetchData(uri);
       return data;
     }
-    console.log('Games No.2');
 
     const uri = getUrlWithLang('pong/games');
     const data = fetchData(uri + rest + params);
     return data;
   };
   executeScript = () => {
-    console.log('Games No.3');
     document.dispatchEvent(GameEvent);
-    console.log('Games No.4');
     document.dispatchEvent(PongMainEvent);
-    console.log('Games No.5');
   };
   getState = () => {
     return null;

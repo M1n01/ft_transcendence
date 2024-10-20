@@ -20,7 +20,7 @@ const keys = {
 
 document.addEventListener('PongMainEvent', function async() {
   let isGameRunning = false;
-  console.log('pong');
+  console.log('start pong');
 
   const canvas_block = document.getElementById('pong-canvas-block');
   if (canvas_block == null) {
@@ -216,7 +216,7 @@ document.addEventListener('PongMainEvent', function async() {
 
     if (
       (area.minX - 100 <= ball.position.x && ball.position.x <= area.minX) ||
-      ball.position.x >= area.maxX
+      (ball.position.x >= area.maxX && ball.position.x <= area.maxX + 100)
     ) {
       isGameRunning = false;
       await addScore(ball, area);
@@ -274,7 +274,6 @@ document.addEventListener('PongMainEvent', function async() {
       paddle_right_obj.setFromObject(paddle_right);
 
       if (ball_obj.intersectsBox(paddle_left_obj) && is_left) {
-        console.log('hit left ');
         is_left = false;
 
         ball_velocity.x = Math.abs(ball_velocity.x) + 1;
@@ -284,7 +283,6 @@ document.addEventListener('PongMainEvent', function async() {
         );
       }
       if (ball_obj.intersectsBox(paddle_right_obj) && !is_left) {
-        console.log('hit  right');
         is_left = true;
         ball_velocity.x = -(Math.abs(ball_velocity.x) + 1);
         ball_velocity.y = getRandomArbitrary(

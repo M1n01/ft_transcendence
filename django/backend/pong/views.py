@@ -126,6 +126,7 @@ class StartPong(TemplateView):
                 )
                 id = match.id
             elif type == "tournament":
+                print("tournament No.1")
                 tournaments = Tournament.objects.filter(
                     start_at__lte=datetime.now(tz=timezone.utc),
                     organizer=request.user,
@@ -152,6 +153,35 @@ class StartPong(TemplateView):
         except Exception as e:
             logger.error(f"StartPong Error:{e}")
             return HttpResponseBadRequest()
+
+
+def prepare_next_match(cur_match):
+    try:
+
+        if cur_match.player1_score >= 5:
+            winer = cur_match.player1
+        else:
+            winer = cur_match.player2
+
+        tournament = cur_match.tournament_id
+        round = cur_match.round
+        if round != 0:
+            next_round = int(round / 10)
+            next_match = MatchTmp.objects.get(
+                tournament_id=tournament, round=next_round
+            )
+            if int(round % 2) == 1:
+                next_match.player1 = winer
+            else:
+                next_match.player2 = winer
+            next_match.save()
+        else:
+            tournament.status = TournamentStatusChoices.ENDED
+            tournament.save()
+
+    except Exception as e:
+        logger.error(f"next Match Error:{e}")
+    pass
 
 
 class AddScore(UpdateView):
@@ -181,6 +211,7 @@ class AddScore(UpdateView):
                     match.player2_score = match.player2_score + 1
                 if match.player1_score >= 5 or match.player2_score >= 5:
                     match.is_end = True
+                    prepare_next_match(match)
                 match.save()
 
             if match.player2 is None:
