@@ -1,7 +1,6 @@
 [
   {
     "model": "accounts.fttmpuser",
-    "pk": 1,
     "fields": {
       "username": "admin",
       "password": "QawsEd9r2fV4cxz",
@@ -22,7 +21,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 1,
     "fields": {
       "username": "admin",
       "password": "QawsEd9r2fV4cxz",

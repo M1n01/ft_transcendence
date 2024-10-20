@@ -133,11 +133,43 @@
             </div>
           </div>
 
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              {% trans "最終更新日時" %}
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.updated_at }}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mt-sm-0">
+            <label for="username" class="col-sm-4 col-form-label profile-label">
+              {% trans "最終ログイン日時" %}
+            </label>
+            <div class="col-sm-8">
+              <p class="form-control-plaintext profile-value">
+                <span class="profile-value">{{ user.last_login }}</span>
+              </p>
+            </div>
+          </div>
+
           <div class="d-flex justify-content-sm-start justify-content-center mt-4">
             <a href="/users/edit" class="btn btn-primary me-4" data-link>{% trans "編集" %}</a>
+            {% if user.is_ft == False %}
             <a href="/users/change-password" class="btn btn-primary me-4" data-link
               >{% trans "パスワードの変更" %}</a
             >
+            {% endif %}
+            <a
+              id="export-profile"
+              href="/users/export-profile"
+              class="btn btn-primary me-4"
+              data-link
+              >{% trans "プロフィールのエクスポート" %}</a
+            >
+
             <button
               id="open-delete-modal-button"
               href="/edit-profile"
