@@ -5,7 +5,11 @@ from celery import shared_task
 from datetime import datetime, timezone, timedelta
 from .models import TournamentStatusChoices, Tournament, TournamentParticipant
 from pong.models import MatchTmp
+from django.db import transaction
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def create_first_match(seed_array, tournament, participants, player_id, round, id):
@@ -14,6 +18,8 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             tournament_id=tournament,
             round=round * 10 + 1,
             player1=participants[player_id].participant,
+            player1_alias=participants[player_id].alias_name,
+            is_end=True,
         )
         player_id = player_id + 1
     else:
@@ -22,6 +28,8 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             round=round * 10 + 1,
             player1=participants[player_id].participant,
             player2=participants[player_id + 1].participant,
+            player1_alias=participants[player_id].alias_name,
+            player2_alias=participants[player_id + 1].alias_name,
         )
         player_id = player_id + 2
 
@@ -30,6 +38,8 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             tournament_id=tournament,
             round=round * 10 + 2,
             player1=participants[player_id].participant,
+            player1_alias=participants[player_id].alias_name,
+            is_end=True,
         )
         player_id = player_id + 1
     else:
@@ -38,6 +48,8 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
             round=round * 10 + 2,
             player1=participants[player_id].participant,
             player2=participants[player_id + 1].participant,
+            player1_alias=participants[player_id].alias_name,
+            player2_alias=participants[player_id + 1].alias_name,
         )
         player_id = player_id + 2
     return player_id
@@ -111,20 +123,31 @@ def my_task(arg1, arg2):
 
 
 @shared_task
+@transaction.atomic
 def close_application():
     """
     トーナメントの応募締切タイミグで実行される
     参加者の人数が4人未満なら中止となり、4人以上ならトーナメントが開始される
 
     """
-    start = datetime.now(timezone.utc)
-    end = start + timedelta(minutes=15)
-    list = Tournament.objects.filter(start_at__gte=start, start_at__lte=end)
-    for tournament in list:
-        participant = TournamentParticipant.objects.filter(tournament_id=tournament.id)
-        if len(participant) < 4:
-            tournament.status = TournamentStatusChoices.CANCEL
-        else:
-            create_matches(tournament)
-            tournament.status = TournamentStatusChoices.ONGOING
-        tournament.save()
+    logger.info("close tournament")
+    try:
+        start = datetime.now(timezone.utc)
+        end = start + timedelta(minutes=10)
+        list = Tournament.objects.filter(
+            # start_at__gte=start,
+            start_at__lte=end,
+            status=TournamentStatusChoices.RECRUITING,
+        )
+        for tournament in list:
+            participant = TournamentParticipant.objects.filter(
+                tournament_id=tournament.id
+            )
+            if len(participant) < 4:
+                tournament.status = TournamentStatusChoices.CANCEL
+            else:
+                create_matches(tournament)
+                tournament.status = TournamentStatusChoices.ONGOING
+            tournament.save()
+    except Exception as e:
+        logger.error(f"Error close_application():{e}")
