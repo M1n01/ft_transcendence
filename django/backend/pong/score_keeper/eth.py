@@ -28,7 +28,7 @@ def get_contract_address():
 
 
 def save_match_to_blockchain(
-    tournament, player1, player1_score, player2, player2_score, round
+    match_id, tournament, player1, player1_score, player2, player2_score, round
 ):
 
     w3 = get_contract()
@@ -41,6 +41,7 @@ def save_match_to_blockchain(
 
     try:
         transaction = contract.functions.createMatch(
+            match_id,
             tournament,
             player1,
             player1_score,
@@ -62,18 +63,17 @@ def save_match_to_blockchain(
         # イベントをキャッチしてタイムスタンプを取得
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
         logs = contract.events.MatchCreated().process_receipt(receipt)
-        match_id = logs[0]["args"]["matchId"]
         unix_created_at = logs[0]["args"]["createdAt"]
 
         # タイムスタンプをJSTに変換
         utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
 
-        return match_id, tx_hash.hex(), jst_created_at
+        return tx_hash.hex(), jst_created_at
 
     except Exception as e:
         print(f"Error saving match to blockchain: {e}")
-        return None, None, None
+        return None, None
 
 
 def get_matches_from_blockchain(
@@ -89,7 +89,7 @@ def get_matches_from_blockchain(
         utc_created_at = datetime.fromtimestamp(match[2], tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
-            "id": match[0],
+            "match_id": match[0],
             "tournament_id": match[1],
             "player1": match[3],
             "player2": match[4],
@@ -101,7 +101,7 @@ def get_matches_from_blockchain(
         }
 
     if match_id is not None:
-        match = contract.functions.getMatch(int(match_id), only_active).call()
+        match = contract.functions.getMatch(match_id, only_active).call()
         matches = match_to_dict(match)
     else:
         all_matches = contract.functions.getAllMatches(only_active).call()
