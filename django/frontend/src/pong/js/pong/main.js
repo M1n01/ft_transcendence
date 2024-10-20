@@ -12,10 +12,10 @@ import { addScore } from './addScore.js';
 import '../../scss/pong.scss';
 
 const keys = {
-  w: false,
-  s: false,
-  i: false,
-  k: false,
+  q: false,
+  a: false,
+  o: false,
+  l: false,
 };
 
 document.addEventListener('PongMainEvent', function async() {
@@ -243,11 +243,11 @@ document.addEventListener('PongMainEvent', function async() {
 
   function paddle_position(paddle, is_left) {
     if (is_left) {
-      if (keys['s'] && paddle.position.y > area.minY) paddle.position.y -= paddle_velocity.y;
-      if (keys['w'] && paddle.position.y < area.maxY) paddle.position.y += paddle_velocity.y;
+      if (keys['a'] && paddle.position.y > area.minY) paddle.position.y -= paddle_velocity.y;
+      if (keys['q'] && paddle.position.y < area.maxY) paddle.position.y += paddle_velocity.y;
     } else {
-      if (keys['k'] && paddle.position.y > area.minY) paddle.position.y -= paddle_velocity.y;
-      if (keys['i'] && paddle.position.y < area.maxY) paddle.position.y += paddle_velocity.y;
+      if (keys['l'] && paddle.position.y > area.minY) paddle.position.y -= paddle_velocity.y;
+      if (keys['o'] && paddle.position.y < area.maxY) paddle.position.y += paddle_velocity.y;
     }
   }
 
