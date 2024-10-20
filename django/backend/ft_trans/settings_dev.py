@@ -235,8 +235,10 @@ CELERY_RESULT_SERIALIZZER = "json"
 CELERY_CACHE_BACKEND = "django-cache"
 
 # Celery設定
-# CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
-CELERY_BROKER_URL = f"redis://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6380"
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6380/1")
+CELERY_BROKER_URL = (
+    f"redis://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6380/0"
+)
 CELERY_RESULT_BACKEND = "django-db"
 
 CELERY_RESULT_EXTENDED = True

@@ -14,32 +14,7 @@ urlpatterns = [
     path("index", views.index),
     path("", RedirectView.as_view(url="/games")),
     path("games", views.GamesView.as_view(), name="games"),
-    # path("tournament", views.TournamentView.as_view(), name="tournament"),
-    # path(
-    #    "tournament/recruiting",
-    #    views.TournamentRecruitingView.as_view(),
-    #    name="tournament-recruiting",
-    # ),
-    # path(
-    #    "tournament/organized",
-    #    views.TournamentOrganizedView.as_view(),
-    #    name="tournament-organized",
-    # ),
-    # path(
-    #    "tournament/participant",
-    #    views.TournamentParticipantView.as_view(),
-    #    name="tournament-participant",
-    # ),
-    # path("tournament-chart", views.TournamentView.as_view(), name="tournament-chart"),
-    # path(
-    #    "register-tournament",
-    #    views.RegisterTournament.as_view(),
-    #    name="register-tournament",
-    # ),
+    path("start", views.StartPong.as_view(), name="start"),
+    path("add-score/<uuid:pk>", views.AddScore.as_view(), name="add-score"),
+    path("matches/<uuid:pk>", views.MatchView.as_view(), name="match"),
 ]
-# エンドユーザーによるファイルアップロードなどがある場合、
-# それらを保持するディレクトリを定義する
-# ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# urlpatterns += i18n_patterns(
-# )

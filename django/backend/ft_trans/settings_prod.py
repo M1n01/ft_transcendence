@@ -272,7 +272,9 @@ CELERY_CACHE_BACKEND = "django-cache"
 
 # Celery設定
 # CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
-CELERY_BROKER_URL = f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379"
+CELERY_BROKER_URL = (
+    f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.30.30:6379/1"
+)
 CELERY_RESULT_BACKEND = "django-db"
 # CELERY_RESULT_BACKEND = (
 # f"rediss://default:{os.environ['REDIS_PASSOWRD']}@172.38.10.30:6379"

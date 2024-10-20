@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %} {% load tz %}
 <ul>
   <h2 class="mt-5">{% trans 'トーナメント詳細' %}</h2>
   <div class="d-flex">
@@ -17,7 +17,7 @@
       <li class="list-group-item">{{ tournament.status}}</li>
       <li class="list-group-item">{{ tournament.current_players}}</li>
       <li class="list-group-item">{{ len_participants}}</li>
-      <li class="list-group-item">{{ tournament.start_at}}</li>
+      <li class="list-group-item">{{ tournament.start_at|timezone:"Asia/Tokyo"}}</li>
       <li class="list-group-item">{{ tournament.is_only_friend}}</li>
     </ul>
   </div>

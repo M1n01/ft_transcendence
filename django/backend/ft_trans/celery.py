@@ -16,6 +16,7 @@ app.conf.timezone = "UTC"
 app.conf.beat_schedule = {
     "run-every-hour-at-15-minutes": {
         "task": "tournament.tasks.close_application",
-        "schedule": crontab(minute="10, 25, 40, 55"),
+        # "schedule": crontab(minute="10, 25, 40, 55"),
+        "schedule": crontab(minute="*"),
     },
 }

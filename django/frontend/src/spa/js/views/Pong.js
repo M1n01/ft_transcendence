@@ -2,6 +2,9 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
+import { GameEvent } from '../../../pong/js/pong.js';
+import { PongMainEvent } from '../../..//pong/js/pong/main.js';
+//import { PongMainEvent } from '../../pong/js/pong.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -14,12 +17,30 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    const uri = getUrlWithLang('/pong/');
+    console.log('Games No.1');
+    const pong_ids = rest.match(/^\/match\/([-\w]*)$/);
+    let pong_id = 0;
+    if (pong_ids) {
+      pong_id = pong_ids[1];
+    }
+    if (pong_id != 0) {
+      console.log('Games match id=' + pong_id);
+      const uri = getUrlWithLang('pong/matches/' + pong_id);
+      const data = fetchData(uri);
+      return data;
+    }
+    console.log('Games No.2');
+
+    const uri = getUrlWithLang('pong/games');
     const data = fetchData(uri + rest + params);
     return data;
   };
   executeScript = () => {
-    //executeScriptTab("");
+    console.log('Games No.3');
+    document.dispatchEvent(GameEvent);
+    console.log('Games No.4');
+    document.dispatchEvent(PongMainEvent);
+    console.log('Games No.5');
   };
   getState = () => {
     return null;
