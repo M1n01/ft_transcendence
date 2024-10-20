@@ -4,10 +4,10 @@ pragma solidity ^0.8.24;
 contract PongScoreKeeper {
   struct Match {
     uint256 matchId;
+    uint256 createdAt;
     bytes16 tournamentId;
     bytes16 player1;
     bytes16 player2;
-    uint256 createdAt;
     uint16 player1Score;
     uint16 player2Score;
     uint16 round;
@@ -52,10 +52,10 @@ contract PongScoreKeeper {
 
     matches[nextMatchId] = Match(
       nextMatchId,
+      block.timestamp,
       _tournamentId,
       _player1,
       _player2,
-      block.timestamp,
       _player1Score,
       _player2Score,
       _round,
@@ -78,8 +78,8 @@ contract PongScoreKeeper {
   function getAllMatches(bool _onlyActive) external view returns (Match[] memory) {
     uint256 _totalMatches = nextMatchId;
     Match[] memory _allMatches = new Match[](_totalMatches);
-    uint256 _count = 0;
 
+    uint256 _count = 0;
     for (uint256 i = 0; i < _totalMatches; i++) {
       if (matches[i].createdAt != 0 && (!_onlyActive || matches[i].isActive)) {
         _allMatches[_count] = matches[i];
