@@ -11,6 +11,7 @@ document.addEventListener('GameEvent', function () {
   }
 
   const tournament_game = document.getElementById('start-tournament-game');
+  const tournament_detail = document.getElementById('tournament-game-detail');
 
   const error_message_test = document.getElementById('error-game');
   error_message_test.hidden = true;
@@ -50,6 +51,25 @@ document.addEventListener('GameEvent', function () {
     } catch {
       error_message_tournament.hidden = false;
       console.error('Error:start pong');
+      return;
+    }
+  });
+  tournament_detail.addEventListener('submit', async (event) => {
+    const response = await submitForm(event);
+    if (response.error) {
+      error_message_tournament.hidden = false;
+      return;
+    }
+    const json = await response.json();
+    try {
+      if (json['id'] == '0') {
+        error_message_tournament.hidden = false;
+        return;
+      }
+      moveTo(`/tournament/detail/${json['id']}`);
+    } catch {
+      error_message_tournament.hidden = false;
+      console.error('Error:detail tournament');
       return;
     }
   });

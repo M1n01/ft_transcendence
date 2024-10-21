@@ -107,6 +107,11 @@ def get_tournament(request):
         },
     ]
 
+    # matches = MatchTmp.objects.filter('')
+    matches = MatchTmp.objects.filter(
+        Q(player1=request.user) | Q(player2=request.user)
+    ).order_by("-updated_at")
+
     list = []
     for match in matches:
         if (match["player1_id"] is not None) and (match["player2_id"] is not None):

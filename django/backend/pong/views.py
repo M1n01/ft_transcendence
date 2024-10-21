@@ -102,6 +102,34 @@ class MatchView(DetailView):
     context_object_name = "match"
 
 
+class TournamentDetail(TemplateView):
+    def get(self, request):
+        """
+        GETは禁止
+        """
+        return HttpResponseNotFound()
+
+    def post(self, request):
+        try:
+            tournament_id = 0
+            data = {"id": tournament_id}
+
+            tournaments = Tournament.objects.filter(
+                start_at__lte=datetime.now(tz=timezone.utc),
+                organizer=request.user,
+                status=TournamentStatusChoices.ONGOING,
+            ).order_by("start_at")
+            if len(tournaments) == 0:
+                return JsonResponse(data)
+
+            tournament_id = tournaments[0].id
+            data = {"id": tournament_id}
+            return JsonResponse(data)
+        except Exception as e:
+            logger.error(f"StartPong Error:{e}")
+            return HttpResponseBadRequest()
+
+
 class StartPong(TemplateView):
     def get(self, request):
         """
@@ -113,6 +141,7 @@ class StartPong(TemplateView):
         try:
             type = request.POST.get("type")
             id = 0
+            tournament_id = None
             data = {"id": id}
             if type == "test":
                 # 新しいmatchを作成したら、古いものは削除する
@@ -150,10 +179,11 @@ class StartPong(TemplateView):
                 # print(f"{match=},{match.player1=},")
                 # print(f"{match=},{match.player2=},")
                 id = list_matches[0].id
+                tournament_id = tournaments[0].id
             else:
                 logger.error("StartPong Error:not defined type")
                 return HttpResponseBadRequest()
-            data = {"id": id}
+            data = {"id": id, "tournament": tournament_id}
             return JsonResponse(data)
         except Exception as e:
             logger.error(f"StartPong Error:{e}")
