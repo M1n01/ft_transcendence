@@ -18,6 +18,7 @@ export default class Game {
     this.user2 = null;
     this.position = position;
     this.winner = null;
+    this.is_end = false;
 
     this.div = document.createElement('div');
   }

@@ -14,19 +14,28 @@ export default class TournamentChart {
   }
 
   recursiveSetGame(games, cur_game) {
+    console.log('recursiveSetGame No.0');
+    // 再帰終了条件
+    if (cur_game == null) {
+      return;
+    }
     // 再帰終了条件
     if (cur_game.edge_flag == true) {
       const cur_game_data = games.find((game) => game.id == cur_game.id);
 
+      cur_game.is_end = true;
       //let tmp_user1;
       //let tmp_user2;
 
+      /*
       if (cur_game_data.player2 === '') {
         cur_game.seed_flag = true;
+        cur_game.is_end = true;
         cur_game.winner = cur_game_data.player1;
         cur_game.user1 = cur_game_data.player1;
         return;
       }
+      */
 
       /*
       if (cur_game_data.winner < cur_game_data.loser) {
@@ -59,6 +68,7 @@ export default class TournamentChart {
     const next_game_data1 = games.find((game) => game.id == next_id1);
     const next_game_data2 = games.find((game) => game.id == next_id2);
 
+    //if (next_game_data1.is_end) {
     if (next_game_data1.player1_score > next_game_data1.player2_score) {
       cur_game.user1 = next_game_data1.player1;
     } else if (next_game_data1.player1_score < next_game_data1.player2_score) {
@@ -66,9 +76,11 @@ export default class TournamentChart {
     } else {
       cur_game.user1 = '';
     }
+    //}
     //cur_game.user1 = next_game_data1.winner;
     //cur_game.user2 = next_game_data2.winner;
 
+    //if (next_game_data2.is_end) {
     if (next_game_data2.player1_score > next_game_data2.player2_score) {
       cur_game.user2 = next_game_data2.player1;
     } else if (next_game_data1.player1_score < next_game_data2.player2_score) {
@@ -76,6 +88,7 @@ export default class TournamentChart {
     } else {
       cur_game.user2 = '';
     }
+    //}
 
     if (cur_game.winner == '') {
       cur_game.winner = '';
@@ -98,12 +111,17 @@ export default class TournamentChart {
       next_game2 = this.rightBranches.find((game) => game.id == next_game_data2.id);
     }
 
+    console.log('recursiveSetGame No.1');
     this.recursiveSetGame(games, next_game1);
+    console.log('recursiveSetGame No.2');
     this.recursiveSetGame(games, next_game2);
+    console.log('recursiveSetGame No.3');
   }
 
   setGames(games) {
+    console.log('setGames No.0');
     this.recursiveSetGame(games, this.final);
+    console.log('setGames No.1');
   }
 
   setParticipants(participants) {
@@ -156,7 +174,26 @@ export default class TournamentChart {
   };
 
   calcBranchDepth = (total) => {
-    let cnt = 0;
+    let tmp = 4;
+    let cnt = 2;
+    while (tmp < 33) {
+      console.log('tmp=' + tmp);
+      console.log('ttotal=' + total);
+      console.log('cnt=' + cnt);
+      if (tmp == total) {
+        return cnt;
+      }
+      tmp = tmp * 2;
+      cnt = cnt + 1;
+    }
+
+    if (total == 4) {
+      return 2;
+    } else if (total == 8) {
+      return 3;
+    }
+    console.log('total=' + total);
+    cnt = 0;
     while (total > 1) {
       total = total / 2;
       cnt++;
@@ -165,10 +202,14 @@ export default class TournamentChart {
   };
 
   recursiveMakeBranch = (ctx, branch, cnt, maxCnt, branches) => {
+    console.log('stop?');
     if (cnt >= maxCnt) {
       return;
     }
     const edge_flag = maxCnt - cnt == 1;
+    console.log(
+      'recursiveMakeBranch No.0 flag=' + edge_flag + ', maxCnt=' + maxCnt + ', cnt=' + cnt
+    );
     let new_branches = branch.getNewGames(edge_flag);
     branches.push(new_branches[0]);
     branches.push(new_branches[1]);
@@ -215,7 +256,9 @@ export default class TournamentChart {
     let leftPoint = CanvasCenter.copyOffset(LeftOffBase);
     let rightPoint = CanvasCenter.copyOffset(RightOffBase);
 
+    console.log('create final No.1');
     this.final = new Game(CanvasCenter, offset, false, 0, '', CanvasCenter);
+    console.log('create final No.2');
     const leftBranch = new Game(leftPoint, LeftOffsetPoint, false, 1, 'left', this.final);
     const rightBranch = new Game(rightPoint, RightOffsetPoint, false, 2, 'right', this.final);
 

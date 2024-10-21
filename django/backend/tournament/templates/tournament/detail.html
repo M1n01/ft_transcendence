@@ -9,7 +9,6 @@
       <li class="list-group-item">{% trans '最大参加人数' %}</li>
       <li class="list-group-item">{% trans '登録者数' %}</li>
       <li class="list-group-item">{% trans '開始時間' %}</li>
-      <li class="list-group-item">{% trans 'フレンドのみ' %}</li>
     </ul>
     <ul class="list-group rounded-start-0">
       <li class="list-group-item">{{ tournament.name }}</li>
@@ -18,7 +17,6 @@
       <li class="list-group-item">{{ tournament.current_players}}</li>
       <li class="list-group-item">{{ len_participants}}</li>
       <li class="list-group-item">{{ tournament.start_at|timezone:"Asia/Tokyo"}}</li>
-      <li class="list-group-item">{{ tournament.is_only_friend}}</li>
     </ul>
   </div>
 
@@ -26,7 +24,7 @@
   {% if len_participants > 0 %}
   <ul class="list-group">
     {% for participant in participants %}
-    <li class="list-group-item">{{ participant.participant.username }}</li>
+    <li class="list-group-item">{{ participant.alias_name }}</li>
 
     {% endfor %}
   </ul>
