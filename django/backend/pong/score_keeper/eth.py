@@ -117,9 +117,7 @@ def get_matches_from_blockchain(
         elif tournament_id:
             tournament_id_bytes = tournament_id.bytes
             matches = [
-                match
-                for match in all_matches
-                if match[2] == tournament_id_bytes
+                match for match in all_matches if match[2] == tournament_id_bytes
             ]
         else:
             matches = all_matches
