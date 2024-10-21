@@ -86,13 +86,13 @@ def get_matches_from_blockchain(
     )
 
     def match_to_dict(match):
-        utc_created_at = datetime.fromtimestamp(match[2], tz=timezone.utc)
+        utc_created_at = datetime.fromtimestamp(match[1], tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
-            "match_id": match[0],
-            "tournament_id": match[1],
-            "player1": match[3],
-            "player2": match[4],
+            "match_id": match[0].hex(),
+            "tournament_id": match[2].hex(),
+            "player1": match[3].hex(),
+            "player2": match[4].hex(),
             "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
@@ -101,19 +101,26 @@ def get_matches_from_blockchain(
         }
 
     if match_id is not None:
-        match = contract.functions.getMatch(match_id, only_active).call()
+        match_id_bytes = match_id.bytes
+        match = contract.functions.getMatch(match_id_bytes, only_active).call()
         matches = match_to_dict(match)
     else:
         all_matches = contract.functions.getAllMatches(only_active).call()
         if user_id:
+            user_id_bytes = user_id.bytes
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
                 match
                 for match in all_matches
-                if match[3] == user_id or match[4] == user_id
+                if match[3] == user_id_bytes or match[4] == user_id_bytes
             ]
         elif tournament_id:
-            matches = [match for match in all_matches if match[1] == tournament_id]
+            tournament_id_bytes = tournament_id.bytes
+            matches = [
+                match
+                for match in all_matches
+                if match[2] == tournament_id_bytes
+            ]
         else:
             matches = all_matches
         matches = [match_to_dict(match) for match in matches]
