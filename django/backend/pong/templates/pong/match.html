@@ -69,19 +69,27 @@
           </div>
         </div>
       </div>
-      <canvas id="myCanvas"></canvas>
-      <!---->
-      <div class="d-flex justify-content-end">
-        <button
-          id="back-games-button"
-          onclick="window.history.go(-1);"
-          class="btn btn-primary"
-          hidden
-        >
-          {% trans '戻る'%}
-        </button>
+      <canvas id="myCanvas"> </canvas>
+      <div class="d-flex justify-content-between">
+        <div clsss="invisible">
+          <button class="btn btn-primary invisible">start</button>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button id="start-pong-game-button" class="btn btn-primary">
+            {% trans 'スタート' %}
+          </button>
+        </div>
+        <!---->
+        <div class="d-flex justify-content-start">
+          <button
+            id="back-games-button"
+            onclick="window.history.go(-1);"
+            class="btn btn-secondary invisible"
+          >
+            {% trans '戻る'%}
+          </button>
 
-        <!--
+          <!--
         <form id="start-next-game" method="post" action="{% url 'pong:start'  %}" class="">
           {% csrf_token %}
           {% if match.player2 %}
@@ -93,6 +101,7 @@
           <button type="submit" class="btn btn-primary">{% trans '次のゲーム' %}</button>
         </form>
 -->
+        </div>
       </div>
     </div>
   </body>
