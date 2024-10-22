@@ -71,8 +71,15 @@
       </div>
       <canvas id="myCanvas"></canvas>
       <!---->
-      <div id="back-button" class="d-flex justify-content-end" hidden>
-        <button onclick="window.history.go(-1);" class="btn btn-primary">{% trans '戻る'%}</button>
+      <div class="d-flex justify-content-end">
+        <button
+          id="back-games-button"
+          onclick="window.history.go(-1);"
+          class="btn btn-primary"
+          hidden
+        >
+          {% trans '戻る'%}
+        </button>
 
         <!--
         <form id="start-next-game" method="post" action="{% url 'pong:start'  %}" class="">
