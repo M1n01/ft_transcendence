@@ -18,7 +18,7 @@ export default class Game {
     this.user2 = null;
     this.position = position;
     this.winner = null;
-    this.is_end = false;
+    //this.is_end = false;
 
     this.div = document.createElement('div');
   }
@@ -71,6 +71,7 @@ export default class Game {
     }
   }
   draw_seed(parent, next_game) {
+    console.log('draw_seed No.0');
     let x = this.point.x;
     let y = this.prePoint.y;
     const width = Math.abs(this.offset.x);
@@ -82,15 +83,21 @@ export default class Game {
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width}px`;
     this.div.style.height = '0px';
+    console.log('draw_seed No.1 x:' + x);
 
     // 次の試合で勝った時だけ赤くする
     if (this.winner != '') {
+      console.log('draw_seed No.2 next winner:' + next_game.winner);
+      console.log('draw_seed No.2 this winner:' + this.winner);
       if (next_game.winner == this.winner) {
+        console.log('draw_seed No.3');
         this.div.classList.add('winner');
         this.div.classList.add('validTop');
       } else {
+        console.log('draw_seed No.4');
         this.div.classList.add('tournamentLine');
       }
+      console.log('draw_seed No.5');
     }
     parent.appendChild(this.div);
   }
@@ -191,9 +198,11 @@ export default class Game {
   }
 
   draw_normal(parent, next_game) {
+    console.log('draw_normal No.0');
     const bottom = document.createElement('div');
 
     if (this.position == 'left') {
+      console.log('draw_normal No.1 left');
       const width = Math.abs(this.offset.x);
       const height = Math.abs(this.offset.y);
       const x = this.point.x + this.offset.x;
@@ -209,6 +218,7 @@ export default class Game {
       bottom.style.left = `${x}px`;
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
+      console.log('draw_normal No.2 left x=' + x);
 
       if (this.winner != '') {
         const circle = document.createElement('div');
@@ -220,6 +230,7 @@ export default class Game {
         this.draw_left_winner(parent, x, y, width, height, next_game);
       }
     } else {
+      console.log('draw_normal No.1 right');
       // right
       const width = Math.abs(this.offset.x);
       const height = Math.abs(this.offset.y);
@@ -237,6 +248,7 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
+      console.log('draw_normal No.2 right x:' + x);
       if (this.winner != '') {
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
@@ -314,9 +326,14 @@ export default class Game {
 
     this.appendUserText(this.user1, parent, text_point, width, height);
   }
-  drawNotSeedUser(parent) {
+  drawNotSeedUser(parent, h_flag) {
+    let h_offset = 0;
+    if (h_flag) {
+      h_offset = 40;
+    }
+
     let tmp_offset;
-    const height = Math.abs(this.offset.y) * 1.5;
+    const height = Math.abs(this.offset.y) * 1.5 - h_offset;
     const width = Math.abs(this.offset.x) * 2;
     const point1 = this.point.copyOffset(new Point(0, -this.offset.y));
     const point2 = this.point.copyOffset(new Point(0, this.offset.y));
@@ -334,11 +351,11 @@ export default class Game {
     this.appendUserText(this.user2, parent, user2_point, width, height);
   }
 
-  drawUser(parent) {
+  drawUser(parent, h_flag) {
     if (this.seed_flag) {
       this.drawSeedUser(parent);
     } else {
-      this.drawNotSeedUser(parent);
+      this.drawNotSeedUser(parent, h_flag);
     }
   }
 

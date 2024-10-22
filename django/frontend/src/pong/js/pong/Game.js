@@ -352,11 +352,11 @@ export default class Game {
     this.appendUserText(this.user2, parent, user2_point, width, height);
   }
 
-  drawUser(parent) {
+  drawUser(parent, h_offset = false) {
     if (this.seed_flag) {
       this.drawSeedUser(parent);
     } else {
-      this.drawNotSeedUser(parent);
+      this.drawNotSeedUser(parent, h_offset);
     }
   }
 

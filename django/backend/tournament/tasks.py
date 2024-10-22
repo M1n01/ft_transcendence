@@ -12,30 +12,38 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def create_first_match(seed_array, tournament, participants, player_id, round, id):
+def create_first_match(seed_array, tournament, participants, player_id, round_id, id):
+    print(f"No.0:{seed_array=}")
+    # round_id = seed_array[id]
+    if round_id == 0:
+        return
+    print(f"No.1:{round_id=}")
     if id in seed_array:
+        print(f"No.2:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
-            round=round * 10 + 1,
+            round=round_id * 10 + 1,
             player1=participants[player_id].participant,
             player1_alias=participants[player_id].alias_name,
             is_end=True,
         )
 
-        next_match = MatchTmp.objects.get(tournament_id=tournament, round=round)
-        if round % 2 == 1:
-            next_match.player1 = participants[player_id].participant
-            next_match.player1_alias = participants[player_id].alias_name
-        else:
-            next_match.player2 = participants[player_id].participant
-            next_match.player2_alias = participants[player_id].alias_name
+        next_match = MatchTmp.objects.get(tournament_id=tournament, round=round_id)
+        # if round_id % 2 == 1:
+        next_match.player1 = participants[player_id].participant
+        next_match.player1_alias = participants[player_id].alias_name
+        # else:
+        # next_match.player2 = participants[player_id].participant
+        # next_match.player2_alias = participants[player_id].alias_name
         next_match.save()
         player_id = player_id + 1
+        # return
 
     else:
+        print(f"No.3:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
-            round=round * 10 + 1,
+            round=round_id * 10 + 1,
             player1=participants[player_id].participant,
             player2=participants[player_id + 1].participant,
             player1_alias=participants[player_id].alias_name,
@@ -43,35 +51,40 @@ def create_first_match(seed_array, tournament, participants, player_id, round, i
         )
         player_id = player_id + 2
 
+    # round_id = seed_array[id + 1]
+    print(f"No.4:{round_id=}")
     if id + 1 in seed_array:
+        print(f"No.5:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
-            round=round * 10 + 2,
+            round=round_id * 10 + 2,
             player1=participants[player_id].participant,
             player1_alias=participants[player_id].alias_name,
             is_end=True,
         )
 
-        next_match = MatchTmp.objects.get(tournament_id=tournament, round=round)
-        if round % 2 == 1:
-            next_match.player1 = participants[player_id].participant
-            next_match.player1_alias = participants[player_id].alias_name
-        else:
-            next_match.player2 = participants[player_id].participant
-            next_match.player2_alias = participants[player_id].alias_name
+        next_match = MatchTmp.objects.get(tournament_id=tournament, round=round_id)
+        # if round_id % 2 == 0:
+        # next_match.player1 = participants[player_id].participant
+        # next_match.player1_alias = participants[player_id].alias_name
+        # else:
+        next_match.player2 = participants[player_id].participant
+        next_match.player2_alias = participants[player_id].alias_name
         next_match.save()
         player_id = player_id + 1
 
     else:
+        print(f"No.6:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
-            round=round * 10 + 2,
+            round=round_id * 10 + 2,
             player1=participants[player_id].participant,
             player2=participants[player_id + 1].participant,
             player1_alias=participants[player_id].alias_name,
             player2_alias=participants[player_id + 1].alias_name,
         )
         player_id = player_id + 2
+    print(f"No.7:{round_id=}")
     return player_id
 
 
@@ -84,7 +97,7 @@ def create_matches(tournament):
 
     participants = TournamentParticipant.objects.filter(tournament_id=tournament)
     players_size = len(participants)
-    tmp_players_size = players_size
+    tmp_players_size = players_size - 1
     depth = -1
     while tmp_players_size >= 1:
         tmp_players_size = int(tmp_players_size / 2)
@@ -96,14 +109,36 @@ def create_matches(tournament):
         i = random.randint(0, first_match_size - 1)
         if i not in seed_array:
             seed_array.append(i)
+    print(f"{first_match_size=}")
+    print(f"{seed_match_size=}")
+    print(f"{seed_array=}")
 
     MatchTmp.objects.create(tournament_id=tournament, round=0)
-    MatchTmp.objects.create(tournament_id=tournament, round=1)
-    MatchTmp.objects.create(tournament_id=tournament, round=2)
+    if players_size == 4:
+        MatchTmp.objects.create(
+            tournament_id=tournament,
+            round=1,
+            player1=participants[0].participant,
+            player1_alias=participants[0].alias_name,
+            player2=participants[1].participant,
+            player2_alias=participants[1].alias_name,
+        )
+        MatchTmp.objects.create(
+            tournament_id=tournament,
+            round=2,
+            player1=participants[2].participant,
+            player1_alias=participants[2].alias_name,
+            player2=participants[3].participant,
+            player2_alias=participants[3].alias_name,
+        )
+    else:
+        MatchTmp.objects.create(tournament_id=tournament, round=1)
+        MatchTmp.objects.create(tournament_id=tournament, round=2)
+
     depth = depth - 1
+    player_id = 0
 
     round_array = [1, 2]
-    player_id = 0
     while depth != 0:
         tmp_round_array = []
         id = 0

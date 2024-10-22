@@ -14,28 +14,31 @@ export default class TournamentChart {
   }
 
   recursiveSetGame(games, cur_game) {
-    console.log('recursiveSetGame No.0');
     // 再帰終了条件
     if (cur_game == null) {
       return;
     }
+    console.log('recursiveSetGame No.1');
     // 再帰終了条件
     if (cur_game.edge_flag == true) {
+      console.log('recursiveSetGame No.2 cur_game.id=' + cur_game.id);
       const cur_game_data = games.find((game) => game.id == cur_game.id);
+      //console.log('recursiveSetGame No.3 cur_game_data=' + cur_game_data);
+      console.log('recursiveSetGame No.3 cur_game_data=' + cur_game_data.player1);
+      console.log('recursiveSetGame No.4 cur_game_data=' + cur_game_data.player2);
 
-      cur_game.is_end = true;
+      //cur_game.is_end = true;
       //let tmp_user1;
       //let tmp_user2;
 
-      /*
       if (cur_game_data.player2 === '') {
+        console.log('edge No.1');
         cur_game.seed_flag = true;
         cur_game.is_end = true;
         cur_game.winner = cur_game_data.player1;
         cur_game.user1 = cur_game_data.player1;
         return;
       }
-      */
 
       /*
       if (cur_game_data.winner < cur_game_data.loser) {
@@ -60,6 +63,24 @@ export default class TournamentChart {
       return;
     }
 
+    console.log('No.1 cur_game.id=' + cur_game.id);
+    const cur_game_data = games.find((game) => game.id == cur_game.id);
+    if (cur_game_data) {
+      console.log('No.2 cur_game_data.id=' + cur_game_data.id);
+      console.log('No.2 cur_game_data.player1_score=' + cur_game_data.player1_score);
+      console.log('No.3 cur_game_data.player2_score=' + cur_game_data.player2_score);
+      /*
+      if (cur_game_data.player1_score > cur_game_data.player2_score) {
+        cur_game.winner = cur_game.user1;
+      } else if (cur_game_data.player1_score < cur_game_data.player2_score) {
+        cur_game.winner = cur_game.user2;
+      } else {
+        cur_game.winner = '';
+      }
+        */
+      console.log('No.4 cur_game_data.winner=' + cur_game.winner);
+    }
+
     const current_id = cur_game.id;
     const next_id1 = current_id * 10 + 1;
     const next_id2 = current_id * 10 + 2;
@@ -68,35 +89,37 @@ export default class TournamentChart {
     const next_game_data1 = games.find((game) => game.id == next_id1);
     const next_game_data2 = games.find((game) => game.id == next_id2);
 
-    //if (next_game_data1.is_end) {
-    if (next_game_data1.player1_score > next_game_data1.player2_score) {
-      cur_game.user1 = next_game_data1.player1;
-    } else if (next_game_data1.player1_score < next_game_data1.player2_score) {
-      cur_game.user1 = next_game_data1.player2;
-    } else {
-      cur_game.user1 = '';
+    if (next_game_data1.is_end) {
+      if (next_game_data1.player1_score > next_game_data1.player2_score) {
+        cur_game.user1 = next_game_data1.player1;
+      } else if (next_game_data1.player1_score < next_game_data1.player2_score) {
+        cur_game.user1 = next_game_data1.player2;
+      } else {
+        cur_game.user1 = '';
+      }
     }
-    //}
     //cur_game.user1 = next_game_data1.winner;
     //cur_game.user2 = next_game_data2.winner;
 
-    //if (next_game_data2.is_end) {
-    if (next_game_data2.player1_score > next_game_data2.player2_score) {
-      cur_game.user2 = next_game_data2.player1;
-    } else if (next_game_data1.player1_score < next_game_data2.player2_score) {
-      cur_game.user2 = next_game_data2.player2;
-    } else {
-      cur_game.user2 = '';
+    if (next_game_data2.is_end) {
+      if (next_game_data2.player1_score > next_game_data2.player2_score) {
+        cur_game.user2 = next_game_data2.player1;
+      } else if (next_game_data1.player1_score < next_game_data2.player2_score) {
+        cur_game.user2 = next_game_data2.player2;
+      } else {
+        cur_game.user2 = '';
+      }
     }
-    //}
 
-    if (cur_game.winner == '') {
-      cur_game.winner = '';
-    } else if (cur_game.winner == cur_game.user1) {
+    /*
+    if (cur_game.player1_score > cur_game.player2_score) {
       cur_game.winner = cur_game.user1;
-    } else {
+    } else if (cur_game.player1_score < cur_game.player2_score) {
       cur_game.winner = cur_game.user2;
+    } else {
+      cur_game.winner = '';
     }
+    */
 
     let next_game1;
     let next_game2;
@@ -124,10 +147,13 @@ export default class TournamentChart {
     console.log('setGames No.1');
   }
 
+  /*
   setParticipants(participants) {
+    console.log('participant No.1');
     if (this.size != participants.length) {
       return false;
     }
+    console.log('participant No.2');
 
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
     const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
@@ -136,18 +162,36 @@ export default class TournamentChart {
     const seed_left_cnt = parseInt(seed_cnt / 2);
     const seed_right_cnt = seed_cnt - seed_left_cnt;
 
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_left_cnt=' + seed_left_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
+    console.log('seed_right_cnt=' + seed_right_cnt);
     this.setSeedFlag(leftEdge, seed_left_cnt);
     this.setSeedFlag(rightEdge, seed_right_cnt);
 
+    console.log('participant No.3');
     const edges = [...leftEdge, ...rightEdge];
     const seed_edges = edges.filter((edge) => edge.seed_flag == true);
     const not_seed_edges = edges.filter((edge) => edge.seed_flag == false);
 
+    console.log('participant No.4');
     seed_edges.forEach((edge, index) => {
       edge.setUser(participants[index]);
     });
+    console.log('participant No.5');
     const offset = seed_edges.length;
     not_seed_edges.forEach((edge, index) => {
+      console.log('participant No.6');
       const tmp_user1 = participants[offset + index];
       const tmp_user2 = participants[offset + index + 1];
       if (tmp_user1 < tmp_user2) {
@@ -158,6 +202,7 @@ export default class TournamentChart {
     });
     return true;
   }
+  */
 
   setSeedFlag = (edges, seed_cnt) => {
     const seed_list = new Set();
@@ -174,8 +219,9 @@ export default class TournamentChart {
   };
 
   calcBranchDepth = (total) => {
-    let tmp = 4;
-    let cnt = 2;
+    //let tmp = 4;
+    let cnt = 0;
+    /*
     while (tmp < 33) {
       console.log('tmp=' + tmp);
       console.log('ttotal=' + total);
@@ -192,10 +238,23 @@ export default class TournamentChart {
     } else if (total == 8) {
       return 3;
     }
+    */
+
+    /*
+    if (total == 4) {
+      return 2;
+    } else if (total == 8) {
+      return 3;
+    } else if (total == 16) {
+      return 4;
+    }
+    */
+
     console.log('total=' + total);
     cnt = 0;
-    while (total > 1) {
-      total = total / 2;
+    total = total - 1;
+    while (total >= 1) {
+      total = parseInt(total / 2);
       cnt++;
     }
     return cnt - 1;
@@ -259,14 +318,23 @@ export default class TournamentChart {
     console.log('create final No.1');
     this.final = new Game(CanvasCenter, offset, false, 0, '', CanvasCenter);
     console.log('create final No.2');
+
     const leftBranch = new Game(leftPoint, LeftOffsetPoint, false, 1, 'left', this.final);
     const rightBranch = new Game(rightPoint, RightOffsetPoint, false, 2, 'right', this.final);
+
+    let cnt = 1;
+    if (this.size == 4) {
+      console.log('size is 4');
+      leftBranch.edge_flag = true;
+      rightBranch.edge_flag = true;
+      cnt = 1;
+    }
 
     this.leftBranches = [leftBranch];
     this.rightBranches = [rightBranch];
 
-    this.recursiveMakeBranch(ctx, leftBranch, 1, BranchDepth, this.leftBranches);
-    this.recursiveMakeBranch(ctx, rightBranch, 1, BranchDepth, this.rightBranches);
+    this.recursiveMakeBranch(ctx, leftBranch, cnt, BranchDepth, this.leftBranches);
+    this.recursiveMakeBranch(ctx, rightBranch, cnt, BranchDepth, this.rightBranches);
 
     return;
   };
@@ -275,24 +343,51 @@ export default class TournamentChart {
     this.final.draw(this.parent, null);
     this.leftBranches.forEach((game) => {
       const next_id = parseInt(game.id / 10);
+      console.log('left next_id:' + next_id);
+      console.log('left game.id:' + game.id);
+      console.log('left len:' + this.leftBranches.length);
       const next_game = this.leftBranches.find((game) => game.id == next_id);
+      if (next_game) {
+        console.log('left next_game.id:' + next_game.id);
+        console.log('left next_game.winer' + next_game.winer);
+      }
       game.draw(this.parent, next_game);
     });
     this.rightBranches.forEach((game) => {
       const next_id = parseInt(game.id / 10);
+      console.log('right next_id:' + next_id);
+      console.log('right game.id:' + game.id);
+      console.log('right len:' + this.rightBranches.length);
+      /*
+      this.rightBranches.forEach((branch) => {
+        console.log('right id:' + branch.id);
+        console.log('right user1:' + branch.user1);
+        console.log('right user2:' + branch.user2);
+      });
+      */
+
       const next_game = this.rightBranches.find((game) => game.id == next_id);
+      if (next_game) {
+        console.log('right next_game.id:' + next_game.id);
+        console.log('right next_game.winer:' + next_game.winer);
+      }
       game.draw(this.parent, next_game);
     });
   };
   drawParticipants = () => {
+    console.log('drawParticipants No.1');
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
     const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
+    console.log('drawParticipants No.2');
 
+    const height_offset_flag = leftEdge.length == 1 && rightEdge.length;
     leftEdge.forEach((edge) => {
-      edge.drawUser(this.parent);
+      console.log('drawParticipants No.3 len:' + leftEdge.length);
+      edge.drawUser(this.parent, height_offset_flag);
     });
     rightEdge.forEach((edge) => {
-      edge.drawUser(this.parent);
+      console.log('drawParticipants No.4 len:' + rightEdge.length);
+      edge.drawUser(this.parent, height_offset_flag);
     });
   };
 }
