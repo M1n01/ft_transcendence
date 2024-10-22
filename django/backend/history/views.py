@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from accounts.models import FtUser
+from tournament.models import Tournament
 from django.db.models import Q
 from django.core.paginator import Paginator
 
@@ -59,47 +60,49 @@ def edit_matches_data(request, matches):
 
 
 def get_tournament(request):
+    list = FtUser.objects.all()
+    list2 = Tournament.objects.all()
     matches = [
         {
-            "tournament_id": 1,
+            "tournament_id": list2[0].id,
             "round": 12,
-            "player1_id": 16,
-            "player2_id": 5,
+            "player1_id": list[0].id,
+            "player2_id": list[1].id,
             "player1_score": 2,
             "player2_score": 5,
             "updated_at": datetime.datetime.now(),
         },
         {
-            "tournament_id": 2,
+            "tournament_id": list2[1].id,
             "round": 121,
-            "player1_id": 16,
-            "player2_id": 6,
+            "player1_id": list[2].id,
+            "player2_id": list[3].id,
             "player1_score": 3,
             "player2_score": 2,
             "updated_at": datetime.datetime.now(),
         },
         {
-            "tournament_id": 2,
+            "tournament_id": list2[0].id,
             "round": 1,
-            "player1_id": 7,
-            "player2_id": 16,
+            "player1_id": list[4].id,
+            "player2_id": list[5].id,
             "player1_score": 1,
             "player2_score": 0,
             "updated_at": datetime.datetime.now(),
         },
         {
-            "tournament_id": 3,
+            "tournament_id": list2[1].id,
             "round": 0,
-            "player1_id": 4,
-            "player2_id": 16,
+            "player1_id": list[6].id,
+            "player2_id": list[7].id,
             "player1_score": 2,
             "player2_score": 4,
             "updated_at": datetime.datetime.now(),
         },
         {
-            "tournament_id": 33,
+            "tournament_id": list2[0].id,
             "round": 2121,
-            "player1_id": 16,
+            "player1_id": list[8].id,
             "player2_id": None,
             "player1_score": 0,
             "player2_score": 0,
@@ -107,10 +110,10 @@ def get_tournament(request):
         },
     ]
 
-    # matches = MatchTmp.objects.filter('')
-    matches = MatchTmp.objects.filter(
-        Q(player1=request.user) | Q(player2=request.user)
-    ).order_by("-updated_at")
+    # matches = MatchTmp.objects.filter("")
+    # matches = MatchTmp.objects.filter(
+    #    Q(player1=request.user) | Q(player2=request.user)
+    # ).order_by("-updated_at")
 
     list = []
     for match in matches:
