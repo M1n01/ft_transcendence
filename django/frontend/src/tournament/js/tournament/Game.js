@@ -24,6 +24,7 @@ export default class Game {
   }
 
   draw_final(parent) {
+    console.log('draw final No.1');
     const width = Math.abs(this.offset.x);
     let x = this.point.x - width;
     let y = this.prePoint.y - 3;
@@ -36,7 +37,7 @@ export default class Game {
     parent.appendChild(this.div);
 
     if (this.winner && this.winner != '') {
-      console.log('final winner');
+      console.log('draw final winner');
       const circle = document.createElement('div');
       circle.style.top = `${this.point.y - 7}px`;
       circle.style.left = `${this.point.x - 9}px`;
@@ -94,6 +95,8 @@ export default class Game {
         console.log('draw_seed No.3');
         this.div.classList.add('winner');
         this.div.classList.add('validTop');
+
+        //this.position.classList.add('winner');
       } else {
         console.log('draw_seed No.4');
         this.div.classList.add('tournamentLine');

@@ -53,9 +53,15 @@ export default class TournamentChart {
       cur_game.user1 = cur_game_data.player1;
       cur_game.user2 = cur_game_data.player2;
 
-      if (cur_game_data.player1_score > cur_game_data.player2_score) {
+      if (
+        cur_game_data.player1_score > cur_game_data.player2_score &&
+        cur_game_data.player1_score >= 5
+      ) {
         cur_game.winner = cur_game.user1;
-      } else if (cur_game_data.player1_score < cur_game_data.player2_score) {
+      } else if (
+        cur_game_data.player1_score < cur_game_data.player2_score &&
+        cur_game_data.player2_score >= 5
+      ) {
         cur_game.winner = cur_game.user2;
       } else {
         cur_game.winner = '';
@@ -67,18 +73,22 @@ export default class TournamentChart {
     const cur_game_data = games.find((game) => game.id == cur_game.id);
     if (cur_game_data) {
       console.log('No.2 cur_game_data.id=' + cur_game_data.id);
+      console.log('No.2 cur_game_data.user1=' + cur_game_data.id);
       console.log('No.2 cur_game_data.player1_score=' + cur_game_data.player1_score);
       console.log('No.3 cur_game_data.player2_score=' + cur_game_data.player2_score);
-      /*
-      if (cur_game_data.player1_score > cur_game_data.player2_score) {
-        cur_game.winner = cur_game.user1;
-      } else if (cur_game_data.player1_score < cur_game_data.player2_score) {
-        cur_game.winner = cur_game.user2;
+      if (
+        cur_game_data.player1_score > cur_game_data.player2_score &&
+        cur_game_data.player1_score >= 5
+      ) {
+        cur_game.winner = cur_game_data.player1;
+      } else if (
+        cur_game_data.player1_score < cur_game_data.player2_score &&
+        cur_game_data.player2_score >= 5
+      ) {
+        cur_game.winner = cur_game_data.player2;
       } else {
         cur_game.winner = '';
       }
-        */
-      console.log('No.4 cur_game_data.winner=' + cur_game.winner);
     }
 
     const current_id = cur_game.id;
@@ -112,9 +122,9 @@ export default class TournamentChart {
     }
 
     /*
-    if (cur_game.player1_score > cur_game.player2_score) {
+    if (cur_game.player1_score > cur_game.player2_score && cur_game.player1_score >= 5) {
       cur_game.winner = cur_game.user1;
-    } else if (cur_game.player1_score < cur_game.player2_score) {
+    } else if (cur_game.player1_score < cur_game.player2_score && cur_game.player2_score >= 5) {
       cur_game.winner = cur_game.user2;
     } else {
       cur_game.winner = '';
