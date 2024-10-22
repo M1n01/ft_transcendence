@@ -45,6 +45,9 @@ def save_match_to_blockchain(
         tournament_bytes = tournament.bytes
         player1_bytes = player1.bytes
         player2_bytes = player2.bytes
+        print(
+            "variants", match_id_bytes, tournament_bytes, player1_bytes, player2_bytes
+        )
         transaction = contract.functions.createMatch(
             match_id_bytes,
             tournament_bytes,
@@ -57,24 +60,45 @@ def save_match_to_blockchain(
             {
                 "from": account.address,
                 "nonce": w3.eth.get_transaction_count(account.address),
+                "gas": 300000,
+                "gasPrice": w3.eth.gas_price,
             }
         )
 
         signed_txn = w3.eth.account.sign_transaction(
             transaction, settings.PRIVATE_ACCOUNT_KEY
         )
+
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
 
+
         # イベントをキャッチしてタイムスタンプを取得
+        print("Waiting for transaction receipt...")
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        print(f"Transaction receipt received: {receipt}")
+
+        if receipt.status == 0:
+            print("Transaction failed")
+            raise Exception("Transaction failed")
+
+        print("Processing logs...")
         logs = contract.events.MatchCreated().process_receipt(receipt)
-        unix_created_at = logs[0]["args"]["createdAt"]
+        print(f"Logs processed: {logs}")
 
-        # タイムスタンプをJSTに変換
-        utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
-        jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
+        # logsが空の配列の場合のハンドリングを追加
+        if not logs:
+            print("No logs found in receipt")
+            return tx_hash.hex(), None
 
-        return tx_hash.hex(), jst_created_at
+        try:
+            unix_created_at = logs[0]["args"]["createdAt"]
+            utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
+            jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
+            return tx_hash.hex(), jst_created_at
+        except (IndexError, KeyError) as e:
+            print(f"Error processing logs: {e}")
+            # トランザクションは成功しているのでhashは返す
+            return tx_hash.hex(), None
 
     except Exception as e:
         print(f"Error saving match to blockchain: {e}")
