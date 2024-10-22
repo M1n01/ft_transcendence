@@ -35,7 +35,8 @@ export default class Game {
     this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
 
-    if (this.winner != '') {
+    if (this.winner && this.winner != '') {
+      console.log('final winner');
       const circle = document.createElement('div');
       circle.style.top = `${this.point.y - 7}px`;
       circle.style.left = `${this.point.x - 9}px`;
@@ -86,7 +87,7 @@ export default class Game {
     console.log('draw_seed No.1 x:' + x);
 
     // 次の試合で勝った時だけ赤くする
-    if (this.winner != '') {
+    if (this.winner && this.winner != '') {
       console.log('draw_seed No.2 next winner:' + next_game.winner);
       console.log('draw_seed No.2 this winner:' + this.winner);
       if (next_game.winner == this.winner) {
@@ -220,7 +221,8 @@ export default class Game {
       bottom.classList.add('tournamentBottomBranch');
       console.log('draw_normal No.2 left x=' + x);
 
-      if (this.winner != '') {
+      if (this.winner && this.winner != '') {
+        console.log('normal winner No.1');
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 9}px`;
@@ -249,7 +251,9 @@ export default class Game {
       bottom.classList.add('tournamentBottomBranch');
 
       console.log('draw_normal No.2 right x:' + x);
-      if (this.winner != '') {
+      if (this.winner && this.winner != '') {
+        console.log('normal winner No.1');
+        console.log('normal winner');
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 5}px`;
