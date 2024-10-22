@@ -123,58 +123,46 @@ class RegisterApi(CreateView):
 
     def form_valid(self, form):
         try:
-            print("register No.1")
             data = self.request.POST.copy()
             data["participant"] = self.request.user
             data["participant_id"] = self.request.user.id
             data["is_accept"] = True
             form = TournamentParticipantForm(data)
             if form.is_valid():
-                print("register No.2")
 
                 tournament = form.cleaned_data["tournament_id"]
-                print("register No.3")
                 try:
                     with transaction.atomic():
-                        print("register No.4")
                         participants = (
                             TournamentParticipant.objects.select_for_update().filter(
                                 tournament_id=tournament
                             )
                         )
-                        print("register No.5")
                         if len(participants) >= tournament.current_players:
                             data = {"is_full": True, "is_registered": False}
                             return JsonResponse(data, status=500)
-                        print("register No.6")
 
                         # form.save() がうまくいかないので仕方なく
                         try:
-                            print("register No.7")
                             TournamentParticipant.objects.create(
                                 tournament_id=tournament,
                                 alias_name=form.cleaned_data["alias_name"],
                                 participant=self.request.user,
                                 is_accept=True,
                             )
-                            print("register No.8")
                         except Exception:
                             data = {"is_full": False, "is_registered": True}
                             return JsonResponse(data, status=500)
 
-                        print("register No.9")
                         participants = (
                             TournamentParticipant.objects.select_for_update().filter(
                                 tournament_id=tournament
                             )
                         )
 
-                        print("register No.10")
                         if len(participants) == tournament.current_players:
-                            print("register No.11")
                             create_matches(tournament)
                             tournament.status = TournamentStatusChoices.ONGOING
-                            print("register No.12")
                             tournament.save()
 
                 except IntegrityError:

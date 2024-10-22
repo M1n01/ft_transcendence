@@ -141,63 +141,6 @@ export default class TournamentChart {
     this.recursiveSetGame(games, this.final);
   }
 
-  /*
-  setParticipants(participants) {
-    console.log('participant No.1');
-    if (this.size != participants.length) {
-      return false;
-    }
-    console.log('participant No.2');
-
-    const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
-    const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
-
-    const seed_cnt = (leftEdge.length + rightEdge.length) * 2 - this.size;
-    const seed_left_cnt = parseInt(seed_cnt / 2);
-    const seed_right_cnt = seed_cnt - seed_left_cnt;
-
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_left_cnt=' + seed_left_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    console.log('seed_right_cnt=' + seed_right_cnt);
-    this.setSeedFlag(leftEdge, seed_left_cnt);
-    this.setSeedFlag(rightEdge, seed_right_cnt);
-
-    console.log('participant No.3');
-    const edges = [...leftEdge, ...rightEdge];
-    const seed_edges = edges.filter((edge) => edge.seed_flag == true);
-    const not_seed_edges = edges.filter((edge) => edge.seed_flag == false);
-
-    console.log('participant No.4');
-    seed_edges.forEach((edge, index) => {
-      edge.setUser(participants[index]);
-    });
-    console.log('participant No.5');
-    const offset = seed_edges.length;
-    not_seed_edges.forEach((edge, index) => {
-      console.log('participant No.6');
-      const tmp_user1 = participants[offset + index];
-      const tmp_user2 = participants[offset + index + 1];
-      if (tmp_user1 < tmp_user2) {
-        edge.setUser(tmp_user1, tmp_user2);
-      } else {
-        edge.setUser(tmp_user2, tmp_user1);
-      }
-    });
-    return true;
-  }
-  */
-
   setSeedFlag = (edges, seed_cnt) => {
     const seed_list = new Set();
     while (true) {
@@ -213,38 +156,8 @@ export default class TournamentChart {
   };
 
   calcBranchDepth = (total) => {
-    //let tmp = 4;
     let cnt = 0;
-    /*
-    while (tmp < 33) {
-      console.log('tmp=' + tmp);
-      console.log('ttotal=' + total);
-      console.log('cnt=' + cnt);
-      if (tmp == total) {
-        return cnt;
-      }
-      tmp = tmp * 2;
-      cnt = cnt + 1;
-    }
 
-    if (total == 4) {
-      return 2;
-    } else if (total == 8) {
-      return 3;
-    }
-    */
-
-    /*
-    if (total == 4) {
-      return 2;
-    } else if (total == 8) {
-      return 3;
-    } else if (total == 16) {
-      return 4;
-    }
-    */
-
-    console.log('total=' + total);
     cnt = 0;
     total = total - 1;
     while (total >= 1) {
@@ -255,14 +168,10 @@ export default class TournamentChart {
   };
 
   recursiveMakeBranch = (ctx, branch, cnt, maxCnt, branches) => {
-    console.log('stop?');
     if (cnt >= maxCnt) {
       return;
     }
     const edge_flag = maxCnt - cnt == 1;
-    console.log(
-      'recursiveMakeBranch No.0 flag=' + edge_flag + ', maxCnt=' + maxCnt + ', cnt=' + cnt
-    );
     let new_branches = branch.getNewGames(edge_flag);
     branches.push(new_branches[0]);
     branches.push(new_branches[1]);
@@ -309,16 +218,13 @@ export default class TournamentChart {
     let leftPoint = CanvasCenter.copyOffset(LeftOffBase);
     let rightPoint = CanvasCenter.copyOffset(RightOffBase);
 
-    console.log('create final No.1');
     this.final = new Game(CanvasCenter, offset, false, 0, '', CanvasCenter);
-    console.log('create final No.2');
 
     const leftBranch = new Game(leftPoint, LeftOffsetPoint, false, 1, 'left', this.final);
     const rightBranch = new Game(rightPoint, RightOffsetPoint, false, 2, 'right', this.final);
 
     let cnt = 1;
     if (this.size == 4) {
-      console.log('size is 4');
       leftBranch.edge_flag = true;
       rightBranch.edge_flag = true;
       cnt = 1;
@@ -337,35 +243,25 @@ export default class TournamentChart {
     this.final.draw(this.parent, null);
     this.leftBranches.forEach((game) => {
       const next_id = parseInt(game.id / 10);
-      console.log('left next_id:' + next_id);
-      console.log('left game.id:' + game.id);
-      console.log('left len:' + this.leftBranches.length);
       const next_game = this.leftBranches.find((game) => game.id == next_id);
       game.draw(this.parent, next_game);
     });
     this.rightBranches.forEach((game) => {
       const next_id = parseInt(game.id / 10);
-      console.log('right next_id:' + next_id);
-      console.log('right game.id:' + game.id);
-      console.log('right len:' + this.rightBranches.length);
 
       const next_game = this.rightBranches.find((game) => game.id == next_id);
       game.draw(this.parent, next_game);
     });
   };
   drawParticipants = () => {
-    console.log('drawParticipants No.1');
     const leftEdge = this.leftBranches.filter((branch) => branch.edge_flag == true);
     const rightEdge = this.rightBranches.filter((branch) => branch.edge_flag == true);
-    console.log('drawParticipants No.2');
 
     const height_offset_flag = leftEdge.length == 1 && rightEdge.length;
     leftEdge.forEach((edge) => {
-      console.log('drawParticipants No.3 len:' + leftEdge.length);
       edge.drawUser(this.parent, height_offset_flag);
     });
     rightEdge.forEach((edge) => {
-      console.log('drawParticipants No.4 len:' + rightEdge.length);
       edge.drawUser(this.parent, height_offset_flag);
     });
   };

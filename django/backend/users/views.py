@@ -141,7 +141,6 @@ class ExportProfileView(LoginRequiredMixin, View):
                 ]
             )
 
-        print(response)
         return response
 
 
@@ -182,7 +181,6 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
             # user.updated_at = None
 
             user.save()
-            print("Execute DeleteUserView")
             return JsonResponse({"status": "success"}, status=200)
 
         except Exception as e:

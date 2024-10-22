@@ -16,13 +16,11 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
-    console.log('tournament No.1:');
     const detail_values = rest.match(/^\/detail\/([-\w]*)$/);
     let detail_value = 0;
     if (detail_values) {
       detail_value = detail_values[1];
     }
-    console.log('tournament No.2:' + detail_value);
 
     if (rest === '/organized') {
       const uri = getUrlWithLang('tournament/organized/');
@@ -41,7 +39,6 @@ export default class extends AbstractView {
       const data = fetchData(uri + params);
       return data;
     } else if (detail_value != 0) {
-      console.log('tournament No.3:' + detail_value);
       const uri = getUrlWithLang('tournament/details/' + detail_value);
       const data = fetchData(uri);
       return data;

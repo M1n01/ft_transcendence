@@ -13,13 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 def create_first_match(seed_array, tournament, participants, player_id, round_id, id):
-    print(f"No.0:{seed_array=}")
-    # round_id = seed_array[id]
     if round_id == 0:
         return
-    print(f"No.1:{round_id=}")
     if id in seed_array:
-        print(f"No.2:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
             round=round_id * 10 + 1,
@@ -40,7 +36,6 @@ def create_first_match(seed_array, tournament, participants, player_id, round_id
         # return
 
     else:
-        print(f"No.3:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
             round=round_id * 10 + 1,
@@ -52,9 +47,7 @@ def create_first_match(seed_array, tournament, participants, player_id, round_id
         player_id = player_id + 2
 
     # round_id = seed_array[id + 1]
-    print(f"No.4:{round_id=}")
     if id + 1 in seed_array:
-        print(f"No.5:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
             round=round_id * 10 + 2,
@@ -74,7 +67,6 @@ def create_first_match(seed_array, tournament, participants, player_id, round_id
         player_id = player_id + 1
 
     else:
-        print(f"No.6:{round_id=}")
         MatchTmp.objects.create(
             tournament_id=tournament,
             round=round_id * 10 + 2,
@@ -84,7 +76,6 @@ def create_first_match(seed_array, tournament, participants, player_id, round_id
             player2_alias=participants[player_id + 1].alias_name,
         )
         player_id = player_id + 2
-    print(f"No.7:{round_id=}")
     return player_id
 
 
@@ -109,9 +100,6 @@ def create_matches(tournament):
         i = random.randint(0, first_match_size - 1)
         if i not in seed_array:
             seed_array.append(i)
-    print(f"{first_match_size=}")
-    print(f"{seed_match_size=}")
-    print(f"{seed_array=}")
 
     MatchTmp.objects.create(tournament_id=tournament, round=0)
     if players_size == 4:
@@ -159,7 +147,6 @@ def create_matches(tournament):
 
 @shared_task
 def my_task(arg1, arg2):
-    print("my_task No.1")
     path = "/workspace/uesr2.txt"
     f = open(path, "w")
     now = datetime.now()
@@ -170,10 +157,6 @@ def my_task(arg1, arg2):
     f.close()
     # Task logic here
     result = arg1 + arg2
-    print("my_task No.2")
-    print(f"{result=}")
-    print("my_task No.3")
-    print(f"{now=}")
     return result
 
 
@@ -187,13 +170,6 @@ def close_application():
     """
     logger.info("close tournament")
 
-    path = "/workspace/uesr4.txt"
-    f = open(path, "w")
-    now = datetime.now()
-    f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-    f.write(f"now:{now=}")  # 何も書き込まなくてファイルは作成されました
-    f.close()
-
     try:
         start = datetime.now(timezone.utc)
         end = start + timedelta(minutes=10)
@@ -203,31 +179,11 @@ def close_application():
             status=TournamentStatusChoices.RECRUITING,
         )
 
-        path = "/workspace/uesr5.txt"
-        f = open(path, "w")
-        now = datetime.now()
-        f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-        f.write(f"now:{now=}")  # 何も書き込まなくてファイルは作成されました
-        f.write(f"now:{len(list)=}")  # 何も書き込まなくてファイルは作成されました
-        f.close()
-
         for tournament in list:
-            path = "/workspace/uesr6.txt"
-            f = open(path, "w")
-            now = datetime.now()
-            f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-            f.close()
 
             participant = TournamentParticipant.objects.filter(
                 tournament_id=tournament.id
             )
-            path = "/workspace/uesr7.txt"
-            f = open(path, "w")
-            now = datetime.now()
-            f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-            f.write(f"now:{now=}")  # 何も書き込まなくてファイルは作成されました
-            f.write(f"now:{len(list)=}")  # 何も書き込まなくてファイルは作成されました
-            f.close()
 
             if len(participant) < tournament.current_players:
                 tournament.status = TournamentStatusChoices.CANCEL
@@ -235,20 +191,7 @@ def close_application():
                 create_matches(tournament)
                 tournament.status = TournamentStatusChoices.ONGOING
 
-            path = "/workspace/uesr10.txt"
-            f = open(path, "w")
-            now = datetime.now()
-            f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-            f.write(f"now:{now=}")  # 何も書き込まなくてファイルは作成されました
-            f.close()
-
             tournament.save()
 
-        path = "/workspace/uesr11.txt"
-        f = open(path, "w")
-        now = datetime.now()
-        f.write("abcdefg")  # 何も書き込まなくてファイルは作成されました
-        f.write(f"now:{now=}")  # 何も書き込まなくてファイルは作成されました
-        f.close()
     except Exception as e:
         logger.error(f"Error close_application():{e}")

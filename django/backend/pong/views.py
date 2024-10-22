@@ -163,24 +163,16 @@ class StartPong(TemplateView):
                     organizer=request.user,
                     status=TournamentStatusChoices.ONGOING,
                 ).order_by("start_at")
-                print(f"tournament No.1:{len(tournaments)=}")
                 if len(tournaments) == 0:
                     return JsonResponse(data)
-                print(f"tournament No.2:{(tournaments[0].id)=}")
                 list_matches = (
                     MatchTmp.objects.filter(tournament_id=tournaments[0], is_end=False)
                     .exclude(Q(player1=None) | Q(player2=None))
                     .order_by("-round")
                 )
-                print(f"tournament No.3:{len(list_matches)=}")
 
                 if len(list_matches) == 0:
                     return JsonResponse(data)
-                    # return JsonResponse(data)
-
-                # for match in list_matches:
-                # print(f"{match=},{match.player1=},")
-                # print(f"{match=},{match.player2=},")
                 id = list_matches[0].id
                 tournament_id = tournaments[0].id
             else:
