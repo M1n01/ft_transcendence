@@ -21,11 +21,6 @@ document.addEventListener('RebuildTournamentEvent', async () => {
   chart.init();
 
   const matches = json['matches'];
-  /*
-  for (let i = 0; i < matches.length; i++) {
-    console.log(matches[i]);
-  }
-    */
 
   if (chart.setGames(matches) == false) {
     return false;

@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.auth.decorators import login_not_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from notification.models import UserNotification
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(login_not_required, name="dispatch")
@@ -18,21 +22,30 @@ def index(request):
     return render(request, "spa/index.html")
 
 
-class Top(TemplateView):
-    template_name = "pong/games.html"
+class Top(RedirectView):
+    url = "/pong/games"
+    # template_name = "pong/games.html"
 
 
 @method_decorator(login_not_required, name="dispatch")
 class Nav(TemplateView):
     def get(self, request):
-        user = request.user
-        list = UserNotification.objects.filter(Q(user=request.user) & Q(is_read=False))
-        cnt = len(list) if len(list) > 0 else False
-        context = {"hidden": "d-none d-md-none", "cnt_message": cnt}
-        if user.is_authenticated:
-            context = {"hidden": "", "cnt_message": cnt}
 
-        return render(request, "spa/nav.html", context=context)
+        try:
+            user = request.user
+            list = UserNotification.objects.filter(
+                Q(user=request.user) & Q(is_read=False)
+            )
+            cnt = len(list) if len(list) > 0 else False
+            context = {"hidden": "d-none d-md-none", "cnt_message": cnt}
+            if user.is_authenticated:
+                context = {"hidden": "", "cnt_message": cnt}
+
+            return render(request, "spa/nav.html", context=context)
+        except Exception as e:
+            logger.warning(f"Nav Warning:{e}")
+            context = {"hidden": "", "cnt_message": 0}
+            return render(request, "spa/nav.html", context=context)
 
 
 @method_decorator(login_not_required, name="dispatch")

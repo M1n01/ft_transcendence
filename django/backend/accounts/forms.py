@@ -206,6 +206,9 @@ class SignUpForm(UserCreationForm):
         if FtTmpUser.objects.filter(email=email).exists():
             print(f"email Error:{email=}")
             raise forms.ValidationError(_("このメールアドレスは既に使用されています。......"))
+        if FtUser.objects.filter(email=email).exists():
+            print(f"email Error:{email=}")
+            raise forms.ValidationError(_("このメールアドレスは既に使用されています。......"))
         return email
 
     def clean_phone(self):
@@ -217,6 +220,14 @@ class SignUpForm(UserCreationForm):
 
         if len(phone) > PHONE_MAX_LEN:
             raise forms.ValidationError(_("正しい電話番号を入力してください"))
+
+        if FtTmpUser.objects.filter(phone=phone).exists():
+            print(f"email Error:{phone=}")
+            raise forms.ValidationError(_("この電話番号は既に使用されています。......"))
+        if FtUser.objects.filter(phone=phone).exists():
+            print(f"email Error:{phone=}")
+            raise forms.ValidationError(_("この電話番号は既に使用されています。......"))
+
         return phone
 
     def clean_last_name(self):

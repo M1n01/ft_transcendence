@@ -170,7 +170,7 @@ class RegisterApi(CreateView):
                     return JsonResponse(data, status=500)
 
         except Exception as e:
-            print(f"{e=}")
+            print(f"Register Tournament Error:{e=}")
             data = {"is_full": False}
             return JsonResponse(data, status=500)
         return HttpResponse()
@@ -344,8 +344,8 @@ class InfoApi(DetailView):
         match_data = [
             {
                 "id": match.round,
-                "player1": match.player1.username if match.player1 is not None else "",
-                "player2": match.player2.username if match.player2 is not None else "",
+                "player1": match.player1_alias if match.player1 is not None else "",
+                "player2": match.player2_alias if match.player2 is not None else "",
                 "player1_score": match.player1_score,
                 "player2_score": match.player2_score,
             }

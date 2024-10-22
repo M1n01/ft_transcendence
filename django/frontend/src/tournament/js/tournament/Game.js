@@ -18,6 +18,7 @@ export default class Game {
     this.user2 = null;
     this.position = position;
     this.winner = null;
+    //this.is_end = false;
 
     this.div = document.createElement('div');
   }
@@ -34,7 +35,7 @@ export default class Game {
     this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
 
-    if (this.winner != '') {
+    if (this.winner && this.winner != '') {
       const circle = document.createElement('div');
       circle.style.top = `${this.point.y - 7}px`;
       circle.style.left = `${this.point.x - 9}px`;
@@ -83,10 +84,12 @@ export default class Game {
     this.div.style.height = '0px';
 
     // 次の試合で勝った時だけ赤くする
-    if (this.winner != '') {
+    if (this.winner && this.winner != '') {
       if (next_game.winner == this.winner) {
         this.div.classList.add('winner');
         this.div.classList.add('validTop');
+
+        //this.position.classList.add('winner');
       } else {
         this.div.classList.add('tournamentLine');
       }
@@ -209,7 +212,9 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
-      if (this.winner != '') {
+      if (this.winner && this.winner != '') {
+        //this.div.classList.add('validTop');
+
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 9}px`;
@@ -236,7 +241,7 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
-      if (this.winner != '') {
+      if (this.winner && this.winner != '') {
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 5}px`;
@@ -313,9 +318,14 @@ export default class Game {
 
     this.appendUserText(this.user1, parent, text_point, width, height);
   }
-  drawNotSeedUser(parent) {
+  drawNotSeedUser(parent, h_flag) {
+    let h_offset = 0;
+    if (h_flag) {
+      h_offset = 40;
+    }
+
     let tmp_offset;
-    const height = Math.abs(this.offset.y) * 1.5;
+    const height = Math.abs(this.offset.y) * 1.5 - h_offset;
     const width = Math.abs(this.offset.x) * 2;
     const point1 = this.point.copyOffset(new Point(0, -this.offset.y));
     const point2 = this.point.copyOffset(new Point(0, this.offset.y));
@@ -333,11 +343,11 @@ export default class Game {
     this.appendUserText(this.user2, parent, user2_point, width, height);
   }
 
-  drawUser(parent) {
+  drawUser(parent, h_flag) {
     if (this.seed_flag) {
       this.drawSeedUser(parent);
     } else {
-      this.drawNotSeedUser(parent);
+      this.drawNotSeedUser(parent, h_flag);
     }
   }
 

@@ -5,10 +5,13 @@ from .score_keeper.eth import (
     get_matches_from_blockchain,
     delete_match_from_blockchain,
 )
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from tournament.models import Tournament
 
 import uuid
 
+PLAYERNAME_MAX_LEN = getattr(settings, "USERNAME_MAX_LEN", None)
 
 """
 シード(正確には不戦勝)の場合はplayer2がnull
@@ -70,7 +73,7 @@ class Match:
 
 class MatchTmp(models.Model):
     """
-    Matchと内容はほぼ同じ
+    Matchと内容はほぼ同じ(必要に応じていろいろ追加)
     BlockChainではなく、DBに保持する一時データ
     """
 
@@ -87,9 +90,32 @@ class MatchTmp(models.Model):
     )
     player1_score = models.SmallIntegerField(default=0)
     player2_score = models.SmallIntegerField(default=0)
+    player1_alias = models.CharField(
+        verbose_name=_("プレイヤー1 エイリアス名"),
+        max_length=PLAYERNAME_MAX_LEN,
+        default="",
+    )
+    player2_alias = models.CharField(
+        verbose_name=_("プレイヤー2 エイリアス名"),
+        max_length=PLAYERNAME_MAX_LEN,
+        default="",
+    )
+    is_end = models.BooleanField(default=False)
+    # トーナメントの同一階層のゲームが終わったらTrueとなる
+    is_other_game_end = models.BooleanField(default=False)
 
     def __str__(self):
-        return (
-            f"id={self.id}:{self.round=} {self.player1} vs {self.player2} "
-            + f"(player1_score={self.player1_score}, player2_score={self.player2_score})"
-        )
+        if self.player2 is not None:
+            return (
+                f"id={self.id}:{self.round=} {self.player1} vs {self.player2} "
+                + f"(player1_score={self.player1_score}, player2_score={self.player2_score})"
+            )
+        else:
+            return f"id={self.id}:{self.round=} {self.player1} is seed "
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["tournament_id", "round"], name="match_unique"
+            ),
+        ]
