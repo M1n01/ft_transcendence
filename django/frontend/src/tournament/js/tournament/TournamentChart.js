@@ -18,21 +18,11 @@ export default class TournamentChart {
     if (cur_game == null) {
       return;
     }
-    console.log('recursiveSetGame No.1');
     // 再帰終了条件
     if (cur_game.edge_flag == true) {
-      console.log('recursiveSetGame No.2 cur_game.id=' + cur_game.id);
       const cur_game_data = games.find((game) => game.id == cur_game.id);
-      //console.log('recursiveSetGame No.3 cur_game_data=' + cur_game_data);
-      console.log('recursiveSetGame No.3 cur_game_data=' + cur_game_data.player1);
-      console.log('recursiveSetGame No.4 cur_game_data=' + cur_game_data.player2);
-
-      //cur_game.is_end = true;
-      //let tmp_user1;
-      //let tmp_user2;
 
       if (cur_game_data.player2 === '') {
-        console.log('edge No.1');
         cur_game.seed_flag = true;
         cur_game.is_end = true;
         cur_game.winner = cur_game_data.player1;
@@ -69,23 +59,22 @@ export default class TournamentChart {
       return;
     }
 
-    console.log('No.1 cur_game.id=' + cur_game.id);
     const cur_game_data = games.find((game) => game.id == cur_game.id);
     if (cur_game_data) {
-      console.log('No.2 cur_game_data.id=' + cur_game_data.id);
-      console.log('No.2 cur_game_data.user1=' + cur_game_data.id);
-      console.log('No.2 cur_game_data.player1_score=' + cur_game_data.player1_score);
-      console.log('No.3 cur_game_data.player2_score=' + cur_game_data.player2_score);
       if (
         cur_game_data.player1_score > cur_game_data.player2_score &&
         cur_game_data.player1_score >= 5
       ) {
         cur_game.winner = cur_game_data.player1;
+        cur_game.user1 = cur_game_data.player1;
+        cur_game.user2 = cur_game_data.player2;
       } else if (
         cur_game_data.player1_score < cur_game_data.player2_score &&
         cur_game_data.player2_score >= 5
       ) {
         cur_game.winner = cur_game_data.player2;
+        cur_game.user1 = cur_game_data.player1;
+        cur_game.user2 = cur_game_data.player2;
       } else {
         cur_game.winner = '';
       }
@@ -144,17 +133,12 @@ export default class TournamentChart {
       next_game2 = this.rightBranches.find((game) => game.id == next_game_data2.id);
     }
 
-    console.log('recursiveSetGame No.1');
     this.recursiveSetGame(games, next_game1);
-    console.log('recursiveSetGame No.2');
     this.recursiveSetGame(games, next_game2);
-    console.log('recursiveSetGame No.3');
   }
 
   setGames(games) {
-    console.log('setGames No.0');
     this.recursiveSetGame(games, this.final);
-    console.log('setGames No.1');
   }
 
   /*
@@ -357,10 +341,6 @@ export default class TournamentChart {
       console.log('left game.id:' + game.id);
       console.log('left len:' + this.leftBranches.length);
       const next_game = this.leftBranches.find((game) => game.id == next_id);
-      if (next_game) {
-        console.log('left next_game.id:' + next_game.id);
-        console.log('left next_game.winer' + next_game.winer);
-      }
       game.draw(this.parent, next_game);
     });
     this.rightBranches.forEach((game) => {
@@ -368,19 +348,8 @@ export default class TournamentChart {
       console.log('right next_id:' + next_id);
       console.log('right game.id:' + game.id);
       console.log('right len:' + this.rightBranches.length);
-      /*
-      this.rightBranches.forEach((branch) => {
-        console.log('right id:' + branch.id);
-        console.log('right user1:' + branch.user1);
-        console.log('right user2:' + branch.user2);
-      });
-      */
 
       const next_game = this.rightBranches.find((game) => game.id == next_id);
-      if (next_game) {
-        console.log('right next_game.id:' + next_game.id);
-        console.log('right next_game.winer:' + next_game.winer);
-      }
       game.draw(this.parent, next_game);
     });
   };

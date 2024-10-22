@@ -24,7 +24,6 @@ export default class Game {
   }
 
   draw_final(parent) {
-    console.log('draw final No.1');
     const width = Math.abs(this.offset.x);
     let x = this.point.x - width;
     let y = this.prePoint.y - 3;
@@ -36,6 +35,8 @@ export default class Game {
     this.div.classList.add('tournamentLine');
     parent.appendChild(this.div);
 
+    console.log('draw final No.1 x:' + x + ', y:' + y);
+    console.log('draw final No.1 width:' + width);
     if (this.winner && this.winner != '') {
       console.log('draw final winner');
       const circle = document.createElement('div');
@@ -85,7 +86,8 @@ export default class Game {
     this.div.style.left = `${x}px`;
     this.div.style.width = `${width}px`;
     this.div.style.height = '0px';
-    console.log('draw_seed No.1 x:' + x);
+    console.log('draw_seed No.1 x:' + x + ', y:' + y);
+    console.log('draw_seed No.1 width:' + width);
 
     // 次の試合で勝った時だけ赤くする
     if (this.winner && this.winner != '') {
@@ -155,6 +157,8 @@ export default class Game {
     parent.appendChild(winnerLeft);
   }
   draw_left_winner(parent, x, y, width, height, next_game) {
+    console.log('draw_left_winner No.1 x:' + x);
+    console.log('draw_left_winner No.1 width:' + width);
     const winnerTop = document.createElement('div');
     const winnerBottom = document.createElement('div');
     const winnerRight = document.createElement('div');
@@ -165,6 +169,8 @@ export default class Game {
     winnerTop.style.height = `${height}px`;
     winnerTop.classList.add('winner');
     winnerTop.classList.add('validTop');
+    console.log('draw_left_winner No.1 top x:' + x + ', y:' + y);
+    console.log('draw_left_winner No.1 top width:' + width + ', height:' + height);
 
     winnerBottom.style.top = `${y + this.offset.y * 2}px`;
     winnerBottom.style.left = `${x}px`;
@@ -173,6 +179,9 @@ export default class Game {
     winnerBottom.classList.add('winner');
     winnerBottom.classList.add('validTop');
 
+    console.log('draw_left_winner No.2 top x:' + x + ', y:' + y + this.offset.y * 2);
+    console.log('draw_left_winner No.2 top width:' + width + ', height:' + height);
+
     winnerRight.style.top = `${y}px`;
     winnerRight.style.left = `${x}px`;
     winnerRight.style.width = `${width}px`;
@@ -180,7 +189,14 @@ export default class Game {
     winnerRight.classList.add('winner');
     winnerRight.classList.add('validRight');
 
+    console.log('draw_left_winner No.3 top x:' + x + ', y:' + y + this.offset.y * 2);
+    console.log('draw_left_winner No.3 top width:' + width + ', height:' + height);
+
+    console.log('winner is winner' + this.winner);
+    console.log('winner is user1' + this.user1);
+    console.log('winner is user2' + this.user2);
     if (this.winner == this.user1) {
+      console.log('winner is user1');
       winnerTop.style.width = `${width}px`;
       winnerRight.style.top = `${y}px`;
       winnerBottom.style.width = `${width / 2}px`;
@@ -190,6 +206,7 @@ export default class Game {
         parent.appendChild(winnerBottom);
       }
     } else if (this.winner == this.user2) {
+      console.log('winner is user2');
       winnerTop.style.width = `${width / 2}px`;
       winnerRight.style.top = `${y + height}px`;
       winnerBottom.style.width = `${width}px`;
@@ -222,14 +239,17 @@ export default class Game {
       bottom.style.left = `${x}px`;
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
-      console.log('draw_normal No.2 left x=' + x);
+      console.log('draw_normal No.2 left x=' + x + ', y=' + y);
 
       if (this.winner && this.winner != '') {
-        console.log('normal winner No.1');
+        //this.div.classList.add('validTop');
+
         const circle = document.createElement('div');
         circle.style.top = `${this.point.y - 7}px`;
         circle.style.left = `${this.point.x - 9}px`;
         circle.classList.add('gameCircle');
+        console.log('normal winner No.2 top:' + this.point.y);
+        console.log('normal winner No.2 left:' + this.point.x);
         parent.appendChild(circle);
 
         this.draw_left_winner(parent, x, y, width, height, next_game);
@@ -253,7 +273,7 @@ export default class Game {
       bottom.style.width = `${width}px`;
       bottom.classList.add('tournamentBottomBranch');
 
-      console.log('draw_normal No.2 right x:' + x);
+      console.log('draw_normal No.2 right x=' + x + ', y=' + y);
       if (this.winner && this.winner != '') {
         console.log('normal winner No.1');
         console.log('normal winner');
