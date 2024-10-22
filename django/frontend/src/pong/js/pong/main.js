@@ -20,12 +20,24 @@ const keys = {
 
 document.addEventListener('PongMainEvent', function async() {
   let isGameRunning = false;
-  console.log('start pong');
+  let isStopKey = false;
+  let isEnd = true;
 
   const canvas_block = document.getElementById('pong-canvas-block');
   if (canvas_block == null) {
     return;
   }
+
+  const canvas = document.getElementById('myCanvas');
+  const start_button = document.getElementById('start-pong-game-button');
+  start_button.addEventListener('click', () => {
+    start_button.disabled = true;
+    //start_button.removeAttribute('hidden');
+    start_button.classList.add('invisible');
+    isEnd = false;
+    tick();
+    startPong();
+  });
 
   //isGameRunning = true;
   //const canvas_style = document.window.getComputedStyle(canvas_block);
@@ -56,7 +68,8 @@ document.addEventListener('PongMainEvent', function async() {
 
   // レンダラーを作成
   const renderer = new THREE.WebGLRenderer({
-    canvas: document.querySelector('#myCanvas'),
+    canvas: canvas,
+    //canvas: document.querySelector('#myCanvas'),
   });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
@@ -105,10 +118,10 @@ document.addEventListener('PongMainEvent', function async() {
       //this.Geotext = new THREE.Mesh(TextGeometry, this.material);
     }
     Hidden() {
-      this.Geotext.position.set(-1000, -1000, -1000); // Meshの位置を設定
+      this.Geotext.visible = false;
     }
     Appear() {
-      this.Geotext.position.set(0, 0, 0); // Meshの位置を設定
+      this.Geotext.visible = true;
     }
 
     CreatObject() {
@@ -134,10 +147,15 @@ document.addEventListener('PongMainEvent', function async() {
   count3.CreatObject();
   count2.CreatObject();
   count1.CreatObject();
+  count3.Hidden();
+  count2.Hidden();
+  count1.Hidden();
 
   const startPong = async () => {
     isGameRunning = false;
-    ball.position.set(-1000, -1000, -1000);
+    ball.visible = false;
+    ball.position.set(0, 0, 0);
+
     let vx = getRandomArbitrary(3, 3.5);
     let vy = getRandomArbitrary(3, 3.5);
     const a = getRandomArbitrary(-1, 1);
@@ -169,6 +187,7 @@ document.addEventListener('PongMainEvent', function async() {
       count1.Hidden();
       ball.position.set(0, 0, 0);
       isGameRunning = true;
+      ball.visible = true;
     }, 3000);
   };
 
@@ -204,29 +223,42 @@ document.addEventListener('PongMainEvent', function async() {
   scene.add(paddle_left);
   scene.add(paddle_right);
 
+  ball.visible = false;
   paddle_left.position.x = -PADDDLE_X;
   paddle_right.position.x = PADDDLE_X;
   paddle_left.position.y = 0;
   paddle_right.position.y = 0;
 
-  const ball_position = async (ball) => {
+  //const ball_position = async (ball) => {
+  let cnt = 0;
+  let sum = 0;
+  async function ball_position(ball) {
     ball.rotation.y += 0.1;
     ball.rotation.x += 0.1;
     ball.position.add(ball_velocity);
+    cnt = cnt + 1;
+    sum = sum + ball_velocity.x;
 
     if (
       (area.minX - 100 <= ball.position.x && ball.position.x <= area.minX) ||
       (ball.position.x >= area.maxX && ball.position.x <= area.maxX + 100)
     ) {
+      //isEnd = true;
       isGameRunning = false;
-      await addScore(ball, area);
-      await startPong();
+      isEnd = await addScore(ball, area);
+      if (isEnd) {
+        count3.Hidden();
+        count2.Hidden();
+        count1.Hidden();
+      } else {
+        await startPong();
+      }
     }
     if (ball.position.y <= area.minY || ball.position.y >= area.maxY) {
       ball_velocity.y = -ball_velocity.y; // y方向の速度を反転
     }
     return ball;
-  };
+  }
 
   // キーボードイベントの設定
   document.addEventListener('keydown', (event) => {
@@ -238,6 +270,9 @@ document.addEventListener('PongMainEvent', function async() {
   document.addEventListener('keyup', (event) => {
     if (event.key in keys) {
       keys[event.key] = false;
+    }
+    if (event.key == 'p') {
+      isStopKey = !isStopKey;
     }
   });
 
@@ -257,10 +292,14 @@ document.addEventListener('PongMainEvent', function async() {
     return Math.random() * (max - min) + min;
   }
 
-  startPong();
+  //startPong();
   tick();
   function tick() {
-    if (isGameRunning) {
+    const check = document.getElementById('pong-canvas-block');
+    if (check == null) {
+      isEnd = true;
+    }
+    if (isGameRunning && !isStopKey) {
       count3.Hidden();
       count2.Hidden();
       count1.Hidden();
@@ -292,6 +331,12 @@ document.addEventListener('PongMainEvent', function async() {
       }
     }
     renderer.render(scene, camera);
-    requestAnimationFrame(tick);
+    if (!isEnd) {
+      requestAnimationFrame(tick);
+    } else {
+      count3.Hidden();
+      count2.Hidden();
+      count1.Hidden();
+    }
   }
 });

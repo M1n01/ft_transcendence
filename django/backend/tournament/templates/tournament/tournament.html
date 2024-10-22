@@ -46,9 +46,10 @@
             <form id="make-tournament" action="{% url 'tournament:tournament' %}">
               {% csrf_token %}
               <div id="make-tournament-error" class="text-danger h6" hidden>
-                トーナメントの作成に失敗しました。<br />
-                このダイアログを閉じてもう一度実行してください。<br\>
-                なお、同じ時間に重複して作成することはできません。
+                {% trans 'トーナメントの作成に失敗しました。'%}<br />
+                {% trans '過去の時間を設定することはできません。'%}<br />
+                {% trans '同じ時刻に重複して設定することもできません。'%}<br />
+                {% trans 'このダイアログを閉じてもう一度実行してください。'%}<br\>
               </div>
 
               <div class="mt-3">

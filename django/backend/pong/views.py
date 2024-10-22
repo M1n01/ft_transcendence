@@ -185,6 +185,15 @@ class StartPong(TemplateView):
             return HttpResponseBadRequest()
 
 
+def save_match(winer, loser):
+    winer.match_count = winer.match_count + 1
+    loser.match_count = loser.match_count + 1
+    winer.win_count = winer.win_count + 1
+    loser.loose_count = loser.loose_count + 1
+    winer.save()
+    loser.save()
+
+
 def prepare_next_match(cur_match):
     try:
 
@@ -222,11 +231,13 @@ def prepare_next_match(cur_match):
                 elif match.player1_score >= 5:
                     winer = match.player1
                     alias = match.player1_alias
+                    save_match(match.player1, match.player2)
+
                 else:
                     winer = match.player2
                     alias = match.player2_alias
+                    save_match(match.player2, match.player1)
 
-                # tournament = match.tournament_id
                 round = match.round
                 next_round = int(round / 10)
                 next_match = MatchTmp.objects.get(
