@@ -1,7 +1,6 @@
 [
   {
     "model": "accounts.fttmpuser",
-    "pk": 1,
     "fields": {
       "username": "admin",
       "password": "QawsEd9r2fV4cxz",
@@ -43,7 +42,6 @@
 
   {
     "model": "accounts.ftuser",
-    "pk": 100,
     "fields": {
       "username": "testA1",
       "password": "AAdfBC3DfwFi49",
@@ -62,7 +60,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 2,
     "fields": {
       "username": "testA2",
       "password": "AAdfBC3DfwFi49",
@@ -81,7 +78,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 3,
     "fields": {
       "username": "testA3",
       "password": "AAdfBC3DfwFi49",
@@ -100,7 +96,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 4,
     "fields": {
       "username": "testA4",
       "password": "AAdfBC3DfwFi49",
@@ -119,7 +114,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 5,
     "fields": {
       "username": "testA5",
       "password": "AAdfBC3DfwFi49",
@@ -138,7 +132,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 6,
     "fields": {
       "username": "testA6",
       "password": "AAdfBC3DfwFi49",
@@ -157,7 +150,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 7,
     "fields": {
       "username": "testA7",
       "password": "AAdfBC3DfwFi49",
@@ -176,7 +168,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 8,
     "fields": {
       "username": "testA8",
       "password": "AAdfBC3DfwFi49",
@@ -195,7 +186,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 9,
     "fields": {
       "username": "testA9",
       "password": "AAdfBC3DfwFi49",
@@ -214,7 +204,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 10,
     "fields": {
       "username": "testA10",
       "password": "AAdfBC3DfwFi49",
@@ -233,7 +222,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 11,
     "fields": {
       "username": "testA11",
       "password": "AAdfBC3DfwFi49",
@@ -252,7 +240,6 @@
   },
   {
     "model": "accounts.ftuser",
-    "pk": 12,
     "fields": {
       "username": "testA12",
       "password": "AAdfBC3DfwFi49",

@@ -35,6 +35,8 @@ node_modules
 
 # Public files
 django/public/*
+!django/public/media/avatar/default/user.png
+
 
 # Database
 django/backend/db.sqlite3

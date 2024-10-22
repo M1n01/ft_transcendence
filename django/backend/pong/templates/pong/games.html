@@ -1,3 +1,4 @@
+{% load static %} {% load i18n %}
 <!doctype html>
 <html lang="ja">
   <head>
@@ -6,6 +7,29 @@
     <title>Games</title>
   </head>
   <body>
-    Gamess
+    <h1>{% trans 'Game'%}</h1>
+
+    <div class="d-flex justify-content-start">
+      <form id="start-test-game" method="post" action="{% url 'pong:start'  %}" class="me-5">
+        {% csrf_token %}
+        <input name="type" type="hidden" value="test" />
+        <button type="submit" class="btn btn-primary">{% trans 'テストゲーム' %}</button>
+      </form>
+      <form id="start-tournament-game" method="post" action="{% url 'pong:start'  %}" class="">
+        {% csrf_token %}
+        <input name="type" type="hidden" value="tournament" />
+        <button type="submit" class="btn btn-primary">{% trans 'トーナメント' %}</button>
+      </form>
+    </div>
+    <div id="error-no-tournament" class="text-danger h4 mt-4" hidden>
+      {% trans '実行できるトーナメントがありません' %}
+    </div>
+    <div id="error-game" class="text-danger h4 mt-4" hidden>
+      {% trans 'ゲームの開始に失敗しました。' %} <br />
+      <!---->
+      {% trans 'ページを更新して再度実行してください' %}
+    </div>
+    <canvas class="scene" id="bubble"></canvas>
+    <canvas id="myCanvas"></canvas>
   </body>
 </html>
