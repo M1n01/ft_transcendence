@@ -2,6 +2,7 @@ from web3 import Web3
 from django.conf import settings
 import os
 import json
+import uuid
 from datetime import datetime, timezone, timedelta
 
 
@@ -40,12 +41,16 @@ def save_match_to_blockchain(
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
+        match_id_bytes = match_id.bytes
+        tournament_bytes = tournament.bytes
+        player1_bytes = player1.bytes
+        player2_bytes = player2.bytes
         transaction = contract.functions.createMatch(
-            match_id,
-            tournament,
-            player1,
+            match_id_bytes,
+            tournament_bytes,
+            player1_bytes,
             player1_score,
-            player2,
+            player2_bytes,
             player2_score,
             round,
         ).build_transaction(
@@ -89,10 +94,10 @@ def get_matches_from_blockchain(
         utc_created_at = datetime.fromtimestamp(match[1], tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
-            "match_id": match[0].hex(),
-            "tournament_id": match[2].hex(),
-            "player1": match[3].hex(),
-            "player2": match[4].hex(),
+            "match_id": uuid.UUID(bytes=match[0]),
+            "tournament_id": uuid.UUID(bytes=match[2]),
+            "player1": uuid.UUID(bytes=match[3]),
+            "player2": uuid.UUID(bytes=match[4]),
             "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
@@ -135,7 +140,8 @@ def delete_match_from_blockchain(match_id):
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
-        transaction = contract.functions.deleteMatch(match_id).build_transaction(
+        match_id_bytes = match_id.bytes
+        transaction = contract.functions.deleteMatch(match_id_bytes).build_transaction(
             {
                 "from": account.address,
                 "nonce": w3.eth.get_transaction_count(account.address),

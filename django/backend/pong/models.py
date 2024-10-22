@@ -30,11 +30,11 @@ class Match:
     ):
         # ブロックチェーンにマッチ情報を保存
         tx_hash, created_at = save_match_to_blockchain(
-            match_id.bytes,
-            tournament_id.bytes,
-            player1_id.bytes,
+            match_id,
+            tournament_id,
+            player1_id,
             player1_score,
-            player2_id.bytes,
+            player2_id,
             player2_score,
             round,
         )
