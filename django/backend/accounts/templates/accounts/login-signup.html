@@ -42,10 +42,10 @@
     {% include 'accounts/two-fa-modal.html' %}
     <div class="alert alert-dark fixed-bottom mb-0 text-center" id="cookie-banner">
       <p>
-        このサイトではCookieを使用しています。詳細は
-        <a href="/privacy-policy" class="nav__link" data-link>プライバシーポリシー</a
-        >をご覧ください。
-        <button class="btn btn-success" id="accept-cookies">はい</button>
+        {% trans "このサイトではCookieを使用しています。詳細は" %}
+        <a href="/privacy-policy" class="nav__link" data-link>{% trans "プライバシーポリシー" %}</a
+        >{% trans "をご覧ください。" %}
+        <button class="btn btn-success" id="accept-cookies">{% trans "はい" %}</button>
       </p>
     </div>
     <script>

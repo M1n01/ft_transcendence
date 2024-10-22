@@ -97,6 +97,9 @@
                 <a class="dropdown-item" href="/users/profile" data-link>
                   {% trans "プロフィール" %}
                 </a>
+                <a class="dropdown-item" href="/privacy-policy" data-link>
+                  {% trans "プライバシーポリシー" %}
+                </a>
                 <div>
                   <form id="nav-logout-form" method="post" action="{% url 'accounts:logout' %}">
                     {% csrf_token %}
@@ -156,6 +159,11 @@
                 <li>
                   <a class="nav-link bg-white pb-0" href="/users/profile" data-link>
                     {% trans "プロフィール" %}
+                  </a>
+                </li>
+                <li>
+                  <a class="nav-link bg-white pb-0" href="/privacy-policy" data-link>
+                    {% trans "プライバシーポリシー" %}
                   </a>
                 </li>
                 <li>
