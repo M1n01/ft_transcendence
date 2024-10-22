@@ -62,8 +62,8 @@
             <div class="col-6 text-start ps-3">
               <div class="d-flex flex-column">
                 <img src="" id="player2-win" height="40" width="40" hidden />
-                <span class="text-truncate">{{match.player2_alias}}</span>
                 <span>Score: <span id="player2_current_score">{{match.player2_score}}</span></span>
+                <span class="text-truncate">{{match.player2_alias}}</span>
               </div>
             </div>
           </div>
@@ -73,6 +73,7 @@
       <!---->
       <div id="back-button" class="d-flex justify-content-end" hidden>
         <button onclick="window.history.go(-1);" class="btn btn-primary">{% trans '戻る'%}</button>
+
         <!--
         <form id="start-next-game" method="post" action="{% url 'pong:start'  %}" class="">
           {% csrf_token %}

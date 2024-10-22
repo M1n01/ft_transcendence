@@ -15,6 +15,9 @@ urlpatterns = [
     path("", RedirectView.as_view(url="/games")),
     path("games", views.GamesView.as_view(), name="games"),
     path("start", views.StartPong.as_view(), name="start"),
+    path(
+        "tournament-detail", views.TournamentDetail.as_view(), name="tournament-detail"
+    ),
     path("add-score/<uuid:pk>", views.AddScore.as_view(), name="add-score"),
     path("matches/<uuid:pk>", views.MatchView.as_view(), name="match"),
 ]

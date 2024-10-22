@@ -261,18 +261,6 @@ class FtTmpUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
-        # if password == "":
-        #    return self._create_user(
-        #        email=email,
-        #        username=username,
-        #        # password=password,
-        #        **extra_fields,
-        #    )
-        # else:
-
-        print(f"create USER No.1:{password=}")
-        print("create USER No.1")
-
         return self._create_user(
             email=email,
             username=username,
