@@ -172,7 +172,9 @@ def delete_match_from_blockchain(match_id):
     try:
         match_id_int = match_id.int
         try:
-            transaction = contract.functions.deleteMatch(match_id_int).build_transaction(
+            transaction = contract.functions.deleteMatch(
+                match_id_int
+            ).build_transaction(
                 {
                     "from": account.address,
                     "nonce": w3.eth.get_transaction_count(account.address),
