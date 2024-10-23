@@ -60,7 +60,6 @@ def edit_matches_data(request, matches):
 def get_tournament(request):
 
     matches = Match.get_matches(user_id=request.user.id)
-
     if len(matches) == 0:
         return ([], [])
     list = []
