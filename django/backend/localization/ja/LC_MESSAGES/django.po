@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 12:14+0000\n"
+"POT-Creation-Date: 2024-10-23 11:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,137 +18,1297 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: accounts/models.py:58
-msgid "ユーザー名"
-msgstr "ユーザー名"
-
-#: accounts/models.py:60
+#: accounts/forms.py:37 accounts/models.py:124 accounts/models.py:292
 msgid "email"
 msgstr "メールアドレス"
 
-#: accounts/models.py:62
+#: accounts/forms.py:46 accounts/forms.py:169
+msgid "password"
+msgstr ""
+
+#: accounts/forms.py:68 accounts/forms.py:80 users/forms.py:20
+#: users/forms.py:30
+msgid "username"
+msgstr ""
+
+#: accounts/forms.py:91 users/forms.py:41
+msgid "first_name"
+msgstr ""
+
+#: accounts/forms.py:102 users/forms.py:52
+msgid "last_name"
+msgstr ""
+
+#: accounts/forms.py:112 users/forms.py:61
+msgid "birth_date"
+msgstr ""
+
+#: accounts/forms.py:124 users/forms.py:73
+msgid "country_code"
+msgstr ""
+
+#: accounts/forms.py:135 users/forms.py:84
+msgid "phone_number"
+msgstr ""
+
+#: accounts/forms.py:147
+msgid "auth"
+msgstr ""
+
+#: accounts/forms.py:158 users/forms.py:95
+msgid "language"
+msgstr ""
+
+#: accounts/forms.py:182
+msgid "password(確認用)"
+msgstr ""
+
+#: accounts/forms.py:218 accounts/forms.py:221 users/forms.py:126
+msgid "このメールアドレスは既に使用されています。......"
+msgstr ""
+
+#: accounts/forms.py:229 users/forms.py:135
+msgid "数値以外は記入しないでください"
+msgstr ""
+
+#: accounts/forms.py:232 users/forms.py:138
+#, fuzzy
+#| msgid "最初からやり直してください"
+msgid "正しい電話番号を入力してください"
+msgstr "最初からやり直してください"
+
+#: accounts/forms.py:236 accounts/forms.py:239
+msgid "この電話番号は既に使用されています。......"
+msgstr ""
+
+#: accounts/forms.py:247 accounts/forms.py:254 users/forms.py:145
+msgid "64文字以内にしてください"
+msgstr ""
+
+#: accounts/forms.py:261 accounts/forms.py:271
+msgid "20文字以内にしてください"
+msgstr ""
+
+#: accounts/forms.py:264 accounts/forms.py:274
+#, fuzzy
+#| msgid "最初からやり直してください"
+msgid "8文字以上にしてください"
+msgstr "最初からやり直してください"
+
+#: accounts/models.py:32
+msgid "EMail Auth"
+msgstr ""
+
+#: accounts/models.py:33
+msgid "SMS Auth"
+msgstr ""
+
+#: accounts/models.py:34
+msgid "App Auth"
+msgstr ""
+
+#: accounts/models.py:44
+msgid "日本語"
+msgstr ""
+
+#: accounts/models.py:45
+msgid "英語"
+msgstr ""
+
+#: accounts/models.py:46
+msgid "フランス語"
+msgstr ""
+
+#: accounts/models.py:121 accounts/models.py:289
+#: accounts/templates/accounts/signup.html:9 friend/forms.py:21
+#: friend/templates/friend/request-modal.html:30
+#: friend/templates/friend/search.html:57
+#: users/templates/users/edit-profile.html:35
+#: users/templates/users/profile.html:25
+msgid "ユーザー名"
+msgstr "ユーザー名"
+
+#: accounts/models.py:127 accounts/models.py:295
 #, fuzzy
 #| msgid "email"
 msgid "email42"
 msgstr "メールアドレス"
 
-#: accounts/models.py:69
+#: accounts/models.py:134 accounts/models.py:302
 msgid "姓"
 msgstr "姓"
 
-#: accounts/models.py:75
+#: accounts/models.py:140 accounts/models.py:308
+#: accounts/templates/accounts/signup.html:42
+#: users/templates/users/edit-profile.html:86
+#: users/templates/users/profile.html:83
 msgid "名"
 msgstr "名"
 
-#: accounts/models.py:80
+#: accounts/models.py:148 accounts/models.py:316
+msgid "国番号"
+msgstr ""
+
+#: accounts/models.py:155 accounts/models.py:323
+#: accounts/templates/accounts/signup.html:61
+#: users/templates/users/edit-profile.html:125
+#: users/templates/users/profile.html:116
+msgid "電話番号"
+msgstr ""
+
+#: accounts/models.py:164 accounts/models.py:331
+msgid "言語設定"
+msgstr ""
+
+#: accounts/models.py:180 friend/templates/friend/search.html:56
+msgid "アバター"
+msgstr ""
+
+#: accounts/models.py:185 accounts/models.py:337
 msgid "is_superuer"
 msgstr ""
 
-#: accounts/models.py:82
+#: accounts/models.py:187 accounts/models.py:338
+msgid "is_ft"
+msgstr ""
+
+#: accounts/models.py:189 accounts/models.py:340
 msgid "staff status"
 msgstr ""
 
-#: accounts/models.py:86
+#: accounts/models.py:194 accounts/models.py:345
 msgid "is_active"
 msgstr ""
 
-#: accounts/models.py:90
+#: accounts/models.py:199 accounts/models.py:349
+msgid "is_login"
+msgstr ""
+
+#: accounts/models.py:203 accounts/models.py:353
 msgid "誕生日"
 msgstr "誕生日"
 
-#: accounts/models.py:92
+#: accounts/models.py:205 accounts/models.py:355
+#: accounts/templates/accounts/two-fa-modal.html:17
+msgid "2要素認証"
+msgstr ""
+
+#: accounts/models.py:211 accounts/models.py:361
+msgid "App鍵"
+msgstr ""
+
+#: accounts/models.py:217 accounts/models.py:367
 msgid "ft_created_at"
 msgstr ""
 
-#: accounts/models.py:96
+#: accounts/models.py:223 accounts/models.py:373
 msgid "ft_updateded_at"
 msgstr ""
 
-#: accounts/templates/accounts/ft-login.html:13
-#: accounts/templates/accounts/login.html:13
-msgid "Log_out"
-msgstr "ログアウト"
-
-#: accounts/templates/accounts/ft-login.html:20
-#: accounts/templates/accounts/login.html:20
-msgid "Log_in"
-msgstr "ログイン"
-
-#: accounts/templates/accounts/login.html:24
-#: accounts/templates/accounts/login.html:26
-msgid "42認証"
-msgstr "42認証"
-
-#: accounts/templates/accounts/login.html:27
-msgid "ログアウト"
-msgstr "ログアウト"
-
-#: accounts/templates/accounts/login.html:31
+#: accounts/templates/accounts/login-oauth-modal.html:37
 msgid "QRコードから42でログインすることを許可してください"
 msgstr "QRコードから42でログインすることを許可してください"
 
-#: accounts/templates/accounts/login.html:33
+#: accounts/templates/accounts/login-oauth-modal.html:39
 msgid "続けて認証ボタンを押すことでログインされます"
 msgstr "続けて認証ボタンを押すことでログインされます"
 
-#: accounts/templates/accounts/login.html:36
+#: accounts/templates/accounts/login-oauth-modal.html:42
 msgid "認証中です。"
 msgstr "認証中です。"
 
-#: accounts/templates/accounts/login.html:38
+#: accounts/templates/accounts/login-oauth-modal.html:44
 msgid "しばらくお待ちください"
 msgstr "しばらくお待ちください"
 
-#: accounts/templates/accounts/login.html:42
+#: accounts/templates/accounts/login-oauth-modal.html:48
+#: accounts/templates/accounts/login.html:51
 msgid "認証に失敗しました。"
 msgstr "認証に失敗しました。"
 
-#: accounts/templates/accounts/login.html:44
+#: accounts/templates/accounts/login-oauth-modal.html:50
 msgid "最初からやり直してください"
 msgstr "最初からやり直してください"
 
-#: accounts/templates/accounts/login.html:49
+#: accounts/templates/accounts/login-oauth-modal.html:62
+#: accounts/templates/accounts/two-fa-modal.html:75
 msgid "認証"
 msgstr "認証"
 
-#: accounts/templates/accounts/redirect-oauth.html:10
+#: accounts/templates/accounts/login-signup.html:7
+msgid "Cookie Banner"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:14
+msgid "Log_out"
+msgstr "ログアウト"
+
+#: accounts/templates/accounts/login.html:28
+#: accounts/templates/accounts/signup.html:20
+#: users/templates/users/edit-profile.html:55
+#: users/templates/users/profile.html:38
+msgid "Email address"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:32
+msgid "Password"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:43
+msgid "Log_in"
+msgstr "ログイン"
+
+#: accounts/templates/accounts/login.html:48
+#: accounts/templates/accounts/signup.html:112
+msgid "元に戻す"
+msgstr ""
+
+#: accounts/templates/accounts/login.html:53
+#, fuzzy
+#| msgid "最初からやり直してください"
+msgid "入力内容を見直してください"
+msgstr "最初からやり直してください"
+
+#: accounts/templates/accounts/redirect-oauth.html:11
 msgid "認証完了しました"
 msgstr "認証完了しました"
 
-#: accounts/templates/accounts/redirect-oauth.html:10
-msgid "元のページに戻ってください"
+#: accounts/templates/accounts/redirect-oauth.html:11
+#, fuzzy
+#| msgid "元のページに戻ってください"
+msgid "このページは閉じ、元のページに戻ってください"
 msgstr "元のページに戻ってください"
 
-#: accounts/templates/accounts/success-login.html:10
-msgid "ログインしました"
-msgstr "ログインしました"
+#: accounts/templates/accounts/signup.html:31
+#: users/templates/users/edit-profile.html:73
+#: users/templates/users/profile.html:72
+msgid "氏"
+msgstr ""
 
-#: accounts/templates/accounts/success-logout.html:10
-msgid "ログアウトしました"
-msgstr "ログアウトしました"
+#: accounts/templates/accounts/signup.html:53
+#: users/templates/users/edit-profile.html:99
+#: users/templates/users/profile.html:94
+msgid "生年月日"
+msgstr ""
 
-#: accounts/templates/accounts/success-signup.html:10
-msgid "サインアップしました。"
+#: accounts/templates/accounts/signup.html:57
+#: users/templates/users/edit-profile.html:112
+#: users/templates/users/profile.html:105
+msgid "国コード"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:72
+msgid "2要素認証方法"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:76
+#: users/templates/users/edit-profile.html:138
+#: users/templates/users/profile.html:127
+msgid "言語"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:80
+msgid "パスワード"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:84
+msgid "パスワード(確認用)"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:98
+#, fuzzy
+#| msgid "認証に失敗しました。"
+msgid "認証コードの送信に失敗しました"
+msgstr "認証に失敗しました。"
+
+#: accounts/templates/accounts/signup.html:100
+msgid "入力した内容を見直して再度実行してください"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:110
+#, fuzzy
+#| msgid "サインアップしました。"
+msgid "サインアップ"
 msgstr "サインアップしました。"
 
-#: ft_trans/settings.py:261 ft_trans/settings_dev.py:261
-#: ft_trans/settings_prod.py:259 pong/templates/pong/lang_test.html:8
-#: pong/templates/pong/lang_test.html:15 pong/templates/pong/script.html:8
+#: accounts/templates/accounts/signup.html:116
+msgid "2要素認証をSMSにする場合、電話番号を入力してください"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:119
+#, fuzzy
+#| msgid "サインアップしました。"
+msgid "サーバー内でエラーが発生しました。"
+msgstr "サインアップしました。"
+
+#: accounts/templates/accounts/signup.html:120
+msgid "記入内容を見直して、もう一度最初から実行してください"
+msgstr ""
+
+#: accounts/templates/accounts/signup.html:132
+#, fuzzy
+#| msgid "最初からやり直してください"
+msgid "認証コードを入力してください"
+msgstr "最初からやり直してください"
+
+#: accounts/templates/accounts/signup.html:137
+#: accounts/templates/accounts/two-fa-modal.html:55
+#, fuzzy
+#| msgid "認証に失敗しました。"
+msgid "認証に失敗しました"
+msgstr "認証に失敗しました。"
+
+#: accounts/templates/accounts/signup.html:138
+#: accounts/templates/accounts/two-fa-modal.html:56
+msgid "認証コードを見直して再度実行してください"
+msgstr ""
+
+#: accounts/templates/accounts/two-fa-modal.html:51
+msgid "認証コード"
+msgstr ""
+
+#: accounts/templates/accounts/two-fa-modal.html:66
+#: friend/templates/friend/answer-request-modal.html:73
+#: friend/templates/friend/answer-request-modal.html:145
+#: friend/templates/friend/request-modal.html:83 tournament/models.py:15
+#: tournament/templates/tournament/card-modal.html:64
+#: tournament/templates/tournament/tournament.html:104
+#: users/templates/users/edit-profile.html:218
+#: users/templates/users/profile.html:215
+msgid "キャンセル"
+msgstr ""
+
+#: friend/models.py:9
+msgid "pending"
+msgstr ""
+
+#: friend/models.py:10
+msgid "accepted"
+msgstr ""
+
+#: friend/models.py:11
+msgid "block"
+msgstr ""
+
+#: friend/models.py:12
+msgid "blocked"
+msgstr ""
+
+#: friend/models.py:21
+#, fuzzy
+#| msgid "ユーザー名"
+msgid "ユーザー"
+msgstr "ユーザー名"
+
+#: friend/models.py:27 spa/templates/spa/nav.html:23
+#: spa/templates/spa/nav.html:141
+msgid "フレンド"
+msgstr ""
+
+#: friend/models.py:31 friend/templates/friend/answer-request-modal.html:168
+#: friend/templates/friend/answer-request-modal.html:199
+#: friend/templates/friend/request-card.html:29
+#: friend/templates/friend/request-modal.html:65
+msgid "メッセージ"
+msgstr ""
+
+#: friend/models.py:37 tournament/templates/tournament/detail.html:8
+msgid "状態"
+msgstr ""
+
+#: friend/models.py:43
+msgid "作成日時"
+msgstr ""
+
+#: friend/models.py:48
+msgid "変更日時"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:14
+#: friend/templates/friend/answer-request-modal.html:76
+#: friend/templates/friend/request-card.html:44
+msgid "ブロック"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:47
+msgid "このユーザーをブロックします"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:53
+#: friend/templates/friend/answer-request-modal.html:125
+#, fuzzy
+#| msgid "サインアップしました。"
+msgid "エラーが発生しました。"
+msgstr "サインアップしました。"
+
+#: friend/templates/friend/answer-request-modal.html:55
+#: friend/templates/friend/answer-request-modal.html:127
+msgid "このダイアログを削除し、もう一度実行してください"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:96
+msgid "リクエスト許可"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:122
+msgid "このユーザーをフレンドに追加します"
+msgstr ""
+
+#: friend/templates/friend/answer-request-modal.html:148
+#: tournament/templates/tournament/card-modal.html:66 tournament/views.py:42
+#: tournament/views.py:226
+msgid "登録"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:4
+#: friend/templates/friend/block-users.html:12
+msgid "ブロックリスト"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:9
+#: friend/templates/friend/friend-list.html:9
+#: friend/templates/friend/list.html:9
+#: friend/templates/friend/request-list.html:9
+#: history/templates/history/ovo-list.html:9
+#: history/templates/history/tournaments-list.html:9
+#: tournament/templates/tournament/list.html:17
+msgid "Top"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:14
+#: friend/templates/friend/friend-list.html:14
+#: friend/templates/friend/list.html:14
+#: friend/templates/friend/request-list.html:14
+#: history/templates/history/ovo-list.html:14
+#: history/templates/history/tournaments-list.html:14
+#: tournament/templates/tournament/list.html:22
+msgid "Previous"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:38
+#: friend/templates/friend/friend-list.html:38
+#: friend/templates/friend/list.html:38
+#: friend/templates/friend/request-list.html:38
+#: history/templates/history/ovo-list.html:38
+#: history/templates/history/tournaments-list.html:38
+#: tournament/templates/tournament/list.html:50
+msgid "Next"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:41
+#: friend/templates/friend/friend-list.html:41
+#: friend/templates/friend/list.html:41
+#: friend/templates/friend/request-list.html:41
+#: history/templates/history/ovo-list.html:41
+#: history/templates/history/tournaments-list.html:41
+#: tournament/templates/tournament/list.html:53
+msgid "Last"
+msgstr ""
+
+#: friend/templates/friend/block-users-list.html:47
+msgid "ブロックしたユーザーはいません"
+msgstr ""
+
+#: friend/templates/friend/block-users.html:15
+msgid "すべてのブロックしたユーザーを表示"
+msgstr ""
+
+#: friend/templates/friend/block-users.html:21
+msgid "ブロックしたユーザーはいません."
+msgstr ""
+
+#: friend/templates/friend/friend-card.html:20
+msgid "オンライン"
+msgstr ""
+
+#: friend/templates/friend/friend-card.html:22
+msgid "オフライン"
+msgstr ""
+
+#: friend/templates/friend/friend-list.html:4
+#: friend/templates/friend/friends.html:54
+msgid "フレンドリスト"
+msgstr ""
+
+#: friend/templates/friend/friend-list.html:47
+#: friend/templates/friend/friends.html:63 friend/templates/friend/list.html:47
+msgid "フレンドはいません"
+msgstr ""
+
+#: friend/templates/friend/friend.html:10
+msgid "Friend"
+msgstr ""
+
+#: friend/templates/friend/friends.html:57
+msgid "すべてのフレンドを表示"
+msgstr ""
+
+#: friend/templates/friend/request-card.html:64
+msgid "許可"
+msgstr ""
+
+#: friend/templates/friend/request-list.html:4
+#: friend/templates/friend/request.html:12
+msgid "フレンドリクエスト"
+msgstr ""
+
+#: friend/templates/friend/request-list.html:47
+#: friend/templates/friend/request.html:22
+msgid "フレンドリクエストはありません"
+msgstr ""
+
+#: friend/templates/friend/request-modal.html:56
+#, fuzzy
+#| msgid "ログインしました"
+msgid "エラーが発生しました"
+msgstr "ログインしました"
+
+#: friend/templates/friend/request-modal.html:58
+msgid "相手がすでに登録したかもしれません"
+msgstr ""
+
+#: friend/templates/friend/request-modal.html:60
+msgid "フレンドリクエストを確認してください"
+msgstr ""
+
+#: friend/templates/friend/request-modal.html:85
+#: friend/templates/friend/search.html:58
+msgid "申請"
+msgstr ""
+
+#: friend/templates/friend/request.html:15
+msgid "すべてのリクエストを表示"
+msgstr ""
+
+#: friend/templates/friend/search-form.html:4
+msgid "フレンド候補を探す"
+msgstr ""
+
+#: friend/templates/friend/search.html:51
+msgid "検索結果"
+msgstr ""
+
+#: friend/templates/friend/search.html:91
+msgid "フレンド申請"
+msgstr ""
+
+#: ft_trans/settings.py:334 ft_trans/settings_dev.py:298
+#: ft_trans/settings_prod.py:334 pong/templates/pong/lang_test.html:8
+#: pong/templates/pong/lang_test.html:15 pong/templates/pong/script.html:43
 msgid "Japanese"
 msgstr "日本語"
 
-#: ft_trans/settings.py:262 ft_trans/settings_dev.py:262
-#: ft_trans/settings_prod.py:260 pong/templates/pong/lang_test.html:9
+#: ft_trans/settings.py:335 ft_trans/settings_dev.py:299
+#: ft_trans/settings_prod.py:335 pong/templates/pong/lang_test.html:9
 #: pong/templates/pong/lang_test.html:16
 msgid "English"
 msgstr "英語"
 
-#: ft_trans/settings.py:263 ft_trans/settings_dev.py:263
-#: ft_trans/settings_prod.py:261 pong/templates/pong/lang_test.html:10
+#: ft_trans/settings.py:336 ft_trans/settings_dev.py:300
+#: ft_trans/settings_prod.py:336 pong/templates/pong/lang_test.html:10
 #: pong/templates/pong/lang_test.html:17
 msgid "French"
 msgstr "フランス語"
 
-#: pong/templates/pong/script.html:7
+#: history/templates/history/ovo-card.html:17
+#: history/templates/history/tournament-card.html:17
+msgid "ドロー"
+msgstr ""
+
+#: history/templates/history/ovo-card.html:20
+#: history/templates/history/tournament-card.html:20
+msgid "無効試合"
+msgstr ""
+
+#: history/templates/history/ovo-card.html:22
+#: history/templates/history/tournament-card.html:22
+msgid "勝利"
+msgstr ""
+
+#: history/templates/history/ovo-card.html:25
+#: history/templates/history/tournament-card.html:25
+msgid "敗北"
+msgstr ""
+
+#: history/templates/history/ovo-list.html:4
+#: history/templates/history/ovos.html:7 history/templates/history/ovos.html:13
+msgid "1v1"
+msgstr ""
+
+#: history/templates/history/ovo-list.html:47
+#: history/templates/history/tournaments-list.html:47
+msgid "該当試合はありません"
+msgstr ""
+
+#: history/templates/history/ovos.html:9 history/templates/history/ovos.html:19
+#: history/templates/history/tournaments.html:9
+#: history/templates/history/tournaments.html:19
+msgid "対象の試合はありません"
+msgstr ""
+
+#: history/templates/history/ovos.html:17
+#: history/templates/history/tournaments.html:17
+msgid "すべての試合を表示"
+msgstr ""
+
+#: history/templates/history/tournament-card.html:37
+#: history/templates/history/tournaments-list.html:4
+#: history/templates/history/tournaments.html:7
+#: history/templates/history/tournaments.html:13
+#: pong/templates/pong/games.html:23 spa/templates/spa/nav.html:18
+#: spa/templates/spa/nav.html:136
+msgid "トーナメント"
+msgstr ""
+
+#: notification/models.py:20 notification/models.py:43
+msgid "作成日"
+msgstr ""
+
+#: notification/models.py:22
+msgid "有効期限"
+msgstr ""
+
+#: notification/models.py:44
+msgid "変更日"
+msgstr ""
+
+#: pong/models.py:94
+msgid "プレイヤー1 エイリアス名"
+msgstr ""
+
+#: pong/models.py:99
+msgid "プレイヤー2 エイリアス名"
+msgstr ""
+
+#: pong/templates/pong/card.html:13 tournament/models.py:26
+#: tournament/templates/tournament/card.html:13
+#: tournament/templates/tournament/detail.html:7
+msgid "主催者"
+msgstr ""
+
+#: pong/templates/pong/card.html:22
+msgid "プレイヤー1"
+msgstr ""
+
+#: pong/templates/pong/card.html:27
+msgid "プレイヤー2"
+msgstr ""
+
+#: pong/templates/pong/card.html:31
+#: tournament/templates/tournament/card.html:26
+msgid "開始日時"
+msgstr ""
+
+#: pong/templates/pong/card.html:43
+msgid "開始"
+msgstr ""
+
+#: pong/templates/pong/card.html:53
+#: tournament/templates/tournament/card.html:56
+msgid "詳細 "
+msgstr ""
+
+#: pong/templates/pong/games.html:10
+msgid "Game"
+msgstr ""
+
+#: pong/templates/pong/games.html:14
+msgid "テストゲーム"
+msgstr ""
+
+#: pong/templates/pong/games.html:18 pong/templates/pong/games.html:35
+#: pong/templates/pong/match.html:79
+msgid "スタート"
+msgstr ""
+
+#: pong/templates/pong/games.html:28 pong/templates/pong/games.html:51
+msgid "実行できるトーナメントがありません"
+msgstr ""
+
+#: pong/templates/pong/games.html:44 tournament/views.py:233
+#: tournament/views.py:239 tournament/views.py:245 tournament/views.py:251
+msgid "詳細"
+msgstr ""
+
+#: pong/templates/pong/games.html:54
+#, fuzzy
+#| msgid "認証に失敗しました。"
+msgid "ゲームの開始に失敗しました。"
+msgstr "認証に失敗しました。"
+
+#: pong/templates/pong/games.html:56
+#, fuzzy
+#| msgid "元のページに戻ってください"
+msgid "ページを更新して再度実行してください"
+msgstr "元のページに戻ってください"
+
+#: pong/templates/pong/match.html:13
+msgid "サーバーとの通信に失敗しました"
+msgstr ""
+
+#: pong/templates/pong/match.html:16
+#, fuzzy
+#| msgid "最初からやり直してください"
+msgid "画面を更新してください"
+msgstr "最初からやり直してください"
+
+#: pong/templates/pong/match.html:89
+#: users/templates/users/change-password.html:61
+#: users/templates/users/change-password.html:75
+#: users/templates/users/edit-profile.html:155
+#: users/templates/users/edit-profile.html:167
+msgid "戻る"
+msgstr ""
+
+#: pong/templates/pong/match.html:101
+msgid "次のゲーム"
+msgstr ""
+
+#: pong/templates/pong/script.html:42
 msgid "not_change"
 msgstr "ここは変更しない"
+
+#: spa/templates/spa/error.html:11
+msgid "指定するページにアクセスするにはログインする必要があります"
+msgstr ""
+
+#: spa/templates/spa/error.html:13 spa/templates/spa/error.html:16
+#, fuzzy
+#| msgid "ログインしました"
+msgid "ログインページ"
+msgstr "ログインしました"
+
+#: spa/templates/spa/nav.html:13 spa/templates/spa/nav.html:132
+msgid "ゲーム"
+msgstr ""
+
+#: spa/templates/spa/nav.html:29 spa/templates/spa/nav.html:147
+msgid "通知"
+msgstr ""
+
+#: spa/templates/spa/nav.html:94 spa/templates/spa/nav.html:151
+msgid "履歴"
+msgstr ""
+
+#: spa/templates/spa/nav.html:96 spa/templates/spa/nav.html:155
+msgid "プロフィール"
+msgstr ""
+
+#: spa/templates/spa/nav.html:102 spa/templates/spa/nav.html:160
+msgid "ログアウト"
+msgstr "ログアウト"
+
+#: tournament/forms.py:40 tournament/models.py:31
+#: tournament/templates/tournament/card.html:22
+#: tournament/templates/tournament/detail.html:9
+#: tournament/templates/tournament/tournament.html:66
+msgid "最大参加人数"
+msgstr ""
+
+#: tournament/forms.py:41
+msgid "トーナメント開始日"
+msgstr ""
+
+#: tournament/forms.py:95 tournament/templates/tournament/tournament.html:75
+msgid "フレンドに通知"
+msgstr ""
+
+#: tournament/models.py:12
+msgid "参加者募集中"
+msgstr ""
+
+#: tournament/models.py:13
+msgid "トーナメント進行中"
+msgstr ""
+
+#: tournament/models.py:14
+msgid "終了"
+msgstr ""
+
+#: tournament/models.py:21 tournament/templates/tournament/card-modal.html:19
+#: tournament/templates/tournament/detail.html:6
+#: tournament/templates/tournament/tournament.html:57
+msgid "トーナメント名"
+msgstr ""
+
+#: tournament/models.py:29 tournament/templates/tournament/detail.html:11
+msgid "開始時間"
+msgstr ""
+
+#: tournament/models.py:30
+msgid "フレンドのみ"
+msgstr ""
+
+#: tournament/models.py:59
+msgid "エイリアス名"
+msgstr ""
+
+#: tournament/templates/tournament/card-modal.html:21
+msgid "参加申し込み"
+msgstr ""
+
+#: tournament/templates/tournament/card-modal.html:28
+msgid "参加人数が上限に達したため、登録することができません。"
+msgstr ""
+
+#: tournament/templates/tournament/card-modal.html:31
+msgid "すでに登録しています。"
+msgstr ""
+
+#: tournament/templates/tournament/card-modal.html:47
+msgid "プレイヤー名"
+msgstr ""
+
+#: tournament/templates/tournament/card.html:44
+msgid "参加"
+msgstr ""
+
+#: tournament/templates/tournament/cards.html:11
+msgid "すべての項目を表示"
+msgstr ""
+
+#: tournament/templates/tournament/cards.html:26
+#: tournament/templates/tournament/list.html:69
+msgid "対象のトーナメントは存在しません"
+msgstr ""
+
+#: tournament/templates/tournament/detail.html:3
+msgid "トーナメント詳細"
+msgstr ""
+
+#: tournament/templates/tournament/detail.html:10
+msgid "登録者数"
+msgstr ""
+
+#: tournament/templates/tournament/detail.html:23
+msgid "参加者一覧"
+msgstr ""
+
+#: tournament/templates/tournament/detail.html:33 tournament/views.py:330
+msgid "参加者はいません"
+msgstr ""
+
+#: tournament/templates/tournament/detail.html:36
+msgid "トーナメント表"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:18
+#: tournament/templates/tournament/tournament.html:35
+msgid "トーナメント作成"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:49
+#, fuzzy
+#| msgid "認証に失敗しました。"
+msgid "トーナメントの作成に失敗しました。"
+msgstr "認証に失敗しました。"
+
+#: tournament/templates/tournament/tournament.html:50
+msgid "過去の時間を設定することはできません。"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:51
+msgid "同じ時刻に重複して設定することもできません。"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:52
+msgid "このダイアログを閉じてもう一度実行してください。"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:83
+msgid "開始日"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:89
+msgid "時"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:94
+msgid "分"
+msgstr ""
+
+#: tournament/templates/tournament/tournament.html:111
+msgid "作成"
+msgstr ""
+
+#: tournament/views.py:40 tournament/views.py:224
+msgid "参加可能トーナメント"
+msgstr ""
+
+#: tournament/views.py:64 tournament/views.py:231
+msgid "主催したトーナメント"
+msgstr ""
+
+#: tournament/views.py:91 tournament/views.py:237
+msgid "登録済みトーナメント"
+msgstr ""
+
+#: tournament/views.py:109 tournament/views.py:249
+msgid "すべてのトーナメント"
+msgstr ""
+
+#: tournament/views.py:243
+msgid "終了したトーナメント"
+msgstr ""
+
+#: users/forms.py:152
+msgid "100文字以内にしてください"
+msgstr ""
+
+#: users/forms.py:163 users/templates/users/change-password.html:19
+msgid "現在のパスワード"
+msgstr ""
+
+#: users/forms.py:175 users/templates/users/change-password.html:32
+msgid "新しいパスワード"
+msgstr ""
+
+#: users/forms.py:187
+msgid "新しいパスワード(確認用)"
+msgstr ""
+
+#: users/forms.py:209
+msgid "新しいパスワードは古いパスワードと同じにできません。"
+msgstr ""
+
+#: users/templates/users/change-password.html:7
+#: users/templates/users/change-password.html:10
+msgid "Change Password"
+msgstr ""
+
+#: users/templates/users/change-password.html:45
+msgid "新しいパスワード（確認用）"
+msgstr ""
+
+#: users/templates/users/change-password.html:64
+#: users/templates/users/edit-profile.html:221
+msgid "変更"
+msgstr ""
+
+#: users/templates/users/change-password.html:70
+msgid "42OAuthでログインされたアカウントでは、ご利用できません。"
+msgstr ""
+
+#: users/templates/users/changed-password.html:7
+#: users/templates/users/changed-password.html:10
+msgid "Changed Password"
+msgstr ""
+
+#: users/templates/users/changed-password.html:12
+msgid "パスワードの変更が完了しました。"
+msgstr ""
+
+#: users/templates/users/edit-profile.html:7
+#: users/templates/users/profile.html:7 users/templates/users/profile.html:10
+msgid "Profile"
+msgstr ""
+
+#: users/templates/users/edit-profile.html:10
+msgid "Edit Profile"
+msgstr ""
+
+#: users/templates/users/edit-profile.html:26
+#: users/templates/users/edit-profile.html:180
+msgid "アバター変更"
+msgstr ""
+
+#: users/templates/users/edit-profile.html:158
+msgid "保存"
+msgstr ""
+
+#: users/templates/users/edit-profile.html:170
+msgid "Save"
+msgstr ""
+
+#: users/templates/users/exported-profile.html:7
+#: users/templates/users/exported-profile.html:10
+msgid "Exported Profile"
+msgstr ""
+
+#: users/templates/users/exported-profile.html:12
+msgid "プロフィールのエクスポートが完了しました。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:7
+#: users/templates/users/privacy-policy.html:10
+msgid "Privacy Policy"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:13
+msgid ""
+"本プライバシーポリシーは、42が提供する課題（以下「ft_transcendence」）で作成"
+"されたウェブサイトおよびサービス（以下「本サービス」）における、利用者の個人"
+"データの収集、利用、管理に関する方針を説明するものです。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:16
+msgid ""
+"本サービスの作成者および管理者（以下「管理者」）は、利用者の個人情報を適切に"
+"保護し、GDPR（一般データ保護規則）を遵守して取り扱います。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:19
+msgid "1. 収集する個人データ"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:20
+msgid "管理者が収集する個人データは以下の通りです："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:22
+msgid "氏名、メールアドレス、電話番号などの連絡先情報"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:23
+msgid "アカウント作成時に提供されるユーザー情報"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:24
+msgid "その他、必要に応じて提供される情報"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:25
+msgid "本サービスの利用履歴や閲覧履歴"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:28
+msgid "2. 個人データの収集方法"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:29
+msgid "管理者は、以下の方法で利用者の個人データを収集します："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:31
+msgid "利用者が本サービスを利用する際に自発的に提供された情報"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:32
+msgid "Cookieおよび類似の追跡技術を通じた自動的な収集"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:33
+msgid "第三者のサービスプロバイダからの情報（適用される場合）"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:36
+msgid "3. 個人データの利用目的"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:37
+msgid "管理者は、利用者の個人データを以下の目的で使用します："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:39
+msgid "本サービスの提供およびカスタマイズ"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:40
+msgid "利用者からの問い合わせ対応"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:41
+msgid "サービスの改善および新機能の開発"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:42
+msgid "法的義務の遵守およびコンプライアンス"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:43
+msgid "マーケティングおよびプロモーション（お客様の同意を得た場合）"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:46
+msgid "4. データの保存期間"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:49
+msgid ""
+"管理者は、収集した個人データを、その利用目的を達成するために必要な期間に限り"
+"保持します。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:52
+msgid ""
+"法的に定められた保存期間を超えて保持する必要がある場合は、その限りではありま"
+"せん。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:55
+msgid "5. 個人データの第三者提供"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:56
+msgid "管理者は、以下の場合を除き、利用者の個人データを第三者に提供しません："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:58
+msgid "法的義務を果たすために必要な場合"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:59
+msgid "利用者の同意を得た場合"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:62
+msgid ""
+"サービスプロバイダに業務委託する場合（例：サーバーホスティング、支払い処理な"
+"ど）"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:66
+msgid "6. Cookieおよび追跡技術"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:68
+msgid "管理者は、ウェブサイトの利便性向上目的でCookieを使用しています。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:70
+msgid ""
+"Cookieは、セキュリティー、ネットワーク管理、アクセシビリティー等の機能を有効"
+"にします。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:73
+msgid ""
+"ユーザはブラウザの設定の変更によりこれを無効にすることができますが、それによ"
+"り本サービスの機能が影響を受ける可能性があります。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:76
+msgid "7. 利用者の権利"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:77
+msgid "利用者は、以下の権利を有します："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:79
+msgid "個人データへのアクセス権"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:80
+msgid "個人データの訂正権"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:81
+msgid "個人データの削除権（「忘れられる権利」）"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:82
+msgid "データ処理の制限を求める権利"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:83
+msgid "データポータビリティの権利"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:84
+msgid "処理に対する異議の権利"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:85
+msgid "同意の撤回権（同意に基づく処理の場合）"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:87
+msgid "権利の行使を希望する場合は、下記の連絡先までご連絡ください。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:89
+msgid "8. 個人データの保護"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:92
+msgid ""
+"管理者は、適切な技術的および組織的な措置を講じ、個人データを不正なアクセス、"
+"紛失、改ざん、漏洩から保護します。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:95
+msgid "9. プライバシーポリシーの変更"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:98
+msgid ""
+"管理者は、必要に応じて本プライバシーポリシーを改定することがあります。変更が"
+"あった場合には、本ページにて通知いたします。"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:101
+msgid "10. お問い合わせ"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:104
+msgid ""
+"プライバシーポリシーに関するご質問や、利用者の権利の行使に関するお問い合わせ"
+"は、以下の連絡先までお願いいたします："
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:107
+msgid "連絡先： [連絡先情報]"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:108
+msgid "メール： [メールアドレス]"
+msgstr ""
+
+#: users/templates/users/privacy-policy.html:109
+msgid "電話番号： [電話番号]"
+msgstr ""
+
+#: users/templates/users/profile.html:49
+msgid "勝敗"
+msgstr ""
+
+#: users/templates/users/profile.html:60
+msgid "不戦敗"
+msgstr ""
+
+#: users/templates/users/profile.html:138
+msgid "最終更新日時"
+msgstr ""
+
+#: users/templates/users/profile.html:149
+msgid "最終ログイン日時"
+msgstr ""
+
+#: users/templates/users/profile.html:159
+msgid "編集"
+msgstr ""
+
+#: users/templates/users/profile.html:162
+msgid "パスワードの変更"
+msgstr ""
+
+#: users/templates/users/profile.html:170
+msgid "プロフィールのエクスポート"
+msgstr ""
+
+#: users/templates/users/profile.html:180
+msgid "Delete"
+msgstr ""
+
+#: users/templates/users/profile.html:191
+msgid "アカウント削除"
+msgstr ""
+
+#: users/templates/users/profile.html:200
+msgid "アカウント削除します。"
+msgstr ""
+
+#: users/templates/users/profile.html:201
+msgid "復旧することはできません。"
+msgstr ""
+
+#: users/templates/users/profile.html:220
+msgid "削除"
+msgstr ""
+
+#~ msgid "42認証"
+#~ msgstr "42認証"
+
+#~ msgid "ログアウトしました"
+#~ msgstr "ログアウトしました"
