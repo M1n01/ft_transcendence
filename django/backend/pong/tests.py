@@ -29,11 +29,11 @@ class MatchTestCase(TestCase):
         self.assertEqual(tx_hash, "tx_hash_1")
         self.assertEqual(created_at, "2023-01-01 00:00:00")
         mock_save.assert_called_once_with(
-            self.match_id.bytes,
-            self.tournament_id.bytes,
-            self.player1_id.bytes,
+            self.match_id,
+            self.tournament_id,
+            self.player1_id,
+            self.player2_id,
             11,
-            self.player2_id.bytes,
             8,
             1,
         )
