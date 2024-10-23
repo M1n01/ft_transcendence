@@ -1,7 +1,8 @@
-from web3 import Web3
+from web3 import Web3, exceptions
 from django.conf import settings
 import os
 import json
+import uuid
 from datetime import datetime, timezone, timedelta
 
 
@@ -28,7 +29,7 @@ def get_contract_address():
 
 
 def save_match_to_blockchain(
-    tournament, player1, player1_score, player2, player2_score, round
+    match_id, tournament, player1, player2, player1_score, player2_score, round
 ):
 
     w3 = get_contract()
@@ -40,40 +41,67 @@ def save_match_to_blockchain(
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
-        transaction = contract.functions.createMatch(
-            tournament,
-            player1,
-            player1_score,
-            player2,
-            player2_score,
-            round,
-        ).build_transaction(
-            {
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-            }
-        )
+        match_id_int = match_id.int
+        tournament_int = tournament.int
+        player1_int = player1.int
+        player2_int = player2.int
+
+        try:
+            transaction = contract.functions.createMatch(
+                match_id_int,
+                tournament_int,
+                player1_int,
+                player2_int,
+                player1_score,
+                player2_score,
+                round,
+            ).build_transaction(
+                {
+                    "from": account.address,
+                    "nonce": w3.eth.get_transaction_count(account.address),
+                    "gas": 300000,
+                    "gasPrice": w3.eth.gas_price,
+                }
+            )
+        except exceptions.SolidityError as e:
+            print(f"Error building transaction: {e}")
+            raise Exception("Error building transaction")
 
         signed_txn = w3.eth.account.sign_transaction(
             transaction, settings.PRIVATE_ACCOUNT_KEY
         )
+
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
 
         # イベントをキャッチしてタイムスタンプを取得
+        print("Waiting for transaction receipt...")
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+        if receipt.status == 0:
+            print("Transaction failed")
+            raise Exception("Transaction failed")
+
+        print("Processing logs...")
         logs = contract.events.MatchCreated().process_receipt(receipt)
-        match_id = logs[0]["args"]["matchId"]
-        unix_created_at = logs[0]["args"]["createdAt"]
 
-        # タイムスタンプをJSTに変換
-        utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
-        jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
+        # logsが空の配列の場合のハンドリングを追加
+        if not logs:
+            print("No logs found in receipt")
+            return tx_hash.hex(), None
 
-        return match_id, tx_hash.hex(), jst_created_at
+        try:
+            unix_created_at = logs[0]["args"]["createdAt"]
+            utc_created_at = datetime.fromtimestamp(unix_created_at, tz=timezone.utc)
+            jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
+            return tx_hash.hex(), jst_created_at
+        except (IndexError, KeyError) as e:
+            print(f"Error processing logs: {e}")
+            # トランザクションは成功しているのでhashは返す
+            return tx_hash.hex(), None
 
     except Exception as e:
         print(f"Error saving match to blockchain: {e}")
-        return None, None, None
+        return None, None
 
 
 def get_matches_from_blockchain(
@@ -89,11 +117,11 @@ def get_matches_from_blockchain(
         utc_created_at = datetime.fromtimestamp(match[2], tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
-            "id": match[0],
-            "tournament_id": match[1],
+            "match_id": uuid.UUID(int=match[0]),
+            "tournament_id": uuid.UUID(int=match[1]),
+            "player1": uuid.UUID(int=match[3]),
+            "player2": uuid.UUID(int=match[4]),
             "created_at": jst_created_at,
-            "player1": match[3],
-            "player2": match[4],
             "player1_score": match[5],
             "player2_score": match[6],
             "round": match[7],
@@ -101,10 +129,22 @@ def get_matches_from_blockchain(
         }
 
     if match_id is not None:
-        match = contract.functions.getMatch(int(match_id), only_active).call()
+        match_id_int = match_id.int
+
+        try:
+            match = contract.functions.getMatch(match_id_int, only_active).call()
+        except exceptions.SolidityError as e:
+            print(f"Error getting match: {e}")
+            raise Exception("Error getting match")
+
         matches = match_to_dict(match)
     else:
-        all_matches = contract.functions.getAllMatches(only_active).call()
+        try:
+            all_matches = contract.functions.getAllMatches(only_active).call()
+        except exceptions.SolidityError as e:
+            print(f"Error getting all matches: {e}")
+            raise Exception("Error getting all matches")
+
         if user_id:
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
@@ -130,12 +170,17 @@ def delete_match_from_blockchain(match_id):
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
-        transaction = contract.functions.deleteMatch(match_id).build_transaction(
-            {
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-            }
-        )
+        match_id_int = match_id.int
+        try:
+            transaction = contract.functions.deleteMatch(match_id_int).build_transaction(
+                {
+                    "from": account.address,
+                    "nonce": w3.eth.get_transaction_count(account.address),
+                }
+            )
+        except exceptions.SolidityError as e:
+            print(f"Error building transaction: {e}")
+            raise Exception("Error building transaction")
 
         signed_txn = w3.eth.account.sign_transaction(
             transaction, settings.PRIVATE_ACCOUNT_KEY

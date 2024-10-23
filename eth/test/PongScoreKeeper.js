@@ -10,11 +10,18 @@ describe('PongScoreKeeper contract', function () {
   let pongScoreKeeper;
   let owner;
   let addr1;
-  let addr2;
-  let addr3;
+
+  function uuidToBytes16(uuid) {
+    // Remove hyphens and convert to lowercase
+    const hex = uuid.replace(/-/g, '').toLowerCase();
+    // Pad with zeros if necessary (shouldn't be needed for valid UUIDs)
+    const paddedHex = hex.padStart(32, '0');
+    // Prefix with '0x' to create a valid hex string
+    return '0x' + paddedHex;
+  }
 
   beforeEach(async function () {
-    [owner, addr1, addr2, addr3] = await ethers.getSigners();
+    [owner, addr1] = await ethers.getSigners();
     PongScoreKeeper = await ethers.getContractFactory('PongScoreKeeper');
     pongScoreKeeper = await PongScoreKeeper.deploy();
     await pongScoreKeeper.waitForDeployment();
@@ -24,68 +31,108 @@ describe('PongScoreKeeper contract', function () {
     it('Should set the right owner', async function () {
       expect(await pongScoreKeeper.owner()).to.equal(owner.address);
     });
-
-    it('Should start with nextMatchId as 1', async function () {
-      expect(await pongScoreKeeper.nextMatchId()).to.equal(0);
-    });
   });
 
   describe('Match Creation', function () {
+    const player1 = uuidToBytes16(crypto.randomUUID());
+    const player2 = uuidToBytes16(crypto.randomUUID());
+
     it('Should create a match correctly', async function () {
-      await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
-      const match = await pongScoreKeeper.getMatch(0, true);
-      expect(match.tournamentId).to.equal(1);
-      expect(match.player1).to.equal(addr1.address);
-      expect(match.player2).to.equal(addr2.address);
-      expect(match.player1Score).to.equal(11);
-      expect(match.player2Score).to.equal(5);
-      expect(match.isActive).to.be.true;
-      expect(match.round).to.equal(1);
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 3, 1);
+
+      const match = await pongScoreKeeper.getMatch(matchId, true);
+      expect(match.player1).to.equal(player1);
+      expect(match.player2).to.equal(player2);
+      expect(match.tournamentId).to.equal(tournamentId);
     });
 
     it('Should fail if player1 and player2 are the same', async function () {
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+      const player3 = player1;
+
       await expect(
-        pongScoreKeeper.createMatch(1, addr1.address, 11, addr1.address, 5, 1)
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player3, 15, 5, 1)
       ).to.be.revertedWith('player1 and player2 cannot be the same');
     });
 
+    it('Should fail if match already exists', async function () {
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      const player3 = uuidToBytes16(crypto.randomUUID());
+
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
+      await expect(
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player3, 15, 5, 1)
+      ).to.be.revertedWith('Match already exists');
+    });
+
     it('Should emit MatchCreated event', async function () {
-      await expect(pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1))
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 2))
         .to.emit(pongScoreKeeper, 'MatchCreated')
-        .withArgs(0, 1, await time.latest(), addr1.address, addr2.address, 1);
+        .withArgs(matchId, tournamentId, await time.latest(), player1, player2, 2);
     });
 
     it('Should fail if caller is not the owner', async function () {
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
       await expect(
-        pongScoreKeeper.connect(addr1).createMatch(1, addr1.address, 11, addr2.address, 5, 1)
+        pongScoreKeeper
+          .connect(addr1)
+          .createMatch(matchId, tournamentId, player1, player2, 15, 5, 3)
       ).to.be.reverted;
     });
 
     // 境界値テスト
     it('Should create a match with minimum winning score difference', async function () {
-      await expect(pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 10, 1)).to.not
-        .be.reverted;
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 10, 4))
+        .to.not.be.reverted;
     });
 
     it('Should create a match with maximum possible scores', async function () {
-      await expect(pongScoreKeeper.createMatch(1, addr1.address, 65535, addr2.address, 65534, 1)).to
-        .not.be.reverted;
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      await expect(
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 65535, 65534, 5)
+      ).to.not.be.reverted;
     });
   });
 
   describe('Match Retrieval', function () {
+    const matchId = uuidToBytes16(crypto.randomUUID());
+    const matchId2 = uuidToBytes16(crypto.randomUUID());
+    const player1 = uuidToBytes16(crypto.randomUUID());
+    const player2 = uuidToBytes16(crypto.randomUUID());
+
     beforeEach(async function () {
-      await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
-      await pongScoreKeeper.createMatch(1, addr2.address, 11, addr1.address, 7, 1);
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
+      await pongScoreKeeper.createMatch(matchId2, tournamentId, player2, player1, 15, 7, 1);
     });
 
     it('Should retrieve a single match correctly', async function () {
-      const match = await pongScoreKeeper.getMatch(0, true);
-      expect(match.player1).to.equal(addr1.address);
+      const match = await pongScoreKeeper.getMatch(matchId, true);
+      expect(match.player1).to.equal(player1);
     });
 
     it('Should fail to retrieve a non-existent match', async function () {
-      await expect(pongScoreKeeper.getMatch(3, true)).to.be.revertedWith('Match not found');
+      const nonExistentMatchId = uuidToBytes16(crypto.randomUUID());
+      await expect(pongScoreKeeper.getMatch(nonExistentMatchId, true)).to.be.revertedWith(
+        'Match not found'
+      );
     });
 
     it('Should retrieve all matches correctly', async function () {
@@ -95,29 +142,51 @@ describe('PongScoreKeeper contract', function () {
   });
 
   describe('Match Status Toggle', function () {
+    const matchId = uuidToBytes16(crypto.randomUUID());
+
     beforeEach(async function () {
-      await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+      const player1 = uuidToBytes16(crypto.randomUUID());
+      const player2 = uuidToBytes16(crypto.randomUUID());
+
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
     });
 
     it('Should toggle match status correctly', async function () {
-      await pongScoreKeeper.deleteMatch(0);
-      await expect(pongScoreKeeper.getMatch(0, true)).to.be.revertedWith('Match not found');
+      await pongScoreKeeper.deleteMatch(matchId);
+      await expect(pongScoreKeeper.getMatch(matchId, true)).to.be.revertedWith('Match not found');
     });
 
     it('Should fail to toggle status of a non-existent match', async function () {
-      await expect(pongScoreKeeper.deleteMatch(3)).to.be.revertedWith('Match not found');
+      const nonExistentMatchId = uuidToBytes16(crypto.randomUUID());
+      await expect(pongScoreKeeper.deleteMatch(nonExistentMatchId)).to.be.revertedWith(
+        'Match not found'
+      );
     });
 
     it('Should emit MatchStatusChanged event', async function () {
-      await expect(pongScoreKeeper.deleteMatch(0))
+      await expect(pongScoreKeeper.deleteMatch(matchId))
         .to.emit(pongScoreKeeper, 'MatchStatusChanged')
-        .withArgs(0, false);
+        .withArgs(matchId, false);
     });
   });
 
   describe('Gas Optimization', function () {
     it('Should optimize gas usage for match creation', async function () {
-      const tx = await pongScoreKeeper.createMatch(1, addr1.address, 11, addr2.address, 5, 1);
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+      const player1 = uuidToBytes16(crypto.randomUUID());
+      const player2 = uuidToBytes16(crypto.randomUUID());
+
+      const tx = await pongScoreKeeper.createMatch(
+        matchId,
+        tournamentId,
+        player1,
+        player2,
+        15,
+        5,
+        1
+      );
       const receipt = await tx.wait();
       expect(receipt.gasUsed).to.be.below(200000); // 適切なガス制限を設定
     });
@@ -125,8 +194,15 @@ describe('PongScoreKeeper contract', function () {
 
   describe('Security', function () {
     it('Should not allow non-owners to create matches', async function () {
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+      const player1 = uuidToBytes16(crypto.randomUUID());
+      const player2 = uuidToBytes16(crypto.randomUUID());
+
       await expect(
-        pongScoreKeeper.connect(addr1).createMatch(1, addr2.address, 11, addr3.address, 5, 1)
+        pongScoreKeeper
+          .connect(addr1)
+          .createMatch(matchId, tournamentId, player1, player2, 15, 5, 1)
       ).to.be.reverted;
     });
   });

@@ -23,6 +23,7 @@ class Match:
     @classmethod
     def save(
         cls,
+        match_id,
         tournament_id,
         round,
         player1_id,
@@ -31,15 +32,16 @@ class Match:
         player2_score,
     ):
         # ブロックチェーンにマッチ情報を保存
-        match_id, tx_hash, created_at = save_match_to_blockchain(
+        tx_hash, created_at = save_match_to_blockchain(
+            match_id,
             tournament_id,
             player1_id,
-            player1_score,
             player2_id,
+            player1_score,
             player2_score,
             round,
         )
-        return match_id, tx_hash, created_at
+        return tx_hash, created_at
 
     @classmethod
     def get_match(cls, match_id):
