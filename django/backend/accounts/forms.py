@@ -35,6 +35,7 @@ class LoginForm(AuthenticationForm):
                 "class": "form-control w-100 rounded-0",
                 "type": "email",
                 "placeholder": _("email"),
+                "autocomplete": "email",
             }
         ),
     )
@@ -44,6 +45,7 @@ class LoginForm(AuthenticationForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password"),
                 "aria-labelledby": "passwordHelpBlock",
+                "autocomplete": "current-password",
             }
         ),
     )
@@ -64,6 +66,7 @@ class SignUpForm(UserCreationForm):
                 "id": "username_id",
                 "class": "form-control w-100 rounded-0",
                 "placeholder": _("username"),
+                "autocomplete": "username",
             },
         ),
     )
@@ -75,6 +78,7 @@ class SignUpForm(UserCreationForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "type": "email",
                 "placeholder": _("username"),
+                "autocomplete": "email",
             }
         ),
     )
@@ -85,6 +89,7 @@ class SignUpForm(UserCreationForm):
                 "id": "first_name_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("first_name"),
+                "autocomplete": "first_name",
             }
         ),
     )
@@ -95,6 +100,7 @@ class SignUpForm(UserCreationForm):
                 "id": "last_name_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("last_name"),
+                "autocomplete": "last_name",
             }
         ),
     )
@@ -104,6 +110,7 @@ class SignUpForm(UserCreationForm):
                 "id": "birth_date_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("birth_date"),
+                "autocomplete": "birth_date",
             }
         ),
     )
@@ -126,6 +133,7 @@ class SignUpForm(UserCreationForm):
                 "id": "phone_id",
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("phone_number"),
+                "autocomplete": "phone",
             },
         ),
     )
@@ -160,6 +168,7 @@ class SignUpForm(UserCreationForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password"),
                 "aria-labelledby": "passwordHelpBlock",
+                "autocomplete": "new-password",
             }
         ),
     )
@@ -172,6 +181,7 @@ class SignUpForm(UserCreationForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("password(確認用)"),
                 "aria-labelledby": "passwordHelpBlock",
+                "autocomplete": "new-password",
             }
         ),
     )
