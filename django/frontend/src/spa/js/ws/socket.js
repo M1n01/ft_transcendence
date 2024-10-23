@@ -17,7 +17,7 @@ export const closetWebSocket = () => {
 export const sendWebSocket = async (json_message) => {
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
     try {
-      const json = fetchJsonData('/spa/is-login');
+      const json = await fetchJsonData('/spa/is-login');
       if (json['is_redirect'] == false) {
         socket = new WebSocket(ws_url);
       }
@@ -31,10 +31,10 @@ export const sendWebSocket = async (json_message) => {
   }
 };
 
-export const WebsocketInit = () => {
+export const WebsocketInit = async () => {
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
     try {
-      const json = fetchJsonData('/spa/is-login');
+      const json = await fetchJsonData('/spa/is-login');
       if (json['is_redirect'] == false) {
         socket = new WebSocket(ws_url);
       }
