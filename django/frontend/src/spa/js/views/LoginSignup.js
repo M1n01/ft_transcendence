@@ -22,7 +22,6 @@ export default class extends AbstractView {
     return data;
   };
   executeScript = () => {
-    console.log('executeScript Execute Sript load');
     executeScriptTab();
     document.dispatchEvent(LoginEvent);
     document.dispatchEvent(SignupEvent);
