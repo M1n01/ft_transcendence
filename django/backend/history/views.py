@@ -22,9 +22,9 @@ def edit_matches_data(request, matches):
             data["invalid"] = False
             data["opponent"] = "Test"
             if data["player1_score"] > data["player2_score"]:
-                winer = data["player1"]
+                winer = data["player1_id"]
             elif data["player1_score"] < data["player2_score"]:
-                winer = data["player2"]
+                winer = data["player2_id"]
             else:
                 if data["player1_score"] == 0:
                     data["invalid"] = True
@@ -35,13 +35,17 @@ def edit_matches_data(request, matches):
             else:
                 data["lose"] = True
 
-            if data["player1"] == request.user.id:
-                data["opponent"] = FtUser.objects.get(id=data["player2"])
-                data["opponent_name"] = FtUser.objects.get(id=data["player2"]).username
+            if data["player1_id"] == request.user.id:
+                data["opponent"] = FtUser.objects.get(id=data["player2_id"])
+                data["opponent_name"] = FtUser.objects.get(
+                    id=data["player2_id"]
+                ).username
                 data["result"] = f"{data['player1_score']} - {data['player2_score']}"
             else:
-                data["opponent"] = FtUser.objects.get(id=data["player1"])
-                data["opponent_name"] = FtUser.objects.get(id=data["player1"]).username
+                data["opponent"] = FtUser.objects.get(id=data["player1_id"])
+                data["opponent_name"] = FtUser.objects.get(
+                    id=data["player1_id"]
+                ).username
                 data["result"] = f"{data['player2_score']} - {data['player1_score']}"
     except Exception as e:
         logger.error(f"edit_matches_data error:{e=}")
@@ -56,13 +60,12 @@ def edit_matches_data(request, matches):
 def get_tournament(request):
 
     matches = Match.get_matches(user_id=request.user.id)
-    # matches = Match.get_matches()
 
     if len(matches) == 0:
         return ([], [])
     list = []
     for match in matches:
-        if (match["player1"] is not None) and (match["player2"] is not None):
+        if (match["player1_id"] is not None) and (match["player2_id"] is not None):
             # シード選は除く
             list.append(match)
 
