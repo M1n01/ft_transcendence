@@ -54,18 +54,6 @@
               </p>
             </div>
           </div>
-          <!--
-          <div class="form-group row mt-3 mt-sm-0">
-            <label for="username" class="col-sm-4 col-form-label profile-label">
-              <td>{% trans "不戦敗" %}</td>
-            </label>
-            <div class="col-sm-8">
-              <p class="form-control-plaintext profile-value">
-                <span class="profile-value">{{lose_by_default}}/{{ user.match_count}}</span>
-              </p>
-            </div>
-          </div>
--->
 
           <div class="form-group row mt-3 mt-sm-0">
             <label for="username" class="col-sm-4 col-form-label profile-label">
@@ -73,7 +61,7 @@
             </label>
             <div class="col-sm-8">
               <p class="form-control-plaintext profile-value">
-                <span class="profile-value">{{ user.last_name}}</span>
+                <span class="profile-value text-break text-wrap">{{ user.last_name}}</span>
               </p>
             </div>
           </div>
@@ -84,7 +72,7 @@
             </label>
             <div class="col-sm-8">
               <p class="form-control-plaintext profile-value">
-                <span class="profile-value">{{ user.first_name}}</span>
+                <span class="profile-value text-break text-wrap">{{ user.first_name}}</span>
               </p>
             </div>
           </div>
@@ -155,30 +143,33 @@
             </div>
           </div>
 
-          <div class="d-flex justify-content-sm-start justify-content-center mt-4">
-            <a href="/users/edit" class="btn btn-primary me-4" data-link>{% trans "編集" %}</a>
+          <div class="d-flex justify-content-sm-start justify-content-center mt-4 flex-wrap">
+            <a href="/users/edit" class="btn btn-primary text-nowrap mt-4 me-4" data-link
+              >{% trans "編集" %}</a
+            >
+            <button
+              id="open-delete-modal-button"
+              href="/edit-profile"
+              class="btn btn-danger mt-4 me-4 text-nowrap"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteModal"
+            >
+              {% trans "Delete" %}
+            </button>
+          </div>
+          <div class="d-flex justify-content-sm-start justify-content-center flex-wrap">
             {% if user.is_ft == False %}
-            <a href="/users/change-password" class="btn btn-primary me-4" data-link
+            <a href="/users/change-password" class="btn btn-primary mt-4 me-4 text-nowrap" data-link
               >{% trans "パスワードの変更" %}</a
             >
             {% endif %}
             <a
               id="export-profile"
               href="/users/export-profile"
-              class="btn btn-primary me-4"
+              class="btn btn-primary mt-4 me-4 text-nowrap"
               data-link
               >{% trans "プロフィールのエクスポート" %}</a
             >
-
-            <button
-              id="open-delete-modal-button"
-              href="/edit-profile"
-              class="btn btn-danger ms-4"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteModal"
-            >
-              {% trans "Delete" %}
-            </button>
           </div>
         </div>
       </div>
@@ -200,7 +191,9 @@
             <p>{% trans "アカウント削除します。" %}</p>
             <p>{% trans "復旧することはできません。" %}</p>
             <div id="delete-user-error" class="text-danger" hidden>
-              削除に失敗しました。 <br />ログインし直して、再度実施してください。
+              {% trans "削除に失敗しました。" %} <br />
+              <!---->
+              {% trans "ログインし直して、再度実施してください。" %}
             </div>
           </div>
 
