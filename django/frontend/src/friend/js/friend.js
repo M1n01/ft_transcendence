@@ -7,29 +7,33 @@ import '../scss/friend.scss';
 export const FriendEvent = new Event('FriendEvent');
 
 export const setUserActive = async (list) => {
-  const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
+  try {
+    const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
 
-  if (list == '') {
-    return;
-  }
-  const json = JSON.parse(list);
-
-  user_id_list.forEach((element) => {
-    const id = element.textContent;
-    const card = element.parentElement.parentElement;
-    const active_true = card.querySelector('.login-active-true');
-    const active_false = card.querySelector('.login-active-false');
-    if (active_true && active_false && id in json) {
-      const active = json[id];
-      if (active === 'True') {
-        active_true.hidden = false;
-        active_false.hidden = true;
-      } else if (active === 'False') {
-        active_true.hidden = true;
-        active_false.hidden = false;
-      }
+    if (list == '') {
+      return;
     }
-  });
+    const json = JSON.parse(list);
+
+    user_id_list.forEach((element) => {
+      const id = element.textContent;
+      const card = element.parentElement.parentElement;
+      const active_true = card.querySelector('.login-active-true');
+      const active_false = card.querySelector('.login-active-false');
+      if (active_true && active_false && id in json) {
+        const active = json[id];
+        if (active === 'True') {
+          active_true.hidden = false;
+          active_false.hidden = true;
+        } else if (active === 'False') {
+          active_true.hidden = true;
+          active_false.hidden = false;
+        }
+      }
+    });
+  } catch (error) {
+    console.log('ignore error:' + error);
+  }
 };
 
 function intervalFunc() {
@@ -242,12 +246,16 @@ document.addEventListener('FriendEvent', () => {
     });
   };
 
-  friend_request();
-  friend_top();
-  block_friend_request();
-  accept_friend_request();
-  display_friend_message();
+  try {
+    friend_request();
+    friend_top();
+    block_friend_request();
+    accept_friend_request();
+    display_friend_message();
 
-  intervalFunc();
-  CheckFriendInterval;
+    intervalFunc();
+    CheckFriendInterval;
+  } catch (error) {
+    console.log('ignore error:' + error);
+  }
 });
