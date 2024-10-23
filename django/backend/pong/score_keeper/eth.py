@@ -155,7 +155,11 @@ def get_matches_from_blockchain(
             ]
         elif tournament_id:
             tournament_id_int = tournament_id.int
-            matches = [match for match in all_matches if match[1] == tournament_id_int]
+            matches = [
+                match
+                for match in all_matches
+                if match[1] == tournament_id_int and (round is None or match[7] == round)
+            ]
         else:
             matches = all_matches
         matches = [match_to_dict(match) for match in matches]
