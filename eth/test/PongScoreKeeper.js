@@ -59,6 +59,18 @@ describe('PongScoreKeeper contract', function () {
       ).to.be.revertedWith('player1 and player2 cannot be the same');
     });
 
+    it('Should fail if match already exists', async function () {
+      const matchId = uuidToBytes16(crypto.randomUUID());
+      const tournamentId = uuidToBytes16(crypto.randomUUID());
+
+      const player3 = uuidToBytes16(crypto.randomUUID());
+
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
+      await expect(
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player3, 15, 5, 1)
+      ).to.be.revertedWith('Match already exists');
+    });
+
     it('Should emit MatchCreated event', async function () {
       const matchId = uuidToBytes16(crypto.randomUUID());
       const tournamentId = uuidToBytes16(crypto.randomUUID());

@@ -49,6 +49,7 @@ contract PongScoreKeeper {
     uint16 _player2Score,
     uint16 _round
   ) external onlyOwner {
+    require(matches[_matchId].createdAt == 0, 'Match already exists');
     require(_player1 != _player2, 'player1 and player2 cannot be the same');
 
     matches[_matchId] = Match(
