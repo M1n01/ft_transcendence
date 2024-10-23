@@ -50,6 +50,7 @@ class EditProfileView(LoginRequiredMixin, FormView):
         kwargs = self.get_form_kwargs()  # フォームに渡す引数を取得
         kwargs["instance"] = self.request.user  # ユーザー情報を渡す
         kwargs["user_id"] = self.request.user.id  # user_idも渡す
+        kwargs["auth"] = self.request.user.auth  # 2要素認証の種類を渡す
         return self.form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
@@ -69,8 +70,6 @@ class EditProfileView(LoginRequiredMixin, FormView):
             return HttpResponseBadRequest(f"Bad Request:{e}")
 
     def form_invalid(self, form):
-        # TODO: debug用。あとで消す
-        # print("ValidationError:", form.errors)  # ここでエラーを出力
         response = super().form_invalid(form)
         response.status_code = 400
         return response
@@ -83,8 +82,6 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy("users:changed-password")  # 使わない
 
     def form_invalid(self, form):
-        # TODO: debug用。あとで消す
-        # print("ValidationError:", form.errors)  # ここでエラーを出力
         response = super().form_invalid(form)
         response.status_code = 400
         return response
@@ -113,10 +110,13 @@ class ExportProfileView(LoginRequiredMixin, View):
                 "Email",
                 "first_name",
                 "last_name",
-                "birth_date",
                 "country_code",
                 "phone",
                 "language",
+                "match_count",
+                "win_count",
+                "loose_count",
+                "birth_date",
                 "created_at",
                 "updated_at",
                 "last_login",
@@ -124,22 +124,25 @@ class ExportProfileView(LoginRequiredMixin, View):
         )  # ヘッダー行の作成
 
         # ユーザーデータを取得し、CSVに書き込む
-        for user in FtUser.objects.all():
-            writer.writerow(
-                [
-                    user.username,
-                    user.email,
-                    user.first_name,
-                    user.last_name,
-                    user.birth_date,
-                    user.country_code,
-                    user.phone,
-                    user.language,
-                    user.created_at,
-                    user.updated_at,
-                    user.last_login,
-                ]
-            )
+        user = request.user
+        writer.writerow(
+            [
+                user.username,
+                user.email,
+                user.first_name,
+                user.last_name,
+                user.country_code,
+                user.phone,
+                user.language,
+                user.match_count,
+                user.win_count,
+                user.loose_count,
+                user.birth_date,
+                user.created_at,
+                user.updated_at,
+                user.last_login,
+            ]
+        )
 
         return response
 
@@ -159,26 +162,37 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         try:
             user = self.get_object()  # 削除対象のユーザーオブジェクトを取得
-            # user = request.user  # 削除対象のユーザーオブジェクトを取得
 
             # ユーザーの論理削除 (is_activeをFalseに設定)
-            user.username = "delete_user_" + str(user.id)
-            # request.user.email = None
-            # request.user.email42 = None
-            temp_email = str(user.id) + "user@tmp.email.com"
+            user.password = ""
+            user.last_login = None
+            # user.id = 0
+            user.username = "delete_user"
+            # user.username = ""
+            temp_email = str(user.id) + "@delete.user"
             user.email = temp_email
+            # request.user.email = None
             user.email42 = temp_email
+            # request.user.email42 = None
             user.first_name = None
             user.last_name = None
             user.country_code = None
             user.phone = None
             user.language = ""
+            user.match_count = 0
+            user.win_count = 0
+            user.loose_count = 0
+            user.avatar = "avatar/default/user.png"
+            user.is_superuser = False
+            user.is_ft = False
+            user.is_staff = False
             user.is_active = False
+            user.is_login = False
             user.birth_date = None
             user.auth = ""
             user.app_secret = None
-            # user.created_at = None
-            # user.updated_at = None
+            user.created_at = None
+            user.updated_at = None
 
             user.save()
             return JsonResponse({"status": "success"}, status=200)
