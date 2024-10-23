@@ -119,8 +119,8 @@ def get_matches_from_blockchain(
         return {
             "match_id": uuid.UUID(int=match[0]),
             "tournament_id": uuid.UUID(int=match[1]),
-            "player1": uuid.UUID(int=match[3]),
-            "player2": uuid.UUID(int=match[4]),
+            "player1_id": uuid.UUID(int=match[3]),
+            "player2_id": uuid.UUID(int=match[4]),
             "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
@@ -146,14 +146,16 @@ def get_matches_from_blockchain(
             raise Exception("Error getting all matches")
 
         if user_id:
+            user_id_int = user_id.int
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
                 match
                 for match in all_matches
-                if match[3] == user_id or match[4] == user_id
+                if match[3] == user_id_int or match[4] == user_id_int
             ]
         elif tournament_id:
-            matches = [match for match in all_matches if match[1] == tournament_id]
+            tournament_id_int = tournament_id.int
+            matches = [match for match in all_matches if match[1] == tournament_id_int]
         else:
             matches = all_matches
         matches = [match_to_dict(match) for match in matches]
