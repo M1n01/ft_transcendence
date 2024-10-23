@@ -1,7 +1,7 @@
 from django import forms
 from accounts.models import FtUser
 
-from accounts.models import LanguageChoice, COUNTRY_CODE_CHOICES
+from accounts.models import AuthChoices, LanguageChoice, COUNTRY_CODE_CHOICES
 
 # from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 from django.utils.translation import gettext_lazy as _
@@ -33,7 +33,8 @@ class UserEditForm(forms.ModelForm):
             }
         ),
     )
-    email = forms.CharField(
+    email = forms.EmailField(
+        # required=False,
         max_length=EMAIL_MAX_LEN,
         widget=forms.TextInput(
             attrs={
@@ -45,7 +46,7 @@ class UserEditForm(forms.ModelForm):
         ),
     )
     first_name = forms.CharField(
-        # required=False,
+        required=False,
         max_length=FIRSTNAME_MAX_LEN,
         widget=forms.TextInput(
             attrs={
@@ -56,8 +57,8 @@ class UserEditForm(forms.ModelForm):
         ),
     )
     last_name = forms.CharField(
+        required=False,
         max_length=LASTNAME_MAX_LEN,
-        # required=False,
         widget=forms.TextInput(
             attrs={
                 "id": "last_name_id",
@@ -66,7 +67,8 @@ class UserEditForm(forms.ModelForm):
             }
         ),
     )
-    birth_date = forms.CharField(
+    birth_date = forms.DateField(
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "id": "birth_date_id",
@@ -124,7 +126,8 @@ class UserEditForm(forms.ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        self.user_id = kwargs.pop("user_id", None)  # ユーザーIDをフォームに渡す
+        self.user_id = kwargs.pop("user_id", None)  # user.idをformに渡す
+        self.auth = kwargs.pop("auth", None)  # user.authをformに渡す
         super(UserEditForm, self).__init__(*args, **kwargs)
 
     def clean_username(self):
@@ -133,15 +136,39 @@ class UserEditForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
+        # if not email:
+        #     if self.auth == AuthChoices.EMAIL:
+        #         raise forms.ValidationError(
+        #             _("２要素認証で必要です。メールアドレスを入力してください")
+        #         )
+        #     return email
         if FtUser.objects.filter(email=email).exclude(id=self.user_id).exists():
-            # print(f"email Error:{email=}")
             raise forms.ValidationError(
                 _("このメールアドレスは既に使用されています。......")
             )
         return email
 
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get("last_name")
+        if len(last_name) > LASTNAME_MAX_LEN:
+            raise forms.ValidationError(_("64文字以内にしてください"))
+        return last_name
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        if len(first_name) > LASTNAME_MAX_LEN:
+            raise forms.ValidationError(_("64文字以内にしてください"))
+        return first_name
+
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
+
+        if not phone:
+            if self.auth == AuthChoices.SMS:
+                raise forms.ValidationError(
+                    _("２要素認証で必要です。電話番号を入力してください")
+                )
+            return phone
         pattern = "\\d*"
         result = re.fullmatch(pattern, phone)
         if result is None:
@@ -150,20 +177,6 @@ class UserEditForm(forms.ModelForm):
         if len(phone) > PHONE_MAX_LEN:
             raise forms.ValidationError(_("正しい電話番号を入力してください"))
         return phone
-
-    def clean_last_name(self):
-        last_name = self.cleaned_data.get("last_name")
-        if len(last_name) > LASTNAME_MAX_LEN:
-            # print(f"phne Error:{last_name=}")
-            raise forms.ValidationError(_("64文字以内にしてください"))
-        return last_name
-
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get("first_name")
-        if len(first_name) > LASTNAME_MAX_LEN:
-            # print(f"phne Error:{first_name=}")
-            raise forms.ValidationError(_("64文字以内にしてください"))
-        return first_name
 
 
 class ChangePasswordForm(PasswordChangeForm):

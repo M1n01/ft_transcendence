@@ -50,6 +50,7 @@ class EditProfileView(LoginRequiredMixin, FormView):
         kwargs = self.get_form_kwargs()  # フォームに渡す引数を取得
         kwargs["instance"] = self.request.user  # ユーザー情報を渡す
         kwargs["user_id"] = self.request.user.id  # user_idも渡す
+        kwargs["auth"] = self.request.user.auth  # 2要素認証の種類を渡す
         return self.form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
@@ -158,27 +159,34 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
 
             # ユーザーの論理削除 (is_activeをFalseに設定)
             user.password = ""
+            user.last_login = None
+            # user.id = 0
             user.username = "delete_user"
+            # user.username = ""
             temp_email = str(user.id) + "@delete.user"
             user.email = temp_email
-            user.email42 = temp_email
-            # user.id = 0
-            # user.username = ""
             # request.user.email = None
+            user.email42 = temp_email
             # request.user.email42 = None
             user.first_name = None
             user.last_name = None
             user.country_code = None
             user.phone = None
             user.language = ""
+            user.match_count = 0
+            user.win_count = 0
+            user.loose_count = 0
+            user.avatar = "avatar/default/user.png"
+            user.is_superuser = False
+            user.is_ft = False
+            user.is_staff = False
             user.is_active = False
+            user.is_login = False
             user.birth_date = None
             user.auth = ""
             user.app_secret = None
             user.created_at = None
             user.updated_at = None
-            user.avatar = "avatar/default/user.png"
-            user.last_login = None
 
             user.save()
             return JsonResponse({"status": "success"}, status=200)
