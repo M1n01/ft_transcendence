@@ -45,7 +45,6 @@ def save_match_to_blockchain(
         tournament_int = tournament.int
         player1_int = player1.int
         player2_int = player2.int
-        print("variants", match_id_int, tournament_int, player1_int, player2_int)
 
         try:
             transaction = contract.functions.createMatch(
