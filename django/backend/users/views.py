@@ -69,8 +69,6 @@ class EditProfileView(LoginRequiredMixin, FormView):
             return HttpResponseBadRequest(f"Bad Request:{e}")
 
     def form_invalid(self, form):
-        # TODO: debug用。あとで消す
-        # print("ValidationError:", form.errors)  # ここでエラーを出力
         response = super().form_invalid(form)
         response.status_code = 400
         return response
@@ -83,8 +81,6 @@ class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy("users:changed-password")  # 使わない
 
     def form_invalid(self, form):
-        # TODO: debug用。あとで消す
-        # print("ValidationError:", form.errors)  # ここでエラーを出力
         response = super().form_invalid(form)
         response.status_code = 400
         return response
@@ -181,6 +177,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
             user.app_secret = None
             user.created_at = None
             user.updated_at = None
+            user.avatar = "avatar/default/user.png"
             user.last_login = None
 
             user.save()
