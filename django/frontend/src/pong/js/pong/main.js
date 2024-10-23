@@ -28,6 +28,35 @@ document.addEventListener('PongMainEvent', function async() {
     return;
   }
 
+  const top_left_button = document.getElementById('top-left-button');
+  const top_right_button = document.getElementById('top-right-button');
+  const bottom_left_button = document.getElementById('bottom-left-button');
+  const bottom_right_button = document.getElementById('bottom-right-button');
+  top_left_button.addEventListener('touchstart', () => {
+    keys['q'] = true;
+  });
+  top_left_button.addEventListener('touchend', () => {
+    keys['q'] = false;
+  });
+  top_right_button.addEventListener('touchstart', () => {
+    keys['o'] = true;
+  });
+  top_right_button.addEventListener('touchend', () => {
+    keys['o'] = false;
+  });
+  bottom_left_button.addEventListener('touchstart', () => {
+    keys['a'] = true;
+  });
+  bottom_left_button.addEventListener('touchend', () => {
+    keys['a'] = false;
+  });
+  bottom_right_button.addEventListener('touchstart', () => {
+    keys['l'] = true;
+  });
+  bottom_right_button.addEventListener('touchend', () => {
+    keys['l'] = false;
+  });
+
   const canvas = document.getElementById('myCanvas');
   const start_button = document.getElementById('start-pong-game-button');
   start_button.addEventListener('click', () => {
@@ -48,8 +77,36 @@ document.addEventListener('PongMainEvent', function async() {
   //const height = 460;
 
   const width = Number(canvas_block.offsetWidth);
-  const height = Number(canvas_block.offsetHeight);
-  const PADDDLE_X = 560;
+  const height = (width * 3) / 5;
+  console.log('width=' + width);
+  ///const PADDDLE_X = width * 0.9;
+  //const PADDDLE_X = 450 + (width * width) / 10000;
+  const get_offset = (width) => {
+    let paddle_offset = 0;
+    if (width > 700) {
+      paddle_offset = 140;
+    } else if (width > 600) {
+      paddle_offset = 130;
+    } else if (width > 500) {
+      paddle_offset = 120;
+    } else if (width > 400) {
+      paddle_offset = 100;
+    } else if (width > 350) {
+      paddle_offset = 80;
+    } else if (width > 300) {
+      paddle_offset = 60;
+    } else if (width > 250) {
+      paddle_offset = 40;
+    } else if (width > 200) {
+      paddle_offset = 20;
+    } else if (width > 150) {
+      paddle_offset = 0;
+    } else {
+      paddle_offset = 0;
+    }
+    return paddle_offset;
+  };
+  const PADDDLE_X = 420 + get_offset(width);
   //const PADDDLE_X = (1 - width / height / 2) * height + height + 15;
   const CAMERA_Z = 500;
   const PADDLE_INIT_SPEED = 5;
@@ -61,8 +118,6 @@ document.addEventListener('PongMainEvent', function async() {
     maxY: 370,
   };
 
-  //const vx = 5;
-  //const vy = 5;
   let ball_velocity = new THREE.Vector3(3, 3, 0);
   let paddle_velocity = new THREE.Vector3(0, PADDLE_INIT_SPEED, 0);
 
@@ -73,6 +128,21 @@ document.addEventListener('PongMainEvent', function async() {
   });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
+
+  window.addEventListener('resize', function () {
+    const width = Number(canvas_block.offsetWidth);
+    const height = (width * 3) / 5;
+
+    const PADDDLE_X = 420 + get_offset(width);
+    paddle_left.position.x = -PADDDLE_X;
+    paddle_right.position.x = PADDDLE_X;
+    paddle_position(paddle_left, true);
+    paddle_position(paddle_right, false);
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
+    renderer.render(scene, camera);
+  });
 
   // シーンを作成
   const scene = new THREE.Scene();
@@ -339,4 +409,18 @@ document.addEventListener('PongMainEvent', function async() {
       count1.Hidden();
     }
   }
+  // スマホを傾けた時の処理
+  /*
+  window.addEventListener('resize', function () {
+    if (window.matchMedia('(orientation: landscape)').matches) {
+      // 横向きになった場合の処理
+      console.log('横向きになりました');
+      isEnd = true;
+    } else {
+      // 縦向きになった場合の処理
+      console.log('縦向きになりました');
+      isEnd = true;
+    }
+  });
+  */
 });

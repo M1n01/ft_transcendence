@@ -322,6 +322,10 @@ class AddScore(UpdateView):
             match = MatchTmp.objects.get(id=pk)
 
             try:
+                if match.player2 is None:
+                    type = "test"
+                else:
+                    type = "tournament"
                 if match.is_end is False:
                     with transaction.atomic():
                         # 5点先取したら勝ち。それ以降は更新しない
@@ -334,13 +338,10 @@ class AddScore(UpdateView):
                         if match.player1_score >= 5 or match.player2_score >= 5:
                             match.is_end = True
                             match.save()
-                            save_block_chain(match)
                             prepare_next_match(match)
+                            if type == "tournament":
+                                save_block_chain(match)
 
-                if match.player2 is None:
-                    type = "test"
-                else:
-                    type = "tournament"
                 score = {
                     "player1_score": match.player1_score,
                     "player2_score": match.player2_score,

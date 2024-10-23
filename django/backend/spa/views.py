@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.generic import TemplateView, RedirectView
 from django.contrib.auth.decorators import login_not_required
 from django.utils.decorators import method_decorator
@@ -45,6 +45,7 @@ class Nav(TemplateView):
         except Exception as e:
             logger.warning(f"Nav Warning:{e}")
             context = {"hidden": "", "cnt_message": 0}
+            return HttpResponseBadRequest()
             return render(request, "spa/nav.html", context=context)
 
 

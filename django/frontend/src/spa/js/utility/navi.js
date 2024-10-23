@@ -2,6 +2,7 @@ import { getUrlWithLang } from './url.js';
 import fetchData from './fetch.js';
 import { logout } from './user.js';
 import { sendWebSocket } from '../ws/socket.js';
+import { fetchJsonData } from '../utility/fetch.js';
 const NOTIFICATION_INTERVAL = 10000;
 
 export const UpdateMessageIcon = (cnt, ws = false) => {
@@ -39,6 +40,11 @@ export let GetNotificationInterval = setInterval(getNotificationCount, NOTIFICAT
 
 export const loadNav = async () => {
   try {
+    const json = await fetchJsonData('/spa/is-login');
+    if (json['is_redirect'] == true) {
+      return;
+    }
+
     const nav_uri = getUrlWithLang('spa/nav');
     const nav_html = await fetchData(nav_uri);
     document.querySelector('#nav').innerHTML = nav_html;
