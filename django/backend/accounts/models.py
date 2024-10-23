@@ -124,9 +124,6 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("email"), max_length=EMAIL_MAX_LEN, unique=True
     )
     email42 = models.EmailField(
-        verbose_name=_("email42"), max_length=EMAIL_MAX_LEN, unique=True
-    )
-    email42 = models.EmailField(
         verbose_name=_("email42"),
         max_length=EMAIL_MAX_LEN,
         unique=True,

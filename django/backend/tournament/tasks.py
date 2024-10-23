@@ -185,7 +185,7 @@ def close_application():
                 tournament_id=tournament.id
             )
 
-            if len(participant) < tournament.current_players:
+            if len(participant) < 4:
                 tournament.status = TournamentStatusChoices.CANCEL
             else:
                 create_matches(tournament)
