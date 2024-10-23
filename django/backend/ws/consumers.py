@@ -12,6 +12,10 @@ from .message import get
 from channels.db import database_sync_to_async
 
 
+def extract_ascii(input_string):
+    return "".join(c for c in input_string if c.isalpha())
+
+
 @database_sync_to_async
 def update_user_login_state(user, flag):
     user.is_login = flag
@@ -105,7 +109,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
             user = await get_user(session_id)
 
             if user.is_authenticated:
-                group_name = self.room_group_name + str(user.username)
+                group_name = self.room_group_name + str(extract_ascii(user.email))
                 await self.channel_layer.group_add(group_name, self.channel_name)
                 await self.accept()  # WebSocket接続を受け入れる
                 await update_user_login_state(user, True)
@@ -127,7 +131,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
         user = await get_user(session_id)
         await update_user_login_state(user, False)
 
-        group_name = self.room_group_name + str(user.username)
+        group_name = self.room_group_name + str(extract_ascii(user.email))
         await self.channel_layer.group_send(
             group_name,
             {
@@ -151,7 +155,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
         elif json["message"] == "alert_cnt":
             (message, param1, param2, param3, param4) = await get.alert_cnt(user)
 
-        group_name = self.room_group_name + str(user.username)
+        group_name = self.room_group_name + str(extract_ascii(user.email))
         if message == "":
             return
         await self.channel_layer.group_send(

@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from accounts.models import FtUser
-from tournament.models import Tournament
-from django.db.models import Q
 from django.core.paginator import Paginator
 
-from pong.models import MatchTmp
-import datetime
+# from pong.models import MatchTmp
+from pong.models import Match
 
 import logging
 
@@ -60,61 +58,11 @@ def edit_matches_data(request, matches):
 
 
 def get_tournament(request):
-    list = FtUser.objects.all()
-    list2 = Tournament.objects.all()
-    matches = [
-        {
-            "tournament_id": list2[0].id,
-            "round": 12,
-            "player1_id": list[0].id,
-            "player2_id": list[1].id,
-            "player1_score": 2,
-            "player2_score": 5,
-            "updated_at": datetime.datetime.now(),
-        },
-        {
-            "tournament_id": list2[1].id,
-            "round": 121,
-            "player1_id": list[2].id,
-            "player2_id": list[3].id,
-            "player1_score": 3,
-            "player2_score": 2,
-            "updated_at": datetime.datetime.now(),
-        },
-        {
-            "tournament_id": list2[0].id,
-            "round": 1,
-            "player1_id": list[4].id,
-            "player2_id": list[5].id,
-            "player1_score": 1,
-            "player2_score": 0,
-            "updated_at": datetime.datetime.now(),
-        },
-        {
-            "tournament_id": list2[1].id,
-            "round": 0,
-            "player1_id": list[6].id,
-            "player2_id": list[7].id,
-            "player1_score": 2,
-            "player2_score": 4,
-            "updated_at": datetime.datetime.now(),
-        },
-        {
-            "tournament_id": list2[0].id,
-            "round": 2121,
-            "player1_id": list[8].id,
-            "player2_id": None,
-            "player1_score": 0,
-            "player2_score": 0,
-            "updated_at": datetime.datetime.now(),
-        },
-    ]
 
-    # matches = MatchTmp.objects.filter("")
-    # matches = MatchTmp.objects.filter(
-    #    Q(player1=request.user) | Q(player2=request.user)
-    # ).order_by("-updated_at")
+    matches = Match.get_matches(user_id=request.user.id)
 
+    if len(matches) == 0:
+        return ([], [])
     list = []
     for match in matches:
         if (match["player1_id"] is not None) and (match["player2_id"] is not None):
@@ -126,27 +74,32 @@ def get_tournament(request):
 
 
 def get_ovo(request):
-    matches = MatchTmp.objects.filter(
-        Q(player1=request.user) | Q(player2=request.user)
-    ).order_by("-updated_at")
+    """
+    現状は使わない
+
+    """
+    return None
+    # matches = MatchTmp.objects.filter(
+    #    Q(player1=request.user) | Q(player2=request.user)
+    # ).order_by("-updated_at")
 
     # トーナメントと合わせるために配列に変換する
-    list = []
-    for match in matches:
-        list.append(
-            {
-                "tournament_id": match.tournament_id,
-                "round": match.round,
-                "player1_id": match.player1_id,
-                "player2_id": match.player2_id,
-                "player1_score": match.player1_id,
-                "player2_score": match.player2_id,
-                "updated_at": match.updated_at,
-            }
-        )
+    # list = []
+    # for match in matches:
+    #    list.append(
+    #        {
+    #            "tournament_id": match.tournament_id,
+    #            "round": match.round,
+    #            "player1_id": match.player1_id,
+    #            "player2_id": match.player2_id,
+    #            "player1_score": match.player1_id,
+    #            "player2_score": match.player2_id,
+    #            "updated_at": match.updated_at,
+    #        }
+    #    )
 
-    (list, page_obj) = edit_matches_data(request, list)
-    return (list, page_obj)
+    # (list, page_obj) = edit_matches_data(request, list)
+    # return (list, page_obj)
 
 
 class History(TemplateView):
@@ -154,7 +107,8 @@ class History(TemplateView):
 
     def get(self, request):
         (tournaments, _) = get_tournament(self.request)
-        (ovo, _) = get_ovo(self.request)[:4]
+        # (ovo, _) = get_ovo(self.request)[:4]
+        ovo = None
         context = {"one_v_one": ovo, "tournaments": tournaments[:4]}
 
         return render(request, "history/history.html", context)

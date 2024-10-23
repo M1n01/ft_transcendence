@@ -74,7 +74,8 @@ document.addEventListener('GameEvent', function () {
         return;
       }
     });
-  } catch {
+  } catch (error) {
+    console.log('ignore error:' + error);
     return;
   }
 });

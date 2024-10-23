@@ -1,5 +1,6 @@
 import { setUserActive } from '../../../friend/js/friend.js';
 import { UpdateMessageIcon } from '../utility/navi.js';
+//import { fetchJsonData } from '../utility/fetch.js';
 
 let socket = null;
 let ws_url = 'wss://' + window.location.host + '/ws/websocket/';
@@ -13,7 +14,12 @@ export const closetWebSocket = () => {
 
 export const sendWebSocket = async (json_message) => {
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
-    socket = new WebSocket(ws_url);
+    try {
+      //const json = fetchJsonData('/spa/is-login');
+      socket = new WebSocket(ws_url);
+    } catch {
+      return;
+    }
   }
 
   if (socket.readyState === WebSocket.OPEN) {
@@ -23,7 +29,11 @@ export const sendWebSocket = async (json_message) => {
 
 export const WebsocketInit = () => {
   if (socket == null || socket.readyState >= WebSocket.CLOSING) {
-    socket = new WebSocket(ws_url);
+    try {
+      socket = new WebSocket(ws_url);
+    } catch {
+      return;
+    }
   }
 
   // 接続が開かれた時の処理
@@ -57,12 +67,14 @@ export const WebsocketInit = () => {
     }
   };
 
+  /*
   socket.onclose = function (event) {
-    console.error('WebSocket closed unexpectedly:', event);
+    //console.error('WebSocket closed unexpectedly:', event);
   };
 
   // エラーが発生した時の処理
   socket.onerror = function (event) {
-    console.error('WebSocket error observed:', event);
+    //console.error('WebSocket error observed:', event);
   };
+  */
 };
