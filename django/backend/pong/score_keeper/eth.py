@@ -29,7 +29,7 @@ def get_contract_address():
 
 
 def save_match_to_blockchain(
-    match_id, tournament, player1, player2, player1_score, player2_score, round
+    match_id, tournament_id, player1_id, player2_id, player1_score, player2_score, round
 ):
 
     w3 = get_contract()
@@ -42,16 +42,16 @@ def save_match_to_blockchain(
 
     try:
         match_id_int = match_id.int
-        tournament_int = tournament.int
-        player1_int = player1.int
-        player2_int = player2.int
+        tournament_id_int = tournament_id.int
+        player1_id_int = player1_id.int
+        player2_id_int = player2_id.int
 
         try:
             transaction = contract.functions.createMatch(
                 match_id_int,
-                tournament_int,
-                player1_int,
-                player2_int,
+                tournament_id_int,
+                player1_id_int,
+                player2_id_int,
                 player1_score,
                 player2_score,
                 round,
@@ -119,8 +119,8 @@ def get_matches_from_blockchain(
         return {
             "match_id": uuid.UUID(int=match[0]),
             "tournament_id": uuid.UUID(int=match[1]),
-            "player1": uuid.UUID(int=match[3]),
-            "player2": uuid.UUID(int=match[4]),
+            "player1_id": uuid.UUID(int=match[3]),
+            "player2_id": uuid.UUID(int=match[4]),
             "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
@@ -146,14 +146,20 @@ def get_matches_from_blockchain(
             raise Exception("Error getting all matches")
 
         if user_id:
+            user_id_int = user_id.int
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
                 match
                 for match in all_matches
-                if match[3] == user_id or match[4] == user_id
+                if match[3] == user_id_int or match[4] == user_id_int
             ]
         elif tournament_id:
-            matches = [match for match in all_matches if match[1] == tournament_id]
+            tournament_id_int = tournament_id.int
+            matches = [
+                match
+                for match in all_matches
+                if match[1] == tournament_id_int and (round is None or match[7] == round)
+            ]
         else:
             matches = all_matches
         matches = [match_to_dict(match) for match in matches]
