@@ -124,9 +124,6 @@ class FtUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("email"), max_length=EMAIL_MAX_LEN, unique=True
     )
     email42 = models.EmailField(
-        verbose_name=_("email42"), max_length=EMAIL_MAX_LEN, unique=True
-    )
-    email42 = models.EmailField(
         verbose_name=_("email42"),
         max_length=EMAIL_MAX_LEN,
         unique=True,
@@ -260,18 +257,6 @@ class FtTmpUserManager(BaseUserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-
-        # if password == "":
-        #    return self._create_user(
-        #        email=email,
-        #        username=username,
-        #        # password=password,
-        #        **extra_fields,
-        #    )
-        # else:
-
-        print(f"create USER No.1:{password=}")
-        print("create USER No.1")
 
         return self._create_user(
             email=email,

@@ -11,7 +11,7 @@ services:
       python manage.py migrate &&
       python manage.py loaddata ./**/fixtures/initial_data_prod.json ||
       python manage.py loaddata ./**/fixtures/initial_data.json ||
-      (celery -A ft_trans  worker -B -l info )&
+      (celery -A ft_trans worker -B -l info)&
       (cd frontend && npm install && npm run build) &&
       cd backend && daphne -e  ssl:8000:privateKey=/tmp/server.key:certKey=/tmp/server.crt ft_trans.asgi:application
       '

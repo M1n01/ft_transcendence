@@ -8,10 +8,14 @@ export default class Game {
     this.prePoint = pre_point;
     this.offset = offset;
 
+    this.is_end = false;
     if (edge_flag == undefined) {
       this.edge_flag = false;
     } else {
       this.edge_flag = edge_flag;
+      if (this.edge_flag == true) {
+        this.is_end = true;
+      }
     }
     this.seed_flag = false;
     this.id = id;
@@ -348,11 +352,11 @@ export default class Game {
     this.appendUserText(this.user2, parent, user2_point, width, height);
   }
 
-  drawUser(parent) {
+  drawUser(parent, h_offset = false) {
     if (this.seed_flag) {
       this.drawSeedUser(parent);
     } else {
-      this.drawNotSeedUser(parent);
+      this.drawNotSeedUser(parent, h_offset);
     }
   }
 

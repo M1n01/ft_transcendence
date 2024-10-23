@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from .models import Tournament
 from notification.models import UserNotification, NotificationMessage
-from friend.models import Friendships
+from friend.models import Friendships, FriendshipsStatusChoices
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,9 @@ def execute_after_create(sender, instance, created, **kwargs):
                 return
             if instance.is_only_friend is False:
                 return
-            friends = Friendships.objects.filter(user=instance.organizer)
+            friends = Friendships.objects.filter(
+                user=instance.organizer, status=FriendshipsStatusChoices.ACCEPTED
+            )
             for friend in friends:
                 UserNotification.objects.create(user=friend.friend, message=message)
         except Exception as e:

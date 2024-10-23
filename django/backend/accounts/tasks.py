@@ -20,9 +20,6 @@ def change_login_state(user_id, flag):
 
 @shared_task
 def check_login_state(user_id, flag):
-    print("check_login_state No.1")
     user = FtTmpUser.objects.get(id=user_id)
     if user is None:
         return
-    # user.is_login = flag
-    # user.save()

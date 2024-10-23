@@ -71,7 +71,7 @@ class Match:
 
 class MatchTmp(models.Model):
     """
-    Matchと内容はほぼ同じ
+    Matchと内容はほぼ同じ(必要に応じていろいろ追加)
     BlockChainではなく、DBに保持する一時データ
     """
 
@@ -99,6 +99,8 @@ class MatchTmp(models.Model):
         default="",
     )
     is_end = models.BooleanField(default=False)
+    # トーナメントの同一階層のゲームが終わったらTrueとなる
+    is_other_game_end = models.BooleanField(default=False)
 
     def __str__(self):
         if self.player2 is not None:
@@ -108,3 +110,10 @@ class MatchTmp(models.Model):
             )
         else:
             return f"id={self.id}:{self.round=} {self.player1} is seed "
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["tournament_id", "round"], name="match_unique"
+            ),
+        ]

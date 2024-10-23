@@ -62,18 +62,34 @@
             <div class="col-6 text-start ps-3">
               <div class="d-flex flex-column">
                 <img src="" id="player2-win" height="40" width="40" hidden />
-                <span class="text-truncate">{{match.player2_alias}}</span>
                 <span>Score: <span id="player2_current_score">{{match.player2_score}}</span></span>
+                <span class="text-truncate">{{match.player2_alias}}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <canvas id="myCanvas"></canvas>
-      <!---->
-      <div id="back-button" class="d-flex justify-content-end" hidden>
-        <button onclick="window.history.go(-1);" class="btn btn-primary">{% trans '戻る'%}</button>
-        <!--
+      <canvas id="myCanvas"> </canvas>
+      <div class="d-flex justify-content-between">
+        <div clsss="invisible">
+          <button class="btn btn-primary invisible">start</button>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button id="start-pong-game-button" class="btn btn-primary">
+            {% trans 'スタート' %}
+          </button>
+        </div>
+        <!---->
+        <div class="d-flex justify-content-start">
+          <button
+            id="back-games-button"
+            onclick="window.history.go(-1);"
+            class="btn btn-secondary invisible"
+          >
+            {% trans '戻る'%}
+          </button>
+
+          <!--
         <form id="start-next-game" method="post" action="{% url 'pong:start'  %}" class="">
           {% csrf_token %}
           {% if match.player2 %}
@@ -85,6 +101,7 @@
           <button type="submit" class="btn btn-primary">{% trans '次のゲーム' %}</button>
         </form>
 -->
+        </div>
       </div>
     </div>
   </body>
