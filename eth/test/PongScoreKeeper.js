@@ -41,7 +41,7 @@ describe('PongScoreKeeper contract', function () {
       const matchId = uuidToBytes16(crypto.randomUUID());
       const tournamentId = uuidToBytes16(crypto.randomUUID());
 
-      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, 5, player2, 3, 1);
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 3, 1);
 
       const match = await pongScoreKeeper.getMatch(matchId, true);
       expect(match.player1).to.equal(player1);
@@ -55,7 +55,7 @@ describe('PongScoreKeeper contract', function () {
       const player3 = player1;
 
       await expect(
-        pongScoreKeeper.createMatch(matchId, tournamentId, player1, 11, player3, 5, 1)
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player3, 15, 5, 1)
       ).to.be.revertedWith('player1 and player2 cannot be the same');
     });
 
@@ -63,7 +63,7 @@ describe('PongScoreKeeper contract', function () {
       const matchId = uuidToBytes16(crypto.randomUUID());
       const tournamentId = uuidToBytes16(crypto.randomUUID());
 
-      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, 11, player2, 5, 2))
+      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 2))
         .to.emit(pongScoreKeeper, 'MatchCreated')
         .withArgs(matchId, tournamentId, await time.latest(), player1, player2, 2);
     });
@@ -75,7 +75,7 @@ describe('PongScoreKeeper contract', function () {
       await expect(
         pongScoreKeeper
           .connect(addr1)
-          .createMatch(matchId, tournamentId, player1, 11, player2, 5, 3)
+          .createMatch(matchId, tournamentId, player1, player2, 15, 5, 3)
       ).to.be.reverted;
     });
 
@@ -84,7 +84,7 @@ describe('PongScoreKeeper contract', function () {
       const matchId = uuidToBytes16(crypto.randomUUID());
       const tournamentId = uuidToBytes16(crypto.randomUUID());
 
-      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, 11, player2, 10, 4))
+      await expect(pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 10, 4))
         .to.not.be.reverted;
     });
 
@@ -93,7 +93,7 @@ describe('PongScoreKeeper contract', function () {
       const tournamentId = uuidToBytes16(crypto.randomUUID());
 
       await expect(
-        pongScoreKeeper.createMatch(matchId, tournamentId, player1, 65535, player2, 65534, 5)
+        pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 65535, 65534, 5)
       ).to.not.be.reverted;
     });
   });
@@ -107,8 +107,8 @@ describe('PongScoreKeeper contract', function () {
     beforeEach(async function () {
       const tournamentId = uuidToBytes16(crypto.randomUUID());
 
-      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, 11, player2, 5, 1);
-      await pongScoreKeeper.createMatch(matchId2, tournamentId, player2, 11, player1, 7, 1);
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
+      await pongScoreKeeper.createMatch(matchId2, tournamentId, player2, player1, 15, 7, 1);
     });
 
     it('Should retrieve a single match correctly', async function () {
@@ -137,7 +137,7 @@ describe('PongScoreKeeper contract', function () {
       const player1 = uuidToBytes16(crypto.randomUUID());
       const player2 = uuidToBytes16(crypto.randomUUID());
 
-      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, 11, player2, 5, 1);
+      await pongScoreKeeper.createMatch(matchId, tournamentId, player1, player2, 15, 5, 1);
     });
 
     it('Should toggle match status correctly', async function () {
@@ -170,8 +170,8 @@ describe('PongScoreKeeper contract', function () {
         matchId,
         tournamentId,
         player1,
-        11,
         player2,
+        15,
         5,
         1
       );
@@ -190,7 +190,7 @@ describe('PongScoreKeeper contract', function () {
       await expect(
         pongScoreKeeper
           .connect(addr1)
-          .createMatch(matchId, tournamentId, player1, 11, player2, 5, 1)
+          .createMatch(matchId, tournamentId, player1, player2, 15, 5, 1)
       ).to.be.reverted;
     });
   });

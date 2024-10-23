@@ -29,7 +29,7 @@ def get_contract_address():
 
 
 def save_match_to_blockchain(
-    match_id, tournament, player1, player1_score, player2, player2_score, round
+    match_id, tournament, player1, player2, player1_score, player2_score, round
 ):
 
     w3 = get_contract()
@@ -41,19 +41,19 @@ def save_match_to_blockchain(
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
-        match_id_bytes = match_id.bytes
-        tournament_bytes = tournament.bytes
-        player1_bytes = player1.bytes
-        player2_bytes = player2.bytes
+        match_id_int = match_id.int
+        tournament_int = tournament.int
+        player1_int = player1.int
+        player2_int = player2.int
         print(
-            "variants", match_id_bytes, tournament_bytes, player1_bytes, player2_bytes
+            "variants", match_id_int, tournament_int, player1_int, player2_int
         )
         transaction = contract.functions.createMatch(
-            match_id_bytes,
-            tournament_bytes,
-            player1_bytes,
+            match_id_int,
+            tournament_int,
+            player1_int,
+            player2_int,
             player1_score,
-            player2_bytes,
             player2_score,
             round,
         ).build_transaction(
@@ -115,13 +115,13 @@ def get_matches_from_blockchain(
     )
 
     def match_to_dict(match):
-        utc_created_at = datetime.fromtimestamp(match[1], tz=timezone.utc)
+        utc_created_at = datetime.fromtimestamp(match[2], tz=timezone.utc)
         jst_created_at = utc_created_at.astimezone(timezone(timedelta(hours=9)))
         return {
-            "match_id": uuid.UUID(bytes=match[0]),
-            "tournament_id": uuid.UUID(bytes=match[2]),
-            "player1": uuid.UUID(bytes=match[3]),
-            "player2": uuid.UUID(bytes=match[4]),
+            "match_id": uuid.UUID(int=match[0]),
+            "tournament_id": uuid.UUID(int=match[1]),
+            "player1": uuid.UUID(int=match[3]),
+            "player2": uuid.UUID(int=match[4]),
             "created_at": jst_created_at,
             "player1_score": match[5],
             "player2_score": match[6],
@@ -130,23 +130,23 @@ def get_matches_from_blockchain(
         }
 
     if match_id is not None:
-        match_id_bytes = match_id.bytes
-        match = contract.functions.getMatch(match_id_bytes, only_active).call()
+        match_id_int = match_id.int
+        match = contract.functions.getMatch(match_id_int, only_active).call()
         matches = match_to_dict(match)
     else:
         all_matches = contract.functions.getAllMatches(only_active).call()
         if user_id:
-            user_id_bytes = user_id.bytes
+            user_id_int = user_id.int
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
                 match
                 for match in all_matches
-                if match[3] == user_id_bytes or match[4] == user_id_bytes
+                if match[3] == user_id_int or match[4] == user_id_int
             ]
         elif tournament_id:
-            tournament_id_bytes = tournament_id.bytes
+            tournament_id_int = tournament_id.int
             matches = [
-                match for match in all_matches if match[2] == tournament_id_bytes
+                match for match in all_matches if match[1] == tournament_id_int
             ]
         else:
             matches = all_matches
@@ -164,8 +164,8 @@ def delete_match_from_blockchain(match_id):
     account = w3.eth.account.from_key(settings.PRIVATE_ACCOUNT_KEY)
 
     try:
-        match_id_bytes = match_id.bytes
-        transaction = contract.functions.deleteMatch(match_id_bytes).build_transaction(
+        match_id_int = match_id.int
+        transaction = contract.functions.deleteMatch(match_id_int).build_transaction(
             {
                 "from": account.address,
                 "nonce": w3.eth.get_transaction_count(account.address),

@@ -36,8 +36,8 @@ class Match:
             match_id,
             tournament_id,
             player1_id,
-            player1_score,
             player2_id,
+            player1_score,
             player2_score,
             round,
         )
