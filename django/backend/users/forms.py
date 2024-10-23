@@ -132,11 +132,16 @@ class UserEditForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
+        if not username:
+            raise forms.ValidationError(_("入力してください。"))
+        elif len(username) > USERNAME_MAX_LEN:
+            raise forms.ValidationError(_("24文字以内にしてください"))
         return username
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        # if not email:
+        if not email:
+            raise forms.ValidationError(_("入力してください。"))
         #     if self.auth == AuthChoices.EMAIL:
         #         raise forms.ValidationError(
         #             _("２要素認証で必要です。メールアドレスを入力してください")
@@ -150,15 +155,25 @@ class UserEditForm(forms.ModelForm):
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get("last_name")
-        if len(last_name) > LASTNAME_MAX_LEN:
+        if not last_name:
+            last_name = None
+        elif len(last_name) > LASTNAME_MAX_LEN:
             raise forms.ValidationError(_("64文字以内にしてください"))
         return last_name
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get("first_name")
-        if len(first_name) > LASTNAME_MAX_LEN:
+        if not first_name:
+            first_name = None
+        elif len(first_name) > LASTNAME_MAX_LEN:
             raise forms.ValidationError(_("64文字以内にしてください"))
         return first_name
+
+    def clean_birth_date(self):
+        date = self.cleaned_data.get("birth_date")
+        if not date:
+            date = None
+        return date
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
@@ -168,6 +183,7 @@ class UserEditForm(forms.ModelForm):
                 raise forms.ValidationError(
                     _("２要素認証で必要です。電話番号を入力してください")
                 )
+            phone = None
             return phone
         pattern = "\\d*"
         result = re.fullmatch(pattern, phone)
