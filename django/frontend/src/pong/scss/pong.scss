@@ -6,5 +6,35 @@ Body
   max-width: 720px;
   //max-width: 750px;
   //min-width: 750px;
+  //aspect-ratio: 5 / 3;
+}
+
+.canvas-container {
+  position: relative;
+  max-width: 720px;
   aspect-ratio: 5 / 3;
+  .tablet-button {
+    position: absolute;
+    padding: 10px;
+  }
+  #top-left-button {
+    top: 0;
+    left: 0;
+  }
+  #top-right-button {
+    top: 0;
+    right: 0;
+  }
+  #bottom-left-button {
+    bottom: 0;
+    left: 0;
+  }
+  #bottom-right-button {
+    bottom: 0;
+    right: 0;
+  }
+
+  #left-down-button {
+    margin-bottom: -10px;
+  }
 }

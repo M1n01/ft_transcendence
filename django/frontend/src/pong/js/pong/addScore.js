@@ -37,7 +37,7 @@ export const addScore = async (ball, area) => {
     player1_win.src = crown_img;
     player1_win.hidden = false;
     back_button.style.display = 'block';
-    back_button.removeAttribute('hidden');
+    back_button.classList.remove('invisible');
     return true;
   }
   if (Number(score2) >= 5) {
@@ -45,7 +45,7 @@ export const addScore = async (ball, area) => {
     player2_win.src = crown_img;
     player2_win.hidden = false;
     back_button.style.display = 'block';
-    back_button.removeAttribute('hidden');
+    back_button.classList.remove('invisible');
     return true;
   }
   return false;
