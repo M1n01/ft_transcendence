@@ -18,8 +18,16 @@
           <button type="submit" class="btn btn-primary">{% trans 'スタート' %}</button>
         </form>
       </div>
+
       <div class="d-block mt-5">
         <div class="h3">{% trans 'トーナメント' %}</div>
+      {% if tournament %}
+      <!---->
+      {% include 'pong/card.html' with tournament=tournament match=match %}
+      <!---->
+      {% else %} {% trans '実行できるトーナメントがありません' %} {% endif %}
+
+      <!--
         <div class="d-flex">
           <form id="start-tournament-game" method="post" action="{% url 'pong:start'  %}" class="">
             {% csrf_token %}
@@ -35,6 +43,7 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-secondary">{% trans '詳細' %}</button>
           </form>
+      -->
         </div>
       </div>
     </div>

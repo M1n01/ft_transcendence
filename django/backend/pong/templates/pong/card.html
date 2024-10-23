@@ -1,0 +1,59 @@
+{% load i18n %} {% load tz %}
+<div class="col-md-4 mb-4 w-auto card-div">
+  <div class="card mx-0 mx-sm-0">
+    <div class="card-header d-flex flex-text justify-content-center align-items-center">
+      <div
+        class="h6 card-title text-center d-flex justify-content-center text-break text-wrap pt-3 pb-1"
+      >
+        {{tournament.name}}
+      </div>
+    </div>
+    <div class="card-body w-100">
+      <div class="text-center w-100">
+        <strong class="card-label d-flex justify-content-center">{% trans '主催者'%}<br /></strong
+        ><span
+          ><span class="text-center text-break text-wrap px-2"
+            >{{tournament.organizer.username}}</span
+          ></span
+        >
+      </div>
+      <div class="text-center mt-3">
+        <strong class="card-label d-flex justify-content-center"
+          >{% trans 'プレイヤー1'%}<br /></strong
+        ><span class="d-flex justify-content-center">{{match.player1_alias}}</span>
+      </div>
+      <div class="text-center mt-3">
+        <strong class="card-label d-flex justify-content-center"
+          >{% trans 'プレイヤー2'%}<br /></strong
+        ><span class="d-flex justify-content-center">{{match.player2_alias}}</span>
+      </div>
+      <div class="text-center mt-3">
+        <strong class="card-label d-flex justify-content-center">{% trans '開始日時'%}<br /></strong
+        ><span class="d-flex justify-content-center"
+          >{{tournament.start_at|timezone:"Asia/Tokyo"}}</span
+        >
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-around w-100">
+      <div class="card-footer w-100">
+        <form id="start-tournament-game" method="post" action="{% url 'pong:start'  %}" class="">
+          {% csrf_token %}
+          <input name="type" type="hidden" value="tournament" />
+          <button type="submit" class="btn btn-primary">{% trans '開始' %}</button>
+        </form>
+      </div>
+
+      <form method="post" action="{% url 'tournament:register'  %}" class="w-100 details">
+        {% csrf_token %}
+        <input name="id" type="hidden" value="{{tournament.id}}" />
+        <input name="status" type="hidden" value="ACCEPTED" />
+        <div class="card-footer text-center">
+          <a href="/tournament/detail/{{ tournament.id }}" class="btn btn-primary text-nowrap"
+            >{% trans '詳細 '%}</a
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
