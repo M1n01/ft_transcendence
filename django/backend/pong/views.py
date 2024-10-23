@@ -92,8 +92,40 @@ def index(request):
     return render(request, "pong/index.html", context)
 
 
+def get_current_tournament(user):
+    tournaments = Tournament.objects.filter(
+        start_at__lte=datetime.now(tz=timezone.utc),
+        organizer=user,
+        status=TournamentStatusChoices.ONGOING,
+    ).order_by("start_at")
+    if len(tournaments) == 0:
+        return None
+    return tournaments[0]
+
+
+def get_current_match(tournament):
+    if tournament is None:
+        return None
+    matches = (
+        MatchTmp.objects.filter(tournament_id=tournament, is_end=False)
+        .exclude(Q(player1=None) | Q(player2=None))
+        .order_by("-round")
+    )
+    if len(matches) == 0:
+        return None
+    return matches[0]
+
+
 class GamesView(TemplateView):
     template_name = "pong/games.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tournament = get_current_tournament(self.request.user)
+        match = get_current_match(tournament)
+        context["tournament"] = tournament
+        context["match"] = match
+        return context
 
 
 class MatchView(DetailView):
@@ -107,6 +139,7 @@ class TournamentDetail(TemplateView):
         """
         GETは禁止
         """
+
         return HttpResponseNotFound()
 
     def post(self, request):
@@ -158,23 +191,14 @@ class StartPong(TemplateView):
                 )
                 id = match.id
             elif type == "tournament":
-                tournaments = Tournament.objects.filter(
-                    start_at__lte=datetime.now(tz=timezone.utc),
-                    organizer=request.user,
-                    status=TournamentStatusChoices.ONGOING,
-                ).order_by("start_at")
-                if len(tournaments) == 0:
+                tournament = get_current_tournament(request.user)
+                if tournament is None:
                     return JsonResponse(data)
-                list_matches = (
-                    MatchTmp.objects.filter(tournament_id=tournaments[0], is_end=False)
-                    .exclude(Q(player1=None) | Q(player2=None))
-                    .order_by("-round")
-                )
-
-                if len(list_matches) == 0:
+                match = get_current_match(tournament)
+                if match is None:
                     return JsonResponse(data)
-                id = list_matches[0].id
-                tournament_id = tournaments[0].id
+                id = match.id
+                tournament_id = tournament.id
             else:
                 logger.error("StartPong Error:not defined type")
                 return HttpResponseBadRequest()

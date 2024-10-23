@@ -3,32 +3,32 @@ pragma solidity ^0.8.24;
 
 contract PongScoreKeeper {
   struct Match {
-    uint256 matchId;
-    uint256 tournamentId;
+    uint128 matchId;
+    uint128 tournamentId;
     uint256 createdAt;
-    uint256 player1;
-    uint256 player2;
+    uint128 player1;
+    uint128 player2;
     uint16 player1Score;
     uint16 player2Score;
     uint16 round;
     bool isActive; // Matchの削除フラグ
   }
 
-  mapping(uint256 => Match) public matches;
-  uint256 public nextMatchId;
+  mapping(uint128 => Match) public matches;
+  uint128[] public matchIds;
 
   address public immutable owner;
 
   event MatchCreated(
-    uint256 indexed matchId,
-    uint256 tournamentId,
+    uint128 indexed matchId,
+    uint128 tournamentId,
     uint256 createdAt,
-    uint256 indexed player1,
-    uint256 indexed player2,
+    uint128 indexed player1,
+    uint128 indexed player2,
     uint16 round
   );
 
-  event MatchStatusChanged(uint256 indexed tournamentId, bool isActive);
+  event MatchStatusChanged(uint128 indexed matchId, bool isActive);
 
   modifier onlyOwner() {
     require(msg.sender == owner, 'Not owner');
@@ -41,17 +41,19 @@ contract PongScoreKeeper {
 
   // POST method
   function createMatch(
-    uint256 _tournamentId,
-    uint256 _player1,
+    uint128 _matchId,
+    uint128 _tournamentId,
+    uint128 _player1,
+    uint128 _player2,
     uint16 _player1Score,
-    uint256 _player2,
     uint16 _player2Score,
     uint16 _round
   ) external onlyOwner {
+    require(matches[_matchId].createdAt == 0, 'Match already exists');
     require(_player1 != _player2, 'player1 and player2 cannot be the same');
 
-    matches[nextMatchId] = Match(
-      nextMatchId,
+    matches[_matchId] = Match(
+      _matchId,
       _tournamentId,
       block.timestamp,
       _player1,
@@ -61,11 +63,11 @@ contract PongScoreKeeper {
       _round,
       true // アクティブフラグ
     );
-    emit MatchCreated(nextMatchId, _tournamentId, block.timestamp, _player1, _player2, _round);
-    nextMatchId++;
+    matchIds.push(_matchId);
+    emit MatchCreated(_matchId, _tournamentId, block.timestamp, _player1, _player2, _round);
   }
 
-  function getMatch(uint256 _matchId, bool _onlyActive) external view returns (Match memory) {
+  function getMatch(uint128 _matchId, bool _onlyActive) external view returns (Match memory) {
     require(matches[_matchId].createdAt != 0, 'Match not found');
     Match memory _match = matches[_matchId];
     if (_onlyActive && !_match.isActive) {
@@ -76,13 +78,14 @@ contract PongScoreKeeper {
 
   // GET method
   function getAllMatches(bool _onlyActive) external view returns (Match[] memory) {
-    uint256 _totalMatches = nextMatchId;
+    uint256 _totalMatches = matchIds.length;
     Match[] memory _allMatches = new Match[](_totalMatches);
-    uint256 _count = 0;
 
+    uint256 _count = 0;
     for (uint256 i = 0; i < _totalMatches; i++) {
-      if (matches[i].createdAt != 0 && (!_onlyActive || matches[i].isActive)) {
-        _allMatches[_count] = matches[i];
+      uint128 _matchId = matchIds[i];
+      if (matches[_matchId].createdAt != 0 && (!_onlyActive || matches[_matchId].isActive)) {
+        _allMatches[_count] = matches[_matchId];
         _count++;
       }
     }
@@ -95,12 +98,12 @@ contract PongScoreKeeper {
   }
 
   // DELETE method
-  function deleteMatch(uint256 _tournamentId) external onlyOwner {
-    require(matches[_tournamentId].createdAt != 0, 'Match not found');
+  function deleteMatch(uint128 _matchId) external onlyOwner {
+    require(matches[_matchId].createdAt != 0, 'Match not found');
 
-    Match storage matchData = matches[_tournamentId];
+    Match storage matchData = matches[_matchId];
     matchData.isActive = !matchData.isActive;
 
-    emit MatchStatusChanged(_tournamentId, matchData.isActive);
+    emit MatchStatusChanged(_matchId, matchData.isActive);
   }
 }
