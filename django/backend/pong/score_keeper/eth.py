@@ -1,4 +1,4 @@
-from web3 import Web3
+from web3 import Web3, exceptions
 from django.conf import settings
 import os
 import json
@@ -45,25 +45,28 @@ def save_match_to_blockchain(
         tournament_int = tournament.int
         player1_int = player1.int
         player2_int = player2.int
-        print(
-            "variants", match_id_int, tournament_int, player1_int, player2_int
-        )
-        transaction = contract.functions.createMatch(
-            match_id_int,
-            tournament_int,
-            player1_int,
-            player2_int,
-            player1_score,
-            player2_score,
-            round,
-        ).build_transaction(
-            {
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-                "gas": 300000,
-                "gasPrice": w3.eth.gas_price,
-            }
-        )
+        print("variants", match_id_int, tournament_int, player1_int, player2_int)
+
+        try:
+            transaction = contract.functions.createMatch(
+                match_id_int,
+                tournament_int,
+                player1_int,
+                player2_int,
+                player1_score,
+                player2_score,
+                round,
+            ).build_transaction(
+                {
+                    "from": account.address,
+                    "nonce": w3.eth.get_transaction_count(account.address),
+                    "gas": 300000,
+                    "gasPrice": w3.eth.gas_price,
+                }
+            )
+        except exceptions.SolidityError as e:
+            print(f"Error building transaction: {e}")
+            raise Exception("Error building transaction")
 
         signed_txn = w3.eth.account.sign_transaction(
             transaction, settings.PRIVATE_ACCOUNT_KEY
@@ -71,11 +74,9 @@ def save_match_to_blockchain(
 
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
 
-
         # イベントをキャッチしてタイムスタンプを取得
         print("Waiting for transaction receipt...")
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-        print(f"Transaction receipt received: {receipt}")
 
         if receipt.status == 0:
             print("Transaction failed")
@@ -83,7 +84,6 @@ def save_match_to_blockchain(
 
         print("Processing logs...")
         logs = contract.events.MatchCreated().process_receipt(receipt)
-        print(f"Logs processed: {logs}")
 
         # logsが空の配列の場合のハンドリングを追加
         if not logs:
@@ -131,23 +131,30 @@ def get_matches_from_blockchain(
 
     if match_id is not None:
         match_id_int = match_id.int
-        match = contract.functions.getMatch(match_id_int, only_active).call()
+
+        try:
+            match = contract.functions.getMatch(match_id_int, only_active).call()
+        except exceptions.SolidityError as e:
+            print(f"Error getting match: {e}")
+            raise Exception("Error getting match")
+
         matches = match_to_dict(match)
     else:
-        all_matches = contract.functions.getAllMatches(only_active).call()
+        try:
+            all_matches = contract.functions.getAllMatches(only_active).call()
+        except exceptions.SolidityError as e:
+            print(f"Error getting all matches: {e}")
+            raise Exception("Error getting all matches")
+
         if user_id:
-            user_id_int = user_id.int
             # ユーザーIDを指定した場合、player1かplayer2にユーザーIDが含まれるものを抽出
             matches = [
                 match
                 for match in all_matches
-                if match[3] == user_id_int or match[4] == user_id_int
+                if match[3] == user_id or match[4] == user_id
             ]
         elif tournament_id:
-            tournament_id_int = tournament_id.int
-            matches = [
-                match for match in all_matches if match[1] == tournament_id_int
-            ]
+            matches = [match for match in all_matches if match[1] == tournament_id]
         else:
             matches = all_matches
         matches = [match_to_dict(match) for match in matches]
@@ -165,12 +172,16 @@ def delete_match_from_blockchain(match_id):
 
     try:
         match_id_int = match_id.int
-        transaction = contract.functions.deleteMatch(match_id_int).build_transaction(
-            {
-                "from": account.address,
-                "nonce": w3.eth.get_transaction_count(account.address),
-            }
-        )
+        try:
+            transaction = contract.functions.deleteMatch(match_id_int).build_transaction(
+                {
+                    "from": account.address,
+                    "nonce": w3.eth.get_transaction_count(account.address),
+                }
+            )
+        except exceptions.SolidityError as e:
+            print(f"Error building transaction: {e}")
+            raise Exception("Error building transaction")
 
         signed_txn = w3.eth.account.sign_transaction(
             transaction, settings.PRIVATE_ACCOUNT_KEY
