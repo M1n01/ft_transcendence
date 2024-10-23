@@ -29,7 +29,7 @@ def get_contract_address():
 
 
 def save_match_to_blockchain(
-    match_id, tournament, player1, player2, player1_score, player2_score, round
+    match_id, tournament_id, player1_id, player2_id, player1_score, player2_score, round
 ):
 
     w3 = get_contract()
@@ -42,16 +42,16 @@ def save_match_to_blockchain(
 
     try:
         match_id_int = match_id.int
-        tournament_int = tournament.int
-        player1_int = player1.int
-        player2_int = player2.int
+        tournament_id_int = tournament_id.int
+        player1_id_int = player1_id.int
+        player2_id_int = player2_id.int
 
         try:
             transaction = contract.functions.createMatch(
                 match_id_int,
-                tournament_int,
-                player1_int,
-                player2_int,
+                tournament_id_int,
+                player1_id_int,
+                player2_id_int,
                 player1_score,
                 player2_score,
                 round,
