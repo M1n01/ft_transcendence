@@ -24,32 +24,36 @@ export function navModal(open) {
 }
 
 document.addEventListener('TwoFaEvent', function () {
-  const two_fa_form = document.getElementById('two-fa-verify-form');
-  const input_code = document.getElementById('two-fa-verify-code');
-  const error_message = document.getElementById('failure-verify');
-  const cancel_two_fa = document.getElementById('cancel-two-fa');
+  try {
+    const two_fa_form = document.getElementById('two-fa-verify-form');
+    const input_code = document.getElementById('two-fa-verify-code');
+    const error_message = document.getElementById('failure-verify');
+    const cancel_two_fa = document.getElementById('cancel-two-fa');
 
-  two_fa_form.addEventListener('submit', async function (event) {
-    const response = await submitForm(event);
-    input_code.value = '';
-    if (response.status != 200) {
-      error_message.hidden = false;
-      return;
-    }
-    navModal(false);
-    await moveTo('games');
-    WebsocketInit();
-  });
+    two_fa_form.addEventListener('submit', async function (event) {
+      const response = await submitForm(event);
+      input_code.value = '';
+      if (response.status != 200) {
+        error_message.hidden = false;
+        return;
+      }
+      navModal(false);
+      await moveTo('games');
+      WebsocketInit();
+    });
 
-  cancel_two_fa.addEventListener('submit', async (event) => {
-    const response = await submitForm(event);
-    if (response.status != 200) {
-      console.error('Error:cancel TwoFa');
-      return;
-    }
-  });
+    cancel_two_fa.addEventListener('submit', async (event) => {
+      const response = await submitForm(event);
+      if (response.status != 200) {
+        console.error('Error:cancel TwoFa');
+        return;
+      }
+    });
 
-  input_code.addEventListener('input', () => {
-    error_message.hidden = true;
-  });
+    input_code.addEventListener('input', () => {
+      error_message.hidden = true;
+    });
+  } catch (error) {
+    console.log('ignore error:' + error);
+  }
 });

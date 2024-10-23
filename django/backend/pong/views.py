@@ -8,7 +8,7 @@ from django.views.decorators.http import condition
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, DetailView
-from .models import MatchTmp
+from .models import MatchTmp, Match
 from django.db.models import Q
 
 from tournament.models import Tournament, TournamentStatusChoices
@@ -284,6 +284,25 @@ def prepare_next_match(cur_match):
     pass
 
 
+def save_block_chain(match):
+    print(f"{match.id=}")
+    print(f"{match.tournament_id.id=}")
+    print(f"{match.round=}")
+    print(f"{match.player1.id=}")
+    print(f"{match.player1_score=}")
+    print(f"{match.player2.id=}")
+    print(f"{match.player2_score=}")
+    Match.save(
+        match_id=match.id,
+        tournament_id=match.tournament_id.id,
+        round=match.round,
+        player1_id=match.player1.id,
+        player2_id=match.player2.id,
+        player1_score=match.player1_score,
+        player2_score=match.player2_score,
+    )
+
+
 class AddScore(UpdateView):
     model = MatchTmp
     fields = ["player1_score", "player2_score"]
@@ -315,6 +334,7 @@ class AddScore(UpdateView):
                         if match.player1_score >= 5 or match.player2_score >= 5:
                             match.is_end = True
                             match.save()
+                            save_block_chain(match)
                             prepare_next_match(match)
 
                 if match.player2 is None:
