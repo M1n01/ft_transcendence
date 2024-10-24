@@ -13,7 +13,8 @@ from channels.db import database_sync_to_async
 
 
 def extract_ascii(input_string):
-    return "".join(c for c in input_string if c.isalpha())
+    test = "".join(c for c in input_string if c.isalpha())
+    return test[:50]
 
 
 @database_sync_to_async

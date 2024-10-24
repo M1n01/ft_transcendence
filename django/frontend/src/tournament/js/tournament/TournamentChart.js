@@ -181,8 +181,10 @@ export default class TournamentChart {
 
   init = () => {
     const BranchDepth = this.calcBranchDepth(this.size);
-    const initWidth = this.parent.clientWidth;
-    const initHeight = this.parent.clientHeight;
+    //const initWidth = this.parent.clientWidth;
+    //const initHeight = this.parent.clientHeight;
+    const initWidth = 400;
+    const initHeight = 200;
     const curWidth = initWidth + (BranchDepth - 1) * 50 + OffsetX;
     const curHeight = initHeight + parseInt((BranchDepth * BranchDepth - 4) / 4) * 150;
     this.parent.style.width = `${curWidth}px`;
