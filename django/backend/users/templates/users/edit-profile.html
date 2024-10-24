@@ -82,6 +82,9 @@
             </div>
             {% endif %}
           </tr>
+          {%else %}
+          <input type="text" name="username" value="{{ user.username }}" readonly hidden />
+          <td><input type="text" name="email" value="{{ user.email42 }}" readonly hidden /></td>
           {% endif %}
           <tr>
             <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
