@@ -8,7 +8,7 @@ import { RebuildTournamentEvent } from '../../../tournament/js/rebuild_tournamen
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Sign up');
+    this.setTitle('Tournament');
   }
 
   checkRedirect = async () => {

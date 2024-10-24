@@ -16,6 +16,7 @@ export default class extends AbstractView {
   getHtml = async (rest = '', params = '') => {
     const uri = getUrlWithLang('accounts/logout');
     const data = fetchData(uri + rest + params);
+    document.querySelector('#nav').innerHTML = '<div></div>';
     return data;
   };
   executeScript = () => {

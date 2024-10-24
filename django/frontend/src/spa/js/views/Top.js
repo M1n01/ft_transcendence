@@ -2,7 +2,7 @@ import AbstractView from './AbstractView.js';
 import fetchData from '../utility/fetch.js';
 import { getUrlWithLang } from '../utility/url.js';
 import { fetchJsonData } from '../utility/fetch.js';
-import { GameEvent } from '../../../pong/js/pong.js';
+//import { GameEvent } from '../../../pong/js/pong.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -24,7 +24,7 @@ export default class extends AbstractView {
   executeScript = () => {
     //非常にわかりにくいが、Topページはpong(game)ページに遷移するので、
     //GameEventを読み出す必要がある
-    document.dispatchEvent(GameEvent);
+    //document.dispatchEvent(GameEvent);
   };
 
   getState = () => {

@@ -15,23 +15,36 @@ export function isLogined() {
 }
 
 export const reload = async () => {
-  const uri = getDisplayedURI(window.location.href);
-  await router(uri.rest, uri.params);
-  await loadNav();
+  try {
+    const uri = getDisplayedURI(window.location.href);
+    await router(uri.rest, uri.params);
+    await loadNav();
+  } catch {
+    return;
+  }
 };
 
 export const handlePostLogin = async () => {
-  moveTo('/games');
-  document.getElementById('nav').hidden = false;
+  try {
+    moveTo('/games');
+    document.getElementById('nav').hidden = false;
+  } catch {
+    return;
+  }
 };
 
 export const logout = async () => {
-  const form = document.getElementById('nav-logout-form');
-  const formData = new FormData(form);
-  const response = await fetchAsForm(form, formData);
-  if (response.status == 200) {
-    closetWebSocket();
-    navigateTo('login-signup');
-    await reload();
+  try {
+    const form = document.getElementById('nav-logout-form');
+    const formData = new FormData(form);
+    const response = await fetchAsForm(form, formData);
+    document.querySelector('#nav').innerHTML = '<div></div>';
+    if (response.status == 200) {
+      closetWebSocket();
+      navigateTo('login-signup');
+      await reload();
+    }
+  } catch {
+    return;
   }
 };

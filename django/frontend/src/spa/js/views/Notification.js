@@ -15,6 +15,7 @@ export default class extends AbstractView {
     return json;
   };
   getHtml = async (rest = '', params = '') => {
+    console.log('load notifiation');
     const uri = getUrlWithLang('notification/');
     const data = fetchData(uri + rest + params);
     return data;

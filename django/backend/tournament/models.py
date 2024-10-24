@@ -43,8 +43,8 @@ class Tournament(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        if self.current_players < 4 or self.current_players > 32:
-            raise ValueError("current_players must be between 4 and 32")
+        if self.current_players < 4 or self.current_players > 16:
+            raise ValueError("current_players must be between 4 and 16")
         super().save(*args, **kwargs)
 
     def __str__(self):

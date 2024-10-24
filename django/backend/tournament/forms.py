@@ -81,7 +81,7 @@ class TournamentForm(forms.ModelForm):
     )
     current_players = forms.IntegerField(
         min_value=4,
-        max_value=32,
+        max_value=16,
         widget=forms.NumberInput(
             # attrs={
             # "placeholder": _("最大参加人数"),

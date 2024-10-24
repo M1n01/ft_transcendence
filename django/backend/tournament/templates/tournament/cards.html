@@ -1,31 +1,39 @@
 {% load i18n %}
-<body>
-  <br />
-  <ul>
-    <div class="mt-4">
-      <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
-        <h3>{{attr.title}}</h3>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournament List</title>
+  </head>
+  <body>
+    <br />
+    <ul>
+      <div class="mt-4">
+        <div class="d-flex align-items-center align-items-sm-end flex-column flex-sm-row">
+          <h3>{{attr.title}}</h3>
+
+          {% if tournaments %}
+          <span class="h6 ps-2">
+            <a href="{{attr.link}}" data-link class="">{% trans 'すべての項目を表示' %}</a>
+          </span>
+          {% endif %}
+        </div>
 
         {% if tournaments %}
-        <span class="h6 ps-2">
-          <a href="{{attr.link}}" data-link class="">{% trans 'すべての項目を表示' %}</a>
-        </span>
+        <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
+          {% for tournament in tournaments %}
+          <span style="display: none"></span>
+          {% include 'tournament/card.html' with tournament=tournament attr=attr %} {% endfor %}
+          <!-- Don't erase me-->
+          {% include 'tournament/card-modal.html' %}
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center justify-content-sm-start overflow-hidden">
+          {% trans '対象のトーナメントは存在しません' %}
+        </div>
         {% endif %}
       </div>
-
-      {% if tournaments %}
-      <div class="row d-flex justify-content-center justify-content-sm-start overflow-hidden">
-        {% for tournament in tournaments %}
-        <span style="display: none"></span>
-        {% include 'tournament/card.html' with tournament=tournament attr=attr %} {% endfor %}
-        <!-- Don't erase me-->
-        {% include 'tournament/card-modal.html' %}
-      </div>
-      {% else %}
-      <div class="d-flex justify-content-center justify-content-sm-start overflow-hidden">
-        {% trans '対象のトーナメントは存在しません' %}
-      </div>
-      {% endif %}
-    </div>
-  </ul>
-</body>
+    </ul>
+  </body>
+</html>

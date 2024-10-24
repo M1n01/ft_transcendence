@@ -41,7 +41,7 @@ class RecruitingView(ListView):
             "link": "/tournament/recruiting/",
             "button": _("登録"),
             "display_register": True,
-            "username": self.request.user.username,
+            "username": self.requet.user.username,
         }
 
         return context

@@ -13,8 +13,8 @@ from channels.db import database_sync_to_async
 
 
 def extract_ascii(input_string):
-    test = "".join(c for c in input_string if c.isalpha())
-    return test[:50]
+    test = "".join(c for c in input_string if (c.isalpha() or c.isdigit()))
+    return test[:95]
 
 
 @database_sync_to_async
@@ -157,6 +157,7 @@ class FtWebsocket(AsyncWebsocketConsumer):
             (message, param1, param2, param3, param4) = await get.alert_cnt(user)
 
         group_name = self.room_group_name + str(extract_ascii(user.email))
+        print(f"{group_name=}")
         if message == "":
             return
         await self.channel_layer.group_send(
