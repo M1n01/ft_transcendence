@@ -28,7 +28,6 @@ export const UpdateMessageIcon = (cnt, ws = false) => {
 };
 
 function getNotificationCount() {
-  console.log('get notification No.1');
   const message = {
     type: 'get',
     message: 'alert_cnt',

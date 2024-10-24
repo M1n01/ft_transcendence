@@ -34,7 +34,7 @@
           <div class="modal-body">
             <div class="d-flex justify-content-center w-100">
               <div p id="instruction">
-                {% trans "QRコードから42でログインすることを許可してください" %}
+                {% trans "中央のボタンから、42でログインすることを許可してください" %}
                 <br />
                 {% trans "続けて認証ボタンを押すことでログインされます" %}
               </div>
@@ -52,9 +52,11 @@
               </div>
             </div>
 
-            <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer"
-              ><img src="data:image/png;base64,{{ qr }}" height="480" width="480"
-            /></a>
+            <a id="ft-oauth-url" href="{{ft_url}}" target="_blank" rel="noopener noreferrer">
+              <div class="text-center mt-3 mb-3">
+                <button class="btn btn-danger"><span class="h2">42OAuth</span></button>
+              </div>
+            </a>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
