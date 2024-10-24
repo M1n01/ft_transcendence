@@ -135,7 +135,7 @@ class UserEditForm(forms.ModelForm):
         if not username:
             raise forms.ValidationError(_("入力してください。"))
         elif len(username) > USERNAME_MAX_LEN:
-            raise forms.ValidationError(_("24文字以内にしてください"))
+            raise forms.ValidationError(_("16文字以内にしてください"))
         return username
 
     def clean_email(self):
