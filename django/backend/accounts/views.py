@@ -438,6 +438,8 @@ def oauth_login(request):
             seconds=getattr(settings, "JWT_VALID_TIME", None)
         )
         request.session["exp"] = str(tmp_time.timestamp())  # 5minutes
+        request.session["is_provisional_login"] = True
+        request.session["user_id"] = str(user.id)
 
         return HttpResponse()
     except RuntimeError as e:

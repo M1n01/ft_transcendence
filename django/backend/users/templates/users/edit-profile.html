@@ -31,6 +31,7 @@
       <form id="edit-profile-form" method="POST" action="{% url 'users:edit-profile' %}">
         {% csrf_token %}
         <div class="row d-flex justify-content-start">
+          {% if user.is_ft == False %}
           <tr>
             <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "ユーザー名" %}</td>
@@ -81,8 +82,9 @@
             </div>
             {% endif %}
           </tr>
+          {% endif %}
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "氏" %}</td>
             </div>
             <div class="col-12 col-md-5">
@@ -99,7 +101,7 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "名" %}</td>
             </div>
             <div class="col-12 col-md-5">
@@ -116,7 +118,7 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "生年月日" %}</td>
             </div>
             <div class="col-12 col-md-5">
@@ -133,7 +135,7 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "国コード" %}</td>
             </div>
             <div class="col-12 col-md-5">
@@ -150,7 +152,7 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "電話番号" %}</td>
             </div>
             <div class="col-12 col-md-5">
@@ -167,7 +169,7 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-md-5 text-start text-md-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4 text-break text-wrap">
               <td>{% trans "言語" %}</td>
             </div>
             <div class="col-12 col-md-5">

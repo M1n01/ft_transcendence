@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-24 04:56+0000\n"
+"POT-Creation-Date: 2024-10-24 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "email"
 msgstr "メールアドレス"
 
-#: accounts/forms.py:46 accounts/forms.py:169
+#: accounts/forms.py:46 accounts/forms.py:170
 msgid "password"
 msgstr "password"
 
@@ -51,45 +51,45 @@ msgstr "country_code"
 msgid "phone_number"
 msgstr "phone_number"
 
-#: accounts/forms.py:147
+#: accounts/forms.py:148
 msgid "auth"
 msgstr "auth"
 
-#: accounts/forms.py:158 users/forms.py:110
+#: accounts/forms.py:159 users/forms.py:110
 msgid "language"
 msgstr "language"
 
-#: accounts/forms.py:182
+#: accounts/forms.py:183
 msgid "password(確認用)"
 msgstr "password(確認用)"
 
-#: accounts/forms.py:218 accounts/forms.py:221 users/forms.py:152
+#: accounts/forms.py:219 accounts/forms.py:222 users/forms.py:152
 msgid "このメールアドレスは既に使用されています。......"
 msgstr "このメールアドレスは既に使用されています。......"
 
-#: accounts/forms.py:229 users/forms.py:191
+#: accounts/forms.py:230 users/forms.py:191
 msgid "数値以外は記入しないでください"
 msgstr "数値以外は記入しないでください"
 
-#: accounts/forms.py:232 users/forms.py:194
+#: accounts/forms.py:233 users/forms.py:194
 msgid "正しい電話番号を入力してください"
 msgstr "正しい電話番号を入力してください"
 
-#: accounts/forms.py:236 accounts/forms.py:239
+#: accounts/forms.py:237 accounts/forms.py:240
 msgid "この電話番号は既に使用されています。......"
 msgstr "この電話番号は既に使用されています。......"
 
-#: accounts/forms.py:247 accounts/forms.py:254 users/forms.py:161
+#: accounts/forms.py:248 accounts/forms.py:255 users/forms.py:161
 #: users/forms.py:169
 msgid "64文字以内にしてください"
 msgstr "64文字以内にしてください"
 
-#: accounts/forms.py:261 accounts/forms.py:271 users/forms.py:250
+#: accounts/forms.py:262 accounts/forms.py:272 users/forms.py:250
 #: users/forms.py:260 users/forms.py:270
 msgid "20文字以内にしてください"
 msgstr "20文字以内にしてください"
 
-#: accounts/forms.py:264 accounts/forms.py:274 users/forms.py:253
+#: accounts/forms.py:265 accounts/forms.py:275 users/forms.py:253
 #: users/forms.py:263 users/forms.py:273
 msgid "8文字以上にしてください"
 msgstr "8文字以上にしてください"
@@ -122,7 +122,7 @@ msgstr "フランス語"
 #: accounts/templates/accounts/signup.html:9 friend/forms.py:21
 #: friend/templates/friend/request-modal.html:30
 #: friend/templates/friend/search.html:57
-#: users/templates/users/edit-profile.html:35
+#: users/templates/users/edit-profile.html:36
 #: users/templates/users/profile.html:25
 msgid "ユーザー名"
 msgstr "ユーザー名"
@@ -137,8 +137,8 @@ msgstr "姓"
 
 #: accounts/models.py:140 accounts/models.py:308
 #: accounts/templates/accounts/signup.html:42
-#: users/templates/users/edit-profile.html:86
-#: users/templates/users/profile.html:83
+#: users/templates/users/edit-profile.html:103
+#: users/templates/users/profile.html:75
 msgid "名"
 msgstr "名"
 
@@ -148,8 +148,8 @@ msgstr "国番号"
 
 #: accounts/models.py:155 accounts/models.py:323
 #: accounts/templates/accounts/signup.html:61
-#: users/templates/users/edit-profile.html:125
-#: users/templates/users/profile.html:116
+#: users/templates/users/edit-profile.html:154
+#: users/templates/users/profile.html:108
 msgid "電話番号"
 msgstr "電話番号"
 
@@ -203,8 +203,10 @@ msgid "ft_updateded_at"
 msgstr "ft_updateded_at"
 
 #: accounts/templates/accounts/login-oauth-modal.html:37
-msgid "QRコードから42でログインすることを許可してください"
-msgstr "QRコードから42でログインすることを許可してください"
+#, fuzzy
+#| msgid "中央のボタンから、42にログインすることを許可してください"
+msgid "中央のボタンから、42でログインすることを許可してください"
+msgstr "中央のボタンから、42にログインすることを許可してください"
 
 #: accounts/templates/accounts/login-oauth-modal.html:39
 msgid "続けて認証ボタンを押すことでログインされます"
@@ -227,7 +229,11 @@ msgstr "認証に失敗しました。"
 msgid "最初からやり直してください"
 msgstr "最初からやり直してください"
 
-#: accounts/templates/accounts/login-oauth-modal.html:62
+#: accounts/templates/accounts/login-oauth-modal.html:63
+msgid "Close"
+msgstr "閉じる"
+
+#: accounts/templates/accounts/login-oauth-modal.html:66
 #: accounts/templates/accounts/two-fa-modal.html:75
 msgid "認証"
 msgstr "認証"
@@ -261,7 +267,7 @@ msgstr "ログアウト"
 
 #: accounts/templates/accounts/login.html:28
 #: accounts/templates/accounts/signup.html:20
-#: users/templates/users/edit-profile.html:55
+#: users/templates/users/edit-profile.html:62
 #: users/templates/users/profile.html:38
 msgid "Email address"
 msgstr "メールアドレス"
@@ -292,20 +298,20 @@ msgid "このページは閉じ、元のページに戻ってください"
 msgstr "このページは閉じ、元のページに戻ってください"
 
 #: accounts/templates/accounts/signup.html:31
-#: users/templates/users/edit-profile.html:73
-#: users/templates/users/profile.html:72
+#: users/templates/users/edit-profile.html:86
+#: users/templates/users/profile.html:64
 msgid "氏"
 msgstr "氏"
 
 #: accounts/templates/accounts/signup.html:53
-#: users/templates/users/edit-profile.html:99
-#: users/templates/users/profile.html:94
+#: users/templates/users/edit-profile.html:120
+#: users/templates/users/profile.html:86
 msgid "生年月日"
 msgstr "生年月日"
 
 #: accounts/templates/accounts/signup.html:57
-#: users/templates/users/edit-profile.html:112
-#: users/templates/users/profile.html:105
+#: users/templates/users/edit-profile.html:137
+#: users/templates/users/profile.html:97
 msgid "国コード"
 msgstr "国コード"
 
@@ -314,8 +320,8 @@ msgid "2要素認証方法"
 msgstr "2要素認証方法"
 
 #: accounts/templates/accounts/signup.html:76
-#: users/templates/users/edit-profile.html:138
-#: users/templates/users/profile.html:127
+#: users/templates/users/edit-profile.html:171
+#: users/templates/users/profile.html:119
 msgid "言語"
 msgstr "言語"
 
@@ -375,8 +381,8 @@ msgstr "認証コード"
 #: friend/templates/friend/request-modal.html:83 tournament/models.py:15
 #: tournament/templates/tournament/card-modal.html:64
 #: tournament/templates/tournament/tournament.html:104
-#: users/templates/users/edit-profile.html:218
-#: users/templates/users/profile.html:215
+#: users/templates/users/edit-profile.html:252
+#: users/templates/users/profile.html:212
 msgid "キャンセル"
 msgstr "キャンセル"
 
@@ -412,7 +418,7 @@ msgstr "フレンド"
 msgid "メッセージ"
 msgstr "メッセージ"
 
-#: friend/models.py:37 tournament/templates/tournament/detail.html:8
+#: friend/models.py:37 tournament/templates/tournament/detail.html:27
 msgid "状態"
 msgstr "状態"
 
@@ -678,7 +684,7 @@ msgstr "プレイヤー2 エイリアス名"
 
 #: pong/templates/pong/card.html:13 tournament/models.py:26
 #: tournament/templates/tournament/card.html:13
-#: tournament/templates/tournament/detail.html:7
+#: tournament/templates/tournament/detail.html:21
 msgid "主催者"
 msgstr "主催者"
 
@@ -743,10 +749,10 @@ msgid "画面を更新してください"
 msgstr "画面を更新してください"
 
 #: pong/templates/pong/match.html:153
-#: users/templates/users/change-password.html:61
-#: users/templates/users/change-password.html:75
-#: users/templates/users/edit-profile.html:155
-#: users/templates/users/edit-profile.html:167
+#: users/templates/users/change-password.html:68
+#: users/templates/users/change-password.html:80
+#: users/templates/users/edit-profile.html:191
+#: users/templates/users/edit-profile.html:201
 msgid "戻る"
 msgstr "戻る"
 
@@ -784,7 +790,7 @@ msgstr "ログアウト"
 
 #: tournament/forms.py:40 tournament/models.py:31
 #: tournament/templates/tournament/card.html:22
-#: tournament/templates/tournament/detail.html:9
+#: tournament/templates/tournament/detail.html:33
 #: tournament/templates/tournament/tournament.html:66
 msgid "最大参加人数"
 msgstr "最大参加人数"
@@ -810,12 +816,12 @@ msgid "終了"
 msgstr "終了"
 
 #: tournament/models.py:21 tournament/templates/tournament/card-modal.html:19
-#: tournament/templates/tournament/detail.html:6
+#: tournament/templates/tournament/detail.html:15
 #: tournament/templates/tournament/tournament.html:57
 msgid "トーナメント名"
 msgstr "トーナメント名"
 
-#: tournament/models.py:29 tournament/templates/tournament/detail.html:11
+#: tournament/models.py:29 tournament/templates/tournament/detail.html:45
 msgid "開始時間"
 msgstr "開始時間"
 
@@ -847,32 +853,32 @@ msgstr "プレイヤー名"
 msgid "参加"
 msgstr "参加"
 
-#: tournament/templates/tournament/cards.html:11
+#: tournament/templates/tournament/cards.html:18
 msgid "すべての項目を表示"
 msgstr "すべての項目を表示"
 
-#: tournament/templates/tournament/cards.html:26
+#: tournament/templates/tournament/cards.html:33
 #: tournament/templates/tournament/list.html:69
 msgid "対象のトーナメントは存在しません"
 msgstr "対象のトーナメントは存在しません"
 
-#: tournament/templates/tournament/detail.html:3
+#: tournament/templates/tournament/detail.html:9
 msgid "トーナメント詳細"
 msgstr "トーナメント詳細"
 
-#: tournament/templates/tournament/detail.html:10
+#: tournament/templates/tournament/detail.html:39
 msgid "登録者数"
 msgstr "登録者数"
 
-#: tournament/templates/tournament/detail.html:23
+#: tournament/templates/tournament/detail.html:52
 msgid "参加者一覧"
 msgstr "参加者一覧"
 
-#: tournament/templates/tournament/detail.html:33 tournament/views.py:330
+#: tournament/templates/tournament/detail.html:62 tournament/views.py:331
 msgid "参加者はいません"
 msgstr "参加者はいません"
 
-#: tournament/templates/tournament/detail.html:36
+#: tournament/templates/tournament/detail.html:64
 msgid "トーナメント表"
 msgstr "トーナメント表"
 
@@ -938,18 +944,20 @@ msgid "入力してください。"
 msgstr "入力してください。"
 
 #: users/forms.py:138
-msgid "24文字以内にしてください"
-msgstr "24文字以内にしてください"
+#, fuzzy
+#| msgid "64文字以内にしてください"
+msgid "16文字以内にしてください"
+msgstr "64文字以内にしてください"
 
 #: users/forms.py:184
 msgid "２要素認証で必要です。電話番号を入力してください"
 msgstr "２要素認証で必要です。電話番号を入力してください"
 
-#: users/forms.py:207 users/templates/users/change-password.html:19
+#: users/forms.py:207 users/templates/users/change-password.html:18
 msgid "現在のパスワード"
 msgstr "現在のパスワード"
 
-#: users/forms.py:221 users/templates/users/change-password.html:32
+#: users/forms.py:221 users/templates/users/change-password.html:34
 msgid "新しいパスワード"
 msgstr "新しいパスワード"
 
@@ -966,16 +974,16 @@ msgstr "新しいパスワードは古いパスワードと同じにできませ
 msgid "Change Password"
 msgstr "パスワード変更"
 
-#: users/templates/users/change-password.html:45
+#: users/templates/users/change-password.html:51
 msgid "新しいパスワード（確認用）"
 msgstr "新しいパスワード（確認用）"
 
-#: users/templates/users/change-password.html:64
-#: users/templates/users/edit-profile.html:221
+#: users/templates/users/change-password.html:70
+#: users/templates/users/edit-profile.html:255
 msgid "変更"
 msgstr "変更"
 
-#: users/templates/users/change-password.html:70
+#: users/templates/users/change-password.html:75
 msgid "42OAuthでログインされたアカウントでは、ご利用できません。"
 msgstr "42OAuthでログインされたアカウントでは、ご利用できません。"
 
@@ -997,16 +1005,16 @@ msgstr "Profile"
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
-#: users/templates/users/edit-profile.html:26
-#: users/templates/users/edit-profile.html:180
+#: users/templates/users/edit-profile.html:27
+#: users/templates/users/edit-profile.html:214
 msgid "アバター変更"
 msgstr "アバター変更"
 
-#: users/templates/users/edit-profile.html:158
+#: users/templates/users/edit-profile.html:194
 msgid "保存"
 msgstr "保存"
 
-#: users/templates/users/edit-profile.html:170
+#: users/templates/users/edit-profile.html:204
 msgid "Save"
 msgstr "Save"
 
@@ -1018,6 +1026,10 @@ msgstr "Exported Profile"
 #: users/templates/users/exported-profile.html:12
 msgid "プロフィールのエクスポートが完了しました。"
 msgstr "プロフィールのエクスポートが完了しました。"
+
+#: users/templates/users/exported-profile.html:16
+msgid "プロフィール画面に戻る"
+msgstr "トップ画面に戻る"
 
 #: users/templates/users/privacy-policy.html:13
 msgid ""
@@ -1269,53 +1281,67 @@ msgstr "電話番号： [電話番号]"
 msgid "トップ画面に戻る"
 msgstr "トップ画面に戻る"
 
-#: users/templates/users/profile.html:49
+#: users/templates/users/profile.html:53
 msgid "勝敗"
 msgstr "勝敗"
 
-#: users/templates/users/profile.html:60
-msgid "不戦敗"
-msgstr "不戦敗"
-
-#: users/templates/users/profile.html:138
+#: users/templates/users/profile.html:130
 msgid "最終更新日時"
 msgstr "最終更新日時"
 
-#: users/templates/users/profile.html:149
+#: users/templates/users/profile.html:141
 msgid "最終ログイン日時"
 msgstr "最終ログイン日時"
 
-#: users/templates/users/profile.html:159
+#: users/templates/users/profile.html:152
 msgid "編集"
 msgstr "編集"
 
-#: users/templates/users/profile.html:162
-msgid "パスワードの変更"
-msgstr "パスワードの変更"
-
-#: users/templates/users/profile.html:170
-msgid "プロフィールのエクスポート"
-msgstr "プロフィールのエクスポート"
-
-#: users/templates/users/profile.html:180
+#: users/templates/users/profile.html:161
 msgid "Delete"
 msgstr "消す"
 
-#: users/templates/users/profile.html:191
+#: users/templates/users/profile.html:167
+msgid "パスワードの変更"
+msgstr "パスワードの変更"
+
+#: users/templates/users/profile.html:175
+msgid "プロフィールのエクスポート"
+msgstr "プロフィールのエクスポート"
+
+#: users/templates/users/profile.html:186
 msgid "アカウント削除"
 msgstr "アカウント削除"
 
-#: users/templates/users/profile.html:200
+#: users/templates/users/profile.html:195
 msgid "アカウント削除します。"
 msgstr "アカウント削除します。"
 
-#: users/templates/users/profile.html:201
+#: users/templates/users/profile.html:196
 msgid "復旧することはできません。"
 msgstr "復旧することはできません。"
 
-#: users/templates/users/profile.html:220
+#: users/templates/users/profile.html:198
+#, fuzzy
+#| msgid "認証に失敗しました。"
+msgid "削除に失敗しました。"
+msgstr "認証に失敗しました。"
+
+#: users/templates/users/profile.html:200
+#, fuzzy
+#| msgid "ページを更新して再度実行してください"
+msgid "ログインし直して、再度実施してください。"
+msgstr "ページを更新して再度実行してください"
+
+#: users/templates/users/profile.html:217
 msgid "削除"
 msgstr "削除"
+
+#~ msgid "24文字以内にしてください"
+#~ msgstr "24文字以内にしてください"
+
+#~ msgid "不戦敗"
+#~ msgstr "不戦敗"
 
 #~ msgid "42認証"
 #~ msgstr "42認証"
