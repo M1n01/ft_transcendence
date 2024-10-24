@@ -11,6 +11,12 @@ services:
       cp /tmp/make_db_setting.sh ./backend/make_db_setting.sh &&
       sh ./backend/make_db_setting.sh &&
       cd backend &&
+      python manage.py makemigrations accounts &&
+      python manage.py makemigrations tournament &&
+      python manage.py makemigrations friend &&
+      python manage.py makemigrations pong &&
+      python manage.py makemigrations users &&
+      python manage.py makemigrations notification &&
       python manage.py makemigrations &&
       python manage.py migrate &&
       (python manage.py loaddata ./**/fixtures/initial_data_prod.json || echo '') &&
