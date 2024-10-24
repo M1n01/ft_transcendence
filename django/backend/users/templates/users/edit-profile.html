@@ -9,7 +9,7 @@
   <body>
     <h1>{% trans "Edit Profile" %}</h1>
 
-    <div class="col-12 col-sm-11 text-center">
+    <div class="col-12 col-md-11 text-center">
       <div class="avatar-background">
         <div
           style="background-image: url('{{user.avatar.url}}');   "
@@ -32,18 +32,18 @@
         {% csrf_token %}
         <div class="row d-flex justify-content-start">
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "ユーザー名" %}</td>
             </div>
             {% if user.is_ft == True %}
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>
                 <input type="text" name="username" value="{{ form.username.value }}" readonly />
               </td>
             </div>
             <!-- <td></td> -->
             {% else %}
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.username }}</td>
               <div id="username-errors" class="text-start col-12">
                 {% if form.username.errors %}
@@ -58,16 +58,16 @@
             {% endif %}
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "Email address" %}</td>
             </div>
             {% if user.is_ft == True %}
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td><input type="text" name="email" value="{{ form.email.value }}" readonly /></td>
             </div>
             <!-- <td></td> -->
             {% else %}
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.email }}</td>
             </div>
             <div id="email-errors" class="text-start col-12">
@@ -82,10 +82,10 @@
             {% endif %}
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "氏" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.first_name }}</td>
               <div id="first-name-errors" class="text-start col-12">
                 {% if form.first_name.errors %}
@@ -99,10 +99,10 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "名" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.last_name }}</td>
               <div id="last-name-errors" class="text-start col-12">
                 {% if form.last_name.errors %}
@@ -116,10 +116,10 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "生年月日" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.birth_date }}</td>
               <div id="birth-date-errors" class="text-start col-12">
                 {% if form.birth_date.errors %}
@@ -133,10 +133,10 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "国コード" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.country_code }}</td>
               <div id="country-code-errors" class="text-start col-12">
                 {% if form.country_code.errors %}
@@ -150,10 +150,10 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "電話番号" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.phone }}</td>
               <div id="phone-errors" class="text-start col-12">
                 {% if form.phone.errors %}
@@ -167,10 +167,10 @@
             </div>
           </tr>
           <tr>
-            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+            <div class="col-12 col-md-5 text-start text-md-end me-4">
               <td>{% trans "言語" %}</td>
             </div>
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-md-5">
               <td>{{ form.language }}</td>
               <div id="language-errors" class="text-start col-12">
                 {% if form.language.errors %}
@@ -185,8 +185,8 @@
           </tr>
           <!-- 他に表示したい情報があればここに追加 -->
           <tr>
-            <div class="col-12 col-sm-5 mt-4 me-4"></div>
-            <div class="col-12 col-sm-5 mt-4 d-flex justify-content-end">
+            <div class="col-12 col-md-5 mt-4 me-4"></div>
+            <div class="col-12 col-md-5 mt-4 d-flex justify-content-end">
               <a href="/users/profile" class="btn btn-secondary me-2" data-link
                 >{% trans "戻る" %}</a
               >
@@ -196,7 +196,7 @@
             </div>
           </tr>
         </div>
-        <!-- <div class="d-flex justify-content-sm-end justify-content-center mt-4">
+        <!-- <div class="d-flex justify-content-md-end justify-content-center mt-4">
           <div>
             <a href="/users/profile" class="btn btn-secondary me-4" data-link>{% trans "戻る" %}</a>
           </div>
