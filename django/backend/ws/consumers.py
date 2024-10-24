@@ -13,9 +13,7 @@ from channels.db import database_sync_to_async
 
 
 def extract_ascii(input_string):
-    test = "".join(
-        c for c in input_string if (c.isalpha() or c.isdigit() or "-" or "_" or ".")
-    )
+    test = input_string.replace("@", "")
     return test[:95]
 
 

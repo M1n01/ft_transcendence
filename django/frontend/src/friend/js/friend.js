@@ -37,26 +37,32 @@ export const setUserActive = async (list) => {
 };
 
 function intervalFunc() {
-  const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
-  let id_list = '';
-  if (user_id_list.length == 0) {
+  try {
+    const user_id_list = document.querySelectorAll('.friend-user-id-hidden');
+    let id_list = '';
+    if (user_id_list.length == 0) {
+      //clearInterval(CheckFriendInterval);
+      return;
+    }
+    user_id_list.forEach((element) => {
+      const id = element.textContent;
+      id_list += id + '@';
+    });
+    if (id_list !== '') {
+      id_list = id_list.substring(0, id_list.length - 1);
+      const message = {
+        type: 'get',
+        message: 'active_list',
+        content: id_list,
+      };
+      sendWebSocket(message);
+    }
+  } catch {
+    clearInterval(CheckFriendInterval);
     return;
   }
-  user_id_list.forEach((element) => {
-    const id = element.textContent;
-    id_list += id + '@';
-  });
-  if (id_list !== '') {
-    id_list = id_list.substring(0, id_list.length - 1);
-    const message = {
-      type: 'get',
-      message: 'active_list',
-      content: id_list,
-    };
-    sendWebSocket(message);
-  }
 }
-export let CheckFriendInterval = setInterval(intervalFunc, 5000);
+export let CheckFriendInterval = setInterval(intervalFunc, 3000);
 
 const accept_friend_request = () => {
   const accepts = document.querySelector('#app').querySelectorAll('.pre-accept-friend');
@@ -256,6 +262,7 @@ document.addEventListener('FriendEvent', () => {
     intervalFunc();
     CheckFriendInterval;
   } catch (error) {
+    //clearInterval(CheckFriendInterval);
     console.log('ignore error:' + error);
   }
 });
