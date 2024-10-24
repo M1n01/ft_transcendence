@@ -9,158 +9,192 @@
   <body>
     <h1>{% trans "Edit Profile" %}</h1>
 
-    <div class="col-12 col-sm-4 text-center">
+    <div class="col-12 col-sm-11 text-center">
       <div class="avatar-background">
         <div
           style="background-image: url('{{user.avatar.url}}');   "
           class="avatar-background-img"
         ></div>
       </div>
-      <button
-        id="open-update-modal-button"
-        type="button"
-        class="btn btn-primary mt-3 mb-5"
-        data-bs-toggle="modal"
-        data-bs-target="#updateAvatarModal"
-      >
-        {% trans 'アバター変更' %}
-      </button>
+      <div>
+        <button
+          id="open-update-modal-button"
+          type="button"
+          class="btn btn-primary mt-3 mb-5"
+          data-bs-toggle="modal"
+          data-bs-target="#updateAvatarModal"
+        >
+          {% trans 'アバター変更' %}
+        </button>
+      </div>
 
       <form id="edit-profile-form" method="POST" action="{% url 'users:edit-profile' %}">
-        <div class="table-responsive">
-          {% csrf_token %}
-          <table>
-            <tbody>
-              <tr>
-                <td>{% trans "ユーザー名" %}</td>
-                {% if user.is_ft == True %}
-                <td>
-                  <input type="text" name="username" value="{{ form.username.value }}" readonly />
-                </td>
-                <!-- <td></td> -->
-                {% else %}
-                <td>{{ form.username }}</td>
-                <td id="username-errors" class="text-start">
-                  {% if form.username.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.username.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
+        {% csrf_token %}
+        <div class="row d-flex justify-content-start">
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "ユーザー名" %}</td>
+            </div>
+            {% if user.is_ft == True %}
+            <div class="col-12 col-sm-5">
+              <td>
+                <input type="text" name="username" value="{{ form.username.value }}" readonly />
+              </td>
+            </div>
+            <!-- <td></td> -->
+            {% else %}
+            <div class="col-12 col-sm-5">
+              <td>{{ form.username }}</td>
+              <div id="username-errors" class="text-start col-12">
+                {% if form.username.errors %}
+                <ul class="errorlist">
+                  {% for error in form.username.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
                 {% endif %}
-              </tr>
-              <tr>
-                <td>{% trans "Email address" %}</td>
-                {% if user.is_ft == True %}
-                <td><input type="text" name="email" value="{{ form.email.value }}" readonly /></td>
-                <!-- <td></td> -->
-                {% else %}
-                <td>{{ form.email }}</td>
-                <td id="email-errors" class="text-start">
-                  {% if form.email.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.email.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
+              </div>
+            </div>
+            {% endif %}
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "Email address" %}</td>
+            </div>
+            {% if user.is_ft == True %}
+            <div class="col-12 col-sm-5">
+              <td><input type="text" name="email" value="{{ form.email.value }}" readonly /></td>
+            </div>
+            <!-- <td></td> -->
+            {% else %}
+            <div class="col-12 col-sm-5">
+              <td>{{ form.email }}</td>
+            </div>
+            <div id="email-errors" class="text-start col-12">
+              {% if form.email.errors %}
+              <ul class="errorlist">
+                {% for error in form.email.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+            {% endif %}
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "氏" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.first_name }}</td>
+              <div id="first-name-errors" class="text-start col-12">
+                {% if form.first_name.errors %}
+                <ul class="errorlist">
+                  {% for error in form.first_name.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
                 {% endif %}
-              </tr>
-              <tr>
-                <td>{% trans "氏" %}</td>
-                <td>{{ form.first_name }}</td>
-                <td id="first-name-errors" class="text-start">
-                  {% if form.first_name.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.first_name.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td>{% trans "名" %}</td>
-                <td>{{ form.last_name }}</td>
-                <td id="last-name-errors" class="text-start">
-                  {% if form.last_name.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.last_name.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td>{% trans "生年月日" %}</td>
-                <td>{{ form.birth_date }}</td>
-                <td id="birth-date-errors" class="text-start">
-                  {% if form.birth_date.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.birth_date.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td>{% trans "国コード" %}</td>
-                <td>{{ form.country_code }}</td>
-                <td id="country-code-errors" class="text-start">
-                  {% if form.country_code.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.country_code.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td>{% trans "電話番号" %}</td>
-                <td>{{ form.phone }}</td>
-                <td id="phone-errors" class="text-start">
-                  {% if form.phone.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.phone.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td>{% trans "言語" %}</td>
-                <td>{{ form.language }}</td>
-                <td id="language-errors" class="text-start">
-                  {% if form.language.errors %}
-                  <ul class="errorlist">
-                    {% for error in form.language.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </td>
-              </tr>
-              <!-- 他に表示したい情報があればここに追加 -->
-              <tr>
-                <td></td>
-                <td colspan="3" class="d-flex justify-content-end mt-4">
-                  <a href="/users/profile" class="btn btn-secondary me-2" data-link
-                    >{% trans "戻る" %}</a
-                  >
-                  <button type="submit" class="btn btn-primary" form="edit-profile-form">
-                    {% trans "保存" %}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              </div>
+            </div>
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "名" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.last_name }}</td>
+              <div id="last-name-errors" class="text-start col-12">
+                {% if form.last_name.errors %}
+                <ul class="errorlist">
+                  {% for error in form.last_name.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "生年月日" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.birth_date }}</td>
+              <div id="birth-date-errors" class="text-start col-12">
+                {% if form.birth_date.errors %}
+                <ul class="errorlist">
+                  {% for error in form.birth_date.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "国コード" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.country_code }}</td>
+              <div id="country-code-errors" class="text-start col-12">
+                {% if form.country_code.errors %}
+                <ul class="errorlist">
+                  {% for error in form.country_code.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "電話番号" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.phone }}</td>
+              <div id="phone-errors" class="text-start col-12">
+                {% if form.phone.errors %}
+                <ul class="errorlist">
+                  {% for error in form.phone.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </tr>
+          <tr>
+            <div class="col-12 col-sm-5 text-start text-sm-end me-4">
+              <td>{% trans "言語" %}</td>
+            </div>
+            <div class="col-12 col-sm-5">
+              <td>{{ form.language }}</td>
+              <div id="language-errors" class="text-start col-12">
+                {% if form.language.errors %}
+                <ul class="errorlist">
+                  {% for error in form.language.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </tr>
+          <!-- 他に表示したい情報があればここに追加 -->
+          <tr>
+            <div class="col-12 col-sm-5 mt-4 me-4"></div>
+            <div class="col-12 col-sm-5 mt-4 d-flex justify-content-end">
+              <a href="/users/profile" class="btn btn-secondary me-2" data-link
+                >{% trans "戻る" %}</a
+              >
+              <button type="submit" class="btn btn-primary" form="edit-profile-form">
+                {% trans "保存" %}
+              </button>
+            </div>
+          </tr>
         </div>
         <!-- <div class="d-flex justify-content-sm-end justify-content-center mt-4">
           <div>

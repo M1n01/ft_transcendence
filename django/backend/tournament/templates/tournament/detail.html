@@ -1,41 +1,71 @@
 {% load i18n %} {% load tz %}
-<ul>
-  <h2 class="mt-5">{% trans 'トーナメント詳細' %}</h2>
-  <div class="d-flex">
-    <ul class="list-group rounded-end-0">
-      <li class="list-group-item">{% trans 'トーナメント名' %}</li>
-      <li class="list-group-item">{% trans '主催者' %}</li>
-      <li class="list-group-item">{% trans '状態' %}</li>
-      <li class="list-group-item">{% trans '最大参加人数' %}</li>
-      <li class="list-group-item">{% trans '登録者数' %}</li>
-      <li class="list-group-item">{% trans '開始時間' %}</li>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournament Detail</title>
+  </head>
+  <body>
+    <h1 class="mt-1">{% trans 'トーナメント詳細' %}</h1>
+
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th class="text-break text-wrap text-top">{% trans 'トーナメント名' %}</th>
+            <th class="text-break text-wrap text-top">{{ tournament.name }}</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-break text-wrap">{% trans '主催者' %}</td>
+            <td class="text-break text-wrap">{{ tournament.organizer.username }}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-break text-wrap">{% trans '状態' %}</td>
+            <td class="text-break text-wrap">{{ tournament.status }}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-break text-wrap">{% trans '最大参加人数' %}</td>
+            <td class="text-break text-wrap">{{ tournament.current_players }}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-break text-wrap">{% trans '登録者数' %}</td>
+            <td class="text-break text-wrap">{{ len_participants }}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="text-break text-wrap">{% trans '開始時間' %}</td>
+            <td class="text-break text-wrap">{{ tournament.start_at|timezone:"Asia/Tokyo"}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-5">{% trans '参加者一覧' %}</h3>
+    {% if len_participants > 0 %}
+    <ul class="list-group">
+      {% for participant in participants %}
+      <li class="list-group-item">{{ participant.alias_name }}</li>
+
+      {% endfor %}
     </ul>
-    <ul class="list-group rounded-start-0">
-      <li class="list-group-item">{{ tournament.name }}</li>
-      <li class="list-group-item">{{ tournament.organizer.username }}</li>
-      <li class="list-group-item">{{ tournament.status}}</li>
-      <li class="list-group-item">{{ tournament.current_players}}</li>
-      <li class="list-group-item">{{ len_participants}}</li>
-      <li class="list-group-item">{{ tournament.start_at|timezone:"Asia/Tokyo"}}</li>
-    </ul>
-  </div>
 
-  <h3 class="mt-5">{% trans '参加者一覧' %}</h3>
-  {% if len_participants > 0 %}
-  <ul class="list-group">
-    {% for participant in participants %}
-    <li class="list-group-item">{{ participant.alias_name }}</li>
+    {% else %}
+    <div>{% trans '参加者はいません' %}</div>
+    {% endif %}
 
-    {% endfor %}
-  </ul>
-
-  {% else %}
-  <div>{% trans '参加者はいません' %}</div>
-  {% endif %}
-
-  <h3 class="mt-5">{% trans 'トーナメント表' %}</h3>
-  <input id="id-hidden" value="{{tournament.id}}" hidden />
-  <div id="tournament-chart">
-    <div class="position-absolute" id="tournament-div" style="width: 400px; height: 200px"></div>
-  </div>
-</ul>
+    <h3 class="mt-5">{% trans 'トーナメント表' %}</h3>
+    <input id="id-hidden" value="{{tournament.id}}" hidden />
+    <div id="tournament-chart" class="">
+      <div class="position-absolute" id="tournament-div"></div>
+    </div>
+  </body>
+</html>
