@@ -88,7 +88,7 @@ export default class TournamentChart {
     const next_game_data1 = games.find((game) => game.id == next_id1);
     const next_game_data2 = games.find((game) => game.id == next_id2);
 
-    if (next_game_data1.is_end) {
+    if (next_game_data1 && next_game_data1.is_end) {
       if (next_game_data1.player1_score > next_game_data1.player2_score) {
         cur_game.user1 = next_game_data1.player1;
       } else if (next_game_data1.player1_score < next_game_data1.player2_score) {
@@ -100,7 +100,7 @@ export default class TournamentChart {
     //cur_game.user1 = next_game_data1.winner;
     //cur_game.user2 = next_game_data2.winner;
 
-    if (next_game_data2.is_end) {
+    if (next_game_data2 && next_game_data2.is_end) {
       if (next_game_data2.player1_score > next_game_data2.player2_score) {
         cur_game.user2 = next_game_data2.player1;
       } else if (next_game_data1.player1_score < next_game_data2.player2_score) {
@@ -122,14 +122,14 @@ export default class TournamentChart {
 
     let next_game1;
     let next_game2;
-    if (String(next_game_data1.id)[0] == '1') {
+    if (next_game_data1 && String(next_game_data1.id)[0] == '1') {
       next_game1 = this.leftBranches.find((game) => game.id == next_game_data1.id);
-    } else {
+    } else if (next_game_data1) {
       next_game1 = this.rightBranches.find((game) => game.id == next_game_data1.id);
     }
-    if (String(next_game_data2.id)[0] == '1') {
+    if (next_game_data2 && String(next_game_data2.id)[0] == '1') {
       next_game2 = this.leftBranches.find((game) => game.id == next_game_data2.id);
-    } else {
+    } else if (next_game_data2) {
       next_game2 = this.rightBranches.find((game) => game.id == next_game_data2.id);
     }
 
