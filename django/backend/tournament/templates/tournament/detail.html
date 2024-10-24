@@ -60,12 +60,12 @@
 
     {% else %}
     <div>{% trans '参加者はいません' %}</div>
-    {% endif %}
-
+    {% endif %} {% if display_chart %}
     <h3 class="mt-5">{% trans 'トーナメント表' %}</h3>
     <input id="id-hidden" value="{{tournament.id}}" hidden />
     <div id="tournament-chart" class="">
       <div class="position-absolute" id="tournament-div"></div>
     </div>
+    {% endif%}
   </body>
 </html>

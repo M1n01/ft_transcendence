@@ -3,5 +3,5 @@
 //import { reload } from '../../spa/js/utility/user.js';
 export const NotificationEvent = new Event('NotificationEvent');
 document.addEventListener('NotificationEvent', () => {
-  console.log('notifiation test');
+  //console.log('notifiation test');
 });

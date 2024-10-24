@@ -8,7 +8,7 @@ import { fetchJsonData } from '../utility/fetch.js';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle('Sign up');
+    this.setTitle('History');
   }
 
   checkRedirect = async () => {

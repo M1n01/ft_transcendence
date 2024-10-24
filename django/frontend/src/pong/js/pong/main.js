@@ -32,30 +32,62 @@ document.addEventListener('PongMainEvent', function async() {
   const top_right_button = document.getElementById('top-right-button');
   const bottom_left_button = document.getElementById('bottom-left-button');
   const bottom_right_button = document.getElementById('bottom-right-button');
-  top_left_button.addEventListener('touchstart', () => {
-    keys['q'] = true;
-  });
-  top_left_button.addEventListener('touchend', () => {
-    keys['q'] = false;
-  });
-  top_right_button.addEventListener('touchstart', () => {
-    keys['o'] = true;
-  });
-  top_right_button.addEventListener('touchend', () => {
-    keys['o'] = false;
-  });
-  bottom_left_button.addEventListener('touchstart', () => {
-    keys['a'] = true;
-  });
-  bottom_left_button.addEventListener('touchend', () => {
-    keys['a'] = false;
-  });
-  bottom_right_button.addEventListener('touchstart', () => {
-    keys['l'] = true;
-  });
-  bottom_right_button.addEventListener('touchend', () => {
-    keys['l'] = false;
-  });
+  top_left_button.addEventListener(
+    'touchstart',
+    () => {
+      keys['q'] = true;
+    },
+    { passive: true }
+  );
+  top_left_button.addEventListener(
+    'touchend',
+    () => {
+      keys['q'] = false;
+    },
+    { passive: true }
+  );
+  top_right_button.addEventListener(
+    'touchstart',
+    () => {
+      keys['o'] = true;
+    },
+    { passive: true }
+  );
+  top_right_button.addEventListener(
+    'touchend',
+    () => {
+      keys['o'] = false;
+    },
+    { passive: true }
+  );
+  bottom_left_button.addEventListener(
+    'touchstart',
+    () => {
+      keys['a'] = true;
+    },
+    { passive: true }
+  );
+  bottom_left_button.addEventListener(
+    'touchend',
+    () => {
+      keys['a'] = false;
+    },
+    { passive: true }
+  );
+  bottom_right_button.addEventListener(
+    'touchstart',
+    () => {
+      keys['l'] = true;
+    },
+    { passive: true }
+  );
+  bottom_right_button.addEventListener(
+    'touchend',
+    () => {
+      keys['l'] = false;
+    },
+    { passive: true }
+  );
 
   const canvas = document.getElementById('myCanvas');
   const start_button = document.getElementById('start-pong-game-button');
@@ -78,7 +110,6 @@ document.addEventListener('PongMainEvent', function async() {
 
   const width = Number(canvas_block.offsetWidth);
   const height = (width * 3) / 5;
-  console.log('width=' + width);
   ///const PADDDLE_X = width * 0.9;
   //const PADDDLE_X = 450 + (width * width) / 10000;
   const get_offset = (width) => {
@@ -409,18 +440,4 @@ document.addEventListener('PongMainEvent', function async() {
       count1.Hidden();
     }
   }
-  // スマホを傾けた時の処理
-  /*
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(orientation: landscape)').matches) {
-      // 横向きになった場合の処理
-      console.log('横向きになりました');
-      isEnd = true;
-    } else {
-      // 縦向きになった場合の処理
-      console.log('縦向きになりました');
-      isEnd = true;
-    }
-  });
-  */
 });

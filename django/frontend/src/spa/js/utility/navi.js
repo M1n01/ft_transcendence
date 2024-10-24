@@ -28,6 +28,7 @@ export const UpdateMessageIcon = (cnt, ws = false) => {
 };
 
 function getNotificationCount() {
+  console.log('get notification No.1');
   const message = {
     type: 'get',
     message: 'alert_cnt',
@@ -59,7 +60,6 @@ export const loadNav = async () => {
       await logout();
     });
     UpdateMessageIcon(0, false);
-    //GetNotificationInterval = setInterval(getNotificationCount, NOTIFICATION_INTERVAL);
     GetNotificationInterval;
   } catch (error) {
     console.log('ignore error:' + error);

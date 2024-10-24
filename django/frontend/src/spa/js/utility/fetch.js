@@ -1,17 +1,21 @@
 function makeRequest(method, url) {
-  return fetch(url, {
-    method: method,
-    headers: { SPA: 'spa' },
-    redirect: 'follow',
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(' Fetch() Error');
-    }
-    if (response.status >= 400) {
-      throw new Error(' Status Error:' + response.status);
-    }
-    return response;
-  });
+  try {
+    return fetch(url, {
+      method: method,
+      headers: { SPA: 'spa' },
+      redirect: 'follow',
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error('Fetch() Error');
+      }
+      if (response.status >= 400) {
+        throw new Error(' Status Error:' + response.status);
+      }
+      return response;
+    });
+  } catch (error) {
+    throw new Error('Fetch() Error:' + error);
+  }
 }
 
 export async function fetchAsForm(form, FormData) {
@@ -26,7 +30,8 @@ export async function fetchAsForm(form, FormData) {
     return res;
   } catch (error) {
     console.error('Fetch Error:' + error.message);
-    return '';
+    const res = { error: true, status: 500 };
+    return res;
   }
 }
 export async function fetchAsFormByGet(form, FormData, query_word) {
@@ -41,7 +46,8 @@ export async function fetchAsFormByGet(form, FormData, query_word) {
     return res;
   } catch (error) {
     console.error('Fetch Error:' + error.message);
-    return '';
+    const res = { error: true, status: 500 };
+    return res;
   }
 }
 

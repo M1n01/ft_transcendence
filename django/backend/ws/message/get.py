@@ -49,6 +49,7 @@ def get_alert_cnt(user):
     from notification.models import UserNotification
 
     list = UserNotification.objects.filter(Q(user=user) & Q(is_read=False))
+    print(f"{user=},, {len(list)=}")
     return len(list)
 
 

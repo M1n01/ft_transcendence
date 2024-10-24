@@ -320,16 +320,30 @@ class DetailView(DetailView):
     context_object_name = "tournament"
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        id = context[self.context_object_name].id
-        participants = TournamentParticipant.objects.filter(tournament_id=id)
-        context["len_participants"] = len(participants)
-        if len(participants) > 0:
-            context["participants"] = participants
-        else:
-            context["participants"] = _("参加者はいません")
+        try:
+            context = super().get_context_data(**kwargs)
+            id = context[self.context_object_name].id
+            participants = TournamentParticipant.objects.filter(tournament_id=id)
+            context["len_participants"] = len(participants)
+            if len(participants) > 0:
+                context["participants"] = participants
+            else:
+                context["participants"] = _("参加者はいません")
+            print(f"{id=}")
+            tournament = Tournament.objects.get(id=id)
+            print(f"{id=}")
+            if (
+                tournament.status == TournamentStatusChoices.ONGOING
+                or tournament.status == TournamentStatusChoices.ENDED
+            ):
+                context["display_chart"] = True
+            else:
+                context["display_chart"] = False
 
-        return context
+            return context
+        except Exception as e:
+            print(f"Error get_content_data:{e}")
+            return None
 
 
 class InfoApi(DetailView):
