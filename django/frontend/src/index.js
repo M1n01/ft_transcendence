@@ -54,40 +54,45 @@ export const getDisplayedURI = (pathname) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  loadNav();
-  WebsocketInit();
+  try {
+    loadNav();
+    WebsocketInit();
+  } catch {
+    return;
+  }
 
   let tmp_path = window.location.href;
 
   document.body.addEventListener('click', (e) => {
-    // ページ切替
-    if (e.target.matches('[data-link]')) {
-      savePage(window.location.href);
-      e.preventDefault();
-      tmp_path = e.target.href;
-      const uri = getDisplayedURI(tmp_path);
-      navigateTo(uri.path, uri.rest, uri.params);
-    }
-
-    // aタグ内にsvgタグを入れるとそちらにclickイベントをとられてしまうので、
-    // ここで追加実装
-    if (e.target.matches('[data-svg]')) {
-      e.preventDefault();
-
-      const linkElement = e.target.closest('[data-link]');
-      if (linkElement) {
-        tmp_path = linkElement.href;
+    try {
+      // ページ切替
+      if (e.target.matches('[data-link]')) {
+        savePage(window.location.href);
+        e.preventDefault();
+        tmp_path = e.target.href;
         const uri = getDisplayedURI(tmp_path);
         navigateTo(uri.path, uri.rest, uri.params);
       }
-    }
 
-    // Form送信
-    const document_form = document.getElementsByTagName('FORM');
-    if (document_form && document_form.length > 0) {
-      document.getElementsByTagName('FORM')[0].addEventListener('submit', async function (event) {
-        const response = await submitForm(event);
-        /*
+      // aタグ内にsvgタグを入れるとそちらにclickイベントをとられてしまうので、
+      // ここで追加実装
+      if (e.target.matches('[data-svg]')) {
+        e.preventDefault();
+
+        const linkElement = e.target.closest('[data-link]');
+        if (linkElement) {
+          tmp_path = linkElement.href;
+          const uri = getDisplayedURI(tmp_path);
+          navigateTo(uri.path, uri.rest, uri.params);
+        }
+      }
+
+      // Form送信
+      const document_form = document.getElementsByTagName('FORM');
+      if (document_form && document_form.length > 0) {
+        document.getElementsByTagName('FORM')[0].addEventListener('submit', async function (event) {
+          const response = await submitForm(event);
+          /*
 
         event.preventDefault(); // フォームのデフォルトの送信を防止
         const form = event.target;
@@ -103,19 +108,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetchAsForm(form, formData);
         form.disabled = false;
         */
-        updatePage(response);
-      });
+          updatePage(response);
+        });
 
-      //多言語切替
-      if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
-        e.preventDefault();
+        //多言語切替
+        if (e.target.tagName === 'INPUT' && e.target.className === 'change-language') {
+          e.preventDefault();
 
-        const lang_url = '/i18n/setlang/';
-        const form = document.getElementById('lang_form');
-        let formData = new FormData(form);
-        const current_uri = getDisplayedURI(tmp_path).path;
-        changingLanguage(lang_url, formData, current_uri);
+          const lang_url = '/i18n/setlang/';
+          const form = document.getElementById('lang_form');
+          let formData = new FormData(form);
+          const current_uri = getDisplayedURI(tmp_path).path;
+          changingLanguage(lang_url, formData, current_uri);
+        }
       }
+    } catch {
+      return;
     }
   });
 
