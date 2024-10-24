@@ -32,7 +32,7 @@ document.addEventListener('UserEvent', function () {
     const handleFormSubmit = async (form, errorFields, successRedirect) => {
       form.addEventListener('submit', async (event) => {
         const response = await submitForm(event);
-        if (response.error) return;
+        if (!response || response.error) return;
 
         if (response.status != 200) {
           const html = await response.text();

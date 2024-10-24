@@ -39,7 +39,11 @@
             </label>
             <div class="col-sm-8">
               <p class="form-control-plaintext profile-value">
-                <span class="profile-value text-break text-wrap">{{ user.email}}</span>
+                {% if user.is_ft == True %}
+                <span class="profile-value text-break text-wrap">{{ user.email42 }}</span>
+                {% else %}
+                <span class="profile-value text-break text-wrap">{{ user.email }}</span>
+                {% endif %}
               </p>
             </div>
           </div>

@@ -38,7 +38,7 @@
             {% if user.is_ft == True %}
             <div class="col-12 col-md-5">
               <td>
-                <input type="text" name="username" value="{{ form.username.value }}" readonly />
+                <input type="text" name="username" value="{{ user.username }}" readonly />
               </td>
             </div>
             <!-- <td></td> -->
@@ -63,7 +63,7 @@
             </div>
             {% if user.is_ft == True %}
             <div class="col-12 col-md-5">
-              <td><input type="text" name="email" value="{{ form.email.value }}" readonly /></td>
+              <td><input type="text" name="email" value="{{ user.email42 }}" readonly /></td>
             </div>
             <!-- <td></td> -->
             {% else %}

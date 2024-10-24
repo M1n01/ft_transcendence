@@ -125,10 +125,12 @@ class ExportProfileView(LoginRequiredMixin, View):
 
         # ユーザーデータを取得し、CSVに書き込む
         user = request.user
+        # 条件に応じたメールアドレスの選択
+        email_value = user.email42 if user.is_ft else user.email
         writer.writerow(
             [
                 user.username,
-                user.email,
+                email_value,
                 user.first_name,
                 user.last_name,
                 user.country_code,
