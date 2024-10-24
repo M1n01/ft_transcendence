@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # SMSサービスを一時的に無効にする
 # SMSサービスは有料なので、使用を制限したいため
 # これがTrueであると、認証コードは何を入力しても通る
-DEV_SMS = True
+DEV_SMS = False
 
 # email_code_dict = {}
 

@@ -157,7 +157,6 @@ class FtWebsocket(AsyncWebsocketConsumer):
             (message, param1, param2, param3, param4) = await get.alert_cnt(user)
 
         group_name = self.room_group_name + str(extract_ascii(user.email))
-        print(f"{group_name=}")
         if message == "":
             return
         await self.channel_layer.group_send(

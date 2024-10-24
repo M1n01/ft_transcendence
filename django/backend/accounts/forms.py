@@ -134,6 +134,7 @@ class SignUpForm(UserCreationForm):
                 "class": "form-control w-100 rounded-0 border-top-0",
                 "placeholder": _("phone_number"),
                 "autocomplete": "phone",
+                "type": "password",
             },
         ),
     )
