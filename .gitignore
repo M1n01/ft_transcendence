@@ -34,7 +34,10 @@ node_modules
 */**/dist
 
 # Public files
-django/public/*
+django/public/webpack-stats.json
+django/public/static/*
+!django/public/static/favicon.ico
+django/public/media/*
 !django/public/media/avatar/default/user.png
 
 
